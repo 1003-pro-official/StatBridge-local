@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0",
+  "name": "StatBridge BOK publication golden set",
+  "freeze_date": "2026-09-28",
+  "value_snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "scope": {
+    "publication_families": [
+      "통화신용정책보고서",
+      "금융안정보고서",
+      "경제전망보고서",
+      "기업경영분석",
+      "지급결제보고서",
+      "지역경제보고서"
+    ],
+    "editions_per_family": "freeze date 기준 최신 2개 공개본",
+    "answer_space": "현재 StatBridge 로컬 카탈로그에서 지원하는 한국은행 통계표 ID만 정답으로 허용",
+    "numeric_values": "프로젝트 data/tables CSV의 2026-09-28 보유본에서 선택한 관측값을 fixture로 고정. 행별 LST_CHN_DE와 입력 파일 SHA-256을 fixture에 기록하며, 단일 KOSIS API 조회일이라고 해석하지 않는다.",
+    "forecast_policy": "보고서의 전망 주제는 질문 소재로만 사용하고, 전망치 자체는 정답 수치로 사용하지 않는다.",
+    "source_material": "본문 PDF, 본문 표·그림 설명, 공식 수치 첨부파일; 전망치는 관측값 정답에서 제외"
+  },
+  "reports": [
+    {
+      "id": "tcm-2026-09",
+      "family": "통화신용정책보고서",
+      "title": "통화신용정책보고서(2026년 9월)",
+      "published": "2026-09-10",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "primary_pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    {
+      "id": "tcm-2026-03",
+      "family": "통화신용정책보고서",
+      "title": "통화신용정책보고서(2026년 3월)",
+      "published": "2026-03-12",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1"
+    },
+    {
+      "id": "fsr-2026-06",
+      "family": "금융안정보고서",
+      "title": "금융안정보고서(2026년 6월)",
+      "published": "2026-06-24",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "primary_pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    {
+      "id": "fsr-2025-12",
+      "family": "금융안정보고서",
+      "title": "금융안정보고서(2025년 12월)",
+      "published": "2025-12-24",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "primary_pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    {
+      "id": "eor-2026-08",
+      "family": "경제전망보고서",
+      "title": "경제전망보고서(2026년 8월)",
+      "published": "2026-08-27",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "primary_pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    {
+      "id": "eor-2026-05",
+      "family": "경제전망보고서",
+      "title": "경제전망보고서(2026년 5월)",
+      "published": "2026-05-28",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "primary_pdf_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
+    },
+    {
+      "id": "corporate-2024",
+      "family": "기업경영분석",
+      "title": "2024년 기업경영분석 결과(해설 및 통계편)",
+      "published": "2025-10-29",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "primary_pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    {
+      "id": "corporate-2023",
+      "family": "기업경영분석",
+      "title": "2023년 기업경영분석 결과",
+      "published": "2024-10-22",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "primary_pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    {
+      "id": "payment-2025",
+      "family": "지급결제보고서",
+      "title": "2025년도 지급결제보고서",
+      "published": "2026-04-13",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "primary_pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    {
+      "id": "payment-2024",
+      "family": "지급결제보고서",
+      "title": "2024년도 지급결제보고서",
+      "published": "2025-04-21",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "primary_pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    {
+      "id": "regional-2026-07",
+      "family": "지역경제보고서",
+      "title": "지역경제보고서(2026년 7월)",
+      "published": "2026-07-29",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "primary_pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    {
+      "id": "regional-2026-01",
+      "family": "지역경제보고서",
+      "title": "지역경제보고서(2026년 1월)",
+      "published": "2026-01-28",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "primary_pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "primary_pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    }
+  ],
+  "evaluation": {
+    "current_stage": "catalog retrieval, clarification options, exact local CSV chart path",
+    "retrieval_metrics": [
+      "Recall@5 by required series group",
+      "MRR",
+      "Top-1"
+    ],
+    "clarification": "status and required catalog options",
+    "chart": "exact periods, numeric values, units and frequency against frozen fixtures; visual checks remain manual",
+    "out_of_scope": "no-match response",
+    "release_gates": {
+      "holdout_recall_at_5": 0.9,
+      "holdout_category_recall_at_5": 0.8,
+      "holdout_clarification_pass_rate": 0.9,
+      "holdout_no_match_rate": 0.95,
+      "chart_exact_pass_rate": 1.0
+    },
+    "holdout_caveat": "이 100개는 개발 중 검색 규칙을 조정할 때 노출되었다. 현재 점수는 회고적이며 블라인드 성능으로 해석하지 않는다. 별도의 미공개 신규 질문으로 재검증해야 한다."
+  },
+  "counts": {
+    "cases": 150,
+    "chart_cases": 30,
+    "splits": {
+      "development": 50,
+      "holdout": 100
+    },
+    "categories": {
+      "single_table": 30,
+      "alias": 25,
+      "conditions": 25,
+      "close_distinctions": 20,
+      "multi_indicator": 20,
+      "clarification": 15,
+      "out_of_scope": 15
+    },
+    "family_targets": {
+      "통화신용정책보고서": 25,
+      "금융안정보고서": 25,
+      "경제전망보고서": 25,
+      "기업경영분석": 25,
+      "지급결제보고서": 15,
+      "지역경제보고서": 20,
+      "범위 밖": 15
+    },
+    "minimum_distinct_target_tables": 50
+  }
+}

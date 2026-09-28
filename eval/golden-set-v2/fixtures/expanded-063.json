@@ -1,0 +1,71 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_512Y019",
+      "label": "지역별 기업경기조사(실적(2013.1~)) · 제조업 업황BSI · 부산",
+      "frequency": "M",
+      "unit": "",
+      "item_id": "13103134492999",
+      "classifications": {
+        "objL1": "13102134492BSI_CD.AA",
+        "objL2": "13102134492ORGANISATION_UNIT.Z11"
+      },
+      "source_file": "data/tables/DT_512Y019__지역별 기업경기조사(실적(2013.1~)).csv",
+      "source_file_sha256": "2b29cd14770244589e0e9d9810986c315898c9f257f84eee183856f8cfece2b1",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202509",
+          "value": 67.0
+        },
+        {
+          "period": "202510",
+          "value": 60.0
+        },
+        {
+          "period": "202511",
+          "value": 65.0
+        },
+        {
+          "period": "202512",
+          "value": 63.0
+        },
+        {
+          "period": "202601",
+          "value": 63.0
+        },
+        {
+          "period": "202602",
+          "value": 63.0
+        },
+        {
+          "period": "202603",
+          "value": 68.0
+        },
+        {
+          "period": "202604",
+          "value": 63.0
+        },
+        {
+          "period": "202605",
+          "value": 67.0
+        },
+        {
+          "period": "202606",
+          "value": 69.0
+        },
+        {
+          "period": "202607",
+          "value": 68.0
+        },
+        {
+          "period": "202608",
+          "value": 62.0
+        }
+      ]
+    }
+  ]
+}

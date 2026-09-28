@@ -1,0 +1,3295 @@
+[
+  {
+    "id": "expanded-001",
+    "category": "close_distinctions",
+    "query": "신규취급액이 아닌 잔액 기준 예금은행 수신금리 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.6 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y013"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-001.json",
+        "series": [
+          {
+            "table_id": "DT_121Y013",
+            "label": "예금은행 수신금리(잔액 기준) · 저축예금",
+            "unit": "연리%"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-002",
+    "category": "close_distinctions",
+    "query": "신규취급액이 아닌 잔액 기준 예금은행 대출금리 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "공식 게시물 본문 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y015"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-002.json",
+        "series": [
+          {
+            "table_id": "DT_121Y015",
+            "label": "예금은행 대출금리(잔액 기준) · 당좌대출 4)",
+            "unit": "연리%"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-003",
+    "category": "close_distinctions",
+    "query": "잔액 기준이 아닌 신규취급액 고정금리와 변동금리 대출 비중 추이",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.6 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y010"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-004",
+    "category": "close_distinctions",
+    "query": "신규취급액이 아닌 잔액 기준 고정금리와 변동금리 대출 비중 추이",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "공식 게시물 본문 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y011"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-005",
+    "category": "alias",
+    "query": "은행에서 빌린 돈 총액은 얼마나 되나",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.7 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_104Y016"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-005.json",
+        "series": [
+          {
+            "table_id": "DT_104Y016",
+            "label": "예금은행 대출금(말잔) · 총대출금",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-006",
+    "category": "close_distinctions",
+    "query": "평잔이 아닌 말잔 원계열 본원통화 추이",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "공식 게시물 본문 — 통화",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_102Y001"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-007",
+    "category": "close_distinctions",
+    "query": "원계열이 아닌 계절조정 M2 말잔 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.6 — 통화",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_101Y001"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-007.json",
+        "series": [
+          {
+            "table_id": "DT_101Y001",
+            "label": "M2 상품별 구성내역(말잔 계절조정계열) · M2(말잔 계절조정계열)",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-008",
+    "category": "alias",
+    "query": "지역별 은행 대출 잔액은",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "공식 게시물 본문 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_141Y003"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-008.json",
+        "series": [
+          {
+            "table_id": "DT_141Y003",
+            "label": "예금은행 지역별 대출금(말잔) · 원화대출금 · 서울 · 예금은행",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-009",
+    "category": "alias",
+    "query": "사람들이 앞으로 물가가 얼마나 오를 것으로 보나",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.10 — 기대인플레이션",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_511Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-010",
+    "category": "alias",
+    "query": "가계빚을 어느 금융권에서 많이 빌렸나",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y002"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-010.json",
+        "series": [
+          {
+            "table_id": "DT_151Y002",
+            "label": "예금취급기관 가계대출(업권별 월) · 예금취급기관",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-011",
+    "category": "alias",
+    "query": "집 살 때 빌린 가계빚 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y005"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-011.json",
+        "series": [
+          {
+            "table_id": "DT_151Y005",
+            "label": "예금취급기관 가계대출(용도별 월) · 예금취급기관",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-012",
+    "category": "close_distinctions",
+    "query": "잔액이 아닌 차주당 가계대출 신규취급액 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y001"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-012.json",
+        "series": [
+          {
+            "table_id": "DT_181Y001",
+            "label": "차주당 가계대출 신규취급액 · 전체",
+            "unit": "십만원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-013",
+    "category": "close_distinctions",
+    "query": "신규취급액이 아닌 차주당 가계대출 잔액 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-014",
+    "category": "close_distinctions",
+    "query": "잔액이 아닌 차주당 주택담보대출 신규취급액 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.20 — 주택담보대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y011"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-015",
+    "category": "close_distinctions",
+    "query": "신규취급액이 아닌 차주당 주택담보대출 잔액 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.11 — 주택담보대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y012"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-016",
+    "category": "conditions",
+    "query": "2024년 이후 가계대출 신규취급액 비중 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y013"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-017",
+    "category": "conditions",
+    "query": "2024년 이후 가계대출 잔액 비중 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y016"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-018",
+    "category": "alias",
+    "query": "은행이 돈 빌려주기에 얼마나 적극적인가",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_514Y001"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-018.json",
+        "series": [
+          {
+            "table_id": "DT_514Y001",
+            "label": "대출행태서베이(대출태도) · 국내은행-차주가중종합지수",
+            "unit": ""
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-019",
+    "category": "alias",
+    "query": "은행이 보는 대출자의 위험은",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.8 — 신용위험",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_514Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-020",
+    "category": "alias",
+    "query": "사람들이 대출을 얼마나 원하나",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_514Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-021",
+    "category": "conditions",
+    "query": "2024년 이후 산업별대출금(예금은행, 기업규모별) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.12 — 기업대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_131Y018"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-022",
+    "category": "conditions",
+    "query": "2024년 이후 비은행금융기관 지역별 기업대출(말잔) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.11 — 기업대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_141Y010"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-023",
+    "category": "close_distinctions",
+    "query": "실질이 아닌 명목 경제활동별 GDP 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.8 — 성장",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y103"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-023.json",
+        "series": [
+          {
+            "table_id": "DT_200Y103",
+            "label": "경제활동별 GDP 및 GNI(계절조정 명목 분기) · 농림어업",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-024",
+    "category": "close_distinctions",
+    "query": "계절조정이 아닌 원계열 명목 GDP 추이",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 성장",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y105"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-025",
+    "category": "close_distinctions",
+    "query": "명목이 아닌 실질 국내총생산 지출 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.8 — 소비",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y108"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-025.json",
+        "series": [
+          {
+            "table_id": "DT_200Y108",
+            "label": "국내총생산에 대한 지출(계절조정 실질 분기) · 최종소비지출",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-026",
+    "category": "close_distinctions",
+    "query": "실질이 아닌 명목 국내총생산 지출 추이",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 소비",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y107"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-027",
+    "category": "close_distinctions",
+    "query": "실질이 아닌 명목 가계 목적별 소비지출 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.8 — 소비",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y140"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-027.json",
+        "series": [
+          {
+            "table_id": "DT_200Y140",
+            "label": "가계의 목적별 최종소비지출(계절조정 명목 분기) · 식료품 및 비주류 음료",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-028",
+    "category": "close_distinctions",
+    "query": "명목이 아닌 실질 가계 목적별 소비지출 추이",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 소비",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y141"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-029",
+    "category": "alias",
+    "query": "나라 전체 저축과 투자 흐름",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.7 — 투자",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y155"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-030",
+    "category": "conditions",
+    "query": "2024년 이후 수출물가지수(기본분류) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 수출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_402Y014"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-031",
+    "category": "alias",
+    "query": "수출로 받은 돈을 지수로 보면",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.7 — 수출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_403Y001"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-032",
+    "category": "alias",
+    "query": "국내에 공급되는 물건의 가격 흐름",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 물가",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_405Y006"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-033",
+    "category": "conditions",
+    "query": "2024년 이후 재무상태표(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.20 — 재무상태표",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y001"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-033.json",
+        "series": [
+          {
+            "table_id": "DT_501Y001",
+            "label": "재무상태표(제11차 한국표준산업분류 2009~) · A01 농업 · 종합 · 자산총계",
+            "unit": "백만원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-034",
+    "category": "conditions",
+    "query": "2024년 이후 손익계산서(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.26 — 손익계산서",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-035",
+    "category": "conditions",
+    "query": "2024년 이후 제조원가명세서(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.25 — 제조원가명세서",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-036",
+    "category": "conditions",
+    "query": "2024년 이후 이익잉여금 처분계산서(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.24 — 이익잉여금",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y004"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-037",
+    "category": "alias",
+    "query": "기업 몸집이 얼마나 커졌나",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 성장성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y005"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-037.json",
+        "series": [
+          {
+            "table_id": "DT_501Y005",
+            "label": "성장성 지표(제11차 한국표준산업분류 2009~) · 전산업 · 종합 · 총자산증가율",
+            "unit": "%"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-038",
+    "category": "alias",
+    "query": "기업이 장사해서 남긴 이익은",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.6 — 수익성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y006"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-038.json",
+        "series": [
+          {
+            "table_id": "DT_501Y006",
+            "label": "손익 지표(제11차 한국표준산업분류 2009~) · 전산업 · 종합 · 총자산세전순이익률",
+            "unit": "%"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-039",
+    "category": "alias",
+    "query": "기업 재무건전성은 어떤가",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 안정성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y007"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-040",
+    "category": "alias",
+    "query": "기업 자산이 얼마나 효율적으로 도나",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.35 — 회전율",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y008"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-041",
+    "category": "alias",
+    "query": "기업 직원당 생산성은",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.43 — 생산성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y009"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-042",
+    "category": "alias",
+    "query": "기업이 새로 만든 부가가치 구성은",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.27 — 부가가치",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y010"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-043",
+    "category": "alias",
+    "query": "기업 현금 유입과 유출은",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 현금흐름",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y013"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-044",
+    "category": "conditions",
+    "query": "2024년 이후 현금흐름관련 기타 주요 재무항목(2012~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.6 — 현금흐름",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y014"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-045",
+    "category": "conditions",
+    "query": "2024년 이후 현금흐름비율(2012~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 현금흐름",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y015"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-046",
+    "category": "conditions",
+    "query": "2024년 이후 재무상태표(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.21 — 재무상태표",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y001"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-047",
+    "category": "conditions",
+    "query": "2024년 이후 손익계산서(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.25 — 손익계산서",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-048",
+    "category": "conditions",
+    "query": "2024년 이후 성장성 지표(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.6 — 성장성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y005"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-049",
+    "category": "conditions",
+    "query": "2024년 이후 손익 지표(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 수익성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y006"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-050",
+    "category": "conditions",
+    "query": "2024년 이후 자산/자본 지표(제11차 한국표준산업분류, 2009~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.6 — 안정성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y007"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-051",
+    "category": "conditions",
+    "query": "2024년 이후 분위수(제11차 한국표준산업분류, 2013~) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 분위수",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y086"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-052",
+    "category": "alias",
+    "query": "카드로 결제한 규모가 얼마나 되나",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.14 — 신용카드",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_601Y003"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-052.json",
+        "series": [
+          {
+            "table_id": "DT_601Y003",
+            "label": "신용카드 · 전체 이용건수 · 합계",
+            "unit": "천건"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-053",
+    "category": "conditions",
+    "query": "2024년 이후 결제시스템별 통계 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "locator": "원문 PDF p.6 — 결제시스템",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_602Y001"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-054",
+    "category": "conditions",
+    "query": "2024년 이후 지급수단별 통계 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 지급수단",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_602Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-055",
+    "category": "single_table",
+    "query": "한은금융망결제통계표 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "locator": "원문 PDF p.6 — 한은금융망",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_603Y001"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-056",
+    "category": "single_table",
+    "query": "지급결제동향 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 지급결제",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_603Y010"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-056.json",
+        "series": [
+          {
+            "table_id": "DT_603Y010",
+            "label": "지급결제동향 · 일반자금이체 · 건수",
+            "unit": "건"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-057",
+    "category": "single_table",
+    "query": "지로시스템 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "locator": "원문 PDF p.22 — 지로",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_604Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-058",
+    "category": "single_table",
+    "query": "금융공동망 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.9 — 금융공동망",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_605Y012"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-059",
+    "category": "single_table",
+    "query": "한은금융망 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "locator": "원문 PDF p.6 — 한은금융망",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_606Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-060",
+    "category": "single_table",
+    "query": "전자지급결제대행 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 전자지급결제",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_633Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-061",
+    "category": "single_table",
+    "query": "선불전자지급수단 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "locator": "원문 PDF p.6 — 선불전자지급",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_633Y004"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-062",
+    "category": "single_table",
+    "query": "어음교환 및 부도 추이",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 어음",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_801Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-063",
+    "category": "single_table",
+    "query": "지역별 기업경기조사(실적(2013.1~)) 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.6 — 경기",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_512Y019"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/expanded-063.json",
+        "series": [
+          {
+            "table_id": "DT_512Y019",
+            "label": "지역별 기업경기조사(실적(2013.1~)) · 제조업 업황BSI · 부산",
+            "unit": ""
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "누락 기간을 보간하지 않음"
+        ]
+      }
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-064",
+    "category": "single_table",
+    "query": "지역별 기업경기조사(전망(2013.2~)) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.10 — 경기",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_512Y020"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-065",
+    "category": "single_table",
+    "query": "소비자동향조사(지역, 월) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.10 — 소비",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_511Y004"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-066",
+    "category": "single_table",
+    "query": "산업별대출금(예금은행, 지역별, 전산업) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.6 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_132Y001"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-067",
+    "category": "single_table",
+    "query": "산업별대출금(예금은행, 지역별, 용도별) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.12 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_132Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-068",
+    "category": "single_table",
+    "query": "예금은행 지역별 수신(말잔) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.10 — 금융",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_141Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-069",
+    "category": "single_table",
+    "query": "예금은행 지역별 대출금(말잔) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.12 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_141Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-070",
+    "category": "single_table",
+    "query": "예금은행 지역별 기업대출(말잔) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.6 — 기업대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_141Y004"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-071",
+    "category": "single_table",
+    "query": "예금은행 지역별 가계대출(말잔) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.12 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-072",
+    "category": "single_table",
+    "query": "비은행금융기관 지역별 가계대출(말잔) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.6 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y006"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-073",
+    "category": "single_table",
+    "query": "수출물량지수 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.6 — 수출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_403Y002"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-074",
+    "category": "single_table",
+    "query": "경제활동별 GDP 및 GNI(계절조정, 실질, 분기) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.10 — 성장",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y104"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-075",
+    "category": "single_table",
+    "query": "기업경기조사(실적) 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.6 — 경기",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_512Y013"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-076",
+    "category": "single_table",
+    "query": "경제심리지수 추이",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.10 — 경기",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_513Y001"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-077",
+    "category": "multi_indicator",
+    "query": "예금은행 수신금리와 대출금리 잔액 기준 비교",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.6 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y013"
+        ],
+        [
+          "DT_121Y015"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-078",
+    "category": "multi_indicator",
+    "query": "M2와 본원통화 증가 흐름 비교",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "공식 게시물 본문 — 통화",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_101Y001"
+        ],
+        [
+          "DT_102Y001"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-079",
+    "category": "multi_indicator",
+    "query": "차주당 가계대출 신규취급액과 잔액을 같이 봐줘",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y001"
+        ],
+        [
+          "DT_181Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-080",
+    "category": "multi_indicator",
+    "query": "차주당 주택담보대출 신규취급액과 잔액 비교",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.11 — 주택담보대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_181Y011"
+        ],
+        [
+          "DT_181Y012"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-081",
+    "category": "multi_indicator",
+    "query": "명목 GDP와 실질 GDP를 비교해줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.8 — 성장",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y103"
+        ],
+        [
+          "DT_200Y104"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-082",
+    "category": "multi_indicator",
+    "query": "수출금액지수와 수출물량지수를 같이 봐줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 수출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_403Y001"
+        ],
+        [
+          "DT_403Y002"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-083",
+    "category": "multi_indicator",
+    "query": "기업 성장성과 수익성 지표를 같이 봐줘",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 성장성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y005"
+        ],
+        [
+          "DT_501Y006"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-084",
+    "category": "multi_indicator",
+    "query": "기업 재무상태표와 손익계산서 비교",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.21 — 재무상태표",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y001"
+        ],
+        [
+          "DT_501Y002"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-085",
+    "category": "multi_indicator",
+    "query": "자산 회전율과 생산성 지표 비교",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.43 — 생산성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y008"
+        ],
+        [
+          "DT_501Y009"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-086",
+    "category": "multi_indicator",
+    "query": "기업 현금흐름표와 현금흐름비율 비교",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.6 — 현금흐름",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_501Y013"
+        ],
+        [
+          "DT_501Y015"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-087",
+    "category": "multi_indicator",
+    "query": "신용카드 결제와 선불전자지급수단을 비교해줘",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 지급결제",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_601Y003"
+        ],
+        [
+          "DT_633Y004"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-088",
+    "category": "multi_indicator",
+    "query": "한은금융망과 금융공동망 결제 흐름 비교",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "locator": "원문 PDF p.6 — 지급결제",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_606Y002"
+        ],
+        [
+          "DT_605Y012"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-089",
+    "category": "multi_indicator",
+    "query": "2013년 이후 지역별 기업경기 실적과 전망을 비교해줘",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.6 — 경기",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_512Y019"
+        ],
+        [
+          "DT_512Y020"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-090",
+    "category": "multi_indicator",
+    "query": "지역별 예금은행 수신과 지역별 예금은행 대출을 비교해줘",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.6 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_141Y002"
+        ],
+        [
+          "DT_141Y003"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-091",
+    "category": "multi_indicator",
+    "query": "지역별 가계대출과 기업대출 비교",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.12 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y003"
+        ],
+        [
+          "DT_141Y004"
+        ]
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-092",
+    "category": "clarification",
+    "query": "금리 추이 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.6 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_121Y002",
+        "DT_121Y006"
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-093",
+    "category": "clarification",
+    "query": "가계 빚 얼마나 늘었어",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "원문 PDF p.8 — 가계대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_sha256": "5dc9cfa51b8584039f5cd2d2d5b68d1a3ae9eb1d7e3463d9fed69b1953cc9fcf"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_151Y001",
+        "DT_151Y002"
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-094",
+    "category": "clarification",
+    "query": "대출 상황 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.7 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_104Y016",
+        "DT_151Y001"
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "expanded-095",
+    "category": "clarification",
+    "query": "물가 어떻게 됐어",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.8 — 물가",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_401Y015",
+        "DT_404Y014"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-096",
+    "category": "clarification",
+    "query": "기업 실적은 어떠니",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10094232",
+      "locator": "원문 PDF p.6 — 성장성",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/28c42cb6b6b04bc7ac742c84f55f9a6e/1/648e72ea66ea4ed7a56e82311e4f4d26.pdf",
+      "pdf_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_501Y005",
+        "DT_501Y006"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-097",
+    "category": "clarification",
+    "query": "기업 재무 상태 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.21 — 재무상태표",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_501Y001",
+        "DT_501Y002"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-098",
+    "category": "clarification",
+    "query": "결제 규모 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 지급결제",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_601Y003",
+        "DT_603Y010"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-099",
+    "category": "clarification",
+    "query": "전자지급은 얼마나 됐어",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2024",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200722&nttId=10090993",
+      "locator": "원문 PDF p.6 — 전자지급",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/1b669bf496924e59b47b0fffac00329c/1/f96eb6db70224422aae15c27c9807119.pdf",
+      "pdf_sha256": "3b8b03eba893f1831d14d418eba84f711f2e5bd7302e5e76d84961b6de5cca2c"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_633Y002",
+        "DT_633Y004"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-100",
+    "category": "clarification",
+    "query": "지역 경기는 어때",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.6 — 경기",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_512Y019",
+        "DT_511Y004"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-101",
+    "category": "clarification",
+    "query": "지역별 대출 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.6 — 대출",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_141Y003",
+        "DT_151Y003"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-102",
+    "category": "clarification",
+    "query": "기업경기 전망 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-07",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=11063266",
+      "locator": "원문 PDF p.6 — 경기",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/46f3b338f1e94556a9d9623366bef5b8/1/0d3090f426c24b76a64c8be3197fab52.pdf",
+      "pdf_sha256": "14b87089fcfdbe5ac07b3c0f950147fae9e8e11507f7e619000337ddc7b4e4ab"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_512Y014",
+        "DT_512Y020"
+      ]
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-103",
+    "category": "out_of_scope",
+    "query": "내년 기준금리를 정확히 예측해줘",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.6 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-104",
+    "category": "out_of_scope",
+    "query": "2027년 한국 성장률 전망치를 실제 관측 그래프로 그려줘",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.6 — 금융",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-105",
+    "category": "out_of_scope",
+    "query": "2027년 원달러 환율을 예측해줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.8 — 성장",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-106",
+    "category": "out_of_scope",
+    "query": "지금 주식 매수 종목을 추천해줘",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.6 — 기업",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-107",
+    "category": "out_of_scope",
+    "query": "대출을 받아도 되는지 개인 재무 상담해줘",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 결제",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-108",
+    "category": "out_of_scope",
+    "query": "스테이블코인 가격을 예측해줘",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.6 — 지역",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-109",
+    "category": "out_of_scope",
+    "query": "2027년 물가를 확정 관측값으로 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "원문 PDF p.6 — 금리",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/3d42a054e8ac48a4a7cc9f47d9b2342c/1/90062882a28e41eba46626b219fd89d8.pdf",
+      "pdf_sha256": "beb99b56b11f7df3facec760aa399eff1d7e892b31bc2bfba5d5829575be249b"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-110",
+    "category": "out_of_scope",
+    "query": "기업의 내년 파산을 예측해줘",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "원문 PDF p.6 — 금융",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/4f1a9e7acede40168fde41d1e555d2f4/1/05eb1cce55c94e1299ef42f1b46ac153.pdf",
+      "pdf_sha256": "ef33431a464ca6641cfbded4900315863aee9f56d0fcdb26d851ee39b6227508"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-111",
+    "category": "out_of_scope",
+    "query": "2027년 지역별 제조업 생산량 예측치를 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "원문 PDF p.8 — 성장",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/dfe965a8e38a4e4b9fd1a6989a7ee18e/1/3aa17ed0ffd64f55b9c74755d3c622ae.pdf",
+      "pdf_sha256": "871c8215234f864cd39975ad44b5bc696f259c1fec05efc745d7e0b3724eefb1"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-112",
+    "category": "out_of_scope",
+    "query": "2027년 카드 결제 규모 전망치를 실측값으로 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "corporate-2023",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?menuNo=200455&nttId=10087575",
+      "locator": "원문 PDF p.6 — 기업",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/bf513c6fcd2e44a7b3e49795602bf796/1/ee7c83a9847d495194d044e28e6ec421.pdf",
+      "pdf_sha256": "29cd0164ae3fb59032cda11fb55a015371376240cfbe03d89e74c912287303f1"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-113",
+    "category": "out_of_scope",
+    "query": "오늘의 미세먼지 농도를 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "payment-2025",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000600/view.do?menuNo=200072&nttId=10097493",
+      "locator": "원문 PDF p.6 — 결제",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/977c0991eed94df19242522542d6cc51/1/1650009c83044e8089c8e38ba1f60ee2.pdf",
+      "pdf_sha256": "447f9746e58a05856215810f54ce581f081dee1678c276e296a4cb3b9b132574"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  },
+  {
+    "id": "expanded-114",
+    "category": "out_of_scope",
+    "query": "주말 축구 경기 결과를 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "regional-2026-01",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002507/view.do?menuNo=200069&nttId=10096149",
+      "locator": "원문 PDF p.6 — 지역",
+      "basis": "간행물의 주제를 사용자 통계 질문으로 변환하고, 정답 표 ID는 별도로 로컬 카탈로그에서 검증",
+      "pdf_url": "https://www.bok.or.kr/fileSrc/portal/abf85ca1e48740de8b6581316d19c3ac/1/7f4b7e174159403aaf2cbe38ca312077.pdf",
+      "pdf_sha256": "2c29f5190c6890da00b7b6a0a31c7046779c02260c7aa9c58c8448c158490d48"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "holdout"
+  }
+]

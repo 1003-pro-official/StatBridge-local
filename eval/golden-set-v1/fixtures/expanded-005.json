@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_104Y016",
+      "label": "예금은행 대출금(말잔) · 총대출금",
+      "frequency": "M",
+      "unit": "십억원",
+      "item_id": "13103860883999",
+      "classifications": {
+        "objL1": "13102860883ACC_ITEM.BDCA1"
+      },
+      "source_file": "data/tables/DT_104Y016__예금은행 대출금(말잔).csv",
+      "source_file_sha256": "12ca38689b214ce2fe8151990adf57f7649dec8adb2911651fc19c27170d3d55",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202507",
+          "value": 2453183.3
+        },
+        {
+          "period": "202508",
+          "value": 2467413.0
+        },
+        {
+          "period": "202509",
+          "value": 2475267.1
+        },
+        {
+          "period": "202510",
+          "value": 2485918.2
+        },
+        {
+          "period": "202511",
+          "value": 2495858.4
+        },
+        {
+          "period": "202512",
+          "value": 2490883.5
+        },
+        {
+          "period": "202601",
+          "value": 2495243.3
+        },
+        {
+          "period": "202602",
+          "value": 2505840.0
+        },
+        {
+          "period": "202603",
+          "value": 2515637.1
+        },
+        {
+          "period": "202604",
+          "value": 2527788.2
+        },
+        {
+          "period": "202605",
+          "value": 2543787.4
+        },
+        {
+          "period": "202606",
+          "value": 2558241.9
+        }
+      ]
+    }
+  ]
+}

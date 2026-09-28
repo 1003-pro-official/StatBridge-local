@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_121Y015",
+      "label": "예금은행 대출금리(잔액 기준) · 당좌대출 4)",
+      "frequency": "M",
+      "unit": "연리%",
+      "item_id": "13103134612999",
+      "classifications": {
+        "objL1": "13102134612ACC_ITEM.BECBLB04"
+      },
+      "source_file": "data/tables/DT_121Y015__예금은행 대출금리(잔액 기준).csv",
+      "source_file_sha256": "512e23e92d64c1e00d83f1ba55c158734f95b21715a760849cf5f9084a20eef6",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202508",
+          "value": 4.12
+        },
+        {
+          "period": "202509",
+          "value": 4.14
+        },
+        {
+          "period": "202510",
+          "value": 4.04
+        },
+        {
+          "period": "202511",
+          "value": 4.39
+        },
+        {
+          "period": "202512",
+          "value": 4.17
+        },
+        {
+          "period": "202601",
+          "value": 4.2
+        },
+        {
+          "period": "202602",
+          "value": 4.32
+        },
+        {
+          "period": "202603",
+          "value": 4.34
+        },
+        {
+          "period": "202604",
+          "value": 4.4
+        },
+        {
+          "period": "202605",
+          "value": 4.45
+        },
+        {
+          "period": "202606",
+          "value": 4.37
+        },
+        {
+          "period": "202607",
+          "value": 4.56
+        }
+      ]
+    }
+  ]
+}

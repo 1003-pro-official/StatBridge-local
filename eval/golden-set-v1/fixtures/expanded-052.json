@@ -1,0 +1,71 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_601Y003",
+      "label": "신용카드 · 전체 이용건수 · 합계",
+      "frequency": "M",
+      "unit": "천건",
+      "item_id": "13103134583999",
+      "classifications": {
+        "objL1": "13102134583ACC_ITEM.100000",
+        "objL2": "13102134583FINCL_GRP_CD.00"
+      },
+      "source_file": "data/tables/DT_601Y003__신용카드.csv",
+      "source_file_sha256": "0b29f695e94a333ae35b80b308e0854278ff1095717ff0661931400e2d2699db",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202507",
+          "value": 1690270.042
+        },
+        {
+          "period": "202508",
+          "value": 1655590.4
+        },
+        {
+          "period": "202509",
+          "value": 1665830.24
+        },
+        {
+          "period": "202510",
+          "value": 1625250.522
+        },
+        {
+          "period": "202511",
+          "value": 1613894.2794
+        },
+        {
+          "period": "202512",
+          "value": 1662897.915
+        },
+        {
+          "period": "202601",
+          "value": 1585431.319
+        },
+        {
+          "period": "202602",
+          "value": 1443670.165
+        },
+        {
+          "period": "202603",
+          "value": 1681172.78
+        },
+        {
+          "period": "202604",
+          "value": 1663613.748
+        },
+        {
+          "period": "202605",
+          "value": 1709069.976
+        },
+        {
+          "period": "202606",
+          "value": 1701220.429
+        }
+      ]
+    }
+  ]
+}

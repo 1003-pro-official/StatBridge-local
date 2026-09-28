@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Build artifacts / binaries — 소스 경로에 커밋 금지
+*.exe
+*.dll

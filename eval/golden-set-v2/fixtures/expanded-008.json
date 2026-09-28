@@ -1,0 +1,72 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_141Y003",
+      "label": "예금은행 지역별 대출금(말잔) · 원화대출금 · 서울 · 예금은행",
+      "frequency": "M",
+      "unit": "십억원",
+      "item_id": "13103134696999",
+      "classifications": {
+        "objL1": "13102134696ACC_ITEM.200000",
+        "objL2": "13102134696RG_CD.A00",
+        "objL3": "13102134696REP_AGENCY.0950"
+      },
+      "source_file": "data/tables/DT_141Y003__예금은행 지역별 대출금(말잔).csv",
+      "source_file_sha256": "745cc2459f264bc143266f38b227f37e4ee4412aafd80fd04331e7b46dd2f174",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202507",
+          "value": 1014280.7
+        },
+        {
+          "period": "202508",
+          "value": 1023672.8
+        },
+        {
+          "period": "202509",
+          "value": 1027949.3
+        },
+        {
+          "period": "202510",
+          "value": 1032081.7
+        },
+        {
+          "period": "202511",
+          "value": 1040973.4
+        },
+        {
+          "period": "202512",
+          "value": 1037103.6
+        },
+        {
+          "period": "202601",
+          "value": 1039916.2
+        },
+        {
+          "period": "202602",
+          "value": 1046268.9
+        },
+        {
+          "period": "202603",
+          "value": 1051999.2
+        },
+        {
+          "period": "202604",
+          "value": 1058649.0
+        },
+        {
+          "period": "202605",
+          "value": 1068718.5
+        },
+        {
+          "period": "202606",
+          "value": 1080235.4
+        }
+      ]
+    }
+  ]
+}

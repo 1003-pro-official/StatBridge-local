@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_121Y002",
+      "label": "예금은행 저축성수신 신규취급액 금리",
+      "frequency": "M",
+      "unit": "연리%",
+      "source_file": "data/tables/DT_121Y002__예금은행 수신금리(신규취급액 기준).csv",
+      "source_file_sha256": "c0a159e4b4d7dbb5f525401a27fea881b2e3abca9d1b2483b38361e3a066d169",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 3.08
+        },
+        {
+          "period": "202502",
+          "value": 2.97
+        },
+        {
+          "period": "202503",
+          "value": 2.83
+        },
+        {
+          "period": "202504",
+          "value": 2.72
+        },
+        {
+          "period": "202505",
+          "value": 2.64
+        },
+        {
+          "period": "202506",
+          "value": 2.55
+        },
+        {
+          "period": "202507",
+          "value": 2.51
+        },
+        {
+          "period": "202508",
+          "value": 2.49
+        },
+        {
+          "period": "202509",
+          "value": 2.52
+        },
+        {
+          "period": "202510",
+          "value": 2.56
+        },
+        {
+          "period": "202511",
+          "value": 2.8
+        },
+        {
+          "period": "202512",
+          "value": 2.9
+        }
+      ],
+      "item_id": "13103134588999",
+      "classifications": {
+        "objL1": "13102134588ACC_ITEM.BEABAA1"
+      }
+    }
+  ]
+}

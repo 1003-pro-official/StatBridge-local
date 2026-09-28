@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_200Y108",
+      "label": "국내총생산에 대한 지출(계절조정 실질 분기) · 최종소비지출",
+      "frequency": "Q",
+      "unit": "십억원",
+      "item_id": "13103136297999",
+      "classifications": {
+        "objL1": "13102136297ACC_ITEM.10101"
+      },
+      "source_file": "data/tables/DT_200Y108__국내총생산에 대한 지출(계절조정, 실질, 분기).csv",
+      "source_file_sha256": "37aca6e0ab7754c20b28561cb5d751f3679c9b10af883feeaa07d87bdbabaa2f",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202303",
+          "value": 369071.8
+        },
+        {
+          "period": "202304",
+          "value": 370544.2
+        },
+        {
+          "period": "202401",
+          "value": 373721.6
+        },
+        {
+          "period": "202402",
+          "value": 374513.4
+        },
+        {
+          "period": "202403",
+          "value": 376312.0
+        },
+        {
+          "period": "202404",
+          "value": 376594.2
+        },
+        {
+          "period": "202501",
+          "value": 377128.4
+        },
+        {
+          "period": "202502",
+          "value": 380104.7
+        },
+        {
+          "period": "202503",
+          "value": 384651.6
+        },
+        {
+          "period": "202504",
+          "value": 386760.4
+        },
+        {
+          "period": "202601",
+          "value": 387893.4
+        },
+        {
+          "period": "202602",
+          "value": 389095.6
+        }
+      ]
+    }
+  ]
+}

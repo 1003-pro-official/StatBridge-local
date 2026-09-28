@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_514Y001",
+      "label": "대출행태서베이(대출태도) · 국내은행-차주가중종합지수",
+      "frequency": "Q",
+      "unit": "",
+      "item_id": "13103134672999",
+      "classifications": {
+        "objL1": "13102134672ACC_CD.AA"
+      },
+      "source_file": "data/tables/DT_514Y001__대출행태서베이(대출태도).csv",
+      "source_file_sha256": "2f983c73af6b3a6180f5fe7e3c266d321434e9a42d1fcb101eec771d31351fce",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202304",
+          "value": -6.0
+        },
+        {
+          "period": "202401",
+          "value": -3.0
+        },
+        {
+          "period": "202402",
+          "value": -6.0
+        },
+        {
+          "period": "202403",
+          "value": -17.0
+        },
+        {
+          "period": "202404",
+          "value": -27.0
+        },
+        {
+          "period": "202501",
+          "value": 7.0
+        },
+        {
+          "period": "202502",
+          "value": -13.0
+        },
+        {
+          "period": "202503",
+          "value": -28.0
+        },
+        {
+          "period": "202504",
+          "value": -21.0
+        },
+        {
+          "period": "202601",
+          "value": -1.0
+        },
+        {
+          "period": "202602",
+          "value": -2.0
+        },
+        {
+          "period": "202603",
+          "value": -7.0
+        }
+      ]
+    }
+  ]
+}

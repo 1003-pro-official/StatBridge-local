@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_121Y013",
+      "label": "예금은행 수신금리(잔액 기준) · 저축예금",
+      "frequency": "M",
+      "unit": "연리%",
+      "item_id": "13103134701999",
+      "classifications": {
+        "objL1": "13102134701ACC_ITEM.BEABAB221"
+      },
+      "source_file": "data/tables/DT_121Y013__예금은행 수신금리(잔액 기준).csv",
+      "source_file_sha256": "a1be15eae81df7e459cb61ec4ee06518597cf14a48ba3f4ae52b6db4950fefbf",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202508",
+          "value": 0.27
+        },
+        {
+          "period": "202509",
+          "value": 0.27
+        },
+        {
+          "period": "202510",
+          "value": 0.27
+        },
+        {
+          "period": "202511",
+          "value": 0.27
+        },
+        {
+          "period": "202512",
+          "value": 0.27
+        },
+        {
+          "period": "202601",
+          "value": 0.26
+        },
+        {
+          "period": "202602",
+          "value": 0.26
+        },
+        {
+          "period": "202603",
+          "value": 0.27
+        },
+        {
+          "period": "202604",
+          "value": 0.27
+        },
+        {
+          "period": "202605",
+          "value": 0.27
+        },
+        {
+          "period": "202606",
+          "value": 0.27
+        },
+        {
+          "period": "202607",
+          "value": 0.26
+        }
+      ]
+    }
+  ]
+}

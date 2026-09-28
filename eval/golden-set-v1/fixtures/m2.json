@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_161Y008",
+      "label": "M2 말잔 원계열",
+      "frequency": "M",
+      "unit": "십억원",
+      "source_file": "data/tables/DT_161Y008__M2 상품별 구성내역(말잔, 원계열).csv",
+      "source_file_sha256": "116cbe41639a72d38484b7d39d2871e1a546f1cbad9b2d7a46eddbddf41b4ffc",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 3903317.901621
+        },
+        {
+          "period": "202502",
+          "value": 3921166.766554
+        },
+        {
+          "period": "202503",
+          "value": 3920129.457673
+        },
+        {
+          "period": "202504",
+          "value": 3930369.598335
+        },
+        {
+          "period": "202505",
+          "value": 3965821.78375
+        },
+        {
+          "period": "202506",
+          "value": 3975620.037104
+        },
+        {
+          "period": "202507",
+          "value": 3997670.471233
+        },
+        {
+          "period": "202508",
+          "value": 4056713.228332
+        },
+        {
+          "period": "202509",
+          "value": 4059617.614272
+        },
+        {
+          "period": "202510",
+          "value": 4050412.109134
+        },
+        {
+          "period": "202511",
+          "value": 4081033.534892
+        },
+        {
+          "period": "202512",
+          "value": 4099741.039891
+        }
+      ],
+      "item_id": "13103844599999",
+      "classifications": {
+        "objL1": "13102844599ACC_ITEM.BBGA00"
+      }
+    }
+  ]
+}

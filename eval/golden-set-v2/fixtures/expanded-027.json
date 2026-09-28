@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_200Y140",
+      "label": "가계의 목적별 최종소비지출(계절조정 명목 분기) · 식료품 및 비주류 음료",
+      "frequency": "Q",
+      "unit": "십억원",
+      "item_id": "13103136265999",
+      "classifications": {
+        "objL1": "13102136265ACC_ITEM.10101"
+      },
+      "source_file": "data/tables/DT_200Y140__가계의 목적별 최종소비지출(계절조정, 명목, 분기).csv",
+      "source_file_sha256": "47e07837108a9a8cada0e38366998a70ed75986a0a901ed3a96c49d99fda25a8",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202303",
+          "value": 36152.0
+        },
+        {
+          "period": "202304",
+          "value": 36242.3
+        },
+        {
+          "period": "202401",
+          "value": 36526.9
+        },
+        {
+          "period": "202402",
+          "value": 36991.1
+        },
+        {
+          "period": "202403",
+          "value": 36983.1
+        },
+        {
+          "period": "202404",
+          "value": 37922.9
+        },
+        {
+          "period": "202501",
+          "value": 38252.8
+        },
+        {
+          "period": "202502",
+          "value": 38451.9
+        },
+        {
+          "period": "202503",
+          "value": 37922.8
+        },
+        {
+          "period": "202504",
+          "value": 40117.5
+        },
+        {
+          "period": "202601",
+          "value": 40436.6
+        },
+        {
+          "period": "202602",
+          "value": 40872.3
+        }
+      ]
+    }
+  ]
+}

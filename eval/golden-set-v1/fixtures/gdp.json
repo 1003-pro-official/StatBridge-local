@@ -1,0 +1,54 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_200Y104",
+      "label": "실질 국내총생산",
+      "frequency": "Q",
+      "unit": "십억원",
+      "source_file": "data/tables/DT_200Y104__경제활동별 GDP 및 GNI(계절조정, 실질, 분기).csv",
+      "source_file_sha256": "4edbeb380a695ab5baf8f291a9a27ee868082746b90e0c54b93bd498d05a4238",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202401",
+          "value": 575171.3
+        },
+        {
+          "period": "202402",
+          "value": 574301.7
+        },
+        {
+          "period": "202403",
+          "value": 574618.7
+        },
+        {
+          "period": "202404",
+          "value": 575977.0
+        },
+        {
+          "period": "202501",
+          "value": 574984.3
+        },
+        {
+          "period": "202502",
+          "value": 578719.2
+        },
+        {
+          "period": "202503",
+          "value": 586599.9
+        },
+        {
+          "period": "202504",
+          "value": 585964.0
+        }
+      ],
+      "item_id": "13103136259999",
+      "classifications": {
+        "objL1": "13102136259ACC_ITEM.1400"
+      }
+    }
+  ]
+}

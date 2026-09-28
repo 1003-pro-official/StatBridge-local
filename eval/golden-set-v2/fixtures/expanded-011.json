@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_151Y005",
+      "label": "예금취급기관 가계대출(용도별 월) · 예금취급기관",
+      "frequency": "M",
+      "unit": "십억원",
+      "item_id": "13103134699999",
+      "classifications": {
+        "objL1": "13102134699ACC_ITEM.1110000"
+      },
+      "source_file": "data/tables/DT_151Y005__예금취급기관 가계대출(용도별, 월).csv",
+      "source_file_sha256": "56e4b140d2c4a40a720fed65db05c194ec6c56a8561229c738b5fda5cacc2112",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202507",
+          "value": 1308782.4
+        },
+        {
+          "period": "202508",
+          "value": 1314357.0
+        },
+        {
+          "period": "202509",
+          "value": 1316613.6
+        },
+        {
+          "period": "202510",
+          "value": 1321670.2
+        },
+        {
+          "period": "202511",
+          "value": 1325872.6
+        },
+        {
+          "period": "202512",
+          "value": 1326681.3
+        },
+        {
+          "period": "202601",
+          "value": 1327867.4
+        },
+        {
+          "period": "202602",
+          "value": 1331582.9
+        },
+        {
+          "period": "202603",
+          "value": 1334607.5
+        },
+        {
+          "period": "202604",
+          "value": 1338626.4
+        },
+        {
+          "period": "202605",
+          "value": 1345183.5
+        },
+        {
+          "period": "202606",
+          "value": 1350997.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_200Y103",
+      "label": "경제활동별 GDP 및 GNI(계절조정 명목 분기) · 농림어업",
+      "frequency": "Q",
+      "unit": "십억원",
+      "item_id": "13103136258999",
+      "classifications": {
+        "objL1": "13102136258ACC_ITEM.1101"
+      },
+      "source_file": "data/tables/DT_200Y103__경제활동별 GDP 및 GNI(계절조정, 명목, 분기).csv",
+      "source_file_sha256": "7e0ab7e30206a093da9d96cf17d862251a83c8b09d4f1d801c156852655e5cb9",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202303",
+          "value": 8762.5
+        },
+        {
+          "period": "202304",
+          "value": 9005.1
+        },
+        {
+          "period": "202401",
+          "value": 9681.0
+        },
+        {
+          "period": "202402",
+          "value": 9051.2
+        },
+        {
+          "period": "202403",
+          "value": 8435.1
+        },
+        {
+          "period": "202404",
+          "value": 9430.9
+        },
+        {
+          "period": "202501",
+          "value": 9748.8
+        },
+        {
+          "period": "202502",
+          "value": 8963.1
+        },
+        {
+          "period": "202503",
+          "value": 9099.0
+        },
+        {
+          "period": "202504",
+          "value": 9686.2
+        },
+        {
+          "period": "202601",
+          "value": 9797.7
+        },
+        {
+          "period": "202602",
+          "value": 9221.9
+        }
+      ]
+    }
+  ]
+}

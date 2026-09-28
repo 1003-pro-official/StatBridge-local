@@ -1,0 +1,54 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_151Y001",
+      "label": "가계신용",
+      "frequency": "Q",
+      "unit": "십억원",
+      "source_file": "data/tables/DT_151Y001__가계신용(업권별, 분기).csv",
+      "source_file_sha256": "7f4f5cb1d66cc9ad609d7caf575251ac50e4a7bc0e852126808ab4b686bc8784",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202401",
+          "value": 1879403.258112
+        },
+        {
+          "period": "202402",
+          "value": 1892719.127544
+        },
+        {
+          "period": "202403",
+          "value": 1911440.977868
+        },
+        {
+          "period": "202404",
+          "value": 1922366.008349
+        },
+        {
+          "period": "202501",
+          "value": 1924990.1396
+        },
+        {
+          "period": "202502",
+          "value": 1949977.450175
+        },
+        {
+          "period": "202503",
+          "value": 1964816.698757
+        },
+        {
+          "period": "202504",
+          "value": 1979088.552599
+        }
+      ],
+      "item_id": "13103134771999",
+      "classifications": {
+        "objL1": "13102134771ACC_ITEM.1000000"
+      }
+    }
+  ]
+}

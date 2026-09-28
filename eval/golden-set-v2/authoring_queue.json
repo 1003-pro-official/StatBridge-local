@@ -1,0 +1,602 @@
+[
+  {
+    "id": "v2-draft-001",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-002",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-003",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-004",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-005",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-006",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-007",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-008",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-009",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-010",
+    "family": "통화신용정책보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-011",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-012",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-013",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-014",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-015",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-016",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-017",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-018",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-019",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-020",
+    "family": "금융안정보고서",
+    "case_type": "follow_up",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-021",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-022",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-023",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-024",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-025",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-026",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-027",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-028",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-029",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-030",
+    "family": "경제전망보고서",
+    "case_type": "catalog_only",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-031",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-032",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-033",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-034",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-035",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-036",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-037",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-038",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-039",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-040",
+    "family": "기업경영분석",
+    "case_type": "clear_no_clarification",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-041",
+    "family": "지급결제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-042",
+    "family": "지급결제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-043",
+    "family": "지급결제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-044",
+    "family": "지급결제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-045",
+    "family": "지급결제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-046",
+    "family": "지역경제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-047",
+    "family": "지역경제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-048",
+    "family": "지역경제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-049",
+    "family": "지역경제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  },
+  {
+    "id": "v2-draft-050",
+    "family": "지역경제보고서",
+    "case_type": "chart_e2e",
+    "status": "needs_source_and_human_review",
+    "eligible_for_scoring": false,
+    "authoring_requirements": {
+      "source_locator": "기존 v1 근거를 복사하지 말고 실제 보고서 쪽·표·그림을 확인해 기록",
+      "supported_target": "실제 카탈로그에서 table/item/classification ID와 데이터 가용성을 검증",
+      "independent_review": "작성자와 다른 검토자가 질문 의도·정답·역질문 결정을 확인"
+    }
+  }
+]

@@ -1,0 +1,71 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_603Y010",
+      "label": "지급결제동향 · 일반자금이체 · 건수",
+      "frequency": "M",
+      "unit": "건",
+      "item_id": "13103134582999",
+      "classifications": {
+        "objL1": "13102134582ACC_ITEM.S10000",
+        "objL2": "13102134582GUBUN_CD.EACH"
+      },
+      "source_file": "data/tables/DT_603Y010__지급결제동향.csv",
+      "source_file_sha256": "9d1212a754a4b5c0a30e7fdf713458ab0c1b67f8e674ceaa546849f340d85b3d",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202509",
+          "value": 106920.0
+        },
+        {
+          "period": "202510",
+          "value": 91616.0
+        },
+        {
+          "period": "202511",
+          "value": 99053.0
+        },
+        {
+          "period": "202512",
+          "value": 112747.0
+        },
+        {
+          "period": "202601",
+          "value": 102021.0
+        },
+        {
+          "period": "202602",
+          "value": 81527.0
+        },
+        {
+          "period": "202603",
+          "value": 116979.0
+        },
+        {
+          "period": "202604",
+          "value": 114133.0
+        },
+        {
+          "period": "202605",
+          "value": 101769.0
+        },
+        {
+          "period": "202606",
+          "value": 119142.0
+        },
+        {
+          "period": "202607",
+          "value": 114049.0
+        },
+        {
+          "period": "202608",
+          "value": 102123.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_501Y005",
+      "label": "성장성 지표(제11차 한국표준산업분류 2009~) · 전산업 · 종합 · 총자산증가율",
+      "frequency": "Y",
+      "unit": "%",
+      "item_id": "13103134632999",
+      "classifications": {
+        "objL1": "13102134632BZTYP_CD.ZZZ00",
+        "objL2": "13102134632ENTERPRISE_SCALE.A",
+        "objL3": "13102134632ACC_ITEM.501"
+      },
+      "source_file": "data/tables/DT_501Y005__성장성 지표(제11차 한국표준산업분류, 2009~).csv",
+      "source_file_sha256": "0a92224f72d0c698c811be64c69de23e6cdf333a807aca173546c5d5117ab216",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "2013",
+          "value": 4.59
+        },
+        {
+          "period": "2014",
+          "value": 4.29
+        },
+        {
+          "period": "2015",
+          "value": 5.5
+        },
+        {
+          "period": "2016",
+          "value": 6.29
+        },
+        {
+          "period": "2017",
+          "value": 7.59
+        },
+        {
+          "period": "2018",
+          "value": 5.83
+        },
+        {
+          "period": "2019",
+          "value": 6.09
+        },
+        {
+          "period": "2020",
+          "value": 7.94
+        },
+        {
+          "period": "2021",
+          "value": 12.66
+        },
+        {
+          "period": "2022",
+          "value": 9.66
+        },
+        {
+          "period": "2023",
+          "value": 6.34
+        },
+        {
+          "period": "2024",
+          "value": 7.01
+        }
+      ]
+    }
+  ]
+}

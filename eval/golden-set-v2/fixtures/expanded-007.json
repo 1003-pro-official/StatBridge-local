@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_101Y001",
+      "label": "M2 상품별 구성내역(말잔 계절조정계열) · M2(말잔 계절조정계열)",
+      "frequency": "M",
+      "unit": "십억원",
+      "item_id": "13103134693999",
+      "classifications": {
+        "objL1": "13102134693ACC_ITEM.BBGS00"
+      },
+      "source_file": "data/tables/DT_101Y001__M2 상품별 구성내역(말잔, 계절조정계열).csv",
+      "source_file_sha256": "2f7d9715eb80da5582e52bbc687f386e6bf96bd8ba528c919f9a08d651adbf0b",
+      "source_last_changed_dates": [
+        "2025-12-30"
+      ],
+      "points": [
+        {
+          "period": "200310",
+          "value": 891214.0131
+        },
+        {
+          "period": "200311",
+          "value": 895503.651
+        },
+        {
+          "period": "200312",
+          "value": 895639.8006
+        },
+        {
+          "period": "200401",
+          "value": 897070.88
+        },
+        {
+          "period": "200402",
+          "value": 906986.7491
+        },
+        {
+          "period": "200403",
+          "value": 911447.1092
+        },
+        {
+          "period": "200404",
+          "value": 920236.6037
+        },
+        {
+          "period": "200405",
+          "value": 923153.4161
+        },
+        {
+          "period": "200406",
+          "value": 923962.3044
+        },
+        {
+          "period": "200407",
+          "value": 930868.9959
+        },
+        {
+          "period": "200408",
+          "value": 938875.7187
+        },
+        {
+          "period": "200409",
+          "value": 941989.3816
+        }
+      ]
+    }
+  ]
+}

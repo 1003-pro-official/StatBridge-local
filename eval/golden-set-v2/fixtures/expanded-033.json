@@ -1,0 +1,72 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_501Y001",
+      "label": "재무상태표(제11차 한국표준산업분류 2009~) · A01 농업 · 종합 · 자산총계",
+      "frequency": "Y",
+      "unit": "백만원",
+      "item_id": "13103134531999",
+      "classifications": {
+        "objL1": "13102134531BZTYP_CD.A01",
+        "objL2": "13102134531ENTERPRISE_SCALE.A",
+        "objL3": "13102134531ACC_ITEM.110000"
+      },
+      "source_file": "data/tables/DT_501Y001__재무상태표(제11차 한국표준산업분류, 2009~).csv",
+      "source_file_sha256": "904978ef10d15bbf381523411b98ee1f5a32e941f5efecd750bb4d9d25d02b4f",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "2013",
+          "value": 8181412.0
+        },
+        {
+          "period": "2014",
+          "value": 9183952.0
+        },
+        {
+          "period": "2015",
+          "value": 10413310.0
+        },
+        {
+          "period": "2016",
+          "value": 11394683.0
+        },
+        {
+          "period": "2017",
+          "value": 12974070.0
+        },
+        {
+          "period": "2018",
+          "value": 14364188.0
+        },
+        {
+          "period": "2019",
+          "value": 15614226.0
+        },
+        {
+          "period": "2020",
+          "value": 16614416.0
+        },
+        {
+          "period": "2021",
+          "value": 19441232.0
+        },
+        {
+          "period": "2022",
+          "value": 20994641.0
+        },
+        {
+          "period": "2023",
+          "value": 21842987.0
+        },
+        {
+          "period": "2024",
+          "value": 22788254.0
+        }
+      ]
+    }
+  ]
+}

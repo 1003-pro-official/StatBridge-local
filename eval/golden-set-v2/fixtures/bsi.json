@@ -1,0 +1,71 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_512Y013",
+      "label": "전산업 업황실적BSI",
+      "frequency": "M",
+      "unit": "",
+      "source_file": "data/tables/DT_512Y013__기업경기조사(실적).csv",
+      "source_file_sha256": "47ae4b0d23843030bf6109b074d88ed6cdd14eedcdfef9d4e8204686654396d5",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 64.0
+        },
+        {
+          "period": "202502",
+          "value": 63.0
+        },
+        {
+          "period": "202503",
+          "value": 65.0
+        },
+        {
+          "period": "202504",
+          "value": 65.0
+        },
+        {
+          "period": "202505",
+          "value": 69.0
+        },
+        {
+          "period": "202506",
+          "value": 68.0
+        },
+        {
+          "period": "202507",
+          "value": 68.0
+        },
+        {
+          "period": "202508",
+          "value": 69.0
+        },
+        {
+          "period": "202509",
+          "value": 69.0
+        },
+        {
+          "period": "202510",
+          "value": 70.0
+        },
+        {
+          "period": "202511",
+          "value": 70.0
+        },
+        {
+          "period": "202512",
+          "value": 71.0
+        }
+      ],
+      "item_id": "13103134673999",
+      "classifications": {
+        "objL1": "13102134673BUSINESS_TYPE_CD.99988",
+        "objL2": "13102134673BSI_CD.AA"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1121 @@
+[
+  {
+    "id": "single-01",
+    "category": "single_table",
+    "query": "최근 경제심리지수 순환변동치 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "경제심리 및 성장 설명",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_513Y001"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/esi.json",
+        "series": [
+          {
+            "table_id": "DT_513Y001",
+            "label": "경제심리지수 순환변동치",
+            "unit": ""
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "single-02",
+    "category": "single_table",
+    "query": "기업경기조사에서 전 산업 업황실적은 어떻게 변했나",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "기업심리 지표",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_512Y013"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/bsi.json",
+        "series": [
+          {
+            "table_id": "DT_512Y013",
+            "label": "전산업 업황실적BSI",
+            "unit": ""
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "single-03",
+    "category": "single_table",
+    "query": "가계신용 잔액의 분기별 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "Ⅰ. 금융안정 상황, 가계 및 기업 신용",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y001"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/household_credit.json",
+        "series": [
+          {
+            "table_id": "DT_151Y001",
+            "label": "가계신용",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "single-04",
+    "category": "single_table",
+    "query": "실질 GDP 국내총생산 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "경제성장",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y104"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/gdp.json",
+        "series": [
+          {
+            "table_id": "DT_200Y104",
+            "label": "실질 국내총생산",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "single-05",
+    "category": "single_table",
+    "query": "경상수지 흑자 흐름",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "경상수지 및 대외거래",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_301Y017"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/current_account.json",
+        "series": [
+          {
+            "table_id": "DT_301Y017",
+            "label": "경상수지",
+            "unit": "백만달러"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "single-06",
+    "category": "single_table",
+    "query": "수출물량지수 총지수 추이",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "수출입 및 대외거래",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_403Y002"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/export_volume.json",
+        "series": [
+          {
+            "table_id": "DT_403Y002",
+            "label": "수출물량지수 총지수",
+            "unit": "2020＝100"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "single-07",
+    "category": "single_table",
+    "query": "원화 기준 수입물가지수 총지수",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "물가 여건과 수입물가",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_401Y015"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/import_price.json",
+        "series": [
+          {
+            "table_id": "DT_401Y015",
+            "label": "원화기준 수입물가지수",
+            "unit": "2020＝100"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "single-08",
+    "category": "single_table",
+    "query": "M2 말잔 원계열 규모",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "금융시장 및 유동성",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_161Y008"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/m2.json",
+        "series": [
+          {
+            "table_id": "DT_161Y008",
+            "label": "M2 말잔 원계열",
+            "unit": "십억원"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "alias-01",
+    "category": "alias",
+    "query": "요즘 경기가 체감상 어떤지 경제심리 지표로 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "경제심리 관련 설명",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_513Y001"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "alias-02",
+    "category": "alias",
+    "query": "기업들이 느끼는 경기 상황 BSI 실적",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "기업심리와 경제 여건",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_512Y013"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "alias-03",
+    "category": "alias",
+    "query": "가계 빚 규모가 얼마나 되는지",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "가계신용과 가계부채",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y001"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "alias-04",
+    "category": "alias",
+    "query": "수출 물건 양이 늘었는지 지수로 확인",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "수출입 동향",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_403Y002"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "alias-05",
+    "category": "alias",
+    "query": "시중에 풀린 돈 M2 잔액",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "금융시장 유동성",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_161Y008",
+          "DT_101Y002"
+        ]
+      ],
+      "answer_key_note": "두 ID의 표명이 동일한 M2 상품별 구성내역(말잔, 원계열)이므로 둘 다 허용한다."
+    },
+    "split": "development"
+  },
+  {
+    "id": "alias-06",
+    "category": "alias",
+    "query": "한국의 대외거래 흑자 경상수지",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "경상수지와 대외거래",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_301Y017"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "conditions-01",
+    "category": "conditions",
+    "query": "2025년 월별 경제심리지수 순환변동치를 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "경제심리 관련 설명",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_513Y001"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "conditions-02",
+    "category": "conditions",
+    "query": "2024년 이후 분기별 가계신용 전체 잔액",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "가계 및 기업 신용",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y001"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "conditions-03",
+    "category": "conditions",
+    "query": "2025년 매월 원화 기준 수입물가지수 총지수",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "물가 여건과 수입물가",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_401Y015"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "conditions-04",
+    "category": "conditions",
+    "query": "2025년 월별 예금은행 가계대출 신규취급액 평균 금리",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "가계대출과 금리 여건",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y006"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/loan_rate.json",
+        "series": [
+          {
+            "table_id": "DT_121Y006",
+            "label": "예금은행 가계대출 신규취급액 금리",
+            "unit": "연리%"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "conditions-05",
+    "category": "conditions",
+    "query": "2024년부터 2025년까지 분기 실질 국내총생산",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-05",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=200066&menuNo=200066&nttId=10098209&programType=newsData&relate=Y",
+      "locator": "경제성장 및 GDP",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y104"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "conditions-06",
+    "category": "conditions",
+    "query": "2025년 M2 말잔 원계열 월별 추이",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2025-12",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200769&nttId=10095308",
+      "locator": "유동성 및 통화량",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_161Y008"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "close-01",
+    "category": "close_distinctions",
+    "query": "예금은행 대출금리 신규 취급액 기준을 찾아줘",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "시장금리 및 대출금리",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y006"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "close-02",
+    "category": "close_distinctions",
+    "query": "예금은행 대출금리 잔액 기준 시계열",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "시장금리와 여신금리",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y015"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "close-03",
+    "category": "close_distinctions",
+    "query": "예금은행 수신금리 신규취급액 기준",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "시장금리 및 수신금리",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y002"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "separate",
+        "fixture": "fixtures/deposit_rate.json",
+        "series": [
+          {
+            "table_id": "DT_121Y002",
+            "label": "예금은행 저축성수신 신규취급액 금리",
+            "unit": "연리%"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "close-04",
+    "category": "close_distinctions",
+    "query": "기업경기조사 전망이 아니라 실적 지표",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "기업심리와 경기전망",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_512Y013"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "multi-01",
+    "category": "multi_indicator",
+    "query": "예금은행 신규취급액 기준 대출금리와 수신금리를 비교해줘",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "시장금리·여수신금리",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_121Y006"
+        ],
+        [
+          "DT_121Y002"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "combined",
+        "fixture": "fixtures/rate_comparison.json",
+        "series": [
+          {
+            "table_id": "DT_121Y006",
+            "label": "대출금리 신규취급액",
+            "unit": "연%"
+          },
+          {
+            "table_id": "DT_121Y002",
+            "label": "수신금리 신규취급액",
+            "unit": "연리%"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "multi-02",
+    "category": "multi_indicator",
+    "query": "경제심리지수와 기업경기조사 실적을 같이 보여줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "경제심리와 기업경기",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_513Y001"
+        ],
+        [
+          "DT_512Y013"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "multi-03",
+    "category": "multi_indicator",
+    "query": "실질 GDP와 경상수지 추이를 함께 확인",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "성장 및 경상수지",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_200Y104"
+        ],
+        [
+          "DT_301Y017"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "multi-04",
+    "category": "multi_indicator",
+    "query": "가계신용과 예금은행 가계대출금리를 같이 찾아줘",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "가계신용과 가계대출 여건",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_151Y001"
+        ],
+        [
+          "DT_121Y006"
+        ]
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "multi-05",
+    "category": "multi_indicator",
+    "query": "수입물가와 생산자물가 총지수 비교",
+    "tags": [
+      "chart"
+    ],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "물가 흐름과 비용 압력",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "retrieval"
+    },
+    "expected": {
+      "status": "candidate_found",
+      "retrieval_groups": [
+        [
+          "DT_401Y015"
+        ],
+        [
+          "DT_404Y014"
+        ]
+      ],
+      "chart": {
+        "type": "line",
+        "layout": "combined",
+        "fixture": "fixtures/price_comparison.json",
+        "series": [
+          {
+            "table_id": "DT_401Y015",
+            "label": "원화기준 수입물가지수",
+            "unit": "2020＝100"
+          },
+          {
+            "table_id": "DT_404Y014",
+            "label": "생산자물가지수 총지수",
+            "unit": "2020＝100"
+          }
+        ],
+        "visual_checks": [
+          "관측 기간과 주기가 fixture와 일치",
+          "축 단위가 계열 단위와 일치",
+          "범례가 각 통계계열을 구분",
+          "누락/중복 기간이 임의 보간되지 않음"
+        ]
+      }
+    },
+    "split": "development"
+  },
+  {
+    "id": "clarification-01",
+    "category": "clarification",
+    "query": "금리 추이를 보고 싶어",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-09",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200754&nttId=11064613",
+      "locator": "기준금리·시장금리 문맥",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_121Y002",
+        "DT_121Y006"
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "clarification-02",
+    "category": "clarification",
+    "query": "대출이 얼마나 늘었어?",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "가계·기업 신용 문맥",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_104Y016",
+        "DT_151Y001"
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "clarification-03",
+    "category": "clarification",
+    "query": "물가가 어떻게 됐어?",
+    "tags": [],
+    "source": {
+      "report_id": "tcm-2026-03",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?depth=201150&menuNo=200067&nttId=10096935&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1",
+      "locator": "물가 지표 문맥",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_401Y015",
+        "DT_404Y014"
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "clarification-04",
+    "category": "clarification",
+    "query": "경기 전망을 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "성장·물가·고용 전망 문맥",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "clarification"
+    },
+    "expected": {
+      "status": "need_clarification",
+      "retrieval_groups": [],
+      "clarification_options": [
+        "DT_512Y014",
+        "DT_512Y020"
+      ]
+    },
+    "split": "development"
+  },
+  {
+    "id": "out-01",
+    "category": "out_of_scope",
+    "query": "서울 강남구 오늘 미세먼지 농도 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "기상자료는 카탈로그 범위 밖",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "development"
+  },
+  {
+    "id": "out-02",
+    "category": "out_of_scope",
+    "query": "삼성전자 다음 주 주가 예측해줘",
+    "tags": [],
+    "source": {
+      "report_id": "fsr-2026-06",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?depth=200068&menuNo=200068&nttId=11062197&programType=newsData&relate=Y",
+      "locator": "개별 종목 미래 주가는 범위 밖",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "development"
+  },
+  {
+    "id": "out-03",
+    "category": "out_of_scope",
+    "query": "우리 회사 내부 매출 목표 달성률 알려줘",
+    "tags": [],
+    "source": {
+      "report_id": "eor-2026-08",
+      "url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?depth=201150&menuNo=200066&nttId=11064210&oldMenuNo=201150&pageIndex=1&pageUnit=10&programType=newsData&searchCnd=1&searchKwd=",
+      "locator": "비공개 기업 내부 자료는 범위 밖",
+      "basis": "보고서 주제와 도표 설명을 질문 소재로 사용; 정답 표 ID는 카탈로그, 수치는 고정 로컬 CSV fixture로 별도 확인"
+    },
+    "evaluation": {
+      "current_check": "empty_result"
+    },
+    "expected": {
+      "status": "no_match",
+      "retrieval_groups": []
+    },
+    "split": "development"
+  }
+]

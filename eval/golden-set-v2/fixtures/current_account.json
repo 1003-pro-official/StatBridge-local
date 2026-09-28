@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_301Y017",
+      "label": "경상수지",
+      "frequency": "M",
+      "unit": "백만달러",
+      "source_file": "data/tables/DT_301Y017__경상수지(계절조정).csv",
+      "source_file_sha256": "7ff2a7b37d1a9679debf74de1c0b3e6307bac2fe7c762596b0f3a1525127b5f6",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 9156.7
+        },
+        {
+          "period": "202502",
+          "value": 8670.6
+        },
+        {
+          "period": "202503",
+          "value": 8870.5
+        },
+        {
+          "period": "202504",
+          "value": 8897.1
+        },
+        {
+          "period": "202505",
+          "value": 9855.8
+        },
+        {
+          "period": "202506",
+          "value": 10086.9
+        },
+        {
+          "period": "202507",
+          "value": 11101.6
+        },
+        {
+          "period": "202508",
+          "value": 10487.3
+        },
+        {
+          "period": "202509",
+          "value": 9476.5
+        },
+        {
+          "period": "202510",
+          "value": 9285.9
+        },
+        {
+          "period": "202511",
+          "value": 12171.5
+        },
+        {
+          "period": "202512",
+          "value": 14993.3
+        }
+      ],
+      "item_id": "13103134664999",
+      "classifications": {
+        "objL1": "13102134664ACC_CD.SA000"
+      }
+    }
+  ]
+}

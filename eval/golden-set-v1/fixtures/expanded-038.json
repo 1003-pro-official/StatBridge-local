@@ -1,0 +1,72 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_501Y006",
+      "label": "손익 지표(제11차 한국표준산업분류 2009~) · 전산업 · 종합 · 총자산세전순이익률",
+      "frequency": "Y",
+      "unit": "%",
+      "item_id": "13103134573999",
+      "classifications": {
+        "objL1": "13102134573BZTYP_CD.ZZZ00",
+        "objL2": "13102134573ENTERPRISE_SCALE.A",
+        "objL3": "13102134573ACC_ITEM.6011"
+      },
+      "source_file": "data/tables/DT_501Y006__손익 지표(제11차 한국표준산업분류, 2009~).csv",
+      "source_file_sha256": "de08c08696316821ed1bc3c8363c8e3f9051d62f321c85ad8752b53a193c6985",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "2013",
+          "value": 2.65
+        },
+        {
+          "period": "2014",
+          "value": 2.98
+        },
+        {
+          "period": "2015",
+          "value": 3.81
+        },
+        {
+          "period": "2016",
+          "value": 4.11
+        },
+        {
+          "period": "2017",
+          "value": 5.19
+        },
+        {
+          "period": "2018",
+          "value": 4.43
+        },
+        {
+          "period": "2019",
+          "value": 2.95
+        },
+        {
+          "period": "2020",
+          "value": 2.83
+        },
+        {
+          "period": "2021",
+          "value": 5.01
+        },
+        {
+          "period": "2022",
+          "value": 3.66
+        },
+        {
+          "period": "2023",
+          "value": 2.78
+        },
+        {
+          "period": "2024",
+          "value": 3.06
+        }
+      ]
+    }
+  ]
+}

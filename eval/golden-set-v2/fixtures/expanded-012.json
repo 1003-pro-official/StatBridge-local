@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_181Y001",
+      "label": "차주당 가계대출 신규취급액 · 전체",
+      "frequency": "Q",
+      "unit": "십만원",
+      "item_id": "13103852633999",
+      "classifications": {
+        "objL1": "13102852633ACC_ITEM.0000"
+      },
+      "source_file": "data/tables/DT_181Y001__차주당 가계대출 신규취급액.csv",
+      "source_file_sha256": "fdef57cd3acce44a39a8964b3ecbae18af86090c60b6d548549b09921ea62a9f",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202303",
+          "value": 369.5
+        },
+        {
+          "period": "202304",
+          "value": 376.0
+        },
+        {
+          "period": "202401",
+          "value": 388.6
+        },
+        {
+          "period": "202402",
+          "value": 393.7
+        },
+        {
+          "period": "202403",
+          "value": 401.9
+        },
+        {
+          "period": "202404",
+          "value": 365.1
+        },
+        {
+          "period": "202501",
+          "value": 356.6
+        },
+        {
+          "period": "202502",
+          "value": 382.6
+        },
+        {
+          "period": "202503",
+          "value": 385.2
+        },
+        {
+          "period": "202504",
+          "value": 344.3
+        },
+        {
+          "period": "202601",
+          "value": 354.2
+        },
+        {
+          "period": "202602",
+          "value": 341.4
+        }
+      ]
+    }
+  ]
+}
