@@ -1,57 +1,99 @@
-export type Candidate = {
-  table_id: string;
-  table_name: string;
-  score: number;
-  path: string;
-  frequencies: string[];
-  start_period: string | null;
-  end_period: string | null;
-  local_csv_available: boolean;
+export type ChartPoint = {
+  date: string;
+  value: number;
 };
 
-export type SearchResponse = {
-  status: "search_results";
+export type ChartSeries = {
+  id: string;
+  label: string;
+  unit: string;
+  color: string;
+  points: ChartPoint[];
+};
+
+export type SelectedTable = {
+  tableId: string;
+  name: string;
+  source: string;
+  item: string;
+  unit: string;
+};
+
+export type LineageStep = {
+  id: string;
+  title: string;
+  description: string;
+  status: "complete" | "active";
+};
+
+export type ClarificationOption = {
+  label: string;
+  value: string;
+};
+
+export type Clarification = {
+  id: string;
+  question: string;
+  ui: string;
+  options: ClarificationOption[];
+};
+
+export type QueryState = {
+  original_query?: string;
+  confirmed?: Record<string, string>;
+  confirmed_terms?: string[];
+  asked_clarifications?: string[];
+  candidate_tables?: Array<{ table_id: string; table_name: string; score: number }>;
+  status?: string;
+  [key: string]: unknown;
+};
+
+export type QueryResponse = {
+  status?: "need_clarification" | "need_period" | "need_chart_mode" | "resolved" | "no_match" | "catalog_only" | "data_unavailable";
   query: string;
-  candidates: Candidate[];
-  note: string;
+  interpretedQuery: string;
+  summary: string;
+  period: { start: string; end: string };
+  availablePeriod?: { min: string; max: string };
+  frequency: string;
+  chart: ChartSeries[];
+  chartMode?: "combined" | "separate" | null;
+  seriesCount?: number;
+  tables: SelectedTable[];
+  insights: string[];
+  lineage: LineageStep[];
+  warnings: string[];
+  clarification?: Clarification;
+  clarifications?: Clarification[];
+  state?: QueryState;
+  debug?: {
+    selectedTable?: unknown;
+    apiPlan?: Record<string, unknown>;
+    executionStatus?: string;
+    rowsPreview?: Array<Record<string, unknown>>;
+    timingMs?: { resolve?: number; execute?: number; total?: number };
+  };
 };
 
-export type SeriesChoice = {
-  table_id: string;
-  item_id?: string;
-  classifications?: Record<string, string>;
-  frequency?: string;
-  start_period?: string;
-  end_period?: string;
-};
-
-export type SeriesOptions = {
-  table_id: string;
-  table_name: string;
-  items: { id: string; label: string }[];
-  axes: { key: string; label: string; values: { id: string; label: string }[] }[];
-  periods: Record<string, { start: string; end: string; recent_start?: string }>;
-  local_csv_available: boolean;
-};
-
-export type AnalysisResponse = {
-  status: "need_clarification" | "resolved" | "no_match" | "data_unavailable";
+export type QueryRequest = {
   query: string;
-  reason?: "table" | "series";
-  candidates?: Candidate[];
-  options?: SeriesOptions;
-  series?: SeriesChoice[];
-  table_id?: string;
-  message?: string;
-  local_csv_available?: boolean;
-  layout?: "combined" | "separate";
-  chart?: {
-    table_id: string;
-    table_name: string;
-    label: string;
-    unit: string;
-    frequency: string;
-    source: string;
-    points: { period: string; value: number }[];
-  }[];
+  state?: QueryState;
+  clarification?: {
+    clarification_id: string;
+    value: string;
+  };
+  selections?: Array<{ clarification_id: string; values: string[] }>;
+  execute?: boolean;
+  period_start?: string;
+  period_end?: string;
+  chart_mode?: "combined" | "separate";
 };
+
+export type CatalogTable = {
+  tableId: string; name: string; organization: string; frequency: string; frequencyLabel: string; unitScale: string;
+  periodStart: string; periodEnd: string; items: string[]; units: string[];
+  dimensions: Array<{ name: string; count: number; examples: string[] }>;
+};
+export type CatalogMiddle = { name: string; count: number; children: CatalogTable[] };
+export type CatalogMajor = { name: string; count: number; children: CatalogMiddle[] };
+export type CatalogResponse = { source: string; total: number; categories: CatalogMajor[] };

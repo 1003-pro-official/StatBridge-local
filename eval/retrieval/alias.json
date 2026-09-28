@@ -1,0 +1,4 @@
+[
+  {"query": "집 담보로 받은 대출이 얼마나 남았어", "expected_status": "need_clarification"},
+  {"query": "시중에 돈이 얼마나 풀렸어", "expected_concept": "M2"}
+]

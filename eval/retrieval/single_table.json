@@ -1,0 +1,4 @@
+[
+  {"query": "최근 5년 경제심리지수 추이를 보여줘", "expected_table_ids": ["DT_513Y001"]},
+  {"query": "경제심리지수 월별", "expected_table_ids": ["DT_513Y001"]}
+]

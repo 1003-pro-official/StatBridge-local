@@ -1,0 +1,4 @@
+[
+  {"query": "예금금리와 대출금리를 비교해줘", "expected_min_tables": 2},
+  {"query": "경제심리지수와 생산자물가지수와 주택담보대출 잔액 비교", "expected_min_tables": 3}
+]
