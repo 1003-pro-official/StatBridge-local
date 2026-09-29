@@ -91,6 +91,16 @@ class ValidationTests(unittest.TestCase):
             self.assertTrue(any("local CSV missing" in error for error in errors))
             self.assertTrue(any("duplicate query" in error for error in errors))
 
+    def test_select_case_accepts_backend_double_underscore_csv_name(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "DT_TEST__표 A 월별 추이.csv"
+            with path.open("w", encoding="utf-8-sig", newline="") as stream:
+                writer = csv.DictWriter(stream, fieldnames=["PRD_SE", "PRD_DE"])
+                writer.writeheader()
+                writer.writerow({"PRD_SE": "M", "PRD_DE": "2025-01"})
+            errors = manage.validate_rows([case()], {"DT_TEST"}, Path(temporary), pilot=False)
+            self.assertFalse(any("local CSV missing" in error for error in errors))
+
     def test_clarification_has_options_but_no_accepted_id(self):
         with tempfile.TemporaryDirectory() as temporary:
             row = case()
