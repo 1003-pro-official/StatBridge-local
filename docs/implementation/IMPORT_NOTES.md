@@ -12,4 +12,4 @@
 
 ## 재현
 
-루트 `README.md`의 설치·실행·평가 명령을 따른다. `eval/golden-set-v4.1/`의 holdout 파일에는 질문만 있으며, 개발 중 평가는 dev/test로 수행한다. `tools/evaluate_golden_v41.py`의 결과는 `eval/results/`처럼 Git에서 제외한 경로에 기록한다.
+루트 `README.md`의 설치·실행·평가 명령을 따른다. 현재 위치 `eval/table-discovery/v4.1/`의 holdout 파일에는 질문만 있으며, 개발 중 평가는 dev/test로 수행한다. `tools/evaluate_golden_v41.py`의 결과는 `eval/results/`처럼 Git에서 제외한 경로에 기록한다.

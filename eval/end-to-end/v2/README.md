@@ -1,6 +1,6 @@
 # 골든셋 v2 (초안)
 
-`cases/v1_regression.json`은 기존 v1 사례 150개를 v2 형식으로 옮긴 회귀 평가 데이터입니다. 원본 `eval/golden-set/`은 수정하지 않았습니다. v1의 보류 평가 사례는 개발 중 검색 규칙 조정에 사용되었으므로, 블라인드 평가가 아니라 회귀 검사에만 사용합니다.
+`cases/v1_regression.json`은 이 계열의 v1 사례 150개를 v2 형식으로 옮긴 회귀 평가 데이터입니다. 원본 `eval/end-to-end/v1/`은 수정하지 않았습니다. v1의 보류 평가 사례는 개발 중 검색 규칙 조정에 사용되었으므로, 블라인드 평가가 아니라 회귀 검사에만 사용합니다.
 
 `authoring_queue.json`에는 합의한 신규 사례 50건의 작성 작업이 들어 있습니다.
 
@@ -30,14 +30,14 @@ v2는 `expected.resolution`에 의도, 역질문 유형, 정답 표 ID 집합, �
 
 ```bash
 PYTHONPATH=src/backend:src/agent .venv/bin/python tools/build_golden_set_v2.py
-PYTHONPATH=src/backend:src/agent .venv/bin/python tools/evaluate_golden_set.py --corpus eval/golden-set-v2
+PYTHONPATH=src/backend:src/agent .venv/bin/python tools/evaluate_golden_set.py --corpus eval/end-to-end/v2
 ```
 
 현재 검색 평가기는 옮겨온 회귀 사례를 평가합니다. 현재 API의 예측 결과를 저장한 뒤 v2 지표를 계산하려면 다음 명령을 사용합니다.
 
 ```bash
 PYTHONPATH=src/backend:src/agent .venv/bin/python tools/predict_golden_set_v2.py --output /tmp/golden-v2-predictions.json
-.venv/bin/python tools/evaluate_golden_set_v2.py eval/golden-set-v2/cases/v1_regression.json /tmp/golden-v2-predictions.json
+.venv/bin/python tools/evaluate_golden_set_v2.py eval/end-to-end/v2/cases/v1_regression.json /tmp/golden-v2-predictions.json
 ```
 
 예측 파일은 사례 ID를 키로 사용합니다. 각 값에는 API의 `resolution`, 같은 요청에서 받은 후보 순위 `ranked_table_ids`, 기존 응답 상태 `legacy_status`가 포함됩니다.

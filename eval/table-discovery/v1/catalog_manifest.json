@@ -1,0 +1,6165 @@
+{
+  "dataset": "ClaBi KOSIS Golden Set v1 Pilot",
+  "version": "v1-draft-2026-09-23",
+  "catalog_version": "hankook_tables_2026-09-14",
+  "generated_at": "2026-09-23T07:37:42.270436+00:00",
+  "reused_sources": [
+    "eval/goldenset/single_table.json (query and proposed slots/candidate seeds only)",
+    "eval/goldenset/alias.json (query and proposed concept/table seeds only)",
+    "eval/goldenset/multi_table.json (query and proposed pair seeds only)",
+    "eval/goldenset/no_match.json (query and proposed no-match seeds only)",
+    "data/kosis/hankook_tables.json",
+    "data/statbridge_mcp_server/data_full/collection/table_summary.csv",
+    "data/statbridge_mcp_server/data_full/tables/*.csv"
+  ],
+  "new_artifacts": [
+    "golden-set/cases.jsonl",
+    "golden-set/schema.json",
+    "golden-set/review.xlsx",
+    "golden-set/catalog_manifest.json",
+    "golden-set/coverage.csv",
+    "golden-set/kosis_metadata_export.json",
+    "golden-set/README.md",
+    "golden-set/scripts/manage_golden_set.py"
+  ],
+  "sources": {
+    "catalog": {
+      "path": "data/kosis/hankook_tables.json",
+      "collected_at": "2026-09-14T06:26:16.468657+00:00",
+      "record_count": 349,
+      "sha256": "cbe3e941ba3ecd733711fa86c75528fe6531250b25062c710c0387709e0a5f3e"
+    },
+    "local_metadata_and_data": {
+      "table_summary_path": "data/statbridge_mcp_server/data_full/collection/table_summary.csv",
+      "table_summary_rows": 347,
+      "snapshot_csv_count": 347,
+      "snapshot_csv_encoding": "UTF-8 with BOM tolerated; all read with utf-8-sig"
+    },
+    "api_export": {
+      "path": "golden-set/kosis_metadata_export.json",
+      "source": "project statbridge_mcp.kosis_client KOSIS getMeta(PRD, ITM)",
+      "exported_at_utc": "2026-09-23T07:21:22.920265+00:00",
+      "unique_candidate_tables_queried": 59,
+      "failed_tables": 0,
+      "records_with_any_metadata": 59,
+      "metadata_scope": "period and item/classification endpoints; unit, comments and series definitions are not returned by these endpoints"
+    },
+    "hashes": {
+      "table_summary_csv_sha256": "3e83750b0e119fd63454dd20998c59e0cb8e0c42f346068fbb8cc534e032dbb0"
+    }
+  },
+  "counts": {
+    "cases": 150,
+    "by_primary_type": {
+      "clear_single_table": 30,
+      "colloquial_alias": 25,
+      "ambiguous_metric": 20,
+      "multi_indicator_table": 20,
+      "conditions": 20,
+      "no_match_out_of_scope": 15,
+      "conversation_followup": 20
+    },
+    "by_split": {
+      "dev": 30,
+      "validation": 30,
+      "locked_test": 90
+    },
+    "by_review_status": {
+      "review_required": 150
+    },
+    "unique_candidate_tables": 59,
+    "catalog_table_count": 349,
+    "catalog_paths_represented": 14,
+    "catalog_paths_total": 14
+  },
+  "review": {
+    "by_decision": {
+      "미입력": 150
+    },
+    "approved_cases": 0,
+    "excluded_cases": 0,
+    "awaiting_human_review": 150,
+    "policy": "No generated or imported value changes annotation.review_status; only a human adjudicator can explicitly edit final labels and status."
+  },
+  "no_match": {
+    "cases": [
+      "GS-0116",
+      "GS-0117",
+      "GS-0118",
+      "GS-0119",
+      "GS-0120",
+      "GS-0121",
+      "GS-0122",
+      "GS-0123",
+      "GS-0124",
+      "GS-0125",
+      "GS-0126",
+      "GS-0127",
+      "GS-0128",
+      "GS-0129",
+      "GS-0130"
+    ],
+    "verification_state": "review_required",
+    "scope": "349-row Korean Bank project catalog snapshot; no live all-KOSIS catalog search endpoint was used; inspect recorded query phrase, terms, aliases and paths before accepting NO_MATCH"
+  },
+  "limits": [
+    "The catalog and local data snapshot is dated 2026-09-14; KOSIS API partial metadata was queried 2026-09-23.",
+    "Live metadata calls verify frequencies, periods, item and classification rows only. Units, comments and full series definitions remain unverified by the queried endpoints.",
+    "A row in the current catalog is not automatically a relevant answer. All candidate relatedness scores and gold labels are proposals.",
+    "The 150-case pilot is not statistically powered to settle small model differences."
+  ],
+  "tables": [
+    {
+      "table_id": "DT_101Y001",
+      "table_name": "M2 상품별 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y002",
+      "table_name": "M2 상품별 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y003",
+      "table_name": "M2 상품별 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y004",
+      "table_name": "M2 상품별 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y005",
+      "table_name": "M2 경제주체별 보유현황(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y006",
+      "table_name": "M2 경제주체별 보유현황(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y007",
+      "table_name": "M2 기관별구성내역(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y008",
+      "table_name": "M2 기관별구성내역(평잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y009",
+      "table_name": "예금취급기관 개관표(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "예금취급기관 개관표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y010",
+      "table_name": "중앙은행 개관표(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "예금취급기관 개관표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y011",
+      "table_name": "기타예금취급기관 개관표(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "예금취급기관 개관표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y014",
+      "table_name": "M2 경제주체별 보유현황(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y015",
+      "table_name": "M2 경제주체별 보유현황(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y016",
+      "table_name": "M1 상품별 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y017",
+      "table_name": "M1 상품별 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y018",
+      "table_name": "M1 상품별 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_101Y019",
+      "table_name": "M1 상품별 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y001",
+      "table_name": "본원통화 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0001",
+        "GS-0007",
+        "GS-0008",
+        "GS-0009",
+        "GS-0010",
+        "GS-0024",
+        "GS-0026",
+        "GS-0029",
+        "GS-0030",
+        "GS-0033",
+        "GS-0041",
+        "GS-0042",
+        "GS-0045",
+        "GS-0046",
+        "GS-0049",
+        "GS-0053",
+        "GS-0054",
+        "GS-0056",
+        "GS-0059",
+        "GS-0060",
+        "GS-0063",
+        "GS-0065",
+        "GS-0067",
+        "GS-0068",
+        "GS-0072",
+        "GS-0079",
+        "GS-0081",
+        "GS-0082",
+        "GS-0084",
+        "GS-0085",
+        "GS-0086",
+        "GS-0087",
+        "GS-0088",
+        "GS-0089",
+        "GS-0091",
+        "GS-0092",
+        "GS-0093",
+        "GS-0096",
+        "GS-0101",
+        "GS-0102",
+        "GS-0107",
+        "GS-0108",
+        "GS-0109",
+        "GS-0110",
+        "GS-0113",
+        "GS-0131",
+        "GS-0137",
+        "GS-0138",
+        "GS-0139",
+        "GS-0140"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 45,
+        "3": 2,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y002",
+      "table_name": "본원통화 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y003",
+      "table_name": "본원통화 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y004",
+      "table_name": "본원통화 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y101",
+      "table_name": "본원통화 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y102",
+      "table_name": "본원통화 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y103",
+      "table_name": "본원통화 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_102Y104",
+      "table_name": "본원통화 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_103Y002",
+      "table_name": "한국은행 주요계정(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "한국은행 주요계정 및 기준금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y008",
+      "table_name": "예금은행 원화예금(종별, 평잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y009",
+      "table_name": "예금은행 원화예금(예금주별,말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y010",
+      "table_name": "예금은행 정기예금(기간별, 말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y013",
+      "table_name": "예금은행 총수신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0007",
+        "GS-0009",
+        "GS-0049",
+        "GS-0065",
+        "GS-0072",
+        "GS-0088",
+        "GS-0092",
+        "GS-0093",
+        "GS-0107",
+        "GS-0137",
+        "GS-0139"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 5,
+        "3": 3,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y014",
+      "table_name": "예금은행 총수신(평잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y015",
+      "table_name": "예금은행 원화예금(종별, 말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0029",
+        "GS-0065",
+        "GS-0086",
+        "GS-0092",
+        "GS-0093",
+        "GS-0108"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 4,
+        "2": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y016",
+      "table_name": "예금은행 대출금(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 자금별 대출금"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_104Y017",
+      "table_name": "예금은행 예금회전율",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "기타금융통계",
+        "예금규모별 계좌 및 금액"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_105Y001",
+      "table_name": "예금규모별 계좌수 및 금액",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "기타금융통계",
+        "예금규모별 계좌 및 금액"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_111Y001",
+      "table_name": "Lf 상품별 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_111Y002",
+      "table_name": "Lf 상품별 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_111Y003",
+      "table_name": "Lf 상품별 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_111Y004",
+      "table_name": "Lf 상품별 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_111Y007",
+      "table_name": "비은행금융기관 수신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0082"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_111Y008",
+      "table_name": "비은행금융기관 수신(평잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0082"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_111Y009",
+      "table_name": "비은행금융기관 여신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_112Y001",
+      "table_name": "L(광의유동성) 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "L(광의유동성)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_112Y002",
+      "table_name": "L(광의유동성) 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "L(광의유동성)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y002",
+      "table_name": "예금은행 수신금리(신규취급액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "수신금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0026",
+        "GS-0054",
+        "GS-0056",
+        "GS-0086",
+        "GS-0091",
+        "GS-0092",
+        "GS-0096"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 4,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y004",
+      "table_name": "비은행금융기관 수신금리(신규취급액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "비은행기관 가중평균금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y006",
+      "table_name": "예금은행 대출금리(신규취급액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "대출금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0041",
+        "GS-0056",
+        "GS-0091",
+        "GS-0092"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 3,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y007",
+      "table_name": "비은행금융기관 대출금리(신규취급액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "비은행기관 가중평균금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y008",
+      "table_name": "예금은행 금리수준별 여수신 비중(신규취급액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 금리수준별 여수신 비중"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0024"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y010",
+      "table_name": "예금은행 고정 및 변동금리대출 비중(신규취급액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 고정 및 특정 금리연동대출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y011",
+      "table_name": "예금은행 고정 및 변동금리대출 비중(잔액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 고정 및 특정 금리연동대출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y013",
+      "table_name": "예금은행 수신금리(잔액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "수신금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0042"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_121Y015",
+      "table_name": "예금은행 대출금리(잔액 기준)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "대출금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y010",
+      "table_name": "산업별대출금(예금은행, 기업형태별)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y011",
+      "table_name": "산업별대출금(예금은행, 용도별)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y013",
+      "table_name": "산업별대출금(예금은행, 전산업)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0046",
+        "GS-0068",
+        "GS-0079"
+      ],
+      "proposed_relatedness_counts": {
+        "2": 2,
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y014",
+      "table_name": "산업별대출금(비은행예금취급기관, 전산업)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "비은행예금취급기관"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0068",
+        "GS-0079"
+      ],
+      "proposed_relatedness_counts": {
+        "2": 1,
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y015",
+      "table_name": "산업별대출금(비은행예금취급기관, 용도별)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "비은행예금취급기관"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y016",
+      "table_name": "산업별대출금(예금취급기관, 전산업)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금취급기관"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y017",
+      "table_name": "산업별대출금(예금취급기관, 용도별)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금취급기관"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_131Y018",
+      "table_name": "산업별대출금(예금은행, 기업규모별)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_132Y001",
+      "table_name": "산업별대출금(예금은행, 지역별, 전산업)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행 지역별"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_132Y003",
+      "table_name": "산업별대출금(예금은행, 지역별, 용도별)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행 지역별"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y002",
+      "table_name": "예금은행 지역별 수신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y003",
+      "table_name": "예금은행 지역별 대출금(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y004",
+      "table_name": "예금은행 지역별 기업대출(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y006",
+      "table_name": "비은행금융기관 지역별 수신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y007",
+      "table_name": "비은행금융기관 지역별 여신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y008",
+      "table_name": "생명보험회사 지역별 수신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "생명보험회사 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y009",
+      "table_name": "생명보험회사 지역별 여신(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "생명보험회사 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_141Y010",
+      "table_name": "비은행금융기관 지역별 기업대출(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_151Y001",
+      "table_name": "가계신용(업권별, 분기)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0053",
+        "GS-0063",
+        "GS-0087",
+        "GS-0109"
+      ],
+      "proposed_relatedness_counts": {
+        "2": 3,
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_151Y002",
+      "table_name": "예금취급기관 가계대출(업권별, 월)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0030",
+        "GS-0033",
+        "GS-0063",
+        "GS-0087",
+        "GS-0110"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 3,
+        "2": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_151Y003",
+      "table_name": "예금은행 지역별 가계대출(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_151Y004",
+      "table_name": "가계신용(용도별, 분기)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_151Y005",
+      "table_name": "예금취급기관 가계대출(용도별, 월)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_151Y006",
+      "table_name": "비은행금융기관 지역별 가계대출(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y001",
+      "table_name": "M1 상품별 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0059",
+        "GS-0081",
+        "GS-0089",
+        "GS-0101"
+      ],
+      "proposed_relatedness_counts": {
+        "2": 2,
+        "3": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y002",
+      "table_name": "M1 상품별 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0008",
+        "GS-0059",
+        "GS-0081",
+        "GS-0089",
+        "GS-0102",
+        "GS-0138"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 3,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y003",
+      "table_name": "M1 상품별 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y004",
+      "table_name": "M1 상품별 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y005",
+      "table_name": "M2 상품별 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y006",
+      "table_name": "M2 상품별 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y007",
+      "table_name": "M2 상품별 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y008",
+      "table_name": "M2 상품별 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0045",
+        "GS-0072",
+        "GS-0088"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y009",
+      "table_name": "M2 경제주체별 보유현황(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y010",
+      "table_name": "M2 경제주체별 보유현황(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y011",
+      "table_name": "M2 경제주체별 보유현황(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y012",
+      "table_name": "M2 경제주체별 보유현황(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y013",
+      "table_name": "M2 기관별 구성내역(평잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y014",
+      "table_name": "M2 기관별 구성내역(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y015",
+      "table_name": "예금취급기관 개관표(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "예금취급기관 개관표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y016",
+      "table_name": "중앙은행 개관표(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "예금취급기관 개관표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_161Y017",
+      "table_name": "기타예금취급기관 개관표(말잔)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "예금취급기관 개관표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_171Y001",
+      "table_name": "Lf 상품별 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_171Y002",
+      "table_name": "Lf 상품별 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_171Y003",
+      "table_name": "Lf 구성내역(평잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_171Y004",
+      "table_name": "Lf 구성내역(평잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_172Y001",
+      "table_name": "L(광의유동성) 구성내역(말잔, 계절조정계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        " L(광의유동성)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_172Y002",
+      "table_name": "L(광의유동성) 구성내역(말잔, 원계열)",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        " L(광의유동성)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y001",
+      "table_name": "차주당 가계대출 신규취급액",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0085"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y002",
+      "table_name": "차주당 가계대출 잔액",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0085"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y003",
+      "table_name": "연령별 지역별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y004",
+      "table_name": "연령별 지역별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y005",
+      "table_name": "연령별 업권별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y006",
+      "table_name": "연령별 업권별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y007",
+      "table_name": "연령별 상품별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y008",
+      "table_name": "연령별 상품별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y009",
+      "table_name": "상품별 업권별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y010",
+      "table_name": "상품별 업권별",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y011",
+      "table_name": "차주당 주택담보대출 신규취급액",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y012",
+      "table_name": "차주당 주택담보대출 잔액",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y013",
+      "table_name": "가계대출 신규취급액 비중",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y014",
+      "table_name": "주택담보대출 잔액 비중",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y015",
+      "table_name": "주택담보대출 신규취급액 비중",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_181Y016",
+      "table_name": "가계대출 잔액 비중",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y101",
+      "table_name": "주요지표(연간지표)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "주요지표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0012",
+        "GS-0013",
+        "GS-0016",
+        "GS-0017",
+        "GS-0027",
+        "GS-0028",
+        "GS-0032",
+        "GS-0043",
+        "GS-0044",
+        "GS-0048",
+        "GS-0058",
+        "GS-0066",
+        "GS-0073",
+        "GS-0075",
+        "GS-0078",
+        "GS-0088",
+        "GS-0099",
+        "GS-0100",
+        "GS-0142",
+        "GS-0143",
+        "GS-0146",
+        "GS-0147"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 14,
+        "3": 3,
+        "0": 2,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y102",
+      "table_name": "주요지표(분기지표)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "주요지표"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0012",
+        "GS-0016",
+        "GS-0032",
+        "GS-0058",
+        "GS-0066",
+        "GS-0088",
+        "GS-0099",
+        "GS-0100",
+        "GS-0142",
+        "GS-0146"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2,
+        "1": 4,
+        "2": 4
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y103",
+      "table_name": "경제활동별 GDP 및 GNI(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0058",
+        "GS-0078"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 1,
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y104",
+      "table_name": "경제활동별 GDP 및 GNI(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0078"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y105",
+      "table_name": "경제활동별 GDP 및 GNI(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y106",
+      "table_name": "경제활동별 GDP 및 GNI(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y107",
+      "table_name": "국내총생산에 대한 지출(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y108",
+      "table_name": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y109",
+      "table_name": "국내총생산에 대한 지출(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y110",
+      "table_name": "국내총생산에 대한 지출(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y111",
+      "table_name": "경제활동별 국내총생산 디플레이터(분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y112",
+      "table_name": "국내총생산에 대한 지출 디플레이터(분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y113",
+      "table_name": "국내총생산과 지출(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0013",
+        "GS-0048",
+        "GS-0075",
+        "GS-0143"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y114",
+      "table_name": "경제활동별 국내총부가가치와 요소소득(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y115",
+      "table_name": "국민처분가능소득과 처분(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y116",
+      "table_name": "국민소득과 부문별 국민처분가능소득(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y117",
+      "table_name": "자본거래(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y118",
+      "table_name": "경상거래(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y119",
+      "table_name": "자본거래(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y120",
+      "table_name": "제도부문별 생산계정(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y121",
+      "table_name": "제도부문별 소득계정(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y122",
+      "table_name": "제도부문별 자본계정(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y123",
+      "table_name": "경제활동별 성장기여도(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y124",
+      "table_name": "경제활동별 성장기여도(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y125",
+      "table_name": "지출항목별 성장기여도(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y126",
+      "table_name": "지출항목별 성장기여도(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y127",
+      "table_name": "자본재형태별 총자본형성(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y128",
+      "table_name": "자본재형태별 총자본형성(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y129",
+      "table_name": "자본재형태별 총자본형성(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y130",
+      "table_name": "자본재형태별 총자본형성(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y131",
+      "table_name": "주체별 총자본형성(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y132",
+      "table_name": "주체별 총자본형성(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y133",
+      "table_name": "주체별 총고정자본형성(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y134",
+      "table_name": "주체별 총고정자본형성(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y135",
+      "table_name": "경제활동별 총고정자본형성(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y136",
+      "table_name": "경제활동별 총고정자본형성(실질, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y137",
+      "table_name": "경제활동별 자본재형태별 총고정자본형성(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y138",
+      "table_name": "경제활동별 설비투자(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0044",
+        "GS-0073"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y139",
+      "table_name": "경제활동별 설비투자(실질, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0073"
+      ],
+      "proposed_relatedness_counts": {
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y140",
+      "table_name": "가계의 목적별 최종소비지출(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y141",
+      "table_name": "가계의 목적별 최종소비지출(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y142",
+      "table_name": "가계의 목적별 최종소비지출(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0043",
+        "GS-0075"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y143",
+      "table_name": "가계의 목적별 최종소비지출(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y144",
+      "table_name": "가계의 형태별 최종소비지출(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y145",
+      "table_name": "가계의 형태별 최종소비지출(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y146",
+      "table_name": "가계의 형태별 최종소비지출(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y147",
+      "table_name": "가계의 형태별 최종소비지출(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y148",
+      "table_name": "가계에 봉사하는 비영리단체의 목적별 최종소비지출(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y149",
+      "table_name": "가계에 봉사하는 비영리단체의 목적별 최종소비지출(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y151",
+      "table_name": "일반정부의 부문별 기능별 최종소비지출(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y152",
+      "table_name": "일반정부의 부문별 기능별 총지출 (명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y153",
+      "table_name": "일반정부의 부문별 총수입, 총지출, 저축투자차액(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y154",
+      "table_name": "공공부문의 부문별 총수입, 총지출, 저축투자차액(명목, 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y155",
+      "table_name": "총저축과 총투자(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총저축과 총투자"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y156",
+      "table_name": "총저축과 총투자(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총저축과 총투자"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y157",
+      "table_name": "정보통신산업(계절조정, 실질, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "정보통신산업(실질)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y158",
+      "table_name": "정보통신산업(원계열, 실질, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "정보통신산업(실질)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y160",
+      "table_name": "부가가치 항목별 명목 GDP(계절조정, 명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0017",
+        "GS-0066",
+        "GS-0147"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "2": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y161",
+      "table_name": "부가가치 항목별 명목 GDP(원계열, 명목, 분기 및 연간)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_200Y162",
+      "table_name": "제도부문별 소득계정(명목, 분기)",
+      "org_id": "301",
+      "stat_id": "1976017",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_281Y001",
+      "table_name": "금융거래표(2009~)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_281Y002",
+      "table_name": "금융자산부채잔액표(2008~)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_281Y004",
+      "table_name": "금융거래표(1975~2005)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "1968 SNA 기준(1975~2005)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_281Y005",
+      "table_name": "금융자산부채잔액표(1975~2005)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "1968 SNA 기준(1975~2005)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_281Y006",
+      "table_name": "금융거래표(2003~2013)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "1993 SNA 기준(2002~2013)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_281Y007",
+      "table_name": "금융자산부채잔액표(2002~)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "1993 SNA 기준(2002~2013)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_282Y001",
+      "table_name": "발행잔액(명목)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0015",
+        "GS-0025",
+        "GS-0052",
+        "GS-0067",
+        "GS-0095",
+        "GS-0111",
+        "GS-0112",
+        "GS-0145"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2,
+        "1": 2,
+        "2": 4
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_282Y002",
+      "table_name": "발행잔액(시가)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_282Y003",
+      "table_name": "순발행액(시가)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_282Y004",
+      "table_name": "보유잔액(시가)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0015",
+        "GS-0025",
+        "GS-0052",
+        "GS-0067",
+        "GS-0095",
+        "GS-0111",
+        "GS-0112",
+        "GS-0145"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 4,
+        "3": 2,
+        "2": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_282Y005",
+      "table_name": "순취득액(시가)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_282Y006",
+      "table_name": "채권발행-보유관계표(잔액, 시가)",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_284Y001",
+      "table_name": "잔액표",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세자금순환표(2018~)"
+      ],
+      "snapshot_csv_available": false,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_284Y002",
+      "table_name": "거래표",
+      "org_id": "301",
+      "stat_id": "1976023",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세자금순환표(2018~)"
+      ],
+      "snapshot_csv_available": false,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_301Y013",
+      "table_name": "국제수지",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0002",
+        "GS-0014",
+        "GS-0022",
+        "GS-0023",
+        "GS-0047",
+        "GS-0064",
+        "GS-0074",
+        "GS-0080",
+        "GS-0090",
+        "GS-0097",
+        "GS-0132",
+        "GS-0144"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 3,
+        "1": 4,
+        "2": 5
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_301Y014",
+      "table_name": "서비스무역세분류통계",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0002",
+        "GS-0022",
+        "GS-0047",
+        "GS-0064",
+        "GS-0074",
+        "GS-0080",
+        "GS-0089",
+        "GS-0090",
+        "GS-0097",
+        "GS-0132"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 8,
+        "3": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_301Y015",
+      "table_name": "지역별 경상수지",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "지역별 국제수지"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0023",
+        "GS-0089"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_301Y016",
+      "table_name": "지역별 자본수지/금융계정",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "지역별 국제수지"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_301Y017",
+      "table_name": "경상수지(계절조정)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0014",
+        "GS-0064",
+        "GS-0080",
+        "GS-0090",
+        "GS-0144"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 3,
+        "2": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_303Y001",
+      "table_name": "지역별 결제통화(수출)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수출 결제통화"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_303Y002",
+      "table_name": "국가별 결제통화(수출)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수출 결제통화"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_303Y003",
+      "table_name": "지역별,국가별 원화결제(수출)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수출 결제통화"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_303Y004",
+      "table_name": "지역별 결제통화(수입)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수입 결제통화"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_303Y005",
+      "table_name": "국가별 결제통화(수입)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수입 결제통화"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_303Y006",
+      "table_name": "지역별,국가별 원화결제(수입)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수입 결제통화"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_304Y101",
+      "table_name": "지식서비스 무역통계(유형별)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_304Y102",
+      "table_name": "지식서비스 무역통계(산업별)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_304Y103",
+      "table_name": "지식서비스 무역통계(기관형태별)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_304Y104",
+      "table_name": "지식서비스 무역통계(지역별)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_304Y105",
+      "table_name": "ICT 산업 특수분류(ICT산업별)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "ICT 산업 특수분류"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_304Y106",
+      "table_name": "콘텐츠 산업 특수분류(콘텐츠산업별)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "콘텐츠 산업 특수분류"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_304Y107",
+      "table_name": "지식재산권 무역수지(유형별)",
+      "org_id": "301",
+      "stat_id": "1976018",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식재산권 무역수지"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_311Y001",
+      "table_name": "국제투자대조표(IIP)",
+      "org_id": "301",
+      "stat_id": "2003008",
+      "catalog_path": [
+        "국제투자대조표(IIP)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0027"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_311Y002",
+      "table_name": "지역별 국제투자대조표",
+      "org_id": "301",
+      "stat_id": "2003008",
+      "catalog_path": [
+        "국제투자대조표(IIP)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_311Y003",
+      "table_name": "통화별 국제투자대조표",
+      "org_id": "301",
+      "stat_id": "2003008",
+      "catalog_path": [
+        "국제투자대조표(IIP)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_311Y004",
+      "table_name": "대외채무",
+      "org_id": "301",
+      "stat_id": "2003033",
+      "catalog_path": [
+        "대외채무및대외채권"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0034",
+        "GS-0035",
+        "GS-0074"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "1": 1,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_311Y005",
+      "table_name": "대외채권",
+      "org_id": "301",
+      "stat_id": "2003033",
+      "catalog_path": [
+        "대외채무및대외채권"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_311Y006",
+      "table_name": "순대외채권",
+      "org_id": "301",
+      "stat_id": "2003033",
+      "catalog_path": [
+        "대외채무및대외채권"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0034",
+        "GS-0035"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 1,
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_401Y015",
+      "table_name": "수입물가지수(기본분류)",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0004",
+        "GS-0005",
+        "GS-0006",
+        "GS-0021",
+        "GS-0036",
+        "GS-0050",
+        "GS-0057",
+        "GS-0062",
+        "GS-0069",
+        "GS-0070",
+        "GS-0076",
+        "GS-0077",
+        "GS-0090",
+        "GS-0094",
+        "GS-0095",
+        "GS-0105",
+        "GS-0106",
+        "GS-0114",
+        "GS-0115",
+        "GS-0134",
+        "GS-0135",
+        "GS-0136",
+        "GS-0150"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2,
+        "1": 17,
+        "2": 4
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_401Y016",
+      "table_name": "수입물가지수(특수분류)",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0004",
+        "GS-0057",
+        "GS-0069",
+        "GS-0076",
+        "GS-0091",
+        "GS-0114",
+        "GS-0134"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 4,
+        "2": 1,
+        "3": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_401Y017",
+      "table_name": "수입물가지수(품목별)",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_401Y018",
+      "table_name": "수입물가지수(용도별)",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_402Y014",
+      "table_name": "수출물가지수(기본분류)",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수출물가"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0005",
+        "GS-0069",
+        "GS-0070",
+        "GS-0090",
+        "GS-0115",
+        "GS-0135"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2,
+        "1": 1,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_402Y015",
+      "table_name": "수출물가지수(특수분류)",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수출물가"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0070",
+        "GS-0076",
+        "GS-0091"
+      ],
+      "proposed_relatedness_counts": {
+        "2": 1,
+        "3": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_402Y016",
+      "table_name": "수출물가지수(품목별)",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수출물가"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_403Y001",
+      "table_name": "수출금액지수",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0006",
+        "GS-0062",
+        "GS-0077",
+        "GS-0094",
+        "GS-0095",
+        "GS-0105",
+        "GS-0136"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 4,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_403Y002",
+      "table_name": "수출물량지수",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0036",
+        "GS-0062",
+        "GS-0077",
+        "GS-0095",
+        "GS-0106"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 3,
+        "2": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_403Y003",
+      "table_name": "수입금액지수",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0050"
+      ],
+      "proposed_relatedness_counts": {
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_403Y004",
+      "table_name": "수입물량지수",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_403Y005",
+      "table_name": "교역조건지수",
+      "org_id": "301",
+      "stat_id": "1976001",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0021",
+        "GS-0094",
+        "GS-0150"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_404Y014",
+      "table_name": "생산자물가지수(기본분류)",
+      "org_id": "301",
+      "stat_id": "1966003",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0003",
+        "GS-0020",
+        "GS-0031",
+        "GS-0037",
+        "GS-0057",
+        "GS-0098",
+        "GS-0133"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 2,
+        "1": 2,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_404Y015",
+      "table_name": "생산자물가지수(특수분류)",
+      "org_id": "301",
+      "stat_id": "1966003",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0003",
+        "GS-0020",
+        "GS-0031",
+        "GS-0098",
+        "GS-0133"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 4,
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_404Y016",
+      "table_name": "생산자물가지수(품목별)",
+      "org_id": "301",
+      "stat_id": "1966003",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_404Y017",
+      "table_name": "생산자물가지수-총지수(1910~1964)",
+      "org_id": "301",
+      "stat_id": "1966003",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_405Y006",
+      "table_name": "국내공급물가지수",
+      "org_id": "301",
+      "stat_id": "1966003",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0037"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_405Y007",
+      "table_name": "총산출물가지수",
+      "org_id": "301",
+      "stat_id": "1966003",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y001",
+      "table_name": "재무상태표(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0084"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y002",
+      "table_name": "손익계산서(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0084"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y003",
+      "table_name": "제조원가명세서(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y004",
+      "table_name": "이익잉여금 처분계산서(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y005",
+      "table_name": "성장성 지표(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y006",
+      "table_name": "손익 지표(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y007",
+      "table_name": "자산/자본 지표(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y008",
+      "table_name": "자산/자본 회전율(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y009",
+      "table_name": "생산성 지표(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y010",
+      "table_name": "부가가치 구성(제11차 한국표준산업분류, 2009~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y013",
+      "table_name": "현금흐름표(2012~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y014",
+      "table_name": "현금흐름관련 기타 주요 재무항목(2012~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y015",
+      "table_name": "현금흐름비율(2012~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y017",
+      "table_name": "기업경영분석지표(2007~2010)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y018",
+      "table_name": "기업경영분석지표(~2007)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y019",
+      "table_name": "성장성 지표(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y020",
+      "table_name": "성장성 지표(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y021",
+      "table_name": "성장성 지표(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y022",
+      "table_name": "성장성 지표(1998~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y023",
+      "table_name": "성장성 지표(1990~1997, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y024",
+      "table_name": "손익 지표(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y025",
+      "table_name": "손익 지표(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y026",
+      "table_name": "손익 지표(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y027",
+      "table_name": "손익 지표(1998~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y028",
+      "table_name": "손익 지표(1990~1997, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y029",
+      "table_name": "자산/자본 지표(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y030",
+      "table_name": "자산/자본 지표(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y031",
+      "table_name": "자산/자본 지표(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y032",
+      "table_name": "자산/자본 지표(1998~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y033",
+      "table_name": "자산/자본 지표(1990~1997, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y034",
+      "table_name": "자산/자본 회전율(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y035",
+      "table_name": "자산/자본 회전율(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y036",
+      "table_name": "자산/자본 회전율(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y037",
+      "table_name": "자산/자본 회전율(1998~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y038",
+      "table_name": "자산/자본 회전율(1990~1997, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y039",
+      "table_name": "생산성 지표(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y040",
+      "table_name": "생산성 지표(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y041",
+      "table_name": "생산성 지표(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y042",
+      "table_name": "생산성 지표(2002~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y043",
+      "table_name": "생산성 지표(1998~2006, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y044",
+      "table_name": "생산성 지표(1990~1997, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y049",
+      "table_name": "재무상태표(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y050",
+      "table_name": "재무상태표(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y051",
+      "table_name": "재무상태표(2008~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y052",
+      "table_name": "재무상태표(2000~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y053",
+      "table_name": "재무상태표(1999, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y054",
+      "table_name": "재무상태표(1997~1998, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y055",
+      "table_name": "재무상태표(1990~1996, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y056",
+      "table_name": "손익계산서(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y057",
+      "table_name": "손익계산서(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y058",
+      "table_name": "손익계산서(2008~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y059",
+      "table_name": "손익계산서(2000~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y060",
+      "table_name": "손익계산서(1999, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y061",
+      "table_name": "손익계산서(1997~1998, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y062",
+      "table_name": "손익계산서(1990~1996, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y063",
+      "table_name": "제조원가명세서(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y064",
+      "table_name": "제조원가명세서(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y065",
+      "table_name": "제조원가명세서(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y066",
+      "table_name": "제조원가명세서(2000~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y067",
+      "table_name": "제조원가명세서(1990~1999, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y068",
+      "table_name": "이익잉여금 처분계산서(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y069",
+      "table_name": "이익잉여금 처분계산서(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y070",
+      "table_name": "이익잉여금 처분계산서(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y071",
+      "table_name": "이익잉여금 처분계산서(2000~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y072",
+      "table_name": "이익잉여금 처분계산서(1990~1999, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y073",
+      "table_name": "부가가치 구성(중소기업기본법, 2015~2016)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y074",
+      "table_name": "부가가치 구성(조세특례제한법, 2009~2014)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y075",
+      "table_name": "부가가치 구성(2007~2010, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_501Y076",
+      "table_name": "부가가치 구성(2002~2007, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y077",
+      "table_name": "부가가치 구성(1998~2006, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y078",
+      "table_name": "부가가치 구성(1990~1997, 표본조사)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y079",
+      "table_name": "현금흐름표(2008~2011)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y080",
+      "table_name": "현금흐름표(1995~2007)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y081",
+      "table_name": "현금흐름관련 기타 주요 재무항목(2008~2011)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y082",
+      "table_name": "현금흐름관련 기타 주요 재무항목(1995~2007)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y083",
+      "table_name": "현금흐름비율(2008~2011)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y084",
+      "table_name": "현금흐름비율(1995~2007)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_501Y086",
+      "table_name": "분위수(제11차 한국표준산업분류, 2013~)",
+      "org_id": "301",
+      "stat_id": "1966004",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_511Y001",
+      "table_name": "소비자동향조사(전국, 분기, 1995.3/4~2008.2/4)",
+      "org_id": "301",
+      "stat_id": "1998023",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_511Y002",
+      "table_name": "소비자동향조사(전국, 월, 2008.9~)",
+      "org_id": "301",
+      "stat_id": "1998023",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0019",
+        "GS-0038",
+        "GS-0071",
+        "GS-0093",
+        "GS-0149"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 2,
+        "3": 2,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_511Y003",
+      "table_name": "기대인플레이션율(전국, 월)",
+      "org_id": "301",
+      "stat_id": "1998023",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0019",
+        "GS-0038",
+        "GS-0071",
+        "GS-0149"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "1": 2,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_511Y004",
+      "table_name": "소비자동향조사(지역, 월)",
+      "org_id": "301",
+      "stat_id": "1998023",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y001",
+      "table_name": "업종별 기업경기실사지수, ~2009.8(실적)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, ~2009.8"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y002",
+      "table_name": "업종별 기업경기실사지수, ~2009.8(전망)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, ~2009.8"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y007",
+      "table_name": "업종별 기업경기실사지수, 2009.8~(실적)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, 2009.8 ~"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y008",
+      "table_name": "업종별 기업경기실사지수, 2009.9~(전망)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, 2009.8 ~"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y011",
+      "table_name": "지역별 기업경기실사지수(실적(~2012.12))",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y012",
+      "table_name": "지역별 기업경기실사지수(전망(~2013.1))",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y013",
+      "table_name": "기업경기조사(실적)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0011",
+        "GS-0018",
+        "GS-0051",
+        "GS-0061",
+        "GS-0083",
+        "GS-0093",
+        "GS-0094",
+        "GS-0103",
+        "GS-0104",
+        "GS-0141",
+        "GS-0148"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 4,
+        "1": 4,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y014",
+      "table_name": "기업경기조사(전망)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0011",
+        "GS-0051",
+        "GS-0061",
+        "GS-0071",
+        "GS-0083",
+        "GS-0094",
+        "GS-0103",
+        "GS-0104",
+        "GS-0141"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 4,
+        "2": 3,
+        "3": 2
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y015",
+      "table_name": "기업경기조사(매출액가중 실적)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0018",
+        "GS-0083",
+        "GS-0148"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "1": 1,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y016",
+      "table_name": "기업경기조사(매출액가중 전망)",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y017",
+      "table_name": "기업경기실사지수((구)실적(~2012.6))",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y018",
+      "table_name": "기업경기실사지수((구)전망(~2012.7))",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y019",
+      "table_name": "지역별 기업경기조사(실적(2013.1~))",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y020",
+      "table_name": "지역별 기업경기조사(전망(2013.2~))",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_512Y021",
+      "table_name": "경영애로사항",
+      "org_id": "301",
+      "stat_id": "1991004",
+      "catalog_path": [
+        "기업경기조사",
+        "경영애로사항"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_513Y001",
+      "table_name": "경제심리지수",
+      "org_id": "301",
+      "stat_id": "2012013",
+      "catalog_path": [
+        "경제심리지수"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0001",
+        "GS-0061",
+        "GS-0113",
+        "GS-0131"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "2": 3
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_514Y001",
+      "table_name": "대출행태서베이(대출태도)",
+      "org_id": "301",
+      "stat_id": "2001022",
+      "catalog_path": [
+        "금융기관대출행태조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0028"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_514Y002",
+      "table_name": "대출행태서베이(신용위험)",
+      "org_id": "301",
+      "stat_id": "2001022",
+      "catalog_path": [
+        "금융기관대출행태조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_514Y003",
+      "table_name": "대출행태서베이(대출수요)",
+      "org_id": "301",
+      "stat_id": "2001022",
+      "catalog_path": [
+        "금융기관대출행태조사"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": false
+    },
+    {
+      "table_id": "DT_601Y003",
+      "table_name": "신용카드",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0039",
+        "GS-0040",
+        "GS-0055"
+      ],
+      "proposed_relatedness_counts": {
+        "1": 2,
+        "3": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_602Y001",
+      "table_name": "결제시스템별 통계",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "BIS기준통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_602Y002",
+      "table_name": "지급수단별 통계",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "BIS기준통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_603Y001",
+      "table_name": "한은금융망결제통계표",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "회계시스템통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_603Y010",
+      "table_name": "지급결제동향",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "회계시스템통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0039",
+        "GS-0040",
+        "GS-0055"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "1": 1,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_604Y003",
+      "table_name": "지로시스템",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_605Y012",
+      "table_name": "금융공동망",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_606Y002",
+      "table_name": "한은금융망",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_633Y002",
+      "table_name": "전자지급결제대행",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_633Y003",
+      "table_name": "결제대금예치",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_633Y004",
+      "table_name": "선불전자지급수단",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_633Y005",
+      "table_name": "전자고지결제",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_633Y006",
+      "table_name": "직불전자지급수단",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_641Y001",
+      "table_name": "한국은행 원화대출금",
+      "org_id": "301",
+      "stat_id": "1976015",
+      "catalog_path": [
+        "통화금융통계",
+        "한국은행 주요계정 및 기준금리"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [
+        "GS-0010",
+        "GS-0140"
+      ],
+      "proposed_relatedness_counts": {
+        "3": 1,
+        "2": 1
+      },
+      "kosis_api_status": "ok",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_801Y002",
+      "table_name": "어음교환 및 부도",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    },
+    {
+      "table_id": "DT_801Y003",
+      "table_name": "지역별 어음부도율",
+      "org_id": "301",
+      "stat_id": "2006012",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "snapshot_csv_available": true,
+      "case_ids": [],
+      "proposed_relatedness_counts": {},
+      "kosis_api_status": "not_queried",
+      "local_unit_recorded": true
+    }
+  ]
+}

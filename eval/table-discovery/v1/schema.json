@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClaBi KOSIS Golden Set v1 Pilot Draft Case",
+  "type": "object",
+  "required": [
+    "case_id",
+    "split",
+    "primary_type",
+    "tags",
+    "catalog_version",
+    "conversation",
+    "gold",
+    "annotation",
+    "review"
+  ],
+  "properties": {
+    "case_id": {"type": "string", "pattern": "^GS-[0-9]{4}$"},
+    "split": {"enum": ["dev", "validation", "locked_test"]},
+    "primary_type": {
+      "enum": [
+        "clear_single_table",
+        "colloquial_alias",
+        "ambiguous_metric",
+        "multi_indicator_table",
+        "conditions",
+        "no_match_out_of_scope",
+        "conversation_followup"
+      ]
+    },
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "catalog_version": {"type": "string"},
+    "conversation": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["role", "text"],
+        "properties": {
+          "role": {"enum": ["user", "assistant"]},
+          "text": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "gold": {
+      "type": "object",
+      "required": [
+        "input",
+        "interpretation",
+        "concepts",
+        "ambiguity",
+        "clarification",
+        "data_strategy",
+        "tool_plan",
+        "retrieval"
+      ],
+      "properties": {
+        "input": {"type": "object"},
+        "interpretation": {"type": "object", "required": ["acceptable_intents", "slots", "unspecified_fields"]},
+        "concepts": {"type": "object", "required": ["acceptable_candidates", "must_preserve_ambiguity", "evidence_requirements"]},
+        "ambiguity": {"type": "object", "required": ["present", "conflicts"]},
+        "clarification": {"type": "object", "required": ["expected", "must_resolve", "acceptable_question_criteria", "answer_branches"]},
+        "data_strategy": {},
+        "tool_plan": {"type": "object", "required": ["expected_next_action", "acceptable_plans", "required_order", "validation_conditions"]},
+        "retrieval": {"type": "object", "required": ["expected_status", "candidates", "acceptable_table_ids", "no_match_reason", "search_scope"]}
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "required": ["evidence", "review_status", "notes"],
+      "properties": {
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "review_status": {"enum": ["draft", "review_required", "needs_adjudication", "approved", "excluded"]},
+        "notes": {"type": "string"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["decision", "approved_table_ids", "edited_gold", "review_notes"],
+      "properties": {
+        "decision": {"type": "string"},
+        "approved_table_ids": {},
+        "edited_gold": {},
+        "review_notes": {"type": "string"}
+      }
+    }
+  },
+  "additionalProperties": true
+}

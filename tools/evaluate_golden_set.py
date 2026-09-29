@@ -12,7 +12,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CORPUS = ROOT / "eval" / "golden-set"
+DEFAULT_CORPUS = ROOT / "eval" / "end-to-end" / "v1"
 
 
 def load_cases(corpus_dir: Path = DEFAULT_CORPUS) -> list[dict[str, Any]]:

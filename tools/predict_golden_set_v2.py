@@ -17,7 +17,7 @@ from statbridge_mcp.statistics_service import StatisticsService  # noqa: E402
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--corpus", type=Path, default=ROOT / "eval" / "golden-set-v2")
+    parser.add_argument("--corpus", type=Path, default=ROOT / "eval" / "end-to-end" / "v2")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     cases = load_cases(args.corpus)
