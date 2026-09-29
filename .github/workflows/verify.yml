@@ -1,0 +1,48 @@
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r src/backend/requirements.txt pytest
+
+      - name: Run tests
+        env:
+          PYTHONPATH: src/backend:src/agent
+        run: python -m pytest -q tests eval/table-discovery/v4.1/tests
+
+      - name: Validate v4.1 dataset
+        run: python eval/table-discovery/v4.1/scripts/validate_v41.py
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: src/agent/frontend/pnpm-lock.yaml
+
+      - name: Build frontend
+        working-directory: src/agent/frontend
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      # CI에는 API 키와 data/tables CSV가 없습니다. 외부 KOSIS·NCP 호출과
+      # 347개 CSV 조회는 키와 데이터가 있는 환경에서 별도로 확인합니다.
