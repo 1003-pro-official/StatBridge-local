@@ -1,0 +1,30 @@
+{"id": "GS4-0003", "query": "25년 국내공급물가지수 총지수의 월별 흐름을", "prior_turns": []}
+{"id": "GS4-0007", "query": "24년 식료품 업종 총자산증가율을", "prior_turns": []}
+{"id": "GS4-0014", "query": "2025년 예금은행 잔액 기준 대출금리를 월별로 좀 알려줘", "prior_turns": []}
+{"id": "GS4-0018", "query": "2025년 업권별 가계신용을 분기별로 좀 보여줘", "prior_turns": []}
+{"id": "GS4-0023", "query": "24년 주요 경제지표 연간 자료를", "prior_turns": []}
+{"id": "GS4-0029", "query": "2025년 금융거래표를 분기별로 보여주세요", "prior_turns": []}
+{"id": "GS4-0036", "query": "2024년 지식재산권 무역수지를 유형별로 어떻게 움직였는지 보고 싶어", "prior_turns": []}
+{"id": "GS4-0044", "query": "2025년 교역조건지수를 월별로 어떻게 움직였는지 보고 싶어", "prior_turns": []}
+{"id": "GS4-0045", "query": "2025년 생산자물가지수 기본분류를 월별로 보여주세요", "prior_turns": []}
+{"id": "GS4-0049", "query": "2024년 제조업 손익계산서를 보여주세요", "prior_turns": []}
+{"id": "GS4-0051", "query": "24년 제조업 현금흐름표를", "prior_turns": []}
+{"id": "GS4-0058", "query": "2025년 개인 신용카드 이용건수를 월별로 좀 보여줘", "prior_turns": []}
+{"id": "GS4-0061", "query": "2024년 대외채무와 대외채권을 분기별로 비교해 주세요", "prior_turns": []}
+{"id": "GS4-0074", "query": "2025년 금융거래와 금융자산부채잔액을 나란히 좀 보여줘", "prior_turns": []}
+{"id": "GS4-0079", "query": "2025년 소비자심리지수와 경제심리지수를 차이가 어떻게 나는지 보고 싶어", "prior_turns": []}
+{"id": "GS4-0080", "query": "25년 신용카드, 지급수단, 전자지급결제대행 이용규모를", "prior_turns": []}
+{"id": "GS4-0081", "query": "대출 얼마나 늘었어?", "prior_turns": []}
+{"id": "GS4-0085", "query": "결제통화 비중 좀 보여줘", "prior_turns": []}
+{"id": "GS4-0089", "query": "채권 자료 보고 싶어", "prior_turns": []}
+{"id": "GS4-0098", "query": "금융기관 수신 추이를 보고 싶습니다.", "prior_turns": []}
+{"id": "GS4-0102", "query": "2024년 전국 초등학교 학급당 학생 수를 좀 알려줘", "prior_turns": []}
+{"id": "GS4-0103", "query": "2025년 응급실 방문자 수를 일별로 어떻게 움직였는지 보고 싶어", "prior_turns": []}
+{"id": "GS4-0112", "query": "25년 지역별 전력 사용량을 시간별로", "prior_turns": []}
+{"id": "GS4-0118", "query": "상세자금순환 잔액표의 최근 분기 자료를 찾아줘", "prior_turns": []}
+{"id": "GS4-0124", "query": "부산도 도 같이 보고 싶어", "prior_turns": [{"role": "user", "content": "서울 어음부도율을 보여줘"}, {"role": "assistant", "content": "통계표를 선택했습니다."}]}
+{"id": "GS4-0127", "query": "대출금리도 같이 비교해줘", "prior_turns": [{"role": "user", "content": "신규취급액 기준 예금금리를 보여줘"}, {"role": "assistant", "content": "통계표를 선택했습니다."}]}
+{"id": "GS4-0128", "query": "이번엔 잔액 기준으로 기준으로 다시 보고 싶어", "prior_turns": [{"role": "user", "content": "대출금리 신규취급액 기준으로 보여줘"}, {"role": "assistant", "content": "통계표를 선택했습니다."}]}
+{"id": "GS4-0133", "query": "전망으로 바꿔줘", "prior_turns": [{"role": "user", "content": "기업경기 실적을 보여줘"}, {"role": "assistant", "content": "통계표를 선택했습니다."}]}
+{"id": "GS4-0136", "query": "대외채권으로 기준으로 다시 보고 싶어", "prior_turns": [{"role": "user", "content": "대외채무를 보여줘"}, {"role": "assistant", "content": "통계표를 선택했습니다."}]}
+{"id": "GS4-0140", "query": "시가 기준으로 기준으로 다시 보고 싶어", "prior_turns": [{"role": "user", "content": "채권 발행잔액 명목가를 보여줘"}, {"role": "assistant", "content": "통계표를 선택했습니다."}]}

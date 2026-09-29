@@ -1,0 +1,4 @@
+[
+  {"query": "물가 어때", "expected_status": "need_clarification", "must_not_auto_select": "생산자물가"},
+  {"query": "대출 얼마나 늘었어", "expected_status": "need_clarification"}
+]

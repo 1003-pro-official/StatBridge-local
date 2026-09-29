@@ -1,0 +1,3 @@
+[
+  {"query": "삼성전자 영업이익 추이를 보여줘", "expected_status": "no_match"}
+]

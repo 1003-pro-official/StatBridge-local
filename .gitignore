@@ -15,6 +15,7 @@ __pycache__/
 node_modules/
 dist/
 build/
+.pnpm-store/
 
 # jupyter / IDE scratch
 .ipynb_checkpoints/
@@ -25,6 +26,11 @@ data/tables/*.csv
 runtime_data/tables/*.csv
 data/vector_store/
 **/vector_store/
+data/vector_documents/
+eval/results/
+eval/retrieval/last_results.json
+**/golden-set-v4.1-private-evaluator/
+**/holdout_answers.jsonl
 *.sqlite3
 *.sqlite3-shm
 *.sqlite3-wal

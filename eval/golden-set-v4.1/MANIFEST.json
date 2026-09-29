@@ -1,0 +1,32 @@
+{
+  "version": "4.1",
+  "total": 150,
+  "public_labeled": 120,
+  "holdout": 30,
+  "splits": {
+    "dev": 50,
+    "test": 70,
+    "holdout": 30
+  },
+  "types": {
+    "single": 60,
+    "multi": 20,
+    "clarify": 20,
+    "no_match": 15,
+    "catalog_only": 5,
+    "followup": 30
+  },
+  "difficulty": {
+    "easy": 23,
+    "medium": 68,
+    "hard": 59
+  },
+  "language_style": {
+    "formal": 39,
+    "colloquial": 38,
+    "abbreviated": 36,
+    "indirect": 37
+  },
+  "scope": "table_discovery",
+  "human_approved": false
+}

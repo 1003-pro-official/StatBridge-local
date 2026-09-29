@@ -1,69 +1,64 @@
 # StatBridge
 
-한국은행 KOSIS 통계표를 자연어로 찾고, 사용자가 선택한 계열을 그래프로 확인하는 프로젝트입니다. 349개 표 목록과 347개 로컬 CSV를 사용합니다.
+한국은행 통계표를 자연어로 탐색하고, 선택한 계열의 관측값과 출처를 확인하는 로컬 애플리케이션입니다.
 
-## 구성
+기여·데이터 공개 범위·검증 규칙은 [AGENTS.md](AGENTS.md)를 참고하세요.
 
-| 경로 | 역할 |
+## 코드와 데이터
+
+| 위치 | 역할 |
 |---|---|
-| `src/backend/statbridge_mcp/` | 표 검색, 메타 조회, 로컬 CSV·KOSIS 자료 조회, MCP 도구 |
-| `src/backend/query_api.py`, `analysis_service.py` | 화면용 검색·분석 API |
-| `src/agent/statbridge_agent/` | HCX 질의 해석과 Backend 후보 검색 파이프라인 |
-| `src/agent/frontend/` | 후보·계열 선택, 그래프, 관측값 표를 보여주는 React 화면 |
-| `data/processed/` | 이전 코드에서 가져온 349표용 작은 메타 인덱스 |
-| `data/tables/` | 기존 347개 CSV. 이식 과정에서 다시 복사하지 않음 |
-| `eval/golden-set/` | 한국은행 간행물 기반 150개 평가 사례와 30개 고정 그래프 fixture |
+| `src/backend/statbridge_mcp/` | 통계표 검색, 메타데이터, KOSIS·로컬 CSV 조회, MCP 도구 |
+| `src/agent/bridge_api.py` | 화면용 FastAPI (`/api/query`, `/api/catalog`, `/api/health`) |
+| `src/agent/agent_runtime.py`, `src/agent/stat_dictionary/` | 질의 해석, 역질문, 통계표·계열 선택 |
+| `src/agent/frontend/` | React 화면 |
+| `data/processed/` | 349개 표의 메타데이터와 347개 지원 표의 항목·분류 정보 |
+| `data/tables/` | 별도 원본에서 공급하는 347개 통계표 CSV; Git에 포함하지 않음 |
+| `eval/golden-set-v4.1/` | 공개 dev/test 120건, 정답 없는 holdout 질문 30건 |
 
-## 실행
+화면의 주 API는 `src/agent/bridge_api.py`입니다. `src/backend/query_api.py`도 같은 앱을 실행합니다. 이전 `/api/analyze` 계약은 제공하지 않으므로 해당 클라이언트는 새 `/api/query` 응답에 맞춰 수정해야 합니다. `analysis_service.py`는 기존 평가 도구 참고용으로 남아 있습니다.
 
-Python 3.12+와 Node.js·pnpm이 필요합니다. 프로젝트 루트에서 Backend 의존성을 설치합니다.
+## 설치와 실행
+
+Python 3.12 이상, Node.js, pnpm이 필요합니다. 저장소 루트에서 실행합니다.
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python -m pip install -r src/backend/requirements.txt
+.venv/bin/python -m pip install -r src/backend/requirements.txt pytest
+cd src/agent/frontend && pnpm install --frozen-lockfile && cd ../../..
 ```
 
-Windows PowerShell에서는 `py -m venv .venv` 후 `.venv\Scripts\python.exe -m pip install -r src\backend\requirements.txt`를 사용합니다.
+Windows PowerShell에서는 `.venv/bin/python` 대신 `.venv\Scripts\python.exe`를 사용합니다.
+의존성 설치 후 `scripts\windows\START_STATBRIDGE.cmd`로 Agent API와 화면을 함께 시작할 수 있습니다.
 
-검색·분석 API를 실행합니다.
+347개 CSV가 있는 별도 원본의 디렉터리를 `STATBRIDGE_TABLES_DIR`로 지정하거나 `data/tables/`에 복사합니다. 메타데이터만으로도 검색과 카탈로그는 확인할 수 있으나 실제 로컬 수치 조회에는 CSV가 필요합니다. KOSIS 조회에는 `KOSIS_API_KEY`, HCX·임베딩·재순위화에는 `NCP_CLOVA_API_KEY`가 필요합니다. 키는 루트 `.env`에 두며 Git에 추가하지 않습니다. 예시는 `.env.example`을 참고합니다.
 
 ```bash
-.venv/bin/python src/backend/query_api.py
+PYTHONPATH=src/backend:src/agent .venv/bin/python -m uvicorn bridge_api:app --host 127.0.0.1 --port 8000
 ```
 
-다른 터미널에서 화면을 실행하고 `http://localhost:5173`을 엽니다.
+다른 터미널에서 화면을 실행합니다.
 
 ```bash
 cd src/agent/frontend
-pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-PowerShell의 API 실행 경로는 `.venv\Scripts\python.exe src\backend\query_api.py`입니다. Vite가 `/api/query`와 `/api/analyze`를 로컬 8000번 API로 전달합니다.
-
-MCP stdio 서버는 별도로 실행할 수 있습니다.
+`http://127.0.0.1:5173`을 열면 Vite가 `/api` 요청을 8000번 Agent API로 전달합니다. MCP stdio 서버는 저장소 루트에서 별도로 실행합니다.
 
 ```bash
-.venv/bin/python src/backend/server.py
+PYTHONPATH=src/backend .venv/bin/python src/backend/server.py
 ```
 
-제공 도구는 `search_tables`, `get_meta`, `fetch_data`와 상태 확인용 `healthcheck`입니다. 검색은 349개 표를 대상으로 하며, 결과의 `local_csv_available`로 2개 목록 전용 표를 구분합니다. `fetch_data`가 로컬 CSV에서 값을 찾지 못하면 KOSIS API를 사용하므로 그때 `KOSIS_API_KEY`가 필요합니다.
+MCP 도구에는 검색, 메타데이터·수치 조회, 배치 검증, 상태 확인이 포함됩니다. API 키가 없으면 KOSIS·NCP 네트워크 기능은 사용할 수 없지만 사전 기반 질의와 메타데이터 탐색은 가능합니다. 벡터 인덱스는 별도 생성물이며 필요할 때 `tools/build_stat_vector_index.py`로 빌드합니다.
 
-## 현재 범위와 확인
-
-화면은 후보를 보여준 뒤 사용자가 표·항목·분류·기간을 선택하게 합니다. `/api/analyze`는 선택 ID를 검증하고 KOSIS를 기본으로 한 번 조회합니다. KOSIS 실패 시 로컬 수치를 자동으로 대신 표시하지 않으며, 사용자가 직접 로컬 저장본을 선택할 수 있습니다. HCX 해석 코드는 별도로 존재하지만 현재 화면 API 경로에는 연결되지 않습니다.
+## 검증과 평가
 
 ```bash
 PYTHONPATH=src/backend:src/agent .venv/bin/python -m pytest -q tests
+.venv/bin/python eval/golden-set-v4.1/scripts/validate_v41.py
+.venv/bin/python tools/evaluate_golden_v41.py --dataset eval/golden-set-v4.1/dev.jsonl --output /tmp/statbridge-v41-dev.json
 cd src/agent/frontend && pnpm build
 ```
 
-Python 테스트 실행에는 `pytest`가 필요합니다. 설치 환경에 없으면 `.venv/bin/python -m pip install pytest`를 실행합니다.
-
-## 보고서 기반 골든셋
-
-한국은행 정기 간행물 6종의 질문을 사용한 150개 평가 코퍼스는 [`eval/golden-set`](eval/golden-set/README.md)에 있습니다. 30개 고정 그래프 데이터, 출처, 평가 범위와 실행 방법을 포함합니다.
-
-```bash
-.venv/bin/python tools/evaluate_golden_set.py
-```
+v4.1의 비공개 holdout 정답과 평가기는 개발 저장소에 넣지 않고 별도 접근 제한 저장소에서 관리합니다. 공개 holdout 파일에는 질문만 있습니다. 기존 v1·v2 평가셋과 도구는 `eval/` 및 `tools/`에 그대로 있습니다.
