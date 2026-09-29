@@ -120,6 +120,14 @@ def normalize_query(query):
     return re.sub(r"[^\w]", "", query.casefold())
 
 
+def local_table_csv(csv_root, table_id):
+    matches = sorted(Path(csv_root).glob(f"{table_id}__*.csv"))
+    if matches:
+        return matches[0]
+    plain = Path(csv_root) / f"{table_id}.csv"
+    return plain if plain.is_file() else None
+
+
 def validate_rows(cases, known_ids, csv_root, *, pilot=True):
     errors = []
     if pilot:
@@ -178,7 +186,7 @@ def validate_rows(cases, known_ids, csv_root, *, pilot=True):
             if status != "catalog_only" or len(selected) != 1 or options:
                 errors.append(f"{cid}: catalog_only needs one table ID")
             for table_id in selected:
-                if (csv_root / f"{table_id}.csv").exists():
+                if local_table_csv(csv_root, table_id) is not None:
                     errors.append(f"{cid}: catalog_only local CSV exists")
         else:
             if status != "select" or not selected or options:
@@ -188,8 +196,8 @@ def validate_rows(cases, known_ids, csv_root, *, pilot=True):
             if case.get("type") == "multi" and len(selected) < 2:
                 errors.append(f"{cid}: multi needs at least two table IDs")
             for table_id in selected:
-                path = csv_root / f"{table_id}.csv"
-                if not path.is_file():
+                path = local_table_csv(csv_root, table_id)
+                if path is None:
                     errors.append(f"{cid}: {table_id} local CSV missing")
                     continue
                 with path.open(encoding="utf-8-sig", newline="") as stream:
