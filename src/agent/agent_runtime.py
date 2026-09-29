@@ -341,12 +341,6 @@ class StatBridgeAgent:
                         result["retrieval_confident"] = self.hybrid.confident(hybrid_candidates)
 
         confirmed_choices = dict((result.get("state") or {}).get("confirmed") or (state or {}).get("confirmed") or {})
-        # UI에서 고른 값은 강한 제약이다. 원 질문에 대한 HCX의 추정 비교
-        # 계열이 사용자의 버튼 선택을 덮어쓰지 못하게 한다.
-        if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans"):
-            comparison = self._resolve_comparison(classification, dictionary_query)
-            if comparison:
-                result = comparison
 
         if prior_user_query and result.get("status") != "need_clarification":
             followup_series=self.resolver.rank_followup(prior_user_query,query,top_k=12)
@@ -361,9 +355,9 @@ class StatBridgeAgent:
                     "state":{"original_query":dictionary_query,"confirmed":{},"asked_clarifications":[],"status":"resolved"},
                 }
 
-        # Deterministic comparison fallback: when HCX is unavailable or does not emit
-        # series, split only explicitly expressed concepts and select IDs from the
-        # dictionary. This never manufactures table/item/dimension identifiers.
+        # HCX series has already been handled once in the initial classification
+        # branch above. This is only the deterministic fallback for unavailable or
+        # empty HCX series, and confirmed UI choices always bypass it.
         if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans"):
             series = self.resolver.rank_many(dictionary_query, top_k=12)
             if len(series) >= 2:
