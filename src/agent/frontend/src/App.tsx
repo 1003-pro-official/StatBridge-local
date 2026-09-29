@@ -33,6 +33,28 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
 
+function DateSelector({ value, min, max, onChange, label }: { value:string; min?:string; max?:string; onChange:(value:string)=>void; label:string }) {
+  const today=new Date().toISOString().slice(0,10);
+  const fallback=[max,today,min].find((item)=>item&&(!min||item>=min)&&(!max||item<=max))||min||max||today;
+  const [open,setOpen]=useState(false);
+  const [draft,setDraft]=useState(value||fallback);
+  useEffect(()=>{if(value)setDraft(value)},[value]);
+  const [year,month,day]=draft.split("-").map(Number);
+  const minYear=Number((min||`${new Date().getFullYear()-30}-01-01`).slice(0,4));
+  const maxYear=Number((max||`${new Date().getFullYear()+5}-12-31`).slice(0,4));
+  const years=Array.from({length:Math.max(1,maxYear-minYear+1)},(_,index)=>minYear+index);
+  const days=Array.from({length:new Date(year,month,0).getDate()},(_,index)=>index+1);
+  const updateDraft=(nextYear:number,nextMonth:number,nextDay:number)=>{
+    const safeDay=Math.min(nextDay,new Date(nextYear,nextMonth,0).getDate());
+    setDraft(`${nextYear}-${String(nextMonth).padStart(2,"0")}-${String(safeDay).padStart(2,"0")}`);
+  };
+  const valid=(!min||draft>=min)&&(!max||draft<=max);
+  return <div className="date-picker">
+    <button type="button" className={`date-trigger ${value?"has-value":""}`} aria-expanded={open} aria-label={`${label} 선택`} onClick={()=>{setDraft(value||fallback);setOpen((current)=>!current)}}><Icon name="history" size={16}/><span>{value||"날짜 선택"}</span><Icon name="chevron" size={14}/></button>
+    {open&&<div className="date-popover"><div className="date-popover-head"><div><small>{label}</small><strong>{draft.replaceAll("-",".")}</strong></div><button type="button" aria-label="날짜 선택 닫기" onClick={()=>setOpen(false)}><Icon name="close" size={15}/></button></div><div className="date-select-grid"><label>년<select value={year} onChange={(event)=>updateDraft(Number(event.target.value),month,day)}>{years.map((item)=><option key={item} value={item}>{item}년</option>)}</select></label><label>월<select value={month} onChange={(event)=>updateDraft(year,Number(event.target.value),day)}>{Array.from({length:12},(_,index)=>index+1).map((item)=><option key={item} value={item}>{item}월</option>)}</select></label><label>일<select value={day} onChange={(event)=>updateDraft(year,month,Number(event.target.value))}>{days.map((item)=><option key={item} value={item}>{item}일</option>)}</select></label></div>{min&&max&&<p>{min}부터 {max}까지 선택할 수 있습니다.</p>}<button type="button" className="date-confirm" disabled={!valid} onClick={()=>{onChange(draft);setOpen(false)}}>이 날짜로 선택</button></div>}
+  </div>;
+}
+
 const navItems: { label: string; icon: IconName }[] = [
   { label: "홈", icon: "home" },
   { label: "대화하기", icon: "chat" },
@@ -41,13 +63,12 @@ const navItems: { label: string; icon: IconName }[] = [
   { label: "데이터 계보", icon: "lineage" },
 ];
 
-function Sidebar({ open, close, view, selectView }: { open: boolean; close: () => void; view: string; selectView: (view: "home" | "lineage") => void }) {
+function Sidebar({ open, close, view, selectView, goHome }: { open: boolean; close: () => void; view: string; selectView: (view: "home" | "lineage") => void; goHome:()=>void }) {
   return <>
     {open && <button className="backdrop" aria-label="메뉴 닫기" onClick={close} />}
     <aside className={`sidebar ${open ? "is-open" : ""}`}>
       <div className="brand-row">
-        <div className="brand-mark"><Icon name="logo" size={23}/></div>
-        <div><strong>StatBridge</strong><span>통계를 잇는 가장 투명한 방법</span></div>
+        <button type="button" className="brand-home" aria-label="StatBridge 홈으로 이동" onClick={()=>{goHome();close()}}><span className="brand-mark"><Icon name="logo" size={23}/></span><span><strong>StatBridge</strong><small>통계를 잇는 가장 투명한 방법</small></span></button>
         <button className="mobile-close" onClick={close} aria-label="메뉴 닫기"><Icon name="close"/></button>
       </div>
       <nav className="main-nav" aria-label="주 메뉴">
@@ -72,6 +93,38 @@ function Sidebar({ open, close, view, selectView }: { open: boolean; close: () =
   </>;
 }
 
+function ExpandableValues({ values, previewCount = 3 }: { values: string[]; previewCount?: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const visibleValues = expanded ? values : values.slice(0, previewCount);
+  if (!values.length) return <>-</>;
+  return <div className="expandable-values">
+    <span>{visibleValues.join(", ")}</span>
+    {values.length > previewCount && <button type="button" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)}>
+      {expanded ? "접기" : `더 보기 (${values.length - previewCount}개)`}
+    </button>}
+  </div>;
+}
+
+function CatalogCard({ table }: { table: CatalogTable }) {
+  return <article className="catalog-card">
+    <div><span>{table.organization}</span><span className="source-check"><Icon name="check" size={12}/></span></div>
+    <h3>{table.name}</h3>
+    <p className="catalog-table-id">통계표 ID {table.tableId}</p>
+    <dl>
+      <div><dt>수록 주기</dt><dd><strong>{table.frequencyLabel}</strong> <small>({table.frequency})</small></dd></div>
+      <div><dt>제공 기간</dt><dd>{table.periodStart} – {table.periodEnd}</dd></div>
+      <div><dt>대표 단위</dt><dd>{table.unitScale || "-"}</dd></div>
+      <div><dt>수치 단위</dt><dd><ExpandableValues values={table.units}/></dd></div>
+      <div><dt>통계 항목</dt><dd><ExpandableValues values={table.items}/></dd></div>
+      <div><dt>분류 정보</dt><dd>{table.dimensions.length ? table.dimensions.map((dimension, index) =>
+        <section className="dimension-detail" key={`${dimension.name}-${index}`}>
+          <b>{dimension.name}</b><span> · {dimension.count}개</span>
+          <ExpandableValues values={dimension.values}/>
+        </section>) : "-"}</dd></div>
+    </dl>
+  </article>;
+}
+
 function DataCatalog() {
   const [catalog, setCatalog] = useState<CatalogResponse | null>(null);
   const [error, setError] = useState("");
@@ -91,7 +144,7 @@ function DataCatalog() {
       <div className="catalog-column"><h2><span>1</span> 대분류</h2>{majors.map((x) => <button className={x.name === major ? "selected" : ""} key={x.name} onClick={() => setMajor(x.name)}><strong>{x.name}</strong><small>{x.count}개</small><Icon name="chevron" size={15}/></button>)}</div>
       <div className="catalog-column"><h2><span>2</span> 중분류</h2>{middles.map((x) => <button className={x.name === (middleNode?.name || "") ? "selected" : ""} key={x.name} onClick={() => setMiddle(x.name)}><strong>{x.name}</strong><small>{x.count}개</small><Icon name="chevron" size={15}/></button>)}</div>
       <div className="catalog-column catalog-small"><h2><span>3</span> 소분류</h2>{middleNode?.children.map((x) => <button className={x.tableId === selected?.tableId ? "selected" : ""} key={x.tableId} onClick={() => setSelected(x)}><strong>{x.name}</strong><Icon name="chevron" size={15}/></button>)}</div>
-      <div className="catalog-detail"><h2>통계표 정보 카드</h2>{selected ? <article className="catalog-card"><div><span>{selected.organization}</span><span className="source-check"><Icon name="check" size={12}/></span></div><h3>{selected.name}</h3><dl><div><dt>수록 주기</dt><dd><strong>{selected.frequencyLabel}</strong></dd></div><div><dt>제공 기간</dt><dd>{selected.periodStart} – {selected.periodEnd}</dd></div><div><dt>수치 단위</dt><dd>{selected.units.join(", ") || selected.unitScale || "-"}</dd></div><div><dt>통계 항목</dt><dd>{selected.items.join(", ") || "-"}</dd></div><div><dt>분류 정보</dt><dd>{selected.dimensions.length?selected.dimensions.map((x, index)=><span className="dimension-detail" key={`${x.name}-${index}`}><b>{x.name}</b> · {x.count}개<br/><small>예: {x.examples.join(", ")||"-"}</small></span>):"-"}</dd></div></dl></article> : <div className="catalog-empty"><Icon name="database" size={35}/><strong>소분류 통계표를 선택하세요.</strong><p>주기·기간·수치 단위·통계 항목과 분류 내용을 카드로 보여드립니다.</p></div>}</div>
+      <div className="catalog-detail"><h2>통계표 정보 카드</h2>{selected ? <CatalogCard key={selected.tableId} table={selected}/> : <div className="catalog-empty"><Icon name="database" size={35}/><strong>소분류 통계표를 선택하세요.</strong><p>주기·기간·수치 단위·통계 항목과 분류 내용을 카드로 보여드립니다.</p></div>}</div>
     </section>}
   </main>;
 }
@@ -106,7 +159,7 @@ function Header({ openMenu }: { openMenu: () => void }) {
 }
 
 function Hero({ query, setQuery, submit, loading }: { query: string; setQuery: (v: string) => void; submit: (e: FormEvent) => void; loading: boolean }) {
-  const suggestions = ["최근 10년 기준금리 추이", "기준금리와 물가 비교", "월별 생산자물가지수"];
+  const suggestions = ["최근 대출금리 추이", "대출금리와 생산자물가 비교", "월별 생산자물가지수"];
   return <section className="hero">
     <div className="hero-glow one"/><div className="hero-glow two"/>
     <div className="hero-content">
@@ -115,16 +168,16 @@ function Hero({ query, setQuery, submit, loading }: { query: string; setQuery: (
       <p>자연어 질문을 한국은행의 실제 통계 구조로 변환하고,<br className="desktop-break"/> 선택 근거까지 추적 가능한 분석 결과를 제공합니다.</p>
       <form className="ask-box" onSubmit={submit}>
         <Icon name="search" size={21}/>
-        <input aria-label="통계 질문" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="예: 2020년 이후 기준금리와 물가를 비교해줘" />
+        <input aria-label="통계 질문" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="예: 대출금리와 생산자물가를 비교해줘" />
         <button type="submit" disabled={loading || !query.trim()}>{loading ? <span className="spinner"/> : <Icon name="send" size={18}/>}<span>분석하기</span></button>
       </form>
       <div className="suggestions"><span>추천 질문</span>{suggestions.map((s) => <button key={s} onClick={() => setQuery(s)}>{s}</button>)}</div>
     </div>
     <div className="hero-visual" aria-hidden="true">
       <div className="orbit orbit-one"/><div className="orbit orbit-two"/>
-      <div className="data-card card-a"><span>기준금리</span><strong>2.75%</strong><small>한국은행</small></div>
+      <div className="data-card card-a"><span>대출금리</span><strong>실데이터</strong><small>한국은행</small></div>
       <div className="bridge-line"><i/><i/><i/><i/><i/></div>
-      <div className="data-card card-b"><span>물가상승률</span><strong>2.10%</strong><small>KOSIS</small></div>
+      <div className="data-card card-b"><span>생산자물가</span><strong>실데이터</strong><small>KOSIS</small></div>
       <div className="verified"><Icon name="check" size={15}/> SOURCE VERIFIED</div>
     </div>
   </section>;
@@ -172,7 +225,7 @@ function PeriodPanel({ result, loading, submit }: { result: QueryResponse; loadi
   const invalid=Boolean(start&&end&&(start>end||(minDate&&start<minDate)||(maxDate&&end>maxDate)));
   return <section className="clarification-section" id="analysis-result"><div className="clarification-card">
     <span className="eyebrow">CHART PERIOD</span><div className="clarification-title"><span><Icon name="chart" size={19}/></span><div><h2>그래프로 볼 정확한 기간을 입력해 주세요.</h2><p>{result.interpretedQuery} · 원자료 주기 {result.frequency}</p></div></div>
-    <div className="period-form"><label>시작일<input type="date" value={start} min={minDate} max={end&&(!maxDate||end<maxDate)?end:maxDate} onChange={(e) => setStart(e.target.value)}/></label><span>→</span><label>종료일<input type="date" value={end} min={start&&(!minDate||start>minDate)?start:minDate} max={maxDate} onChange={(e) => setEnd(e.target.value)}/></label></div>{minDate&&maxDate&&<p className="period-availability">선택 가능 기간: {minDate} ~ {maxDate}</p>}<LayoutChoice mode={mode} setMode={setMode}/><div className="clarification-submit"><span>{invalid?"원자료 제공 기간 안에서 선택해 주세요.":"기간과 그래프 방식을 함께 적용합니다."}</span><button disabled={loading || !start || !end || invalid} onClick={() => submit(start,end,mode)}>그래프 만들기 <Icon name="arrow" size={15}/></button></div>
+    <div className="period-form"><label>시작일<DateSelector label="시작일" value={start} min={minDate} max={end&&(!maxDate||end<maxDate)?end:maxDate} onChange={setStart}/></label><span>→</span><label>종료일<DateSelector label="종료일" value={end} min={start&&(!minDate||start>minDate)?start:minDate} max={maxDate} onChange={setEnd}/></label></div>{minDate&&maxDate&&<p className="period-availability">선택 가능 기간: {minDate} ~ {maxDate}</p>}{(result.tables.length>1||(result.seriesCount||0)>1)&&<LayoutChoice mode={mode} setMode={setMode}/>}<div className="clarification-submit"><span>{invalid?"원자료 제공 기간 안에서 선택해 주세요.":"조회 기간을 적용합니다."}</span><button disabled={loading || !start || !end || invalid} onClick={() => submit(start,end,mode)}>그래프 만들기 <Icon name="arrow" size={15}/></button></div>
   </div></section>;
 }
 
@@ -185,29 +238,30 @@ function ChartModePanel({ result, loading, choose }: { result: QueryResponse; lo
 
 
 function ClarificationPanel({ result, loading, choose }: { result: QueryResponse; loading: boolean; choose: (values: Array<{ clarification_id: string; values: string[] }>,start:string,end:string,mode:"combined"|"separate") => void }) {
-  const groups = result.clarifications?.length ? result.clarifications : result.clarification ? [result.clarification] : [];
-  const [selected, setSelected] = useState<Record<string,string[]>>({});
+  const groups=result.clarifications?.length?result.clarifications:result.clarification?[result.clarification]:[];
+  const [selected,setSelected]=useState<Record<string,string[]>>({});
   const [start,setStart]=useState(""); const [end,setEnd]=useState(""); const [mode,setMode]=useState<"combined"|"separate">("combined");
   const [availablePeriod,setAvailablePeriod]=useState(result.availablePeriod);
   const selectedKey=JSON.stringify(selected);
   useEffect(()=>{
     const selections=Object.entries(selected).filter(([,values])=>values.length).map(([clarification_id,values])=>({clarification_id,values}));
     if(!selections.length){setAvailablePeriod(result.availablePeriod);return;}
-    const timer=window.setTimeout(()=>{submitQuery({query:result.query,state:result.state,selections,execute:false}).then((preview)=>{if(preview.availablePeriod)setAvailablePeriod(preview.availablePeriod);}).catch(()=>undefined);},120);
+    const timer=window.setTimeout(()=>{submitQuery({query:result.query,state:result.state,selections,execute:false}).then((preview)=>{if(preview.availablePeriod)setAvailablePeriod(preview.availablePeriod)}).catch(()=>undefined)},120);
     return()=>window.clearTimeout(timer);
   },[selectedKey,result.query,result.state,result.availablePeriod]);
-  if (result.status !== "need_clarification" || !groups.length) return null;
-  const toggle = (groupId: string, value: string) => setSelected((current) => { const values=current[groupId]||[]; return {...current,[groupId]:values.includes(value)?values.filter((x)=>x!==value):[...values,value]}; });
-  const selectionCount = Object.values(selected).reduce((n, values) => n + values.length, 0);
+  if(result.status!=="need_clarification"||!groups.length)return null;
+  const toggle=(groupId:string,value:string)=>setSelected((current)=>{const values=current[groupId]||[];return{...current,[groupId]:values.includes(value)?values.filter((item)=>item!==value):[...values,value]}});
+  const selectionCount=Object.values(selected).reduce((count,values)=>count+values.length,0);
   const minDate=availablePeriod?.min||undefined, maxDate=availablePeriod?.max||undefined;
   const invalid=Boolean(start&&end&&(start>end||(minDate&&start<minDate)||(maxDate&&end>maxDate)));
   return <section className="clarification-section" id="analysis-result">
     <div className="clarification-card">
       <span className="eyebrow">AGENT CLARIFICATION</span>
       <div className="clarification-title"><span><Icon name="chat" size={19}/></span><div><h2>필요한 조건을 한 화면에서 선택해 주세요.</h2><p>각 항목은 복수 선택할 수 있습니다. 여러 지표를 선택하면 비교 데이터로 함께 조회합니다.</p></div></div>
-      <div className="clarification-groups">{groups.map((group) => <fieldset key={group.id}><legend>{group.question}</legend><div className="clarification-options">{group.options.map((option) => { const active=(selected[group.id]||[]).includes(option.value); return <button type="button" aria-pressed={active} className={active?"selected":""} key={option.value} disabled={loading} onClick={() => toggle(group.id,option.value)}><span className="multi-check">{active&&<Icon name="check" size={13}/>}</span>{option.label}</button>; })}</div></fieldset>)}</div>
-      <div className="setup-block"><strong>조회 날짜</strong><div className="period-form"><label>시작일<input type="date" value={start} min={minDate} max={end&&(!maxDate||end<maxDate)?end:maxDate} onChange={(e)=>setStart(e.target.value)}/></label><span>→</span><label>종료일<input type="date" value={end} min={start&&(!minDate||start>minDate)?start:minDate} max={maxDate} onChange={(e)=>setEnd(e.target.value)}/></label></div>{minDate&&maxDate&&<p className="period-availability">선택 가능 기간: {minDate} ~ {maxDate}</p>}</div><LayoutChoice mode={mode} setMode={setMode}/>
-      <div className="clarification-submit"><span>{invalid?"원자료 제공 기간 안에서 선택해 주세요.":selectionCount?`${selectionCount}개 항목 선택됨`:"항목·날짜·그래프 방식을 설정해 주세요"}</span><button disabled={loading||!selectionCount||!start||!end||invalid} onClick={() => choose(Object.entries(selected).filter(([,values])=>values.length).map(([clarification_id,values])=>({clarification_id,values})),start,end,mode)}>선택 완료 후 그래프 만들기 <Icon name="arrow" size={15}/></button></div>
+      <div className="clarification-groups">{groups.map((group)=><fieldset key={group.id}><legend>{group.question}</legend><div className="clarification-options">{group.options.map((option)=>{const active=(selected[group.id]||[]).includes(option.value);return <button type="button" aria-pressed={active} className={active?"selected":""} key={option.value} disabled={loading} onClick={()=>toggle(group.id,option.value)}><span className="multi-check">{active&&<Icon name="check" size={13}/>}</span>{option.label}</button>})}</div></fieldset>)}</div>
+      <div className="setup-block date-step"><strong>조회 날짜</strong><p>선택한 통계표가 실제 제공하는 기간 안에서 조회합니다.</p><div className="period-form"><label>시작일<DateSelector label="시작일" value={start} min={minDate} max={end&&(!maxDate||end<maxDate)?end:maxDate} onChange={setStart}/></label><span>→</span><label>종료일<DateSelector label="종료일" value={end} min={start&&(!minDate||start>minDate)?start:minDate} max={maxDate} onChange={setEnd}/></label></div>{minDate&&maxDate&&<p className="period-availability"><Icon name="check" size={14}/> 선택 가능 기간: {minDate} ~ {maxDate}</p>}</div>
+      {selectionCount>1&&start&&end&&!invalid&&<div className="layout-step"><LayoutChoice mode={mode} setMode={setMode}/></div>}
+      <div className="clarification-submit"><span>{invalid?"선택한 통계표의 제공 기간 안에서 날짜를 선택해 주세요.":selectionCount?`${selectionCount}개 항목 선택됨`:"항목과 조회 날짜를 선택해 주세요."}</span><button disabled={loading||!selectionCount||!start||!end||invalid} onClick={()=>choose(Object.entries(selected).filter(([,values])=>values.length).map(([clarification_id,values])=>({clarification_id,values})),start,end,mode)}>선택 완료 후 그래프 만들기 <Icon name="arrow" size={15}/></button></div>
       <div className="clarification-trace"><Icon name="lineage" size={15}/><span>UI → Agent → 통계언어 사전 → 역질문 → 선택값 확정 → 사전 재검색</span></div>
     </div>
   </section>;
@@ -215,22 +269,52 @@ function ClarificationPanel({ result, loading, choose }: { result: QueryResponse
 
 function Results({ result }: { result: QueryResponse }) {
   const [lineageOpen, setLineageOpen] = useState(true);
+  const [allDataOpen,setAllDataOpen]=useState(false);
+  const allRows=result.chart.flatMap((series)=>series.points.map((point)=>({series,point})));
+  const previewRows=result.chart.flatMap((series)=>{
+    if(series.points.length<=6)return series.points.map((point)=>({series,point}));
+    return [...series.points.slice(0,3),...series.points.slice(-3)].map((point)=>({series,point}));
+  });
+  const visibleRows=allDataOpen?allRows:previewRows;
   const exportCsv = () => {
     const rows = ["계열,단위,시점,값", ...result.chart.flatMap((s) => s.points.map((p) => `"${s.label}","${s.unit}",${p.date},${p.value}`))];
     const blob = new Blob(["\ufeff" + rows.join("\n")], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "statbridge-analysis.csv"; a.click(); URL.revokeObjectURL(url);
   };
+  const exportPng=async()=>{
+    const svgs=Array.from(document.querySelectorAll<SVGSVGElement>(".chart-panel .chart-wrap svg"));
+    if(!svgs.length)return;
+    const width=1400,chartHeight=500,gap=28;
+    const canvas=document.createElement("canvas");canvas.width=width;canvas.height=svgs.length*chartHeight+(svgs.length-1)*gap;
+    const context=canvas.getContext("2d");if(!context)return;
+    context.fillStyle="#ffffff";context.fillRect(0,0,canvas.width,canvas.height);
+    for(let index=0;index<svgs.length;index+=1){
+      const clone=svgs[index].cloneNode(true) as SVGSVGElement;
+      clone.setAttribute("xmlns","http://www.w3.org/2000/svg");clone.setAttribute("width","700");clone.setAttribute("height","250");
+      const style=document.createElementNS("http://www.w3.org/2000/svg","style");
+      style.textContent=".grid{stroke:#e8ebf3;stroke-width:1}.axis-label,.x-label{fill:#65718d;font:10px Arial,sans-serif}.axis-label{text-anchor:end}.x-label{text-anchor:middle}.line{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.dot{stroke:white;stroke-width:2}";
+      clone.insertBefore(style,clone.firstChild);
+      const blob=new Blob([new XMLSerializer().serializeToString(clone)],{type:"image/svg+xml;charset=utf-8"});
+      const url=URL.createObjectURL(blob);const image=new Image();
+      await new Promise<void>((resolve,reject)=>{image.onload=()=>resolve();image.onerror=()=>reject(new Error("그래프 이미지를 만들지 못했습니다."));image.src=url});
+      context.drawImage(image,0,index*(chartHeight+gap),width,chartHeight);URL.revokeObjectURL(url);
+    }
+    const png=await new Promise<Blob|null>((resolve)=>canvas.toBlob(resolve,"image/png"));if(!png)return;
+    const pngUrl=URL.createObjectURL(png);const link=document.createElement("a");link.download="statbridge-chart.png";link.href=pngUrl;link.click();
+    window.setTimeout(()=>URL.revokeObjectURL(pngUrl),1000);
+  };
+  const noMatch=result.status==="no_match";
   return <section className="results" id="analysis-result">
-    <div className="section-heading"><div><span className="eyebrow">ANALYSIS RESULT</span><h2>질문에서 근거까지, 한눈에</h2></div>{result.status === "resolved" && result.chart.length > 0 && <span className="verified-badge"><Icon name="check" size={15}/> 검증된 데이터</span>}</div>
+    <div className="section-heading"><div><span className="eyebrow">ANALYSIS RESULT</span><h2>질문에서 근거까지, 한눈에</h2></div>{noMatch?<span className="unavailable-badge">지원 데이터 없음</span>:<span className="verified-badge"><Icon name="check" size={15}/> 검증된 데이터</span>}</div>
     <div className="result-grid">
       <article className="panel chart-panel">
-        <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length > 0 && <button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button>}<button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
+        <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length>0&&<button onClick={exportPng}><Icon name="chart" size={17}/> PNG</button>}<button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button><button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
         <div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div>
-        {result.warnings?.map((warning, index) => <div className="error-banner" key={index}>{warning}</div>)}
-        <div className="chart-header"><div><h3>{result.chart.length ? "시계열 분석 결과" : "MCP 통계표 탐색 결과"}</h3>{result.chart.length > 0 && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div><div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div></div>
+        {result.warnings?.map((warning,index)=><div className="error-banner" key={`${index}-${warning}`}>{warning}</div>)}
+        <div className="chart-header"><div><h3>{result.chart.length ? "시계열 분석 결과" : "MCP 통계표 탐색 결과"}</h3>{result.chart.length > 0 && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>
         {result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><LineChart series={[s]}/></div>)}</div> : <LineChart series={result.chart}/>}
-        {result.insights.length > 0 && <div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{result.insights.map((x) => <li key={x}>{x}</li>)}</ul></div>}
-        {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><h3>주요 데이터</h3><span>{result.chart.reduce((n,s) => n+s.points.length,0)}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{result.chart.flatMap((s) => s.points.map((p) => <tr key={`${s.id}-${p.date}`}><td>{s.label}</td><td>{p.date}</td><td>{p.value.toLocaleString()} {s.unit}</td></tr>))}</tbody></table></div>}
+        {result.insights.length>0&&<div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{result.insights.map((x,index) => <li key={`${index}-${x}`}>{x}</li>)}</ul></div>}
+        {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><div><h3>{allDataOpen?"전체 데이터":"주요 데이터 예시"}</h3><p>{allDataOpen?"조회된 모든 관측치를 표시합니다.":"각 계열의 시작과 최근 값을 간략히 보여줍니다."}</p></div><span>전체 {allRows.length}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{visibleRows.map(({series,point}) => <tr key={`${series.id}-${point.date}`}><td>{series.label}</td><td>{point.date}</td><td>{point.value.toLocaleString()} {series.unit}</td></tr>)}</tbody></table>{allRows.length>previewRows.length&&<div className="data-more"><span>{allDataOpen?`전체 ${allRows.length}개를 표시 중입니다.`:`${previewRows.length}개 예시만 표시 중입니다.`}</span><button type="button" aria-expanded={allDataOpen} onClick={()=>setAllDataOpen((current)=>!current)}>{allDataOpen?"간략히 보기":`전체 데이터 더 보기 (${allRows.length}개)`}<Icon name="chevron" size={14}/></button></div>}</div>}
       </article>
       <aside className="evidence-column">
         <article className="panel evidence-panel"><div className="aside-title"><span><Icon name="database" size={18}/></span><div><span className="eyebrow">DATA SOURCES</span><h3>사용한 통계</h3></div></div>{result.tables.map((t) => <div className="source-card" key={t.tableId}><div><span className="table-id">{t.tableId}</span><span className="source-check"><Icon name="check" size={12}/></span></div><strong>{t.name}</strong><p>{t.item} · {t.unit}</p><small>{t.source}</small></div>)}</article>
@@ -250,9 +334,36 @@ export default function App() {
   const [periodSelection, setPeriodSelection] = useState<{start:string;end:string} | null>(null);
   const examples = useMemo(() => ["대출 얼마나 늘었어?", "요즘 물가 어때?", "경기 분위기 어때?", "최근 5년 경제심리지수 추이"], []);
 
+  useEffect(()=>{
+    const restore=(state:Record<string,unknown>|null)=>{
+      if(!state?.statbridge)return;
+      setView(state.view==="lineage"?"lineage":"home");
+      setQuery(typeof state.query==="string"?state.query:"대출 얼마나 늘었어?");
+      setResult((state.result as QueryResponse|null)||null);setPeriodSelection(null);setError("");
+      window.setTimeout(()=>window.scrollTo({top:state.result?document.body.scrollHeight:0,behavior:"smooth"}),20);
+    };
+    if(history.state?.statbridge)restore(history.state);
+    else history.replaceState({statbridge:true,view:"home",query,result:null},"",location.pathname);
+    const onPopState=(event:PopStateEvent)=>restore(event.state);
+    window.addEventListener("popstate",onPopState);return()=>window.removeEventListener("popstate",onPopState);
+  },[]);
+
+  const historyUrl=(nextView:"home"|"lineage",nextQuery=query)=>nextView==="lineage"?`${location.pathname}?view=lineage`:`${location.pathname}${nextQuery?`?q=${encodeURIComponent(nextQuery)}`:""}`;
+  const pushUiState=(nextView:"home"|"lineage",nextResult:QueryResponse|null,nextQuery=query)=>history.pushState({statbridge:true,view:nextView,query:nextQuery,result:nextResult},"",historyUrl(nextView,nextQuery));
+
   const showResult = (data: QueryResponse) => {
     setResult(data);
+    pushUiState("home",data,data.query||query);
     window.setTimeout(() => document.getElementById("analysis-result")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+  };
+
+  const goHome=()=>{
+    setView("home");setResult(null);setPeriodSelection(null);setError("");
+    pushUiState("home",null,query);window.scrollTo({top:0,behavior:"smooth"});
+  };
+
+  const navigateView=(nextView:"home"|"lineage")=>{
+    setView(nextView);pushUiState(nextView,nextView==="home"?result:null,query);window.scrollTo({top:0,behavior:"smooth"});
   };
 
   const onSubmit = async (e: FormEvent) => {
@@ -260,7 +371,9 @@ export default function App() {
     if (!query.trim()) return;
     setLoading(true); setError(""); setResult(null); setPeriodSelection(null);
     try {
-      const data = await submitQuery({ query: query.trim(), execute: true });
+      // Preserve the user's original request. HCX classification.series and the
+      // resolver's deterministic fallback own comparison decomposition.
+      const data=await submitQuery({query:query.trim(),execute:true});
       showResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.");
@@ -305,7 +418,7 @@ export default function App() {
   };
 
   return <div className="app-shell">
-    <Sidebar open={menuOpen} close={() => setMenuOpen(false)} view={view} selectView={setView}/>
+    <Sidebar open={menuOpen} close={() => setMenuOpen(false)} view={view} selectView={navigateView} goHome={goHome}/>
     <div className="main-shell"><Header openMenu={() => setMenuOpen(true)}/>{view === "lineage" ? <DataCatalog/> : <main><Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/><FeatureStrip/>{error && <div className="error-banner">{error}</div>}{result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification}/>} {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>} {result?.status === "need_chart_mode" && <ChartModePanel result={result} loading={loading} choose={chooseChartMode}/>} {result && !["need_clarification","need_period","need_chart_mode"].includes(result.status || "") && <Results result={result}/>}<section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x} onClick={() => { setQuery(x); setResult(null); setPeriodSelection(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x}</button>)}</section></main>}<footer><span>© 2026 StatBridge</span><span>UI → Agent → 통계언어 사전 → MCP → KOSIS</span></footer></div>
   </div>;
 }
