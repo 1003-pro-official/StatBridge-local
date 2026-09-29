@@ -23,6 +23,8 @@
 
 Python 3.12 이상, Node.js, pnpm이 필요합니다. 저장소 루트에서 실행합니다.
 
+**원자료 CSV:** 이 저장소를 clone해도 `data/tables/`의 통계표 CSV 347개는 포함되지 않습니다. 로컬 수치 조회에는 반드시 필요하며, 별도 원본의 CSV를 `data/tables/`에 두거나 `STATBRIDGE_TABLES_DIR`로 그 디렉터리를 지정해야 합니다.
+
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -r src/backend/requirements.txt pytest
@@ -32,7 +34,7 @@ cd src/agent/frontend && pnpm install --frozen-lockfile && cd ../../..
 Windows PowerShell에서는 `.venv/bin/python` 대신 `.venv\Scripts\python.exe`를 사용합니다.
 의존성 설치 후 `scripts\windows\START_STATBRIDGE.cmd`로 Agent API와 화면을 함께 시작할 수 있습니다.
 
-347개 CSV가 있는 별도 원본의 디렉터리를 `STATBRIDGE_TABLES_DIR`로 지정하거나 `data/tables/`에 복사합니다. 메타데이터만으로도 검색과 카탈로그는 확인할 수 있으나 실제 로컬 수치 조회에는 CSV가 필요합니다. KOSIS 조회에는 `KOSIS_API_KEY`, HCX·임베딩·재순위화에는 `NCP_CLOVA_API_KEY`가 필요합니다. 키는 루트 `.env`에 두며 Git에 추가하지 않습니다. 예시는 `.env.example`을 참고합니다.
+CSV가 없어도 메타데이터로 검색과 카탈로그는 확인할 수 있습니다. KOSIS 조회에는 `KOSIS_API_KEY`, HCX·임베딩·재순위화에는 `NCP_CLOVA_API_KEY`가 필요합니다. 키는 루트 `.env`에 두며 Git에 추가하지 않습니다. 예시는 `.env.example`을 참고합니다.
 
 ```bash
 PYTHONPATH=src/backend:src/agent .venv/bin/python -m uvicorn bridge_api:app --host 127.0.0.1 --port 8000
