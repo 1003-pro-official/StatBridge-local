@@ -1,0 +1,14 @@
+# 영역별 소유자(참고용, 자동 리뷰 요청). 리뷰 승인은 최소 1명이면 됩니다.
+# 역할: PM/Evaluation, Backend·Data·MCP, Agent·LLM·Frontend
+
+* @1003-pro-official
+
+/src/backend/ @Engineer3rd-Class-Kimmin
+/data/processed/ @Engineer3rd-Class-Kimmin
+/tools/ @Engineer3rd-Class-Kimmin
+
+/src/agent/ @snarmse
+
+/eval/ @1003-pro-official
+/docs/evaluation/ @1003-pro-official
+/docs/weeks/ @1003-pro-official
