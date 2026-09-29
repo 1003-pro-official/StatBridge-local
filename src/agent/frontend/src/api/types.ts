@@ -92,7 +92,7 @@ export type QueryRequest = {
 export type CatalogTable = {
   tableId: string; name: string; organization: string; frequency: string; frequencyLabel: string; unitScale: string;
   periodStart: string; periodEnd: string; items: string[]; units: string[];
-  dimensions: Array<{ name: string; count: number; examples: string[] }>;
+  dimensions: Array<{ name: string; count: number; values: string[] }>;
 };
 export type CatalogMiddle = { name: string; count: number; children: CatalogTable[] };
 export type CatalogMajor = { name: string; count: number; children: CatalogMiddle[] };

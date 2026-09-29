@@ -374,7 +374,11 @@ class StatLanguageResolver:
         return self._score(query, confirmed=confirmed, top_k=top_k)
 
     def _clarification(self, query, candidates, confirmed=None, asked=None):
-        q=self.norm(query); confirmed=confirmed or {}; asked=set(asked or [])
+        confirmed=confirmed or {}; asked=set(asked or [])
+        # Later clarification gates must see the canonical terms established by
+        # earlier buttons (for example loan_type=산업별대출), not only the user's
+        # original broad wording.
+        q=self.norm(f"{query} {' '.join(self._confirmed_terms(confirmed))}")
         # v5: ambiguity gates are checked before trusting candidate scores.
         # A short everyday term such as '대출' or '물가' can be too weak to rank tables well,
         # but the dictionary already knows that it branches into several valid concepts.
@@ -383,7 +387,21 @@ class StatLanguageResolver:
             if gid in confirmed or gid in asked: continue
             if not any(self._contains(q,x) for x in g.get('trigger_terms',[])): continue
             if any(self._contains(q,x) for x in g.get('skip_if_terms',[])): continue
+            # "기준금리" is an explicit policy-rate metric, not an ambiguous
+            # shorthand for deposit/loan rates.  Do not route it through the
+            # commercial-rate type/basis questions unless another commercial
+            # rate is explicitly present in the same comparison.
+            commercial_rate_named=any(self._contains(q,x) for x in ('대출금리','대출 금리','수신금리','예금금리','예금 금리'))
+            specific_noncommercial_rate=any(self._contains(q,x) for x in ('기준금리','정책금리','콜금리','시장금리'))
+            if gid == 'rate_type' and specific_noncommercial_rate:
+                continue
+            # 신규취급액/잔액 기준은 예금·대출 가중평균금리의 축이다.
+            # 단순히 이름에 "금리"가 들어간 정책·시장금리에 적용하지 않는다.
+            if gid == 'interest_basis' and not commercial_rate_named:
+                continue
             if g.get('id') in {'loan_type','loan_measure'} and any(self._contains(q,x) for x in ('산업대출','대출태도','대출수요','신용위험','한국은행 원화대출')):
+                continue
+            if g.get('id') == 'loan_measure' and confirmed.get('loan_type') == '산업별대출':
                 continue
             if g.get('id')=='loan_measure' and any(self._contains(q,x) for x in ('업권별','용도별','지역별','기업규모별')):
                 continue
@@ -411,8 +429,10 @@ class StatLanguageResolver:
                     tn=c['table_name'].lower()
                     if any(x.lower() in tn for x in o.get('table_name_any',[])) and not any(x.lower() in tn for x in o.get('table_name_none',[])):
                         matching.append(c['table_id'])
-                # If the short query produced poor candidates, fall back to the dictionary catalog.
-                if not matching:
+                # Fall back to the full catalog only when there are no current
+                # candidates at all. Once an earlier answer has constrained the
+                # candidate set, an option with no match is genuinely irrelevant.
+                if not matching and not candidates:
                     for t in self.tables:
                         tn=t['table_name'].lower()
                         if any(x.lower() in tn for x in o.get('table_name_any',[])) and not any(x.lower() in tn for x in o.get('table_name_none',[])):
@@ -779,6 +799,19 @@ class StatLanguageResolver:
     def resolve(self, query, confirmed=None, asked_clarifications=None, top_k=8):
         confirmed=confirmed or {}
         asked_clarifications=asked_clarifications or []
+        compact_query=self.norm(query).replace(' ','')
+        # Specific metrics must never be silently substituted with a broader
+        # supported family. If the current dictionary has no authoritative table
+        # for an explicitly named metric, fail before showing unrelated buttons.
+        explicit_metrics=('기준금리','정책금리','콜금리','시장금리','소비자물가지수','소비자물가')
+        unsupported=[metric for metric in explicit_metrics if metric in compact_query and metric not in self._catalog_search_text]
+        if unsupported:
+            return {
+              'status':'no_match','selected_table':None,'candidates':[],
+              'missing_series':list(dict.fromkeys(unsupported)),
+              'state':{'original_query':query,'confirmed':confirmed,'confirmed_terms':self._confirmed_terms(confirmed),
+                       'asked_clarifications':asked_clarifications,'status':'no_match'}
+            }
         candidates=self._score(query,confirmed=confirmed,top_k=max(top_k,12))
         nq=self.norm(query).replace(' ','')
         catalog_matches=[]

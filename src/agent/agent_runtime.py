@@ -312,6 +312,12 @@ class StatBridgeAgent:
                 result["clarifications"] = self.resolver.collect_clarifications(effective_query, top_k=8)
                 dictionary_query, classification = self._classify(effective_query)
                 result["state"]["original_query"] = dictionary_query
+            elif preflight.get("status") == "no_match" and preflight.get("missing_series"):
+                # 명시한 지표가 신뢰 사전에 없으면 HCX/벡터 유사도로 다른
+                # 통계(예: 기준금리 -> 대출금리)를 대신 선택하지 않는다.
+                dictionary_query, classification = self._classify(effective_query)
+                result = preflight
+                result["state"]["original_query"] = dictionary_query
             else:
                 selected=preflight.get("selected_table") or {}
                 reasons=selected.get("reasons") or []
@@ -334,7 +340,10 @@ class StatBridgeAgent:
                         result["selected_table"] = hybrid_candidates[0]
                         result["retrieval_confident"] = self.hybrid.confident(hybrid_candidates)
 
-        if result.get("status") != "need_clarification" and not result.get("api_plans"):
+        confirmed_choices = dict((result.get("state") or {}).get("confirmed") or (state or {}).get("confirmed") or {})
+        # UI에서 고른 값은 강한 제약이다. 원 질문에 대한 HCX의 추정 비교
+        # 계열이 사용자의 버튼 선택을 덮어쓰지 못하게 한다.
+        if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans"):
             comparison = self._resolve_comparison(classification, dictionary_query)
             if comparison:
                 result = comparison
@@ -355,7 +364,7 @@ class StatBridgeAgent:
         # Deterministic comparison fallback: when HCX is unavailable or does not emit
         # series, split only explicitly expressed concepts and select IDs from the
         # dictionary. This never manufactures table/item/dimension identifiers.
-        if result.get("status") == "resolved" and not result.get("api_plans"):
+        if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans"):
             series = self.resolver.rank_many(dictionary_query, top_k=12)
             if len(series) >= 2:
                 selected=[]; plans=[]

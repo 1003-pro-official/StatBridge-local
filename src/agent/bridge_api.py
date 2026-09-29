@@ -123,23 +123,24 @@ def _catalog_card(table: dict[str, Any], metadata: Any | None = None) -> dict[st
     dimensions = table.get("dimensions") or []
     frequency = str(table.get("prd_se") or "-")
     frequency_labels = {"D": "일", "M": "월", "Q": "분기", "H": "반기", "S": "반기", "Y": "년", "A": "년"}
-    units = [str(x) for x in (table.get("units") or [])[:8]]
+    # API는 원본 메타데이터를 빠짐없이 반환하고, 축약/더 보기는 UI가 담당한다.
+    units = [str(x) for x in (table.get("units") or []) if str(x)]
     unit_scale = next((x for x in units if any(token in x for token in ("조", "억", "백만", "천", "원", "%", "지수"))), units[0] if units else "-")
     metadata_dimensions = list(getattr(metadata, "dimensions", None) or [])
     public_dimensions: list[dict[str, Any]] = []
     for index, dimension in enumerate(dimensions, start=1):
         values = dimension.get("values") or []
-        examples = [str(v.get("normalized") or v.get("value_name") or "") for v in values[:5]]
+        dimension_values = [str(v.get("normalized") or v.get("value_name") or "") for v in values]
         meta_dimension = metadata_dimensions[index - 1] if index <= len(metadata_dimensions) else {}
         meta_values = meta_dimension.get("values") or []
         if meta_values:
-            examples = [str(v.get("class_name") or "") for v in meta_values[:5]]
-        examples = [value for value in examples if value]
+            dimension_values = [str(v.get("class_name") or "") for v in meta_values]
+        dimension_values = [value for value in dimension_values if value]
         raw_name = str(meta_dimension.get("obj_name") or dimension.get("dimension_name") or "")
         public_dimensions.append({
-            "name": _friendly_dimension_name(raw_name, examples, index),
+            "name": _friendly_dimension_name(raw_name, dimension_values, index),
             "count": len(meta_values) if meta_values else len(values),
-            "examples": examples,
+            "values": dimension_values,
         })
 
     return {
@@ -148,7 +149,7 @@ def _catalog_card(table: dict[str, Any], metadata: Any | None = None) -> dict[st
         "frequencyLabel": frequency_labels.get(frequency, frequency), "unitScale": unit_scale,
         "periodStart": str(table.get("period_start_observed") or "-"),
         "periodEnd": str(table.get("period_end_observed") or "-"),
-        "items": [str(x) for x in (table.get("item_names") or [])[:8]],
+        "items": [str(x) for x in (table.get("item_names") or []) if str(x)],
         "units": units,
         "dimensions": public_dimensions,
     }
