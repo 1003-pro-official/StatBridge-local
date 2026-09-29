@@ -1,0 +1,5945 @@
+{
+  "dataset": "ClaBi KOSIS Golden Set v2",
+  "version": "v2-draft-2026-09-23",
+  "generated_at_utc": "2026-09-23T09:16:29.295718+00:00",
+  "catalog_version": "hankook_tables_2026-09-14",
+  "reused_sources": [
+    "golden-set/cases.jsonl (query text, contexts, category/split and unapproved label seeds only)",
+    "golden-set/kosis_metadata_export.json (59 prior candidate metadata records)",
+    "data/kosis/hankook_tables.json",
+    "data/statbridge_mcp_server/data_full/collection/table_summary.csv",
+    "data/statbridge_mcp_server/data_full/tables/*.csv",
+    "schemas/mcp_tools.json"
+  ],
+  "new_artifacts": [
+    "golden-set-v2/cases.jsonl",
+    "golden-set-v2/plan_validation_cases.jsonl",
+    "golden-set-v2/review.xlsx",
+    "golden-set-v2/schema.json",
+    "golden-set-v2/catalog_manifest.json",
+    "golden-set-v2/coverage.csv",
+    "golden-set-v2/kosis_metadata_export.json",
+    "golden-set-v2/README.md",
+    "golden-set-v2/scripts/build_v2.py",
+    "golden-set-v2/scripts/manage_v2.py"
+  ],
+  "counts": {
+    "cases": 150,
+    "by_type": {
+      "clear_single_table": 30,
+      "colloquial_alias": 25,
+      "ambiguous_metric": 20,
+      "multi_indicator_table": 20,
+      "conditions": 20,
+      "no_match_out_of_scope": 15,
+      "conversation_followup": 20
+    },
+    "by_split": {
+      "dev": 30,
+      "validation": 30,
+      "locked_test": 90
+    },
+    "by_review_status": {
+      "review_required": 150
+    },
+    "approved": 0,
+    "excluded": 0,
+    "awaiting_human_review": 150,
+    "plan_validation_fixtures": 12,
+    "unique_candidate_tables": 68,
+    "candidates_by_role": {
+      "v1_candidate_proposal": 324,
+      "catalog_challenger_proposal": 24
+    },
+    "catalog_tables": 349,
+    "catalog_paths_covered": 14,
+    "catalog_paths_total": 14
+  },
+  "review": {
+    "decision_counts": {
+      "미입력": 150
+    },
+    "policy": "import-review writes review inputs only; only a human may apply gold edits and update review_status"
+  },
+  "sources": {
+    "catalog_collected_at": "2026-09-14T06:26:16.468657+00:00",
+    "catalog_sha256": "cbe3e941ba3ecd733711fa86c75528fe6531250b25062c710c0387709e0a5f3e",
+    "summary_rows": 347,
+    "kosis_candidate_tables_queried": 68,
+    "kosis_failed_tables": 0,
+    "kosis_metadata_endpoints": [
+      "getMeta(PRD)",
+      "getMeta(ITM)"
+    ],
+    "kosis_unverified_fields": [
+      "comments",
+      "full series definitions"
+    ],
+    "catalog_search_scope": "349-row Korean Bank project catalog snapshot; no live all-KOSIS catalog search"
+  },
+  "no_match_cases": [
+    {
+      "case_id": "GS-0116",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "기준금리",
+          "통화정책",
+          "금리"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0117",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "영업이익",
+          "기업경영",
+          "기업"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0118",
+      "verification_status": "review_required",
+      "candidate_count": 0,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "코로나",
+          "확진",
+          "감염병",
+          "질병"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 0,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0119",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "소비자물가",
+          "물가지수",
+          "물가"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0120",
+      "verification_status": "review_required",
+      "candidate_count": 0,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "실업률",
+          "고용률",
+          "고용"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 0,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0121",
+      "verification_status": "review_required",
+      "candidate_count": 0,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "코스피",
+          "주가",
+          "주식",
+          "증권"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 0,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0122",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "수출액",
+          "수출",
+          "무역"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0123",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "아파트",
+          "주택가격",
+          "주택",
+          "부동산"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0124",
+      "verification_status": "review_required",
+      "candidate_count": 0,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "주가",
+          "주식",
+          "증권"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 0,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0125",
+      "verification_status": "review_required",
+      "candidate_count": 0,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "인구이동",
+          "인구",
+          "가구"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 0,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0126",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "실업률",
+          "고용률",
+          "고용",
+          "지역별"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0127",
+      "verification_status": "review_required",
+      "candidate_count": 0,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "확진자",
+          "감염병",
+          "질병"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 0,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0128",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "미국",
+          "기준금리",
+          "금리",
+          "해외"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0129",
+      "verification_status": "review_required",
+      "candidate_count": 0,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "환율",
+          "원달러",
+          "미국달러"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 0,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    },
+    {
+      "case_id": "GS-0130",
+      "verification_status": "review_required",
+      "candidate_count": 3,
+      "scope": {
+        "catalog_version": "hankook_tables_2026-09-14",
+        "table_count": 349,
+        "scope": "frozen Korean Bank project catalog snapshot",
+        "query_terms_checked": [
+          "강수량",
+          "기상",
+          "날씨",
+          "지역별"
+        ],
+        "scan_method": "literal substring scan of table title, catalog path, summary category, unit, and classification-axis names; item CSV contents were not scanned",
+        "candidate_proposals_returned": 3,
+        "live_all_KOSIS_catalog_search": false,
+        "verification_status": "review_required",
+        "out_of_scope_vs_catalog_search_miss": "unresolved_until_human_review"
+      }
+    }
+  ],
+  "tables": [
+    {
+      "table_id": "DT_101Y001",
+      "table_name": "M2 상품별 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "197001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y002",
+      "table_name": "M2 상품별 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "196001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y003",
+      "table_name": "M2 상품별 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "198601",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y004",
+      "table_name": "M2 상품별 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "198601",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y005",
+      "table_name": "M2 경제주체별 보유현황(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y006",
+      "table_name": "M2 경제주체별 보유현황(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y007",
+      "table_name": "M2 기관별구성내역(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "frequency": "M",
+      "period_start": "196001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y008",
+      "table_name": "M2 기관별구성내역(평잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "frequency": "M",
+      "period_start": "198601",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y009",
+      "table_name": "예금취급기관 개관표(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "예금취급기관 개관표"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y010",
+      "table_name": "중앙은행 개관표(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "예금취급기관 개관표"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y011",
+      "table_name": "기타예금취급기관 개관표(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "예금취급기관 개관표"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y014",
+      "table_name": "M2 경제주체별 보유현황(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y015",
+      "table_name": "M2 경제주체별 보유현황(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y016",
+      "table_name": "M1 상품별 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "197001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y017",
+      "table_name": "M1 상품별 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "196001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y018",
+      "table_name": "M1 상품별 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "197001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_101Y019",
+      "table_name": "M1 상품별 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "197001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_102Y001",
+      "table_name": "본원통화 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202608",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0001",
+        "GS-0007",
+        "GS-0008",
+        "GS-0009",
+        "GS-0010",
+        "GS-0024",
+        "GS-0026",
+        "GS-0029",
+        "GS-0030",
+        "GS-0033",
+        "GS-0041",
+        "GS-0042",
+        "GS-0045",
+        "GS-0046",
+        "GS-0049",
+        "GS-0053",
+        "GS-0054",
+        "GS-0056",
+        "GS-0059",
+        "GS-0060",
+        "GS-0063",
+        "GS-0065",
+        "GS-0067",
+        "GS-0068",
+        "GS-0072",
+        "GS-0079",
+        "GS-0081",
+        "GS-0082",
+        "GS-0084",
+        "GS-0085",
+        "GS-0086",
+        "GS-0087",
+        "GS-0088",
+        "GS-0089",
+        "GS-0091",
+        "GS-0092",
+        "GS-0093",
+        "GS-0096",
+        "GS-0101",
+        "GS-0102",
+        "GS-0107",
+        "GS-0108",
+        "GS-0109",
+        "GS-0110",
+        "GS-0113",
+        "GS-0131",
+        "GS-0137",
+        "GS-0138",
+        "GS-0139",
+        "GS-0140"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_102Y002",
+      "table_name": "본원통화 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202608",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_102Y003",
+      "table_name": "본원통화 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_102Y004",
+      "table_name": "본원통화 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_102Y101",
+      "table_name": "본원통화 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "196001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_102Y102",
+      "table_name": "본원통화 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_102Y103",
+      "table_name": "본원통화 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_102Y104",
+      "table_name": "본원통화 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "본원통화",
+        "본원통화 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_103Y002",
+      "table_name": "한국은행 주요계정(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "한국은행 주요계정 및 기준금리"
+      ],
+      "frequency": "M",
+      "period_start": "197001",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0116",
+        "GS-0128"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_104Y008",
+      "table_name": "예금은행 원화예금(종별, 평잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_104Y009",
+      "table_name": "예금은행 원화예금(예금주별,말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "197501",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_104Y010",
+      "table_name": "예금은행 정기예금(기간별, 말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "200201",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_104Y013",
+      "table_name": "예금은행 총수신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "199209",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0007",
+        "GS-0009",
+        "GS-0049",
+        "GS-0065",
+        "GS-0072",
+        "GS-0088",
+        "GS-0092",
+        "GS-0093",
+        "GS-0107",
+        "GS-0137",
+        "GS-0139"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_104Y014",
+      "table_name": "예금은행 총수신(평잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "199209",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_104Y015",
+      "table_name": "예금은행 원화예금(종별, 말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "196001",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0029",
+        "GS-0065",
+        "GS-0086",
+        "GS-0092",
+        "GS-0093",
+        "GS-0108"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_104Y016",
+      "table_name": "예금은행 대출금(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 자금별 대출금"
+      ],
+      "frequency": "M",
+      "period_start": "196001",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_104Y017",
+      "table_name": "예금은행 예금회전율",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "기타금융통계",
+        "예금규모별 계좌 및 금액"
+      ],
+      "frequency": "M",
+      "period_start": "198501",
+      "period_end": "202607",
+      "unit": "회/월",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_105Y001",
+      "table_name": "예금규모별 계좌수 및 금액",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "기타금융통계",
+        "예금규모별 계좌 및 금액"
+      ],
+      "frequency": "S",
+      "period_start": "200201",
+      "period_end": "202502",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_111Y001",
+      "table_name": "Lf 상품별 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "198601",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_111Y002",
+      "table_name": "Lf 상품별 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "198001",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_111Y003",
+      "table_name": "Lf 상품별 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "198601",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_111Y004",
+      "table_name": "Lf 상품별 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "198601",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_111Y007",
+      "table_name": "비은행금융기관 수신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "199310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0082"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_111Y008",
+      "table_name": "비은행금융기관 수신(평잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "199310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0082"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_111Y009",
+      "table_name": "비은행금융기관 여신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "199309",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_112Y001",
+      "table_name": "L(광의유동성) 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "L(광의유동성)"
+      ],
+      "frequency": "M",
+      "period_start": "200112",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_112Y002",
+      "table_name": "L(광의유동성) 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "통화 및 유동성지표(구)",
+        "L(광의유동성)"
+      ],
+      "frequency": "M",
+      "period_start": "199501",
+      "period_end": "200409",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_121Y002",
+      "table_name": "예금은행 수신금리(신규취급액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "수신금리"
+      ],
+      "frequency": "M",
+      "period_start": "199601",
+      "period_end": "202607",
+      "unit": "연%|연리%",
+      "case_ids": [
+        "GS-0026",
+        "GS-0054",
+        "GS-0056",
+        "GS-0086",
+        "GS-0091",
+        "GS-0092",
+        "GS-0096",
+        "GS-0116",
+        "GS-0128"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_121Y004",
+      "table_name": "비은행금융기관 수신금리(신규취급액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "비은행기관 가중평균금리"
+      ],
+      "frequency": "M",
+      "period_start": "199708",
+      "period_end": "202607",
+      "unit": "연리%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_121Y006",
+      "table_name": "예금은행 대출금리(신규취급액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "대출금리"
+      ],
+      "frequency": "M",
+      "period_start": "199601",
+      "period_end": "202607",
+      "unit": "연%|연리%",
+      "case_ids": [
+        "GS-0041",
+        "GS-0056",
+        "GS-0091",
+        "GS-0092"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_121Y007",
+      "table_name": "비은행금융기관 대출금리(신규취급액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "비은행기관 가중평균금리"
+      ],
+      "frequency": "M",
+      "period_start": "199201",
+      "period_end": "202607",
+      "unit": "연리%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_121Y008",
+      "table_name": "예금은행 금리수준별 여수신 비중(신규취급액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 금리수준별 여수신 비중"
+      ],
+      "frequency": "M",
+      "period_start": "199703",
+      "period_end": "202607",
+      "unit": "%",
+      "case_ids": [
+        "GS-0024"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_121Y010",
+      "table_name": "예금은행 고정 및 변동금리대출 비중(신규취급액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 고정 및 특정 금리연동대출"
+      ],
+      "frequency": "M",
+      "period_start": "200109",
+      "period_end": "202607",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_121Y011",
+      "table_name": "예금은행 고정 및 변동금리대출 비중(잔액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 고정 및 특정 금리연동대출"
+      ],
+      "frequency": "M",
+      "period_start": "200912",
+      "period_end": "202607",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_121Y013",
+      "table_name": "예금은행 수신금리(잔액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "수신금리"
+      ],
+      "frequency": "M",
+      "period_start": "199601",
+      "period_end": "202607",
+      "unit": "연리%",
+      "case_ids": [
+        "GS-0042"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_121Y015",
+      "table_name": "예금은행 대출금리(잔액 기준)",
+      "catalog_path": [
+        "통화금융통계",
+        "금리",
+        "예금은행 가중평균금리",
+        "대출금리"
+      ],
+      "frequency": "M",
+      "period_start": "199601",
+      "period_end": "202607",
+      "unit": "연리%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_131Y010",
+      "table_name": "산업별대출금(예금은행, 기업형태별)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "frequency": "Q",
+      "period_start": "201804",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_131Y011",
+      "table_name": "산업별대출금(예금은행, 용도별)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "frequency": "Q",
+      "period_start": "200104",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_131Y013",
+      "table_name": "산업별대출금(예금은행, 전산업)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "frequency": "Q",
+      "period_start": "200104",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0046",
+        "GS-0068",
+        "GS-0079"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_131Y014",
+      "table_name": "산업별대출금(비은행예금취급기관, 전산업)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "비은행예금취급기관"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0068",
+        "GS-0079"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_131Y015",
+      "table_name": "산업별대출금(비은행예금취급기관, 용도별)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "비은행예금취급기관"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_131Y016",
+      "table_name": "산업별대출금(예금취급기관, 전산업)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금취급기관"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_131Y017",
+      "table_name": "산업별대출금(예금취급기관, 용도별)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금취급기관"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_131Y018",
+      "table_name": "산업별대출금(예금은행, 기업규모별)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행"
+      ],
+      "frequency": "Q",
+      "period_start": "202101",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_132Y001",
+      "table_name": "산업별대출금(예금은행, 지역별, 전산업)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행 지역별"
+      ],
+      "frequency": "Q",
+      "period_start": "200703",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0126",
+        "GS-0130"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_132Y003",
+      "table_name": "산업별대출금(예금은행, 지역별, 용도별)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "산업별대출금",
+        "예금은행 지역별"
+      ],
+      "frequency": "Q",
+      "period_start": "200703",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0126",
+        "GS-0130"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_141Y002",
+      "table_name": "예금은행 지역별 수신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "199512",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0126",
+        "GS-0130"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_141Y003",
+      "table_name": "예금은행 지역별 대출금(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "199512",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_141Y004",
+      "table_name": "예금은행 지역별 기업대출(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "예금은행 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "200701",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_141Y006",
+      "table_name": "비은행금융기관 지역별 수신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "200409",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_141Y007",
+      "table_name": "비은행금융기관 지역별 여신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "200409",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_141Y008",
+      "table_name": "생명보험회사 지역별 수신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "생명보험회사 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "200409",
+      "period_end": "202605",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_141Y009",
+      "table_name": "생명보험회사 지역별 여신(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "생명보험회사 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "200409",
+      "period_end": "202605",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_141Y010",
+      "table_name": "비은행금융기관 지역별 기업대출(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "지역별 여수신",
+        "비은행금융기관 수신 및 여신"
+      ],
+      "frequency": "M",
+      "period_start": "201301",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_151Y001",
+      "table_name": "가계신용(업권별, 분기)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "frequency": "Q",
+      "period_start": "200204",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0053",
+        "GS-0063",
+        "GS-0087",
+        "GS-0109"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_151Y002",
+      "table_name": "예금취급기관 가계대출(업권별, 월)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0030",
+        "GS-0033",
+        "GS-0063",
+        "GS-0087",
+        "GS-0110"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_151Y003",
+      "table_name": "예금은행 지역별 가계대출(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_151Y004",
+      "table_name": "가계신용(용도별, 분기)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "frequency": "Q",
+      "period_start": "200204",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_151Y005",
+      "table_name": "예금취급기관 가계대출(용도별, 월)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_151Y006",
+      "table_name": "비은행금융기관 지역별 가계대출(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "가계신용"
+      ],
+      "frequency": "M",
+      "period_start": "200712",
+      "period_end": "202606",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y001",
+      "table_name": "M1 상품별 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0059",
+        "GS-0081",
+        "GS-0089",
+        "GS-0101"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_161Y002",
+      "table_name": "M1 상품별 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0008",
+        "GS-0059",
+        "GS-0081",
+        "GS-0089",
+        "GS-0102",
+        "GS-0138"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_161Y003",
+      "table_name": "M1 상품별 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y004",
+      "table_name": "M1 상품별 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M1(협의통화)",
+        "M1 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y005",
+      "table_name": "M2 상품별 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y006",
+      "table_name": "M2 상품별 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y007",
+      "table_name": "M2 상품별 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y008",
+      "table_name": "M2 상품별 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0045",
+        "GS-0072",
+        "GS-0088"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_161Y009",
+      "table_name": "M2 경제주체별 보유현황(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y010",
+      "table_name": "M2 경제주체별 보유현황(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y011",
+      "table_name": "M2 경제주체별 보유현황(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y012",
+      "table_name": "M2 경제주체별 보유현황(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 경제주체별 보유현황(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y013",
+      "table_name": "M2 기관별 구성내역(평잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y014",
+      "table_name": "M2 기관별 구성내역(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "M2(광의통화)",
+        "M2 기관별 구성내역"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y015",
+      "table_name": "예금취급기관 개관표(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "예금취급기관 개관표"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y016",
+      "table_name": "중앙은행 개관표(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "예금취급기관 개관표"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202608",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_161Y017",
+      "table_name": "기타예금취급기관 개관표(말잔)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "예금취급기관 개관표"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_171Y001",
+      "table_name": "Lf 상품별 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_171Y002",
+      "table_name": "Lf 상품별 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(말잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_171Y003",
+      "table_name": "Lf 구성내역(평잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_171Y004",
+      "table_name": "Lf 구성내역(평잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        "Lf(금융기관 유동성)",
+        "Lf 상품별 구성내역(평잔)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_172Y001",
+      "table_name": "L(광의유동성) 구성내역(말잔, 계절조정계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        " L(광의유동성)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_172Y002",
+      "table_name": "L(광의유동성) 구성내역(말잔, 원계열)",
+      "catalog_path": [
+        "통화금융통계",
+        "통화 및 유동성지표",
+        " L(광의유동성)"
+      ],
+      "frequency": "M",
+      "period_start": "200310",
+      "period_end": "202607",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y001",
+      "table_name": "차주당 가계대출 신규취급액",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [
+        "GS-0085"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_181Y002",
+      "table_name": "차주당 가계대출 잔액",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [
+        "GS-0085"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_181Y003",
+      "table_name": "연령별 지역별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y004",
+      "table_name": "연령별 지역별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y005",
+      "table_name": "연령별 업권별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y006",
+      "table_name": "연령별 업권별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y007",
+      "table_name": "연령별 상품별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y008",
+      "table_name": "연령별 상품별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y009",
+      "table_name": "상품별 업권별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 신규취급액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y010",
+      "table_name": "상품별 업권별",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채",
+        "차주당 가계대출 잔액 (교차항목)"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y011",
+      "table_name": "차주당 주택담보대출 신규취급액",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [
+        "GS-0123"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_181Y012",
+      "table_name": "차주당 주택담보대출 잔액",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "십만원",
+      "case_ids": [
+        "GS-0123"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_181Y013",
+      "table_name": "가계대출 신규취급액 비중",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y014",
+      "table_name": "주택담보대출 잔액 비중",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "%",
+      "case_ids": [
+        "GS-0123"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_181Y015",
+      "table_name": "주택담보대출 신규취급액 비중",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_181Y016",
+      "table_name": "가계대출 잔액 비중",
+      "catalog_path": [
+        "통화금융통계",
+        "예금/대출금/기타금융",
+        "차주별 가계부채"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y101",
+      "table_name": "주요지표(연간지표)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "주요지표"
+      ],
+      "frequency": "Y",
+      "period_start": "1953",
+      "period_end": "2025",
+      "unit": "%|2020＝100|달러",
+      "case_ids": [
+        "GS-0012",
+        "GS-0013",
+        "GS-0016",
+        "GS-0017",
+        "GS-0027",
+        "GS-0028",
+        "GS-0032",
+        "GS-0043",
+        "GS-0044",
+        "GS-0048",
+        "GS-0058",
+        "GS-0066",
+        "GS-0073",
+        "GS-0075",
+        "GS-0078",
+        "GS-0088",
+        "GS-0099",
+        "GS-0100",
+        "GS-0142",
+        "GS-0143",
+        "GS-0146",
+        "GS-0147"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y102",
+      "table_name": "주요지표(분기지표)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "주요지표"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "%|십억원",
+      "case_ids": [
+        "GS-0012",
+        "GS-0016",
+        "GS-0032",
+        "GS-0058",
+        "GS-0066",
+        "GS-0088",
+        "GS-0099",
+        "GS-0100",
+        "GS-0142",
+        "GS-0146"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y103",
+      "table_name": "경제활동별 GDP 및 GNI(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0058",
+        "GS-0078"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y104",
+      "table_name": "경제활동별 GDP 및 GNI(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0078"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y105",
+      "table_name": "경제활동별 GDP 및 GNI(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y106",
+      "table_name": "경제활동별 GDP 및 GNI(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y107",
+      "table_name": "국내총생산에 대한 지출(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y108",
+      "table_name": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y109",
+      "table_name": "국내총생산에 대한 지출(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y110",
+      "table_name": "국내총생산에 대한 지출(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y111",
+      "table_name": "경제활동별 국내총생산 디플레이터(분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y112",
+      "table_name": "국내총생산에 대한 지출 디플레이터(분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "196001",
+      "period_end": "202602",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y113",
+      "table_name": "국내총생산과 지출(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0013",
+        "GS-0048",
+        "GS-0075",
+        "GS-0143"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y114",
+      "table_name": "경제활동별 국내총부가가치와 요소소득(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2024",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y115",
+      "table_name": "국민처분가능소득과 처분(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y116",
+      "table_name": "국민소득과 부문별 국민처분가능소득(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y117",
+      "table_name": "자본거래(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y118",
+      "table_name": "경상거래(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y119",
+      "table_name": "자본거래(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "생산 및 지출, 소득 및 처분, 자본거래, 국외거래(종합계정)"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y120",
+      "table_name": "제도부문별 생산계정(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "frequency": "Y",
+      "period_start": "2000",
+      "period_end": "2024",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y121",
+      "table_name": "제도부문별 소득계정(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "frequency": "Y",
+      "period_start": "1975",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y122",
+      "table_name": "제도부문별 자본계정(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "frequency": "Y",
+      "period_start": "1975",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y123",
+      "table_name": "경제활동별 성장기여도(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "frequency": "Q",
+      "period_start": "196002",
+      "period_end": "202602",
+      "unit": "%p",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y124",
+      "table_name": "경제활동별 성장기여도(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "frequency": "Q",
+      "period_start": "196101",
+      "period_end": "202602",
+      "unit": "%p",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y125",
+      "table_name": "지출항목별 성장기여도(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "frequency": "Q",
+      "period_start": "196002",
+      "period_end": "202602",
+      "unit": "%p",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y126",
+      "table_name": "지출항목별 성장기여도(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "GDP에 대한 성장기여도"
+      ],
+      "frequency": "Q",
+      "period_start": "196101",
+      "period_end": "202602",
+      "unit": "%p",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y127",
+      "table_name": "자본재형태별 총자본형성(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y128",
+      "table_name": "자본재형태별 총자본형성(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y129",
+      "table_name": "자본재형태별 총자본형성(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y130",
+      "table_name": "자본재형태별 총자본형성(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y131",
+      "table_name": "주체별 총자본형성(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "200001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y132",
+      "table_name": "주체별 총자본형성(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "200001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y133",
+      "table_name": "주체별 총고정자본형성(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "200001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y134",
+      "table_name": "주체별 총고정자본형성(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Q",
+      "period_start": "200001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y135",
+      "table_name": "경제활동별 총고정자본형성(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2024",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y136",
+      "table_name": "경제활동별 총고정자본형성(실질, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2024",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y137",
+      "table_name": "경제활동별 자본재형태별 총고정자본형성(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Y",
+      "period_start": "2005",
+      "period_end": "2024",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y138",
+      "table_name": "경제활동별 설비투자(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Y",
+      "period_start": "2005",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0044",
+        "GS-0073"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y139",
+      "table_name": "경제활동별 설비투자(실질, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총자본형성"
+      ],
+      "frequency": "Y",
+      "period_start": "2005",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0073"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y140",
+      "table_name": "가계의 목적별 최종소비지출(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y141",
+      "table_name": "가계의 목적별 최종소비지출(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y142",
+      "table_name": "가계의 목적별 최종소비지출(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0043",
+        "GS-0075"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y143",
+      "table_name": "가계의 목적별 최종소비지출(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y144",
+      "table_name": "가계의 형태별 최종소비지출(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y145",
+      "table_name": "가계의 형태별 최종소비지출(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y146",
+      "table_name": "가계의 형태별 최종소비지출(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y147",
+      "table_name": "가계의 형태별 최종소비지출(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y148",
+      "table_name": "가계에 봉사하는 비영리단체의 목적별 최종소비지출(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y149",
+      "table_name": "가계에 봉사하는 비영리단체의 목적별 최종소비지출(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "최종소비지출"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y151",
+      "table_name": "일반정부의 부문별 기능별 최종소비지출(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2024",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y152",
+      "table_name": "일반정부의 부문별 기능별 총지출 (명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2024",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y153",
+      "table_name": "일반정부의 부문별 총수입, 총지출, 저축투자차액(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "frequency": "Y",
+      "period_start": "1970",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y154",
+      "table_name": "공공부문의 부문별 총수입, 총지출, 저축투자차액(명목, 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "일반정부 및 공공부문계정"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2025",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y155",
+      "table_name": "총저축과 총투자(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총저축과 총투자"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y156",
+      "table_name": "총저축과 총투자(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "총저축과 총투자"
+      ],
+      "frequency": "Q",
+      "period_start": "197001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y157",
+      "table_name": "정보통신산업(계절조정, 실질, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "정보통신산업(실질)"
+      ],
+      "frequency": "Q",
+      "period_start": "199501",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y158",
+      "table_name": "정보통신산업(원계열, 실질, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "정보통신산업(실질)"
+      ],
+      "frequency": "Q",
+      "period_start": "199501",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y160",
+      "table_name": "부가가치 항목별 명목 GDP(계절조정, 명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0017",
+        "GS-0066",
+        "GS-0147"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_200Y161",
+      "table_name": "부가가치 항목별 명목 GDP(원계열, 명목, 분기 및 연간)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "경제활동별, 지출항목별, 부가가치항목별 규모"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_200Y162",
+      "table_name": "제도부문별 소득계정(명목, 분기)",
+      "catalog_path": [
+        "국민계정",
+        "국민계정(2020년기준)",
+        "제도부문별 생산, 소득, 자본계정"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202504",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_281Y001",
+      "table_name": "금융거래표(2009~)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준"
+      ],
+      "frequency": "Q",
+      "period_start": "200901",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_281Y002",
+      "table_name": "금융자산부채잔액표(2008~)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준"
+      ],
+      "frequency": "Q",
+      "period_start": "200804",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_281Y004",
+      "table_name": "금융거래표(1975~2005)",
+      "catalog_path": [
+        "자금순환표",
+        "1968 SNA 기준(1975~2005)"
+      ],
+      "frequency": "Q",
+      "period_start": "197501",
+      "period_end": "200504",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_281Y005",
+      "table_name": "금융자산부채잔액표(1975~2005)",
+      "catalog_path": [
+        "자금순환표",
+        "1968 SNA 기준(1975~2005)"
+      ],
+      "frequency": "Q",
+      "period_start": "197501",
+      "period_end": "200504",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_281Y006",
+      "table_name": "금융거래표(2003~2013)",
+      "catalog_path": [
+        "자금순환표",
+        "1993 SNA 기준(2002~2013)"
+      ],
+      "frequency": "Q",
+      "period_start": "200301",
+      "period_end": "201304",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_281Y007",
+      "table_name": "금융자산부채잔액표(2002~)",
+      "catalog_path": [
+        "자금순환표",
+        "1993 SNA 기준(2002~2013)"
+      ],
+      "frequency": "Q",
+      "period_start": "200204",
+      "period_end": "201304",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_282Y001",
+      "table_name": "발행잔액(명목)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "frequency": "Q",
+      "period_start": "201801",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0015",
+        "GS-0025",
+        "GS-0052",
+        "GS-0067",
+        "GS-0095",
+        "GS-0111",
+        "GS-0112",
+        "GS-0145"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_282Y002",
+      "table_name": "발행잔액(시가)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "frequency": "Q",
+      "period_start": "201801",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_282Y003",
+      "table_name": "순발행액(시가)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "frequency": "Q",
+      "period_start": "201801",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_282Y004",
+      "table_name": "보유잔액(시가)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "frequency": "Q",
+      "period_start": "201801",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0015",
+        "GS-0025",
+        "GS-0052",
+        "GS-0067",
+        "GS-0095",
+        "GS-0111",
+        "GS-0112",
+        "GS-0145"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_282Y005",
+      "table_name": "순취득액(시가)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "frequency": "Q",
+      "period_start": "201801",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_282Y006",
+      "table_name": "채권발행-보유관계표(잔액, 시가)",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세채권통계(2018~)"
+      ],
+      "frequency": "Q",
+      "period_start": "201801",
+      "period_end": "202601",
+      "unit": "십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_284Y001",
+      "table_name": "잔액표",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세자금순환표(2018~)"
+      ],
+      "frequency": null,
+      "period_start": null,
+      "period_end": null,
+      "unit": null,
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_284Y002",
+      "table_name": "거래표",
+      "catalog_path": [
+        "자금순환표",
+        "2008 SNA 기준",
+        "상세자금순환표(2018~)"
+      ],
+      "frequency": null,
+      "period_start": null,
+      "period_end": null,
+      "unit": null,
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_301Y013",
+      "table_name": "국제수지",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지"
+      ],
+      "frequency": "M",
+      "period_start": "198001",
+      "period_end": "202607",
+      "unit": "백만달러",
+      "case_ids": [
+        "GS-0002",
+        "GS-0014",
+        "GS-0022",
+        "GS-0023",
+        "GS-0047",
+        "GS-0064",
+        "GS-0074",
+        "GS-0080",
+        "GS-0090",
+        "GS-0097",
+        "GS-0132",
+        "GS-0144"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_301Y014",
+      "table_name": "서비스무역세분류통계",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지"
+      ],
+      "frequency": "M",
+      "period_start": "200601",
+      "period_end": "202607",
+      "unit": "백만달러",
+      "case_ids": [
+        "GS-0002",
+        "GS-0022",
+        "GS-0047",
+        "GS-0064",
+        "GS-0074",
+        "GS-0080",
+        "GS-0089",
+        "GS-0090",
+        "GS-0097",
+        "GS-0132"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_301Y015",
+      "table_name": "지역별 경상수지",
+      "catalog_path": [
+        "국제수지통계",
+        "지역별 국제수지"
+      ],
+      "frequency": "Y",
+      "period_start": "1998",
+      "period_end": "2025",
+      "unit": "백만달러",
+      "case_ids": [
+        "GS-0023",
+        "GS-0089"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_301Y016",
+      "table_name": "지역별 자본수지/금융계정",
+      "catalog_path": [
+        "국제수지통계",
+        "지역별 국제수지"
+      ],
+      "frequency": "Y",
+      "period_start": "2006",
+      "period_end": "2025",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_301Y017",
+      "table_name": "경상수지(계절조정)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지"
+      ],
+      "frequency": "M",
+      "period_start": "198001",
+      "period_end": "202607",
+      "unit": "백만달러",
+      "case_ids": [
+        "GS-0014",
+        "GS-0064",
+        "GS-0080",
+        "GS-0090",
+        "GS-0144"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_303Y001",
+      "table_name": "지역별 결제통화(수출)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수출 결제통화"
+      ],
+      "frequency": "M",
+      "period_start": "199201",
+      "period_end": "202512",
+      "unit": "%|백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_303Y002",
+      "table_name": "국가별 결제통화(수출)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수출 결제통화"
+      ],
+      "frequency": "M",
+      "period_start": "199201",
+      "period_end": "202512",
+      "unit": "%|백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_303Y003",
+      "table_name": "지역별,국가별 원화결제(수출)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수출 결제통화"
+      ],
+      "frequency": "M",
+      "period_start": "199201",
+      "period_end": "202512",
+      "unit": "%|백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_303Y004",
+      "table_name": "지역별 결제통화(수입)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수입 결제통화"
+      ],
+      "frequency": "M",
+      "period_start": "199201",
+      "period_end": "202512",
+      "unit": "%|백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_303Y005",
+      "table_name": "국가별 결제통화(수입)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수입 결제통화"
+      ],
+      "frequency": "M",
+      "period_start": "199201",
+      "period_end": "202512",
+      "unit": "%|백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_303Y006",
+      "table_name": "지역별,국가별 원화결제(수입)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "수입 결제통화"
+      ],
+      "frequency": "M",
+      "period_start": "199201",
+      "period_end": "202512",
+      "unit": "%|백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_304Y101",
+      "table_name": "지식서비스 무역통계(유형별)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_304Y102",
+      "table_name": "지식서비스 무역통계(산업별)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_304Y103",
+      "table_name": "지식서비스 무역통계(기관형태별)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_304Y104",
+      "table_name": "지식서비스 무역통계(지역별)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식서비스 무역통계 (일반분류)"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_304Y105",
+      "table_name": "ICT 산업 특수분류(ICT산업별)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "ICT 산업 특수분류"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_304Y106",
+      "table_name": "콘텐츠 산업 특수분류(콘텐츠산업별)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "콘텐츠 산업 특수분류"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_304Y107",
+      "table_name": "지식재산권 무역수지(유형별)",
+      "catalog_path": [
+        "국제수지통계",
+        "국제수지",
+        "지식서비스 무역통계",
+        "지식재산권 무역수지"
+      ],
+      "frequency": "Q",
+      "period_start": "201001",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_311Y001",
+      "table_name": "국제투자대조표(IIP)",
+      "catalog_path": [
+        "국제투자대조표(IIP)"
+      ],
+      "frequency": "Q",
+      "period_start": "199404",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [
+        "GS-0027"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_311Y002",
+      "table_name": "지역별 국제투자대조표",
+      "catalog_path": [
+        "국제투자대조표(IIP)"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2025",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_311Y003",
+      "table_name": "통화별 국제투자대조표",
+      "catalog_path": [
+        "국제투자대조표(IIP)"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2025",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_311Y004",
+      "table_name": "대외채무",
+      "catalog_path": [
+        "대외채무및대외채권"
+      ],
+      "frequency": "Q",
+      "period_start": "199404",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [
+        "GS-0034",
+        "GS-0035",
+        "GS-0074"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_311Y005",
+      "table_name": "대외채권",
+      "catalog_path": [
+        "대외채무및대외채권"
+      ],
+      "frequency": "Q",
+      "period_start": "199404",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_311Y006",
+      "table_name": "순대외채권",
+      "catalog_path": [
+        "대외채무및대외채권"
+      ],
+      "frequency": "Q",
+      "period_start": "199404",
+      "period_end": "202602",
+      "unit": "백만달러",
+      "case_ids": [
+        "GS-0034",
+        "GS-0035"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_401Y015",
+      "table_name": "수입물가지수(기본분류)",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0004",
+        "GS-0005",
+        "GS-0006",
+        "GS-0021",
+        "GS-0036",
+        "GS-0050",
+        "GS-0057",
+        "GS-0062",
+        "GS-0069",
+        "GS-0070",
+        "GS-0076",
+        "GS-0077",
+        "GS-0090",
+        "GS-0094",
+        "GS-0095",
+        "GS-0105",
+        "GS-0106",
+        "GS-0114",
+        "GS-0115",
+        "GS-0119",
+        "GS-0134",
+        "GS-0135",
+        "GS-0136",
+        "GS-0150"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_401Y016",
+      "table_name": "수입물가지수(특수분류)",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0004",
+        "GS-0057",
+        "GS-0069",
+        "GS-0076",
+        "GS-0091",
+        "GS-0114",
+        "GS-0119",
+        "GS-0134"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_401Y017",
+      "table_name": "수입물가지수(품목별)",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0119"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_401Y018",
+      "table_name": "수입물가지수(용도별)",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수입물가"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_402Y014",
+      "table_name": "수출물가지수(기본분류)",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수출물가"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0005",
+        "GS-0069",
+        "GS-0070",
+        "GS-0090",
+        "GS-0115",
+        "GS-0135"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_402Y015",
+      "table_name": "수출물가지수(특수분류)",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수출물가"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0070",
+        "GS-0076",
+        "GS-0091"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_402Y016",
+      "table_name": "수출물가지수(품목별)",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "수출물가"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_403Y001",
+      "table_name": "수출금액지수",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "frequency": "M",
+      "period_start": "198801",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0006",
+        "GS-0062",
+        "GS-0077",
+        "GS-0094",
+        "GS-0095",
+        "GS-0105",
+        "GS-0122",
+        "GS-0136"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_403Y002",
+      "table_name": "수출물량지수",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "frequency": "M",
+      "period_start": "198801",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0036",
+        "GS-0062",
+        "GS-0077",
+        "GS-0095",
+        "GS-0106",
+        "GS-0122"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_403Y003",
+      "table_name": "수입금액지수",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "frequency": "M",
+      "period_start": "198801",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0050",
+        "GS-0122"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_403Y004",
+      "table_name": "수입물량지수",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "frequency": "M",
+      "period_start": "198801",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_403Y005",
+      "table_name": "교역조건지수",
+      "catalog_path": [
+        "수출입물가조사(2020=100)",
+        "무역지수 및 교역조건지수"
+      ],
+      "frequency": "M",
+      "period_start": "198801",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0021",
+        "GS-0094",
+        "GS-0150"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_404Y014",
+      "table_name": "생산자물가지수(기본분류)",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "frequency": "M",
+      "period_start": "196501",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0003",
+        "GS-0020",
+        "GS-0031",
+        "GS-0037",
+        "GS-0057",
+        "GS-0098",
+        "GS-0133"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_404Y015",
+      "table_name": "생산자물가지수(특수분류)",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "frequency": "M",
+      "period_start": "196501",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [
+        "GS-0003",
+        "GS-0020",
+        "GS-0031",
+        "GS-0098",
+        "GS-0133"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_404Y016",
+      "table_name": "생산자물가지수(품목별)",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "frequency": "M",
+      "period_start": "196501",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_404Y017",
+      "table_name": "생산자물가지수-총지수(1910~1964)",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "frequency": "M",
+      "period_start": "191007",
+      "period_end": "196412",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_405Y006",
+      "table_name": "국내공급물가지수",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "frequency": "M",
+      "period_start": "198001",
+      "period_end": "202608",
+      "unit": "2020＝100|2022.12＝100",
+      "case_ids": [
+        "GS-0037"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_405Y007",
+      "table_name": "총산출물가지수",
+      "catalog_path": [
+        "생산자물가조사(2020=100)"
+      ],
+      "frequency": "M",
+      "period_start": "201001",
+      "period_end": "202608",
+      "unit": "2020＝100",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y001",
+      "table_name": "재무상태표(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "백만원",
+      "case_ids": [
+        "GS-0084",
+        "GS-0117"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_501Y002",
+      "table_name": "손익계산서(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "백만원",
+      "case_ids": [
+        "GS-0084",
+        "GS-0117"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_501Y003",
+      "table_name": "제조원가명세서(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "백만원",
+      "case_ids": [
+        "GS-0117"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_501Y004",
+      "table_name": "이익잉여금 처분계산서(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y005",
+      "table_name": "성장성 지표(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2010",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y006",
+      "table_name": "손익 지표(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y007",
+      "table_name": "자산/자본 지표(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y008",
+      "table_name": "자산/자본 회전율(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "회",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y009",
+      "table_name": "생산성 지표(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y010",
+      "table_name": "부가가치 구성(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y013",
+      "table_name": "현금흐름표(2012~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2023",
+      "period_end": "2024",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y014",
+      "table_name": "현금흐름관련 기타 주요 재무항목(2012~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2023",
+      "period_end": "2024",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y015",
+      "table_name": "현금흐름비율(2012~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2023",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y017",
+      "table_name": "기업경영분석지표(2007~2010)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y018",
+      "table_name": "기업경영분석지표(~2007)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1960",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y019",
+      "table_name": "성장성 지표(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y020",
+      "table_name": "성장성 지표(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y021",
+      "table_name": "성장성 지표(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y022",
+      "table_name": "성장성 지표(1998~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y023",
+      "table_name": "성장성 지표(1990~1997, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1997",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y024",
+      "table_name": "손익 지표(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y025",
+      "table_name": "손익 지표(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y026",
+      "table_name": "손익 지표(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y027",
+      "table_name": "손익 지표(1998~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y028",
+      "table_name": "손익 지표(1990~1997, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1997",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y029",
+      "table_name": "자산/자본 지표(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y030",
+      "table_name": "자산/자본 지표(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y031",
+      "table_name": "자산/자본 지표(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y032",
+      "table_name": "자산/자본 지표(1998~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y033",
+      "table_name": "자산/자본 지표(1990~1997, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1997",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y034",
+      "table_name": "자산/자본 회전율(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "회",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y035",
+      "table_name": "자산/자본 회전율(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "회",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y036",
+      "table_name": "자산/자본 회전율(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "회",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y037",
+      "table_name": "자산/자본 회전율(1998~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y038",
+      "table_name": "자산/자본 회전율(1990~1997, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1997",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y039",
+      "table_name": "생산성 지표(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y040",
+      "table_name": "생산성 지표(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y041",
+      "table_name": "생산성 지표(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "%|백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y042",
+      "table_name": "생산성 지표(2002~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y043",
+      "table_name": "생산성 지표(1998~2006, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2006",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y044",
+      "table_name": "생산성 지표(1990~1997, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1997",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y049",
+      "table_name": "재무상태표(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y050",
+      "table_name": "재무상태표(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y051",
+      "table_name": "재무상태표(2008~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2008",
+      "period_end": "2010",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y052",
+      "table_name": "재무상태표(2000~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2004",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y053",
+      "table_name": "재무상태표(1999, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1999",
+      "period_end": "1999",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y054",
+      "table_name": "재무상태표(1997~1998, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1997",
+      "period_end": "1998",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y055",
+      "table_name": "재무상태표(1990~1996, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1996",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y056",
+      "table_name": "손익계산서(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y057",
+      "table_name": "손익계산서(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y058",
+      "table_name": "손익계산서(2008~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2008",
+      "period_end": "2010",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y059",
+      "table_name": "손익계산서(2000~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2004",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y060",
+      "table_name": "손익계산서(1999, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1999",
+      "period_end": "1999",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y061",
+      "table_name": "손익계산서(1997~1998, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1997",
+      "period_end": "1998",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y062",
+      "table_name": "손익계산서(1990~1996, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1996",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y063",
+      "table_name": "제조원가명세서(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y064",
+      "table_name": "제조원가명세서(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y065",
+      "table_name": "제조원가명세서(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2008",
+      "period_end": "2010",
+      "unit": "백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y066",
+      "table_name": "제조원가명세서(2000~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2004",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y067",
+      "table_name": "제조원가명세서(1990~1999, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1999",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y068",
+      "table_name": "이익잉여금 처분계산서(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y069",
+      "table_name": "이익잉여금 처분계산서(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y070",
+      "table_name": "이익잉여금 처분계산서(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y071",
+      "table_name": "이익잉여금 처분계산서(2000~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y072",
+      "table_name": "이익잉여금 처분계산서(1990~1999, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1999",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y073",
+      "table_name": "부가가치 구성(중소기업기본법, 2015~2016)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2015",
+      "period_end": "2016",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y074",
+      "table_name": "부가가치 구성(조세특례제한법, 2009~2014)",
+      "catalog_path": [
+        "기업경영분석",
+        "2009년~2014년 (조세특례제한법)"
+      ],
+      "frequency": "Y",
+      "period_start": "2009",
+      "period_end": "2014",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y075",
+      "table_name": "부가가치 구성(2007~2010, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2010",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y076",
+      "table_name": "부가가치 구성(2002~2007, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2002",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y077",
+      "table_name": "부가가치 구성(1998~2006, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1998",
+      "period_end": "2006",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y078",
+      "table_name": "부가가치 구성(1990~1997, 표본조사)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1990",
+      "period_end": "1997",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y079",
+      "table_name": "현금흐름표(2008~2011)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2011",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y080",
+      "table_name": "현금흐름표(1995~2007)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2006",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y081",
+      "table_name": "현금흐름관련 기타 주요 재무항목(2008~2011)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2011",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y082",
+      "table_name": "현금흐름관련 기타 주요 재무항목(1995~2007)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "2006",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y083",
+      "table_name": "현금흐름비율(2008~2011)",
+      "catalog_path": [
+        "기업경영분석",
+        "2008년~2010년"
+      ],
+      "frequency": "Y",
+      "period_start": "2007",
+      "period_end": "2011",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y084",
+      "table_name": "현금흐름비율(1995~2007)",
+      "catalog_path": [
+        "기업경영분석",
+        "2007년 이전"
+      ],
+      "frequency": "Y",
+      "period_start": "1998",
+      "period_end": "2007",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_501Y086",
+      "table_name": "분위수(제11차 한국표준산업분류, 2013~)",
+      "catalog_path": [
+        "기업경영분석"
+      ],
+      "frequency": "Y",
+      "period_start": "2013",
+      "period_end": "2024",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_511Y001",
+      "table_name": "소비자동향조사(전국, 분기, 1995.3/4~2008.2/4)",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "frequency": "Q",
+      "period_start": "199503",
+      "period_end": "200802",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_511Y002",
+      "table_name": "소비자동향조사(전국, 월, 2008.9~)",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "frequency": "M",
+      "period_start": "200807",
+      "period_end": "202608",
+      "unit": "",
+      "case_ids": [
+        "GS-0019",
+        "GS-0038",
+        "GS-0071",
+        "GS-0093",
+        "GS-0149"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_511Y003",
+      "table_name": "기대인플레이션율(전국, 월)",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "frequency": "M",
+      "period_start": "200202",
+      "period_end": "202608",
+      "unit": "%",
+      "case_ids": [
+        "GS-0019",
+        "GS-0038",
+        "GS-0071",
+        "GS-0149"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_511Y004",
+      "table_name": "소비자동향조사(지역, 월)",
+      "catalog_path": [
+        "소비자동향조사"
+      ],
+      "frequency": "M",
+      "period_start": "200807",
+      "period_end": "202608",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y001",
+      "table_name": "업종별 기업경기실사지수, ~2009.8(실적)",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, ~2009.8"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "200907",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y002",
+      "table_name": "업종별 기업경기실사지수, ~2009.8(전망)",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, ~2009.8"
+      ],
+      "frequency": "M",
+      "period_start": "200302",
+      "period_end": "200908",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y007",
+      "table_name": "업종별 기업경기실사지수, 2009.8~(실적)",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, 2009.8 ~"
+      ],
+      "frequency": "M",
+      "period_start": "200908",
+      "period_end": "202608",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y008",
+      "table_name": "업종별 기업경기실사지수, 2009.9~(전망)",
+      "catalog_path": [
+        "기업경기조사",
+        "업종별 기업경기조사, 2009.8 ~"
+      ],
+      "frequency": "M",
+      "period_start": "200909",
+      "period_end": "202609",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y011",
+      "table_name": "지역별 기업경기실사지수(실적(~2012.12))",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "201212",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y012",
+      "table_name": "지역별 기업경기실사지수(전망(~2013.1))",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "201301",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y013",
+      "table_name": "기업경기조사(실적)",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "202608",
+      "unit": "",
+      "case_ids": [
+        "GS-0011",
+        "GS-0018",
+        "GS-0051",
+        "GS-0061",
+        "GS-0083",
+        "GS-0093",
+        "GS-0094",
+        "GS-0103",
+        "GS-0104",
+        "GS-0141",
+        "GS-0148"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_512Y014",
+      "table_name": "기업경기조사(전망)",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200302",
+      "period_end": "202609",
+      "unit": "",
+      "case_ids": [
+        "GS-0011",
+        "GS-0051",
+        "GS-0061",
+        "GS-0071",
+        "GS-0083",
+        "GS-0094",
+        "GS-0103",
+        "GS-0104",
+        "GS-0141"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_512Y015",
+      "table_name": "기업경기조사(매출액가중 실적)",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200908",
+      "period_end": "202608",
+      "unit": "",
+      "case_ids": [
+        "GS-0018",
+        "GS-0083",
+        "GS-0148"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_512Y016",
+      "table_name": "기업경기조사(매출액가중 전망)",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200909",
+      "period_end": "202609",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y017",
+      "table_name": "기업경기실사지수((구)실적(~2012.6))",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "201206",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y018",
+      "table_name": "기업경기실사지수((구)전망(~2012.7))",
+      "catalog_path": [
+        "기업경기조사",
+        "기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "200302",
+      "period_end": "201207",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y019",
+      "table_name": "지역별 기업경기조사(실적(2013.1~))",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "201301",
+      "period_end": "202608",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y020",
+      "table_name": "지역별 기업경기조사(전망(2013.2~))",
+      "catalog_path": [
+        "기업경기조사",
+        "지역별 기업경기조사"
+      ],
+      "frequency": "M",
+      "period_start": "201302",
+      "period_end": "202609",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_512Y021",
+      "table_name": "경영애로사항",
+      "catalog_path": [
+        "기업경기조사",
+        "경영애로사항"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "202608",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_513Y001",
+      "table_name": "경제심리지수",
+      "catalog_path": [
+        "경제심리지수"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "202608",
+      "unit": "",
+      "case_ids": [
+        "GS-0001",
+        "GS-0061",
+        "GS-0113",
+        "GS-0131"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_514Y001",
+      "table_name": "대출행태서베이(대출태도)",
+      "catalog_path": [
+        "금융기관대출행태조사"
+      ],
+      "frequency": "Q",
+      "period_start": "200201",
+      "period_end": "202603",
+      "unit": "",
+      "case_ids": [
+        "GS-0028"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_514Y002",
+      "table_name": "대출행태서베이(신용위험)",
+      "catalog_path": [
+        "금융기관대출행태조사"
+      ],
+      "frequency": "Q",
+      "period_start": "200201",
+      "period_end": "202603",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_514Y003",
+      "table_name": "대출행태서베이(대출수요)",
+      "catalog_path": [
+        "금융기관대출행태조사"
+      ],
+      "frequency": "Q",
+      "period_start": "200201",
+      "period_end": "202603",
+      "unit": "",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_601Y003",
+      "table_name": "신용카드",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "202606",
+      "unit": "백만원|천건|천장",
+      "case_ids": [
+        "GS-0039",
+        "GS-0040",
+        "GS-0055"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_602Y001",
+      "table_name": "결제시스템별 통계",
+      "catalog_path": [
+        "지급결제통계",
+        "BIS기준통계"
+      ],
+      "frequency": "M",
+      "period_start": "199101",
+      "period_end": "202607",
+      "unit": "십억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_602Y002",
+      "table_name": "지급수단별 통계",
+      "catalog_path": [
+        "지급결제통계",
+        "BIS기준통계"
+      ],
+      "frequency": "M",
+      "period_start": "199101",
+      "period_end": "202606",
+      "unit": "십억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_603Y001",
+      "table_name": "한은금융망결제통계표",
+      "catalog_path": [
+        "지급결제통계",
+        "회계시스템통계"
+      ],
+      "frequency": "M",
+      "period_start": "200301",
+      "period_end": "202608",
+      "unit": "건|백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_603Y010",
+      "table_name": "지급결제동향",
+      "catalog_path": [
+        "지급결제통계",
+        "회계시스템통계"
+      ],
+      "frequency": "M",
+      "period_start": "200001",
+      "period_end": "202608",
+      "unit": "건|백만원",
+      "case_ids": [
+        "GS-0039",
+        "GS-0040",
+        "GS-0055"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_604Y003",
+      "table_name": "지로시스템",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "frequency": "M",
+      "period_start": "199001",
+      "period_end": "202607",
+      "unit": "십억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_605Y012",
+      "table_name": "금융공동망",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "frequency": "M",
+      "period_start": "199001",
+      "period_end": "202607",
+      "unit": "십억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_606Y002",
+      "table_name": "한은금융망",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "frequency": "M",
+      "period_start": "199501",
+      "period_end": "202608",
+      "unit": "건|십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_633Y002",
+      "table_name": "전자지급결제대행",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_633Y003",
+      "table_name": "결제대금예치",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_633Y004",
+      "table_name": "선불전자지급수단",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_633Y005",
+      "table_name": "전자고지결제",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "frequency": "Q",
+      "period_start": "200801",
+      "period_end": "202602",
+      "unit": "억원|천건",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_633Y006",
+      "table_name": "직불전자지급수단",
+      "catalog_path": [
+        "지급결제통계",
+        "전자지급서비스"
+      ],
+      "frequency": "Q",
+      "period_start": "201301",
+      "period_end": "202602",
+      "unit": "건|백만원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_641Y001",
+      "table_name": "한국은행 원화대출금",
+      "catalog_path": [
+        "통화금융통계",
+        "한국은행 주요계정 및 기준금리"
+      ],
+      "frequency": "M",
+      "period_start": "197101",
+      "period_end": "202608",
+      "unit": "십억원",
+      "case_ids": [
+        "GS-0010",
+        "GS-0116",
+        "GS-0128",
+        "GS-0140"
+      ],
+      "kosis_api_status": "ok"
+    },
+    {
+      "table_id": "DT_801Y002",
+      "table_name": "어음교환 및 부도",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "frequency": "M",
+      "period_start": "196001",
+      "period_end": "202607",
+      "unit": "%|개|십억원",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    },
+    {
+      "table_id": "DT_801Y003",
+      "table_name": "지역별 어음부도율",
+      "catalog_path": [
+        "지급결제통계"
+      ],
+      "frequency": "M",
+      "period_start": "199701",
+      "period_end": "202607",
+      "unit": "%",
+      "case_ids": [],
+      "kosis_api_status": "not_queried"
+    }
+  ]
+}

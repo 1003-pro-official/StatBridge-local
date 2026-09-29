@@ -14,7 +14,8 @@
 | `src/agent/frontend/` | React 화면 |
 | `data/processed/` | 349개 표의 메타데이터와 347개 지원 표의 항목·분류 정보 |
 | `data/tables/` | 별도 원본에서 공급하는 347개 통계표 CSV; Git에 포함하지 않음 |
-| `eval/golden-set-v4.1/` | 공개 dev/test 120건, 정답 없는 holdout 질문 30건 |
+| `eval/table-discovery/` | 질의 해석~통계표 탐색 평가 v1·v2·v3·v4.1 |
+| `eval/end-to-end/` | 별도 계열의 전체 흐름 평가 v1·v2 초안 |
 
 화면의 주 API는 `src/agent/bridge_api.py`입니다. `src/backend/query_api.py`도 같은 앱을 실행합니다. 이전 `/api/analyze` 계약은 제공하지 않으므로 해당 클라이언트는 새 `/api/query` 응답에 맞춰 수정해야 합니다. `analysis_service.py`는 기존 평가 도구 참고용으로 남아 있습니다.
 
@@ -56,9 +57,9 @@ MCP 도구에는 검색, 메타데이터·수치 조회, 배치 검증, 상태 �
 
 ```bash
 PYTHONPATH=src/backend:src/agent .venv/bin/python -m pytest -q tests
-.venv/bin/python eval/golden-set-v4.1/scripts/validate_v41.py
-.venv/bin/python tools/evaluate_golden_v41.py --dataset eval/golden-set-v4.1/dev.jsonl --output /tmp/statbridge-v41-dev.json
+.venv/bin/python eval/table-discovery/v4.1/scripts/validate_v41.py
+.venv/bin/python tools/evaluate_golden_v41.py --dataset eval/table-discovery/v4.1/dev.jsonl --output /tmp/statbridge-v41-dev.json
 cd src/agent/frontend && pnpm build
 ```
 
-v4.1의 비공개 holdout 정답과 평가기는 개발 저장소에 넣지 않고 별도 접근 제한 저장소에서 관리합니다. 공개 holdout 파일에는 질문만 있습니다. 기존 v1·v2 평가셋과 도구는 `eval/` 및 `tools/`에 그대로 있습니다.
+두 평가 계열은 버전 번호와 점수를 공유하지 않습니다. 각 버전의 범위·검토 상태·실행 명령은 [평가 자료 안내](eval/README.md)를 참고하세요. v4.1의 비공개 holdout 정답과 평가기는 별도 접근 제한 저장소에서 관리하며, 공개 holdout 파일에는 질문만 있습니다.

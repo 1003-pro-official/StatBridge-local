@@ -10,7 +10,7 @@ from evaluate_golden_set import DEFAULT_CORPUS, load_cases
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "eval" / "golden-set-v2"
+OUTPUT = ROOT / "eval" / "end-to-end" / "v2"
 FAMILIES = [
     ("통화신용정책보고서", 10), ("금융안정보고서", 10), ("경제전망보고서", 10),
     ("기업경영분석", 10), ("지급결제보고서", 5), ("지역경제보고서", 5),
@@ -82,7 +82,7 @@ def main() -> None:
         "schema_version": "2.0-draft",
         "name": "StatBridge golden set v2",
         "status": "not_release_ready",
-        "baseline": {"source": "eval/golden-set", "cases": len(cases),
+        "baseline": {"source": "eval/end-to-end/v1", "cases": len(cases),
                      "use": "회귀 전용; 기존 holdout은 개발 중 노출되어 블라인드 평가로 해석 금지"},
         "target": {"public_cases": 200, "new_cases": 50, "private_blind_cases": 60},
         "public_additions": {"authoring_tasks": len(queue), "scored_cases": 0,

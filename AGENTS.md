@@ -11,7 +11,7 @@
 ## 공개·비공개 경계
 
 - 비공개 `StatBridge-evaluation-private` 저장소와 `holdout_answers.jsonl`은 이 저장소의 작업, 검색, 인덱싱, 테스트 입력, 프롬프트에 사용하지 않습니다. 같은 로컬 작업공간에 보이더라도 열거나 복사하지 않습니다.
-- 개발 중 평가는 `eval/golden-set-v4.1/dev.jsonl`과 `test.jsonl`로 수행합니다. 공개 `holdout_queries.jsonl`에는 정답을 붙이거나 개발 피드백을 기록하지 않습니다.
+- 개발 중 표 탐색 평가는 `eval/table-discovery/v4.1/dev.jsonl`과 `test.jsonl`로 수행합니다. 공개 `holdout_queries.jsonl`에는 정답을 붙이거나 개발 피드백을 기록하지 않습니다. `eval/end-to-end/`는 별도 평가 계열이며 점수를 혼용하지 않습니다.
 - `.env`, API 키, 원자료 CSV, 벡터 DB, 예측·평가 결과, 임시 파일은 커밋하지 않습니다. 샘플 설정은 실제 값이 없는 `.env.example`에만 둡니다.
 - 비공개 자료가 diff나 PR에 섞인 것을 발견하면 게시를 멈추고 PM에게 알립니다. `.gitignore`만으로 유출을 막을 수 있다고 가정하지 않습니다.
 
@@ -22,8 +22,8 @@
 3. PR 전에 변경 파일 목록과 diff를 확인하고, 최소한 다음 검증을 실행합니다. 실행할 수 없는 검증과 이유는 PR에 기록합니다.
 
 ```bash
-PYTHONPATH=src/backend:src/agent .venv/bin/python -m pytest -q tests eval/golden-set-v4.1/tests
-.venv/bin/python eval/golden-set-v4.1/scripts/validate_v41.py
+PYTHONPATH=src/backend:src/agent .venv/bin/python -m pytest -q tests eval/table-discovery/v4.1/tests
+.venv/bin/python eval/table-discovery/v4.1/scripts/validate_v41.py
 cd src/agent/frontend && pnpm build
 ```
 
