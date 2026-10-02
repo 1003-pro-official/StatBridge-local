@@ -13,7 +13,7 @@ import webbrowser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-STATE = ROOT / 'evaluation_runs' / 'portable_runtime.json'
+STATE = ROOT / '.venv/cache/evaluation_runs' / 'portable_runtime.json'
 
 
 def free_port(port: int) -> bool:
@@ -36,7 +36,7 @@ def healthy(url: str) -> bool:
 
 def valid_keys() -> bool:
     from dotenv import dotenv_values
-    values = dotenv_values(ROOT / 'data/statbridge_mcp_server/.env')
+    values = dotenv_values(ROOT / '.env')
     def present(name: str) -> bool:
         value = str(values.get(name) or '').strip()
         return bool(value) and not any(token in value.lower() for token in ('your_', 'replace', '여기에', '<', '>'))
@@ -44,7 +44,7 @@ def valid_keys() -> bool:
 
 
 def vector_ready() -> bool:
-    path = ROOT / 'data/vector_store_349'
+    path = ROOT / '.venv/cache/vector_store_349'
     if not (path / 'chroma.sqlite3').exists():
         return False
     try:
@@ -82,17 +82,17 @@ def stop() -> None:
 
 def start(api_port: int, ui_port: int, open_browser: bool, build_index: bool) -> None:
     from dotenv import load_dotenv
-    load_dotenv(ROOT / 'data/statbridge_mcp_server/.env', override=False)
+    load_dotenv(ROOT / '.env', override=False)
     # Only previously recorded, still-identical processes belong to this launcher.
     stop()
     for port in (api_port, ui_port):
         if not free_port(port):
             raise RuntimeError(f'Port {port} is in use. Stop the other application first; no process was killed.')
     env = os.environ.copy()
-    env['PYTHONPATH'] = os.pathsep.join([str(ROOT / 'src/agent'), str(ROOT / 'data/statbridge_mcp_server')])
-    env['STATBRIDGE_DATA_DIR'] = str(ROOT / 'data/runtime_data/processed')
-    env['STATBRIDGE_TABLES_DIR'] = str(ROOT / 'data/runtime_data/tables')
-    env['STATBRIDGE_VECTOR_PATH'] = str(ROOT / 'data/vector_store_349')
+    env['PYTHONPATH'] = os.pathsep.join([str(ROOT / 'src/agent'), str(ROOT / 'src/backend')])
+    env['STATBRIDGE_DATA_DIR'] = str(ROOT / 'data/processed')
+    env['STATBRIDGE_TABLES_DIR'] = str(ROOT / 'data/tables')
+    env['STATBRIDGE_VECTOR_PATH'] = str(ROOT / '.venv/cache/vector_store_349')
     env['STATBRIDGE_API_PORT'] = str(api_port)
     env['VITE_API_BASE_URL'] = '/api'
     if build_index:
@@ -103,7 +103,7 @@ def start(api_port: int, ui_port: int, open_browser: bool, build_index: bool) ->
     services: list[dict] = []
     commands = [
         ('agent', [sys.executable, '-m', 'uvicorn', 'bridge_api:app', '--host', '127.0.0.1', '--port', str(api_port)], ROOT / 'src/agent'),
-        ('mcp', [sys.executable, str(ROOT / 'data/statbridge_mcp_server/server.py')], ROOT),
+        ('mcp', [sys.executable, str(ROOT / 'src/backend/server.py')], ROOT),
         ('frontend', ['cmd.exe', '/d', '/c', 'npm.cmd', 'run', 'dev', '--', '--host', '127.0.0.1', '--port', str(ui_port), '--strictPort'], ROOT / 'src/agent/frontend'),
     ]
     try:
@@ -116,14 +116,14 @@ def start(api_port: int, ui_port: int, open_browser: bool, build_index: bool) ->
             ps = f'Get-CimInstance Win32_Process -Filter "ProcessId={process.pid}" | Select-Object ExecutablePath,CreationDate | ConvertTo-Json -Compress'
             identity = subprocess.run(['powershell.exe', '-NoProfile', '-Command', ps], capture_output=True, text=True, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
             if process.poll() is not None or not identity.stdout.strip():
-                raise RuntimeError(f'{name} exited; inspect evaluation_runs/{name}.log')
+                raise RuntimeError(f'{name} exited; inspect .venv/cache/evaluation_runs/{name}.log')
             services.append({'name': name, 'pid': process.pid, 'identity': json.loads(identity.stdout)})
             STATE.write_text(json.dumps({'services': services}, ensure_ascii=False, indent=2), encoding='utf-8')
         for name, url in [('Agent', f'http://127.0.0.1:{api_port}/api/health'), ('UI', f'http://127.0.0.1:{ui_port}/')]:
             deadline = time.monotonic() + 60
             while not healthy(url):
                 if time.monotonic() > deadline:
-                    raise RuntimeError(f'{name} failed to start; inspect evaluation_runs/*.log')
+                    raise RuntimeError(f'{name} failed to start; inspect .venv/cache/evaluation_runs/*.log')
                 time.sleep(.5)
             print(f'[OK] {name}: {url}', flush=True)
         if open_browser:

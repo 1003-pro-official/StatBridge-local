@@ -4,10 +4,10 @@ import sys
 import unittest
 from unittest.mock import patch
 from pathlib import Path
-ROOT = Path(__file__).resolve().parent
-os.environ.setdefault("STATBRIDGE_DATA_DIR", str(ROOT / "data/runtime_data/processed"))
-os.environ["STATBRIDGE_HYBRID_RETRIEVAL"] = "0"
-sys.path[:0] = [str(ROOT / "src/agent"), str(ROOT / "data/statbridge_mcp_server")]
+ROOT = Path(__file__).resolve().parents[1]
+os.environ.setdefault("STATBRIDGE_DATA_DIR", str(ROOT / "data/processed"))
+os.environ.setdefault("STATBRIDGE_HYBRID_RETRIEVAL", "0")
+sys.path[:0] = [str(ROOT / "src/agent"), str(ROOT / "src/backend")]
 from fastapi.testclient import TestClient
 import bridge_api as api
 

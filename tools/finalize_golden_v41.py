@@ -143,7 +143,7 @@ report+=f"""
 
 - Golden v4.1 validator 및 4개 테스트 통과.
 - Python compile 통과.
-- `TEST_AGENT_FLOW.py` 통과: clarification hard constraint, 사전 ID 기반 API plan, MCP 전달 파라미터 일치 확인.
+- `tests/TEST_AGENT_FLOW.py` 통과: clarification hard constraint, 사전 ID 기반 API plan, MCP 전달 파라미터 일치 확인.
 - 실제 KOSIS 원본 호출 확인: `DT_181Y012`, 2025년 1·2분기 요청에서 2행과 동일 table ID 반환.
 - 기존 KOSIS 호출 경로와 `_merge_classifications` 안전장치는 제거하지 않음.
 - catalog-only는 item/objL 근거가 없으므로 API를 호출하지 않음.
@@ -165,5 +165,5 @@ report+=f"""
 - 실제 table/item/objL ID는 통계사전과 로컬 메타데이터에서만 사용.
 - 실제 수치는 기존 KOSIS/MCP 경로만 사용.
 """
-(ROOT/"STATBRIDGE_GOLDEN_V41_EVAL_REPORT.md").write_text(report,encoding="utf-8")
+(ROOT/"docs/evaluation/STATBRIDGE_GOLDEN_V41_EVAL_REPORT.md").write_text(report,encoding="utf-8")
 print(f"wrote report, metrics, failures={len(failures)}")

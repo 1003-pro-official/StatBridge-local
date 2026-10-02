@@ -29,7 +29,7 @@ Split은 `dev` 30, `validation` 30, `locked_test` 90입니다. 이 크기는 첫
 - `kosis_metadata_export.json` — 후보 57개 표의 KOSIS API 주기·항목/분류 응답 원본
 - `scripts/manage_golden_set.py` — 구조 검증, Excel 생성, API 재수집, Excel 검토 입력 반영
 
-기존 파일에서 재사용한 자료는 `eval/goldenset/*.json`의 원문 질의 초안과 `data/kosis/hankook_tables.json`, `data/statbridge_mcp_server/data_full/collection/table_summary.csv`, `data/statbridge_mcp_server/data_full/tables/*.csv`의 카탈로그·메타정보입니다. 기존 정답 필드는 그대로 승인값으로 복사하지 않았습니다.
+기존 파일에서 재사용한 자료는 `eval/goldenset/*.json`의 원문 질의 초안과 `data/kosis/hankook_tables.json`, `src/backend/data_full/collection/table_summary.csv`, `src/backend/data_full/tables/*.csv`의 카탈로그·메타정보입니다. 기존 정답 필드는 그대로 승인값으로 복사하지 않았습니다.
 
 ## KOSIS 및 카탈로그 검증 범위
 
@@ -90,4 +90,4 @@ python3 eval/table-discovery/v1/scripts/manage_golden_set.py enrich-kosis
 python3 eval/table-discovery/v1/scripts/manage_golden_set.py manifest
 ```
 
-`refresh-kosis`는 표 ID별 API 원문 응답만 다시 내보냅니다. `enrich-kosis`가 JSONL에 메타정보 요약·근거를 붙입니다. API 키 값은 로그나 산출물에 기록하지 않습니다. `python-dotenv` 등 프로젝트 의존성이 없다면 `data/statbridge_mcp_server/requirements.txt`를 설치한 뒤 실행합니다.
+`refresh-kosis`는 표 ID별 API 원문 응답만 다시 내보냅니다. `enrich-kosis`가 JSONL에 메타정보 요약·근거를 붙입니다. API 키 값은 로그나 산출물에 기록하지 않습니다. `python-dotenv` 등 프로젝트 의존성이 없다면 `src/backend/requirements.txt`를 설치한 뒤 실행합니다.

@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import requests
 ROOT = Path(__file__).resolve().parents[1]
-(ROOT / "evaluation_runs").mkdir(parents=True, exist_ok=True)
+(ROOT / ".venv/cache/evaluation_runs").mkdir(parents=True, exist_ok=True)
 base = os.getenv("STATBRIDGE_BASE_URL", "http://127.0.0.1:8000")
 s = requests.Session(); s.trust_env = False
 health = s.get(base + "/api/health", timeout=15).json()
@@ -40,5 +40,5 @@ for tid in ("DT_284Y001", "DT_284Y002", "DT_404Y017", "DT_121Y007"):
               "chart_type": rendered["chartType"], "point_count": points, "chosen_codes": choices,
               "period": rendered["period"]}
     results.append(result); print(json.dumps(result, ensure_ascii=True), flush=True)
-(ROOT / "evaluation_runs/349_http_verification.json").write_text(json.dumps({"health": health, "catalog_count": 349, "tables": results}, ensure_ascii=False, indent=2), encoding="utf-8")
+(ROOT / ".venv/cache/evaluation_runs/349_http_verification.json").write_text(json.dumps({"health": health, "catalog_count": 349, "tables": results}, ensure_ascii=False, indent=2), encoding="utf-8")
 print("HTTP query -> period -> KOSIS -> output agent: PASS")

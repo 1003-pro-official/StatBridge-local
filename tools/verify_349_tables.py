@@ -1,6 +1,6 @@
 """Verify every registered table with a real small KOSIS request.
 
-Results are resumable in evaluation_runs/349_live_verification.json. No API keys
+Results are resumable in .venv/cache/evaluation_runs/349_live_verification.json. No API keys
 or raw observations are written. A registered table is not a live-test pass.
 """
 from __future__ import annotations
@@ -12,8 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-os.environ.setdefault("STATBRIDGE_DATA_DIR", str(ROOT / "data/runtime_data/processed"))
-sys.path[:0] = [str(ROOT / "data/statbridge_mcp_server"), str(ROOT / "src/agent")]
+os.environ.setdefault("STATBRIDGE_DATA_DIR", str(ROOT / "data/processed"))
+sys.path[:0] = [str(ROOT / "src/backend"), str(ROOT / "src/agent")]
 from statbridge_mcp.kosis_client import KosisClient, KosisApiError
 from statbridge_mcp.metadata_store import MetadataStore
 from stat_dictionary.stat_language_resolver import StatLanguageResolver
@@ -30,7 +30,7 @@ def main():
     assert set(resolver.tables_by_id) == {t.table_id for t in store.available_supported_tables()}
     client = KosisClient()
     client.session.trust_env = False
-    report_path = ROOT / "evaluation_runs/349_live_verification.json"
+    report_path = ROOT / ".venv/cache/evaluation_runs/349_live_verification.json"
     report_path.parent.mkdir(parents=True, exist_ok=True)
     records = json.loads(report_path.read_text(encoding="utf-8"))["tables"] if args.resume and report_path.exists() else []
     completed = {r["table_id"] for r in records if r["status"] == "ok"}

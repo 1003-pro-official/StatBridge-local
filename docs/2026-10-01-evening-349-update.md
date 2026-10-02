@@ -43,7 +43,7 @@ StatBridge1의 검증·정리는 10월 1일 저녁에 진행했고, 저장소 �
 원격 main에 기존 통합 PR이 병합된 것을 확인하고 그 상태에서 새 기능 브랜치를 만들었다. StatBridge1과 폴더 구조가 달라 경로를 그대로 복사하지 않았다.
 
 - Agent 구현은 기존 `src/agent/agent_runtime.py`에 반영했다. 같은 이름의 모듈과 패키지가 충돌하지 않도록 기존 진입점을 유지했다.
-- 실제 실행용 `data/runtime_data/processed/`와 수동 Backend용 `data/processed/`를 함께 갱신했다. 두 MCP 메타데이터 구현의 지원 목록도 맞췄다.
+- 실제 실행용 `data/processed/`와 수동 Backend용 `data/processed/`를 함께 갱신했다. 두 MCP 메타데이터 구현의 지원 목록도 맞췄다.
 - 키가 없는 환경에서 제공하던 로컬 CSV 조회 경로와 조회 출처 정보는 보존했다.
 - 전체 검사에서 연간 코드 `A`를 `Y`로 정규화하는 회귀와 UI 경고 누락을 확인해 수정했다. 화면이 비교 질문을 정해진 대출·금리 문장으로 바꾸던 코드도 제거했다. 원래 질문을 그대로 보내고 기존 LangGraph/Jev 경로에서 계열을 판단한다.
 
@@ -51,11 +51,11 @@ StatBridge1의 검증·정리는 10월 1일 저녁에 진행했고, 저장소 �
 
 ## 6. 다운로드 후 CMD 실행
 
-GitHub ZIP을 압축 해제하고 루트의 `START_STATBRIDGE.cmd`를 더블클릭하는 경로를 정리했다. Python·Node.js·가상환경·필수 패키지를 검사하고, 미설치 환경은 가능한 경우 winget·pip·npm으로 준비한다. Python/Node 설치 후에는 경로를 갱신해 이어서 진행한다.
+GitHub ZIP을 압축 해제하고 `scripts/windows/START_STATBRIDGE.cmd`를 더블클릭하는 경로를 정리했다. Python·Node.js·가상환경·필수 패키지를 검사하고, 미설치 환경은 가능한 경우 winget·pip·npm으로 준비한다. Python/Node 설치 후에는 경로를 갱신해 이어서 진행한다.
 
 API 키가 없으면 예시 설정에서 `.env`를 만들고 메모장을 열어 입력을 안내한다. 빈 값이나 예시 문구는 실제 키로 인정하지 않는다. 벡터 인덱스는 파일 존재 여부만 보지 않고 현재 사전과 문서가 일치하는지 검사한다. 없거나 불완전하면 캐시를 활용해 생성하고 새 프로세스에서 다시 읽어 확인한다. 최초 생성은 최대 1,047개 임베딩 호출로 시간과 API 사용량이 든다.
 
-준비가 끝나면 Agent API·MCP·UI를 백그라운드로 실행하고 브라우저를 연다. 종료 명령은 이 실행기가 기록한 프로세스만 종료한다. PID가 재사용됐을 가능성도 확인한다. 다른 프로그램이 포트를 사용하고 있으면 강제로 종료하지 않는다. 로그는 `evaluation_runs/`에서 확인할 수 있다.
+준비가 끝나면 Agent API·MCP·UI를 백그라운드로 실행하고 브라우저를 연다. 종료 명령은 이 실행기가 기록한 프로세스만 종료한다. PID가 재사용됐을 가능성도 확인한다. 다른 프로그램이 포트를 사용하고 있으면 강제로 종료하지 않는다. 로그는 `.venv/cache/evaluation_runs/`에서 확인할 수 있다.
 
 ## 검증 결과와 남은 범위
 
@@ -81,12 +81,12 @@ API 키가 없으면 예시 설정에서 `.env`를 만들고 메모장을 열어
 
 ```powershell
 $env:PYTHONPATH="$PWD\src\backend;$PWD\src\agent"
-.\.venv_runtime\Scripts\python.exe -m pytest -q tests eval/table-discovery/v4.1/tests
-.\.venv_runtime\Scripts\python.exe TEST_349_TABLES.py
-.\.venv_runtime\Scripts\python.exe TEST_JEV_HYBRID.py
-.\.venv_runtime\Scripts\python.exe eval/table-discovery/v4.1/scripts/validate_v41.py
-.\.venv_runtime\Scripts\python.exe tools/verify_349_tables.py --resume
-.\.venv_runtime\Scripts\python.exe tools/verify_349_http.py
+.\.venv\Scripts\python.exe -m pytest -q tests eval/table-discovery/v4.1/tests
+.\.venv\Scripts\python.exe tests/test_349_tables.py
+.\.venv\Scripts\python.exe tests/test_jev_hybrid.py
+.\.venv\Scripts\python.exe eval/table-discovery/v4.1/scripts/validate_v41.py
+.\.venv\Scripts\python.exe tools/verify_349_tables.py --resume
+.\.venv\Scripts\python.exe tools/verify_349_http.py
 cd src/agent/frontend
 npm.cmd run build
 ```

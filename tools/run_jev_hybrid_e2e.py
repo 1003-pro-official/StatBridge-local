@@ -37,13 +37,13 @@ def compact(result: dict) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--typesafe-env", type=Path)
-    parser.add_argument("--out", type=Path, default=ROOT / "eval" / "runs" / "20261001_jev_hybrid_e2e.json")
+    parser.add_argument("--out", type=Path, default=ROOT / ".venv" / "cache" / "evaluation_runs" / "20261001_jev_hybrid_e2e.json")
     args = parser.parse_args()
-    load_dotenv(ROOT / "data" / "statbridge_mcp_server" / ".env", override=False)
+    load_dotenv(ROOT / ".env", override=False)
     if args.typesafe_env:
         load_dotenv(args.typesafe_env, override=False)
     sys.path.insert(0, str(ROOT / "src" / "agent"))
-    sys.path.insert(0, str(ROOT / "data" / "statbridge_mcp_server"))
+    sys.path.insert(0, str(ROOT / "src" / "backend"))
     from bridge_api import agent
 
     records = []

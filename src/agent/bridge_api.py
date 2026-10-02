@@ -11,11 +11,11 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
-MCP_ROOT = ROOT / "data" / "statbridge_mcp_server"
-DATA_DIR = ROOT / "data" / "runtime_data" / "processed"
+MCP_ROOT = ROOT / "src" / "backend"
+DATA_DIR = ROOT / "data" / "processed"
 
 os.environ.setdefault("STATBRIDGE_DATA_DIR", str(DATA_DIR))
-os.environ.setdefault("STATBRIDGE_TABLES_DIR", str(ROOT / "data" / "runtime_data" / "tables"))
+os.environ.setdefault("STATBRIDGE_TABLES_DIR", str(ROOT / "data" / "tables"))
 if str(MCP_ROOT) not in sys.path:
     sys.path.insert(0, str(MCP_ROOT))
 

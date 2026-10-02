@@ -23,9 +23,9 @@ def main() -> None:
     parser.add_argument("--typesafe-env", type=Path, required=True)
     parser.add_argument("--hcx", type=Path, required=True)
     parser.add_argument("--gold", type=Path, default=ROOT / "eval" / "goldset" / "goldset_statbridge_hcx003_role_100.jsonl")
-    parser.add_argument("--out", type=Path, default=ROOT / "eval" / "runs" / "20261001_jev_hybrid_live_100")
+    parser.add_argument("--out", type=Path, default=ROOT / ".venv" / "cache" / "evaluation_runs" / "20261001_jev_hybrid_live_100")
     args = parser.parse_args()
-    load_dotenv(ROOT / "data" / "statbridge_mcp_server" / ".env", override=False)
+    load_dotenv(ROOT / ".env", override=False)
     load_dotenv(args.typesafe_env, override=False)
     # Settings are read when the client is constructed, after both env files load.
     client = JevSeriesClient()

@@ -10,8 +10,8 @@ spec.loader.exec_module(runtime)
 
 
 def test_blank_and_placeholder_keys_are_rejected(tmp_path):
-    env = tmp_path / 'data/statbridge_mcp_server/.env'
-    env.parent.mkdir(parents=True)
+    env = tmp_path / '.env'
+    env.parent.mkdir(parents=True, exist_ok=True)
     with patch.object(runtime, 'ROOT', tmp_path):
         for content in ['', 'KOSIS_API_KEY=\nNCP_CLOVA_API_KEY=\n', 'KOSIS_API_KEY=your_key\nNCP_CLOVA_API_KEY=replace_me\n']:
             env.write_text(content, encoding='utf-8')
@@ -28,8 +28,8 @@ def test_busy_port_is_not_treated_as_available():
 
 
 def test_download_includes_all_launcher_dependencies():
-    for path in ['START_STATBRIDGE.cmd', 'STOP_STATBRIDGE.cmd', 'scripts/windows/portable_runtime.py',
-                 'scripts/windows/hold_mcp.py', 'data/statbridge_mcp_server/.env.example',
-                 'data/statbridge_mcp_server/requirements.txt', 'data/runtime_data/processed/bok_table_master.csv',
+    for path in ['scripts/windows/START_STATBRIDGE.cmd', 'scripts/windows/STOP_STATBRIDGE.cmd', 'scripts/windows/portable_runtime.py',
+                 'scripts/windows/hold_mcp.py', '.env.example',
+                 'src/backend/requirements.txt', 'data/processed/bok_table_master.csv',
                  'src/agent/frontend/package-lock.json', 'tools/build_stat_vector_index.py']:
         assert (ROOT / path).is_file()

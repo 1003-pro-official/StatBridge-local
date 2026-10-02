@@ -11,17 +11,17 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT / "data/statbridge_mcp_server"), str(ROOT / "tools")]
+sys.path[:0] = [str(ROOT / "src/backend"), str(ROOT / "tools")]
 from statbridge_mcp.kosis_client import KosisClient, META_URL
 from sync_flow_of_funds import replace_csv, DATA, DICTIONARY
 
 
 def main():
-    report = json.loads((ROOT / "evaluation_runs/349_live_verification.json").read_text(encoding="utf-8"))
+    report = json.loads((ROOT / ".venv/cache/evaluation_runs/349_live_verification.json").read_text(encoding="utf-8"))
     failed = [r for r in report["tables"] if r["status"] != "ok"]
     dictionary = json.loads(DICTIONARY.read_text(encoding="utf-8"))
     tables = {t["table_id"]: t for t in dictionary["tables"]}
-    backup = ROOT / "evaluation_runs" / ("349_defaults_backup_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
+    backup = ROOT / ".venv/cache/evaluation_runs" / ("349_defaults_backup_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
     backup.mkdir(parents=True)
     shutil.copy2(DICTIONARY, backup / DICTIONARY.name)
     for path in DATA.glob("*.csv"):
@@ -81,7 +81,7 @@ def main():
         print(json.dumps(repair, ensure_ascii=True), flush=True)
     dictionary["metadata"]["dimension_value_count"] = sum(len(d["values"]) for t in dictionary["tables"] for d in t["dimensions"])
     DICTIONARY.write_text(json.dumps(dictionary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (ROOT / "evaluation_runs/349_default_repairs.json").write_text(json.dumps(repairs, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ROOT / ".venv/cache/evaluation_runs/349_default_repairs.json").write_text(json.dumps(repairs, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__": main()

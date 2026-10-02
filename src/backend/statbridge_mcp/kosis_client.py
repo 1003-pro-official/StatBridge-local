@@ -63,6 +63,8 @@ class KosisClient:
         self.limiter.wait()
         response = self.session.get(url, params=params, timeout=self.timeout)
         response.raise_for_status()
+        # KOSIS may omit charset; preserve both Korean UTF-8 and lenient JSON.
+        response.encoding = "utf-8"
         payload = _loads_lenient(response.text)
         if isinstance(payload, dict) and "err" in payload:
             raise KosisApiError(payload.get("err", ""), payload.get("errMsg", ""), payload)

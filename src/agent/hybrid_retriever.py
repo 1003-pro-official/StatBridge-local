@@ -19,7 +19,7 @@ class HybridStatRetriever:
         self.client = client or NcpRetrievalClient()
         # Use the verified 349-table store; the obsolete legacy store was
         # removed during cleanup after fresh-process retrieval checks passed.
-        default_path = Path(__file__).resolve().parents[2] / "data" / "vector_store_349"
+        default_path = Path(__file__).resolve().parents[2] / ".venv" / "cache" / "vector_store_349"
         self.path = Path(os.getenv("STATBRIDGE_VECTOR_PATH", str(default_path)))
         self.vector_top_k = int(os.getenv("STATBRIDGE_VECTOR_TOP_K", "24"))
         self.rerank_top_k = int(os.getenv("STATBRIDGE_RERANK_TOP_K", "12"))

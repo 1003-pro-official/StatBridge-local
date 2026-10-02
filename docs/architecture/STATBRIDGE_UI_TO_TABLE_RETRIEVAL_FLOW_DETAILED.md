@@ -27,10 +27,10 @@
 
 ## 2. 실행 프로세스 구조
 
-`START_STATBRIDGE.cmd`가 다음 세 프로세스를 실행한다.
+`scripts/windows/START_STATBRIDGE.cmd`가 다음 세 프로세스를 실행한다.
 
 ```text
-START_STATBRIDGE.cmd
+scripts/windows/START_STATBRIDGE.cmd
 ├─ Agent API
 │  └─ uvicorn bridge_api:app --host 127.0.0.1 --port 8000
 ├─ MCP stdio server
@@ -42,11 +42,11 @@ START_STATBRIDGE.cmd
 시작 전에 실행기는 다음을 수행한다.
 
 - `%~dp0`를 기준으로 패키지 루트를 정한다.
-- `runtime_data\processed`를 `STATBRIDGE_DATA_DIR`로 지정한다.
-- `runtime_data\tables`를 `STATBRIDGE_TABLES_DIR`로 지정한다.
-- 복사된 가상환경을 재사용하지 않고 이 컴퓨터용 `.venv_runtime`을 확인하거나 생성한다.
+- `data\processed`를 `STATBRIDGE_DATA_DIR`로 지정한다.
+- `data\tables`를 `STATBRIDGE_TABLES_DIR`로 지정한다.
+- 복사된 가상환경을 재사용하지 않고 이 컴퓨터용 `.venv`을 확인하거나 생성한다.
 - Python 의존성, Node.js, frontend 의존성을 확인한다.
-- `statbridge_mcp_server\.env`에서 KOSIS/NCP 키가 있는지만 확인한다. 키 값은 화면에 출력하지 않는다.
+- `.env`에서 KOSIS/NCP 키가 있는지만 확인한다. 키 값은 화면에 출력하지 않는다.
 - 기존 8000/5173 포트 프로세스를 정리한다.
 - Agent health와 frontend HTTP 응답을 확인한 뒤 브라우저를 연다.
 
@@ -54,23 +54,23 @@ START_STATBRIDGE.cmd
 
 | 역할 | 파일 |
 |---|---|
-| 통합 실행기 | `START_STATBRIDGE.cmd` |
-| Agent 실행 | `runtime_scripts/RUN_AGENT.cmd` |
-| MCP 실행 | `runtime_scripts/RUN_MCP.cmd` |
-| UI 실행 | `runtime_scripts/RUN_FRONTEND.cmd` |
-| React 화면 | `StatBridge-official/src/agent/frontend/src/App.tsx` |
-| UI HTTP client | `StatBridge-official/src/agent/frontend/src/api/client.ts` |
-| Agent HTTP API | `StatBridge-official/src/agent/bridge_api.py` |
-| Agent orchestration | `StatBridge-official/src/agent/statbridge_agent.py` |
-| 규칙·사전 검색 | `StatBridge-official/src/agent/stat_dictionary/stat_language_resolver.py` |
-| 통계언어 사전 | `StatBridge-official/src/agent/stat_dictionary/stat_language_dictionary.json` |
-| Hybrid 검색 | `StatBridge-official/src/agent/hybrid_retriever.py` |
-| HCX 분류·답변 | `StatBridge-official/src/agent/ncp_clova_client.py` |
-| Embedding·Reranker | `StatBridge-official/src/agent/ncp_retrieval_client.py` |
-| MCP 호환 Gateway | `StatBridge-official/src/agent/mcp_gateway.py` |
-| 통계 서비스 | `statbridge_mcp_server/statbridge_mcp/statistics_service.py` |
-| KOSIS HTTP client | `statbridge_mcp_server/statbridge_mcp/kosis_client.py` |
-| 로컬 metadata | `statbridge_mcp_server/statbridge_mcp/metadata_store.py` |
+| 통합 실행기 | `scripts/windows/START_STATBRIDGE.cmd` |
+| Agent 실행 | `scripts/windows/RUN_AGENT.cmd` |
+| MCP 실행 | `scripts/windows/RUN_MCP.cmd` |
+| UI 실행 | `scripts/windows/RUN_FRONTEND.cmd` |
+| React 화면 | `src/agent/frontend/src/App.tsx` |
+| UI HTTP client | `src/agent/frontend/src/api/client.ts` |
+| Agent HTTP API | `src/agent/bridge_api.py` |
+| Agent orchestration | `src/agent/statbridge_agent.py` |
+| 규칙·사전 검색 | `src/agent/stat_dictionary/stat_language_resolver.py` |
+| 통계언어 사전 | `src/agent/stat_dictionary/stat_language_dictionary.json` |
+| Hybrid 검색 | `src/agent/hybrid_retriever.py` |
+| HCX 분류·답변 | `src/agent/ncp_clova_client.py` |
+| Embedding·Reranker | `src/agent/ncp_retrieval_client.py` |
+| MCP 호환 Gateway | `src/agent/mcp_gateway.py` |
+| 통계 서비스 | `src/backend/statbridge_mcp/statistics_service.py` |
+| KOSIS HTTP client | `src/backend/statbridge_mcp/kosis_client.py` |
+| 로컬 metadata | `src/backend/statbridge_mcp/metadata_store.py` |
 
 ---
 
@@ -194,7 +194,7 @@ HTTP 상태가 성공이 아니거나 fetch 자체가 실패하면 UI는 실제 
 - `status: no_match`
 - chart와 tables는 빈 배열
 - Agent API 연결 실패 경고
-- `START_STATBRIDGE.cmd`로 Agent/MCP를 실행하라는 안내
+- `scripts/windows/START_STATBRIDGE.cmd`로 Agent/MCP를 실행하라는 안내
 
 즉 mock UI가 연결 실패를 실제 KOSIS 결과로 보여주지 않는다. 단, `VITE_USE_MOCK=true`를 명시한 개발 환경에서는 mock 응답을 사용한다.
 
@@ -498,7 +498,7 @@ dimension에는 다음이 들어간다.
 4. ChromaDB cosine collection에 vector, document, metadata를 upsert한다.
 5. metadata에는 최소한 `table_id`, `table_name`이 들어간다.
 
-기본 저장 경로는 `StatBridge-official/data/vector_store`이며 collection은 다음 세 개다.
+기본 저장 경로는 `.venv/cache/vector_store_349`이며 collection은 다음 세 개다.
 
 - `stat_concepts`
 - `stat_tables`
@@ -1196,7 +1196,7 @@ StatBridge1은 사용자의 자연어를 HCX-003으로 검색 표현에 맞게 �
 1. Resolver는 `clearly_resolved`를 계산하지만 현재 반환 분기에서는 이 변수를 직접 사용하지 않는다. 실제로는 ambiguity group이 있으면 역질문하고, 없으면 grounded candidate 존재 여부로 resolved/no-match를 정한다.
 2. Hybrid의 `confident()` 결과는 `retrieval_confident`에 기록되지만 현재 Agent가 resolved 결과를 거부하는 최종 gate로 사용하지 않는다.
 3. UI가 최초 요청에 `execute:true`를 보내도 `bridge_api`는 table 탐색 단계에서 `agent.run(..., execute=False)`를 호출한다. 실제 KOSIS 실행은 날짜가 들어온 후에만 일어난다.
-4. `START_STATBRIDGE.cmd`가 MCP stdio 서버를 별도 실행하지만 UI HTTP 요청은 그 프로세스와 stdio 통신하지 않는다. UI는 같은 `StatisticsService`를 감싼 인프로세스 Gateway를 사용한다.
+4. `scripts/windows/START_STATBRIDGE.cmd`가 MCP stdio 서버를 별도 실행하지만 UI HTTP 요청은 그 프로세스와 stdio 통신하지 않는다. UI는 같은 `StatisticsService`를 감싼 인프로세스 Gateway를 사용한다.
 5. `StatisticsService` 자체는 `prefer_local=True` 기본값과 API fallback 기능을 지원하지만, UI Agent의 `execute_resolution`은 둘 다 비활성화하고 확정된 KOSIS 호출 하나만 실행한다.
 6. HCX-007에는 실제 데이터 기반 narrative 생성 기능이 있지만 현재 `/api/query`의 graph 실행은 `generate_answer=False`다. 화면 summary는 deterministic `_chart_summary` 결과다.
 7. `QueryResponse.debug`에는 내부 plan과 row preview가 포함되지만 현재 `Results` 화면의 기본 본문은 이를 모두 그대로 노출하지 않는다. 화면에는 summary, chart, tables, insights, lineage 중심으로 표시한다.

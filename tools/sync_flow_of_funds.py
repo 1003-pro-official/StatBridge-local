@@ -1,6 +1,6 @@
 """Refresh the two newly available tables from KOSIS, without inventing codes.
 
-Run with .venv_runtime/Scripts/python.exe tools/sync_flow_of_funds.py.
+Run with .venv/Scripts/python.exe tools/sync_flow_of_funds.py.
 This is an idempotent metadata migration. Original files are copied to a dated
 backup before replacing rows. Numeric observations are verified, not persisted.
 """
@@ -15,11 +15,11 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "data/statbridge_mcp_server"))
+sys.path.insert(0, str(ROOT / "src/backend"))
 from statbridge_mcp.kosis_client import KosisClient, META_URL
 
 DICTIONARY = ROOT / "src/agent/stat_dictionary/stat_language_dictionary.json"
-DATA = ROOT / "data/runtime_data/processed"
+DATA = ROOT / "data/processed"
 TABLES = {"DT_284Y001": "잔액", "DT_284Y002": "거래"}
 VALUE_ALIASES = {
     "합계": ["전체", "총합", "총계"], "국내": ["국내 전체", "국내경제"],
@@ -49,7 +49,7 @@ def main():
     client = KosisClient()
     client.session.trust_env = False
     dictionary = json.loads(DICTIONARY.read_text(encoding="utf-8"))
-    backup = ROOT / "evaluation_runs" / ("349_backup_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
+    backup = ROOT / ".venv/cache/evaluation_runs" / ("349_backup_" + datetime.now().strftime("%Y%m%d_%H%M%S"))
     backup.mkdir(parents=True)
     shutil.copy2(DICTIONARY, backup / DICTIONARY.name)
     extension = DICTIONARY.with_name("clarification_extensions.json")
@@ -132,7 +132,7 @@ def main():
     ext = json.loads(extension.read_text(encoding="utf-8"))
     ext["catalog_only_tables"] = [t for t in ext.get("catalog_only_tables", []) if t["table_id"] not in TABLES]
     extension.write_text(json.dumps(ext, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (ROOT / "evaluation_runs/349_metadata_sync.json").write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ROOT / ".venv/cache/evaluation_runs/349_metadata_sync.json").write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"table_count": 349, "backup": str(backup), "evidence": evidence}, ensure_ascii=True))
 
 

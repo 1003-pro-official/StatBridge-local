@@ -7,10 +7,12 @@ import time
 from pathlib import Path
 from typing import Any
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src/backend"))
 from statbridge_mcp.statistics_service import StatisticsService
 
-ROOT = Path(__file__).resolve().parent
-OUT_DIR = ROOT / "validation_results"
+ROOT = Path(__file__).resolve().parents[1]
+OUT_DIR = ROOT / ".venv/cache/validation_results"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 CHECKPOINT = OUT_DIR / "validation_checkpoint.json"
@@ -80,7 +82,7 @@ def load_existing() -> tuple[list[dict[str, Any]], int]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="StatBridge 347개 KOSIS 통계표 전체 smoke test"
+        description="StatBridge 349개 KOSIS 통계표 전체 smoke test"
     )
     parser.add_argument(
         "--start",

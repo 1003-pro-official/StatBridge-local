@@ -1,6 +1,6 @@
-# StatBridge MCP Server (KOSIS 한국은행 347개 대응)
+# StatBridge MCP Server (KOSIS 한국은행 349개 대응)
 
-이 패키지는 **한국은행 KOSIS 통계표 347개**를 대상으로 MCP 서버를 로컬에서 실행하기 위한 최소 동작 버전입니다.
+이 패키지는 **한국은행 KOSIS 통계표 349개**를 대상으로 MCP 서버를 로컬에서 실행하기 위한 최소 동작 버전입니다.
 
 핵심 목표:
 
@@ -8,11 +8,11 @@
 - `get_meta`: 통계표 메타데이터 조회
 - `fetch_data`: 실제 통계 데이터 조회
 - **fallback 구조**:
-  1. 로컬 CSV 캐시(`data_full/tables`) 우선
+  1. 로컬 CSV 캐시(`data/tables`) 우선
   2. 없으면 KOSIS OpenAPI 호출
   3. 파라미터 불일치 시 `ALL` 중심 재시도
 
-> 범위: 현재 수집이 확인된 **347개 지원 표** 기준
+> 범위: 현재 수집이 확인된 **349개 지원 표** 기준
 
 ---
 
@@ -26,7 +26,7 @@
 - `data/processed/bok_periods.csv`
 - `data/processed/bok_comments.csv` (선택)
 - `data/processed/bok_sources.csv` (선택)
-- `data_full/tables/*.csv` (있으면 로컬 우선 조회)
+- `data/tables/*.csv` (있으면 로컬 우선 조회)
 
 > 기존 `kosis_bok_metadata_collector` 산출물을 그대로 연결하면 됩니다.
 
@@ -36,11 +36,13 @@
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip install -r src/backend/requirements.txt
 copy .env.example .env
 ```
 
 `.env`에서 `KOSIS_API_KEY`를 채웁니다.
+
+전체 UI까지 실행하려면 `scripts/windows/START_STATBRIDGE.cmd`를 사용합니다. 아래 명령은 저장소 루트에서 실행합니다. 별도 검증 CLI는 `.\.venv\Scripts\python.exe tools/validate_all_tables_cli.py --limit 10`으로 실행할 수 있으며 결과는 `.venv/cache/validation_results/`에 저장합니다. 이전 실행 결과가 있으면 체크포인트에서 이어 실행하므로 독립적인 재검증은 CLI의 `--help`를 확인한 뒤 체크포인트 설정을 선택합니다.
 
 ---
 
@@ -49,13 +51,13 @@ copy .env.example .env
 ### MCP Inspector로 개발 테스트
 
 ```powershell
-.\.venv\Scripts\python.exe -m mcp dev .\server.py
+.\.venv\Scripts\python.exe -m mcp dev .\src\backend\server.py
 ```
 
 ### 일반 stdio 실행
 
 ```powershell
-.\.venv\Scripts\python.exe .\server.py
+.\.venv\Scripts\python.exe .\src\backend\server.py
 ```
 
 ---
@@ -143,7 +145,7 @@ copy .env.example .env
   - 분류 깊이 자동 계산
   - 실제 item/class 조합까지 fallback 후보에 포함
 - `validate_all_tables(limit=0, prefer_local=False)`:
-  - 347개 표를 최신 1개 시점씩 smoke test
+  - 349개 표를 최신 1개 시점씩 smoke test
   - `limit=10`으로 먼저 일부 테스트 권장
 
 ### 권장 테스트 순서
@@ -151,12 +153,12 @@ copy .env.example .env
 1. `validate_all_tables(limit=10, prefer_local=false)`
 2. 성공률 확인
 3. `limit=50`
-4. 마지막에 `limit=0` 전체 347개
+4. 마지막에 `limit=0` 전체 349개
 
 
 ## v5 - Inspector timeout 대응
 
-347개 전체 API 검증은 수분 이상 걸릴 수 있어 MCP Inspector의 단일 Tool 호출 시간 제한을 넘을 수 있습니다.
+349개 전체 API 검증은 수분 이상 걸릴 수 있어 MCP Inspector의 단일 Tool 호출 시간 제한을 넘을 수 있습니다.
 따라서 `validate_tables_batch`를 사용합니다.
 
 예:

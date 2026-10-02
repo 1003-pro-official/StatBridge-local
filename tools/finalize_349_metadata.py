@@ -5,10 +5,10 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
-(ROOT / "evaluation_runs").mkdir(parents=True, exist_ok=True)
-DATA = ROOT / "data/runtime_data/processed"
+(ROOT / ".venv/cache/evaluation_runs").mkdir(parents=True, exist_ok=True)
+DATA = ROOT / "data/processed"
 master_path = DATA / "bok_table_master.csv"
-backup = ROOT / "evaluation_runs" / ("bok_table_master_before_counts_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv")
+backup = ROOT / ".venv/cache/evaluation_runs" / ("bok_table_master_before_counts_" + datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv")
 shutil.copy2(master_path, backup)
 groups = {}
 for kind in ("items", "classifications"):

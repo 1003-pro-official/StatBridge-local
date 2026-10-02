@@ -15,7 +15,7 @@ function localFallback(query: string, reason: string): QueryResponse {
     tables: [],
     insights: [
       "UI 자체는 정상 동작하고 있습니다.",
-      "START_STATBRIDGE.cmd로 Agent API와 MCP를 함께 실행해 주세요.",
+      "scripts/windows/START_STATBRIDGE.cmd로 Agent API와 MCP를 함께 실행해 주세요.",
     ],
     lineage: [
       { id: "ui", title: "UI 질의 수신", description: "질의 입력과 제출은 정상", status: "complete" },
