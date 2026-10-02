@@ -61,7 +61,10 @@ export async function submitOutput(payload: OutputRenderRequest): Promise<QueryR
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  if (!response.ok) throw new Error(`출력 Agent API 오류: HTTP ${response.status}`);
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(typeof data.detail === "string" ? data.detail : `출력 Agent API 오류: HTTP ${response.status}`);
+  }
   return (await response.json()) as QueryResponse;
 }
 

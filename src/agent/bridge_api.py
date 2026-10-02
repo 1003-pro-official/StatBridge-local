@@ -96,6 +96,7 @@ class OutputEditRequest(BaseModel):
 
 OUTPUT_SESSIONS: dict[str, dict[str, Any]] = {}
 EDIT_SESSIONS: dict[str, dict[str, Any]] = {}
+MAX_EDIT_SESSIONS = 100
 
 
 def _table_card(table_id: str) -> dict[str, str]:
@@ -662,6 +663,8 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     output = rendered.get("output") or {}
     edit_session_id = uuid4().hex
+    if len(EDIT_SESSIONS) >= MAX_EDIT_SESSIONS:
+        EDIT_SESSIONS.pop(next(iter(EDIT_SESSIONS)))
     EDIT_SESSIONS[edit_session_id] = {"result": merged, "output": output, "sessions": sessions}
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
