@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parents[2]
 SOURCE = ROOT.parent / "v1/cases.jsonl"
 CATALOG_PATH = REPO / "data/kosis/hankook_tables.json"
-SUMMARY_PATH = REPO / "data/statbridge_mcp_server/data_full/collection/table_summary.csv"
+SUMMARY_PATH = REPO / "src/backend/data_full/collection/table_summary.csv"
 API_PATH = ROOT / "kosis_metadata_export.json"
 REFERENCE_DATE = "2026-09-23"
 
@@ -167,7 +167,7 @@ def local_metadata(table: dict, summary: dict, api: dict, fallback: dict | None 
             "comments_and_series_definition": "not_checked_by_getMeta_PRD_ITM",
         },
         "kosis_live_metadata": live_details,
-        "snapshot_csv": f"data/statbridge_mcp_server/data_full/tables/{table['tbl_id']}.csv" if (REPO / f"data/statbridge_mcp_server/data_full/tables/{table['tbl_id']}.csv").exists() else None,
+        "snapshot_csv": f"src/backend/data_full/tables/{table['tbl_id']}.csv" if (REPO / f"src/backend/data_full/tables/{table['tbl_id']}.csv").exists() else None,
     }
 
 

@@ -11,7 +11,7 @@
 기존 최종 결과 JSON을 재사용하지 않고 아래 명령으로 120건을 처음부터 다시 실행했다.
 
 ```powershell
-python StatBridge-official\tools\evaluate_golden_v41.py `
+python tools\evaluate_golden_v41.py `
   --dataset golden-set-v4.1-public\cases_labeled.jsonl `
   --output golden_v41_reevaluation_results.json
 ```

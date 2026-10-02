@@ -35,8 +35,8 @@ START
 ## 검증
 
 ```powershell
-statbridge_mcp_server\.venv\Scripts\python.exe TEST_LANGGRAPH_FLOW.py
-statbridge_mcp_server\.venv\Scripts\python.exe TEST_AGENT_FLOW.py
+.venv\Scripts\python.exe tests/test_langgraph_flow.py
+.venv\Scripts\python.exe tests/TEST_AGENT_FLOW.py
 ```
 
 `/api/health`는 `orchestration_engine=langgraph`와 현재 그래프 노드 목록을 반환한다.

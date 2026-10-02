@@ -1,35 +1,194 @@
 @echo off
-setlocal
+setlocal EnableExtensions EnableDelayedExpansion
+chcp 65001 >nul
+title StatBridge Portable Launcher
 for %%I in ("%~dp0..\..") do set "ROOT=%%~fI"
-set "PYTHON_EXE=%ROOT%\.venv\Scripts\python.exe"
+cd /d "%ROOT%"
+set "ROOT=%CD%"
+set "MCP=%ROOT%\src\backend"
+set "AGENT=%ROOT%\src\agent"
+set "FRONT=%AGENT%\frontend"
+set "VENV=%ROOT%\.venv"
+set "STATBRIDGE_DATA_DIR=%ROOT%\data\processed"
+set "STATBRIDGE_TABLES_DIR=%ROOT%\data\tables"
+set "STATBRIDGE_VECTOR_PATH=%ROOT%\.venv\cache\vector_store_349"
+set "PYTHONPATH=%AGENT%;%MCP%"
+set "PATH=%ProgramFiles%\nodejs;%LocalAppData%\Programs\Python\Python312;%LocalAppData%\Programs\Python\Launcher;%PATH%"
+cls
+echo ============================================================
+echo   StatBridge Portable Runtime
+echo   First run installs missing local dependencies automatically.
+echo ============================================================
+echo.
+if not exist "%MCP%\server.py" goto :MISSING
+if not exist "%AGENT%\bridge_api.py" goto :MISSING
+if not exist "%FRONT%\package.json" goto :MISSING
+if not exist "%ROOT%\scripts\windows\portable_runtime.py" goto :MISSING
+if not exist "%STATBRIDGE_DATA_DIR%\bok_table_master.csv" goto :MISSING
 
+echo [1/7] Python 3.11+ detection
+:PYTHON_DETECT
+set "BASE_PY="
+for %%V in (3.13 3.12 3.11) do if not defined BASE_PY (
+    py -%%V -c "import sys;raise SystemExit(0 if sys.version_info[:2] in [(3,11),(3,12),(3,13),(3,14)] else 1)" >nul 2>nul
+    if !errorlevel! equ 0 set "BASE_PY=py -%%V"
+)
+if not defined BASE_PY (
+    python -c "import sys;raise SystemExit(0 if sys.version_info[:2] in [(3,11),(3,12),(3,13),(3,14)] else 1)" >nul 2>nul
+    if !errorlevel! equ 0 set "BASE_PY=python"
+)
+if not defined BASE_PY (
+    where winget >nul 2>nul
+    if errorlevel 1 goto :NO_PYTHON
+    echo Python 3.12 is missing. Installing with Windows Package Manager...
+    winget install --id Python.Python.3.12 -e --accept-package-agreements --accept-source-agreements
+    if errorlevel 1 goto :NO_PYTHON
+    echo [INFO] Python installation finished. Refreshing detection...
+    set "PATH=%LocalAppData%\Programs\Python\Python312;%LocalAppData%\Programs\Python\Launcher;%PATH%"
+    if not exist "%LocalAppData%\Programs\Python\Python312\python.exe" goto :NO_PYTHON
+    goto :PYTHON_DETECT
+)
+echo [OK] !BASE_PY!
+
+echo.
+echo [2/7] Machine-local Python environment
+set "PYTHON_EXE=%VENV%\Scripts\python.exe"
+if exist "%PYTHON_EXE%" (
+    "%PYTHON_EXE%" -c "import sys;raise SystemExit(0 if sys.version_info[:2] in [(3,11),(3,12),(3,13),(3,14)] else 1)" >nul 2>nul
+    if errorlevel 1 (
+        set "BROKEN_VENV=%ROOT%\.venv.invalid.!RANDOM!"
+        echo [INFO] Incompatible environment found. Moving it aside...
+        move "%VENV%" "!BROKEN_VENV!" >nul
+    )
+)
 if not exist "%PYTHON_EXE%" (
-  echo .venv not found. Creating it with the newest available Python 3...
-  py -3 -m venv "%ROOT%\.venv" >nul 2>nul
-  if not exist "%PYTHON_EXE%" python -m venv "%ROOT%\.venv" >nul 2>nul
-  if not exist "%PYTHON_EXE%" (
-    echo Python 3 not found. Install any Python 3.12+ from https://www.python.org/downloads/ and run this script again.
-    exit /b 1
-  )
-  "%PYTHON_EXE%" --version
-  "%PYTHON_EXE%" -m pip install -r "%ROOT%\src\backend\requirements.txt" pytest
-  if errorlevel 1 exit /b 1
+    echo Creating a Python environment for this computer...
+    call !BASE_PY! -m venv "%VENV%"
+    if errorlevel 1 goto :VENV_FAILED
 )
+"%PYTHON_EXE%" -c "import sys;print(sys.executable)" >nul 2>nul
+if errorlevel 1 goto :VENV_FAILED
+echo [OK] %PYTHON_EXE%
 
-where pnpm >nul 2>nul
+echo.
+echo [3/7] Python dependencies
+"%PYTHON_EXE%" -c "import mcp,pandas,requests,dotenv,fastapi,uvicorn,chromadb,langgraph" >nul 2>nul
 if errorlevel 1 (
-  echo pnpm is required. See README.md.
-  exit /b 1
+    echo Installing required Python packages. This can take several minutes on first run...
+    "%PYTHON_EXE%" -m pip install --disable-pip-version-check -r "%MCP%\requirements.txt"
+    if errorlevel 1 goto :PIP_FAILED
 )
+echo [OK] Python dependencies ready.
 
-if not exist "%ROOT%\src\agent\frontend\node_modules\.bin\vite.CMD" (
-  echo Installing frontend dependencies...
-  pushd "%ROOT%\src\agent\frontend"
-  call pnpm install --frozen-lockfile
-  if errorlevel 1 ( popd & exit /b 1 )
-  popd
+echo.
+echo [4/7] API environment
+if not exist "%ROOT%\.env" copy /y "%ROOT%\.env.example" "%ROOT%\.env" >nul
+"%PYTHON_EXE%" "%ROOT%\scripts\windows\portable_runtime.py" check-keys
+if errorlevel 1 goto :API_KEYS_REQUIRED
+set "KOSIS_VALUE="
+set "NCP_VALUE="
+for /f "tokens=1,* delims==" %%A in ('findstr /B /C:"KOSIS_API_KEY=" "%ROOT%\.env" 2^>nul') do set "KOSIS_VALUE=%%B"
+for /f "tokens=1,* delims==" %%A in ('findstr /B /C:"NCP_CLOVA_API_KEY=" "%ROOT%\.env" 2^>nul') do set "NCP_VALUE=%%B"
+if not defined KOSIS_VALUE echo [WARN] KOSIS_API_KEY is empty. Add it to .env.
+if not defined NCP_VALUE echo [WARN] NCP_CLOVA_API_KEY is empty. Add it to .env.
+if not defined KOSIS_VALUE goto :API_KEYS_REQUIRED
+if not defined NCP_VALUE goto :API_KEYS_REQUIRED
+if defined KOSIS_VALUE if defined NCP_VALUE echo [OK] KOSIS and NCP keys found.
+
+:NODE_SETUP
+echo.
+echo [5/7] Node.js and frontend dependencies
+where node >nul 2>nul
+if errorlevel 1 (
+    where winget >nul 2>nul
+    if errorlevel 1 goto :NO_NODE
+    echo Node.js LTS is missing. Installing with Windows Package Manager...
+    winget install --id OpenJS.NodeJS.LTS -e --accept-package-agreements --accept-source-agreements
+    if errorlevel 1 goto :NO_NODE
+    echo [INFO] Node.js installation finished. Refreshing PATH...
+    set "PATH=%ProgramFiles%\nodejs;%PATH%"
+    if not exist "%ProgramFiles%\nodejs\node.exe" goto :NO_NODE
+    goto :NODE_SETUP
 )
+where npm.cmd >nul 2>nul
+if errorlevel 1 goto :NO_NODE
+node -e "const [a,b]=process.versions.node.split('.').map(Number);process.exit((a===20&&b>=19)||(a===22&&b>=12)||a>=24?0:1)"
+if errorlevel 1 (
+    echo [ERROR] Node.js 20.19+, 22.12+, or newer LTS is required. Update Node.js LTS and retry.
+    goto :NO_NODE
+)
+if not exist "%FRONT%\node_modules\.bin\vite.cmd" (
+    echo Installing frontend packages. This can take several minutes on first run...
+    pushd "%FRONT%"
+    if exist "%FRONT%\package-lock.json" (call npm.cmd ci) else (call npm.cmd install)
+    if errorlevel 1 (popd & goto :NPM_FAILED)
+    popd
+)
+echo [OK] Node.js and frontend dependencies ready.
 
-start "StatBridge API" "%~dp0RUN_AGENT.cmd"
-start "StatBridge Frontend" "%~dp0RUN_FRONTEND.cmd"
-echo Open http://127.0.0.1:5173
+echo.
+echo [6/7] Starting services
+if not defined STATBRIDGE_API_PORT set "STATBRIDGE_API_PORT=8000"
+if not defined STATBRIDGE_UI_PORT set "STATBRIDGE_UI_PORT=5173"
+set "BROWSER_OPTION="
+if defined STATBRIDGE_NO_BROWSER set "BROWSER_OPTION=--no-browser"
+set "VECTOR_SETUP="
+"%PYTHON_EXE%" "%ROOT%\scripts\windows\portable_runtime.py" check-index
+if errorlevel 1 set "VECTOR_SETUP=--build-index"
+"%PYTHON_EXE%" "%ROOT%\scripts\windows\portable_runtime.py" start --api-port %STATBRIDGE_API_PORT% --ui-port %STATBRIDGE_UI_PORT% !BROWSER_OPTION! !VECTOR_SETUP!
+if errorlevel 1 goto :FAIL
+echo.
+echo [7/7] Ready. UI: http://127.0.0.1:%STATBRIDGE_UI_PORT%/
+echo To stop: run STOP_STATBRIDGE.cmd
+if not defined STATBRIDGE_NO_PAUSE pause
+exit /b 0
+
+:MISSING
+echo [ERROR] Required package files are missing. Keep this CMD at the StatBridge package root.
+goto :FAIL
+:NO_PYTHON
+echo [ERROR] Python 3.11+ could not be installed. Install Python 3.12 and run this file again.
+goto :FAIL
+:NO_NODE
+echo [ERROR] Node.js LTS could not be installed. Install Node.js LTS and run this file again.
+goto :FAIL
+:VENV_FAILED
+echo [ERROR] Failed to create the machine-local Python environment: %VENV%
+goto :FAIL
+:PIP_FAILED
+echo [ERROR] Python package installation failed. Check internet access and retry.
+goto :FAIL
+:NPM_FAILED
+echo [ERROR] Frontend package installation failed. Check internet access and retry.
+goto :FAIL
+:API_KEYS_REQUIRED
+echo.
+echo [ACTION REQUIRED] API keys are missing.
+echo 1. The settings file has been prepared here:
+echo    %ROOT%\.env
+echo 2. Enter both KOSIS_API_KEY and NCP_CLOVA_API_KEY.
+echo 3. Save the file, close Notepad, then press any key here.
+start "StatBridge API Keys" /wait notepad.exe "%ROOT%\.env"
+"%PYTHON_EXE%" "%ROOT%\scripts\windows\portable_runtime.py" check-keys
+if errorlevel 1 (
+    echo [ERROR] Enter actual KOSIS and NCP keys, not placeholder text.
+    goto :FAIL
+)
+set "KOSIS_VALUE="
+set "NCP_VALUE="
+for /f "tokens=1,* delims==" %%A in ('findstr /B /C:"KOSIS_API_KEY=" "%ROOT%\.env" 2^>nul') do set "KOSIS_VALUE=%%B"
+for /f "tokens=1,* delims==" %%A in ('findstr /B /C:"NCP_CLOVA_API_KEY=" "%ROOT%\.env" 2^>nul') do set "NCP_VALUE=%%B"
+if not defined KOSIS_VALUE (
+    echo [ERROR] KOSIS_API_KEY is still empty.
+    goto :FAIL
+)
+if not defined NCP_VALUE (
+    echo [ERROR] NCP_CLOVA_API_KEY is still empty.
+    goto :FAIL
+)
+echo [OK] API keys found. Continuing setup...
+goto :NODE_SETUP
+:FAIL
+echo.
+if not defined STATBRIDGE_NO_PAUSE pause
+exit /b 1

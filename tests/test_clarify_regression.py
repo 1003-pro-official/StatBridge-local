@@ -4,14 +4,14 @@ import sys
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 AGENT = ROOT / "src" / "agent"
 sys.path.insert(0, str(AGENT))
 
 from stat_dictionary.stat_language_resolver import StatLanguageResolver
 
 
-def main() -> None:
+def test_clarification_regression() -> None:
     resolver = StatLanguageResolver(
         AGENT / "stat_dictionary" / "stat_language_dictionary.json"
     )
@@ -40,4 +40,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    test_clarification_regression()

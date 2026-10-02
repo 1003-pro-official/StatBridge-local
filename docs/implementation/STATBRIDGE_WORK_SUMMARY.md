@@ -44,11 +44,11 @@
 - 세 Chroma 컬렉션에 각각 347개 문서를 영구 저장했습니다.
 - NCP 429 호출 제한에 자동 대기·재시도하며 문서 해시 기반 임베딩 캐시를 재사용합니다.
 - 규칙 전용, 임베딩 전용, 하이브리드 평가 스크립트와 단일·별칭·다중·역질문·no-match 골든셋을 추가했습니다.
-- `RUN_VECTOR_BUILD.cmd`, `RUN_RETRIEVAL_EVAL.cmd`, `RUN_AGENT_E2E_TEST.cmd`를 제공합니다.
+- `scripts/windows/RUN_VECTOR_BUILD.cmd`, `scripts/windows/RUN_RETRIEVAL_EVAL.cmd`, `scripts/windows/RUN_AGENT_E2E_TEST.cmd`를 제공합니다.
 
 ## 새 컴퓨터용 실행기
 
-- `START_STATBRIDGE.cmd`는 복사된 기존 `.venv`를 사용하지 않고 컴퓨터별 `.venv_runtime`을 생성합니다.
+- `scripts/windows/START_STATBRIDGE.cmd`는 복사된 기존 `.venv`를 사용하지 않고 컴퓨터별 `.venv`을 생성합니다.
 - Python 3.11+ 또는 Node.js LTS가 없으면 `winget`으로 설치한 뒤 실행기를 자동 재시작합니다.
 - Python·프런트 의존성은 최초 한 번만 설치하며 이후 실행에서는 그대로 재사용합니다.
 - Agent, MCP, Frontend는 한글·공백 경로에서도 안전한 별도 실행 스크립트로 시작합니다.

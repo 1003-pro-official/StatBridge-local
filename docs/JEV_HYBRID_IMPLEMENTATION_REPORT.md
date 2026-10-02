@@ -1,6 +1,6 @@
 # Jev 하이브리드 구현 및 검증 보고서
 
-> 이 문서는 StatBridge1에서 작성한 구현·검증 기록을 보존한 것이다. StatBridge-local에서는 `StatBridge-official/src/agent` → `src/agent`, `statbridge_mcp_server` → `data/statbridge_mcp_server`, `evaluation_runs` → `eval/runs`로 이식했다. 최신 통합 기록과 수치 해석 보충은 `docs/운영/2026-10-01-통합-작업-요약.md`를 따른다.
+> 이 문서는 StatBridge1에서 작성한 구현·검증 기록을 보존한 것이다. StatBridge-local에서는 `src/agent` → `src/agent`, `src/backend` → `src/backend`, `evaluation_runs` → `.venv/cache/evaluation_runs`로 이식했다. 최신 통합 기록과 수치 해석 보충은 `docs/운영/2026-10-01-통합-작업-요약.md`를 따른다.
 >
 > 정정: 아래 하이브리드 표의 API 오류율 1%는 invalid 출력률이다. HTTP API 오류율은 0%, 비정상 출력률은 1%다. 최종 100%는 평가셋을 보고 프롬프트를 보완한 뒤 저장 HCX 결과와 실제 Jev 호출을 합친 확인 결과이며 독립 holdout 또는 전체 서비스 표 검색 성공률이 아니다. 자동 테스트의 PASS 범위도 당시 실행한 루트 테스트로 한정한다. StatBridge-local 전체 `tests/`에서는 구버전 패키지 테스트 10개의 수집 오류와 1개 버전 테스트 실패가 확인됐다.
 
@@ -15,7 +15,7 @@
 
 정확 일치·고점수 사전 후보는 `resolve()`의 deterministic fast path에서 HCX와 Jev를 모두 생략한다. 이는 기존 경로와 성능을 보존한다.
 
-환경 파일은 `ncp_clova_client._load_env()`가 우선 `statbridge_mcp_server/.env`에서 읽는다.
+환경 파일은 `ncp_clova_client._load_env()`가 우선 `.env`에서 읽는다.
 
 ## 2. 변경 구조
 
@@ -30,12 +30,12 @@ HCX-003 뒤, 검색 진입 전에 `JevSeriesClient.classify_series_count()`를 �
 
 | 파일 | 수정 함수/영역 | 수정 이유 |
 |---|---|---|
-| `StatBridge-official/src/agent/jev_series_client.py` | `JevSettings`, `request_body`, `classify_series_count` | TypeSafe System One의 좁은 series-count 호출, 응답 검증, timeout/HTTP/JSON 오류 처리 |
-| `StatBridge-official/src/agent/jev_series_hybrid.py` | `apply_jev_series_decision`, `_safe_metric_candidates` | HCX series 유지·제거·안전 보정 |
-| `StatBridge-official/src/agent/statbridge_agent.py` | `__init__`, `_classify`, deterministic fast path | HCX 직후 Jev 연결 및 trace 저장 |
-| `StatBridge-official/src/agent/bridge_api.py` | `/api/health` 응답 | Jev 활성화·키 설정 여부·모델 관측 |
-| `statbridge_mcp_server/.env.example` | Jev 환경변수 | 키 하드코딩 방지와 feature flag 제공 |
-| `TEST_JEV_HYBRID.py` | 14개 테스트 | 핵심 6사례, API 스키마, disable, key 없음, timeout, 잘못된 응답, fallback 검증 |
+| `src/agent/jev_series_client.py` | `JevSettings`, `request_body`, `classify_series_count` | TypeSafe System One의 좁은 series-count 호출, 응답 검증, timeout/HTTP/JSON 오류 처리 |
+| `src/agent/jev_series_hybrid.py` | `apply_jev_series_decision`, `_safe_metric_candidates` | HCX series 유지·제거·안전 보정 |
+| `src/agent/statbridge_agent.py` | `__init__`, `_classify`, deterministic fast path | HCX 직후 Jev 연결 및 trace 저장 |
+| `src/agent/bridge_api.py` | `/api/health` 응답 | Jev 활성화·키 설정 여부·모델 관측 |
+| `.env.example` | Jev 환경변수 | 키 하드코딩 방지와 feature flag 제공 |
+| `tests/test_jev_hybrid.py` | 14개 테스트 | 핵심 6사례, API 스키마, disable, key 없음, timeout, 잘못된 응답, fallback 검증 |
 | `tools/evaluate_jev_hybrid_100.py` | 저장 응답 paired replay | 기존 3회 반복 결과 재현 비교 |
 | `tools/run_live_jev_hybrid_100.py` | 현재 프롬프트 100문항 실행 | 실제 적용 프롬프트의 전체 gold set 검증 |
 | `tools/run_jev_hybrid_e2e.py` | Agent/MCP/KOSIS probe | 네 질문의 실제 네트워크 E2E 기록 |
@@ -119,7 +119,7 @@ trace에는 `jev_enabled`, `jev_model`, `jev_status`, `jev_latency_ms`, `jev_ser
 | Python 구문 컴파일 | PASS |
 | Frontend `npm run build` | PASS |
 
-참고: 기존 `TEST_NCP_MODELS.py`는 unittest가 아니라 외부 API smoke 출력 스크립트이며, 샌드박스 실행에서는 프록시 차단 메시지를 출력했다. 별도 승인 네트워크 E2E에서는 HCX-003, Jev, KOSIS가 실제 성공했다.
+참고: 기존 `tests/TEST_NCP_MODELS.py`는 unittest가 아니라 외부 API smoke 출력 스크립트이며, 샌드박스 실행에서는 프록시 차단 메시지를 출력했다. 별도 승인 네트워크 E2E에서는 HCX-003, Jev, KOSIS가 실제 성공했다.
 
 ## 8. Gold Set 100문항 결과
 
@@ -141,9 +141,9 @@ Hybrid API 오류 1%는 재사용한 HCX 저장 결과의 기존 1건 실패가 
 
 재현 파일:
 
-- `evaluation_runs/20261001_jev_hybrid_live_100/summary.json`
-- `evaluation_runs/20261001_jev_hybrid_live_100/hybrid_results.jsonl`
-- `evaluation_runs/20261001_jev_hybrid_100/summary.json` (기존 저장 응답 3회 paired replay)
+- `.venv/cache/evaluation_runs/20261001_jev_hybrid_live_100/summary.json`
+- `.venv/cache/evaluation_runs/20261001_jev_hybrid_live_100/hybrid_results.jsonl`
+- `.venv/cache/evaluation_runs/20261001_jev_hybrid_100/summary.json` (기존 저장 응답 3회 paired replay)
 
 ## 9. E2E 검증 결과
 
@@ -162,7 +162,7 @@ Hybrid API 오류 1%는 재사용한 HCX 저장 결과의 기존 1건 실패가 
 - 경제심리지수는 기존 사전 선택, LangGraph, MCP, KOSIS, 출력 에이전트까지 실제 성공했다.
 - 기준금리/지역 CPI E2E의 최종 표 조회는 기존 사전 범위 때문에 완료되지 않았다. Jev가 ID를 만들어 우회하지 않도록 한 보안·정확성 원칙에 따른 결과다.
 
-실행 기록: `evaluation_runs/20261001_jev_hybrid_e2e.json`.
+실행 기록: `.venv/cache/evaluation_runs/20261001_jev_hybrid_e2e.json`.
 
 ## 10. 장애 테스트
 

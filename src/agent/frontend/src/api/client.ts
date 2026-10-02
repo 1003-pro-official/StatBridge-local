@@ -1,7 +1,7 @@
 import { mockResponse } from "./mock";
 import type { CatalogResponse, OutputEditRequest, OutputRenderRequest, QueryRequest, QueryResponse } from "./types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 
 function localFallback(query: string, reason: string): QueryResponse {
@@ -15,7 +15,7 @@ function localFallback(query: string, reason: string): QueryResponse {
     tables: [],
     insights: [
       "UI 자체는 정상 동작하고 있습니다.",
-      "START_STATBRIDGE.cmd로 Agent API와 MCP를 함께 실행해 주세요.",
+      "scripts/windows/START_STATBRIDGE.cmd로 Agent API와 MCP를 함께 실행해 주세요.",
     ],
     lineage: [
       { id: "ui", title: "UI 질의 수신", description: "질의 입력과 제출은 정상", status: "complete" },

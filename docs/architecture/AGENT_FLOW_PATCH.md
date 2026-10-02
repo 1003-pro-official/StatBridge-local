@@ -9,17 +9,17 @@ UI 자연어 질문을 Agent가 받고, 통계언어 사전 v5를 검색한 뒤 
 현재 portable MCP 서버는 외부 클라이언트용 stdio 서버입니다. HTTP Agent가 매 요청마다 별도 stdio MCP 프로세스를 띄우지 않도록, Agent의 `McpToolGateway`는 MCP tool들이 사용하는 동일한 `StatisticsService`를 호출합니다. 즉 API 파라미터 생성과 데이터 계층은 MCP와 동일합니다.
 
 ## 주요 파일
-- `StatBridge-official/src/agent/statbridge_agent.py`: 사전 검색, 역질문 상태, API plan, MCP 호출 오케스트레이션
-- `StatBridge-official/src/agent/mcp_gateway.py`: Agent -> MCP tool/service gateway
-- `StatBridge-official/src/agent/bridge_api.py`: UI용 FastAPI endpoint
-- `StatBridge-official/src/agent/stat_dictionary/`: v5 통계언어 사전
-- `StatBridge-official/src/agent/frontend/src/App.tsx`: 역질문 버튼 UI
-- `TEST_AGENT_FLOW.py`: API ID와 MCP 전달 파라미터 단위 테스트
+- `src/agent/statbridge_agent.py`: 사전 검색, 역질문 상태, API plan, MCP 호출 오케스트레이션
+- `src/agent/mcp_gateway.py`: Agent -> MCP tool/service gateway
+- `src/agent/bridge_api.py`: UI용 FastAPI endpoint
+- `src/agent/stat_dictionary/`: v5 통계언어 사전
+- `src/agent/frontend/src/App.tsx`: 역질문 버튼 UI
+- `tests/TEST_AGENT_FLOW.py`: API ID와 MCP 전달 파라미터 단위 테스트
 
 ## 실행
-기존처럼 `START_STATBRIDGE.cmd`를 실행합니다.
+기존처럼 `scripts/windows/START_STATBRIDGE.cmd`를 실행합니다.
 
-KOSIS 실호출을 하려면 최초 실행 후 생성되는 `statbridge_mcp_server/.env`에 다음을 넣습니다.
+KOSIS 실호출을 하려면 최초 실행 후 생성되는 `.env`에 다음을 넣습니다.
 
 ```env
 KOSIS_API_KEY=발급받은키

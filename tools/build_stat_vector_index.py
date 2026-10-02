@@ -59,8 +59,8 @@ def main():
     args = parser.parse_args()
     dictionary_path = AGENT / "stat_dictionary" / "stat_language_dictionary.json"
     data = json.loads(dictionary_path.read_text(encoding="utf-8"))
-    store = Path(__import__("os").getenv("STATBRIDGE_VECTOR_PATH", str(ROOT / "data" / "vector_store")))
-    manifest_dir = ROOT / "data" / "vector_documents"
+    store = Path(__import__("os").getenv("STATBRIDGE_VECTOR_PATH", str(ROOT / ".venv" / "cache" / "vector_store_349")))
+    manifest_dir = ROOT / ".venv" / "cache" / "vector_documents"
     manifest_dir.mkdir(parents=True, exist_ok=True)
     docs = documents(data)
     for name, items in docs.items():
@@ -72,7 +72,7 @@ def main():
     try:
         import chromadb
     except ImportError as exc:
-        raise SystemExit("chromadb is required. Install statbridge_mcp_server/requirements.txt") from exc
+        raise SystemExit("chromadb is required. Install src/backend/requirements.txt") from exc
     if args.rebuild and store.exists():
         shutil.rmtree(store)
     store.mkdir(parents=True, exist_ok=True)

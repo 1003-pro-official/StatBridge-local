@@ -8,7 +8,7 @@ from pathlib import Path
 import requests
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 AGENT_DIR = ROOT / "src" / "agent"
 sys.path.insert(0, str(AGENT_DIR))
 
