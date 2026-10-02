@@ -11,7 +11,7 @@ export type ChartSeries = {
   points: ChartPoint[];
 };
 
-export type ChartType = "line" | "bar" | "area" | "scatter";
+export type ChartType = "line" | "bar" | "stacked_bar" | "area" | "scatter" | "bubble" | "pie" | "donut" | "histogram" | "box" | "heatmap" | "treemap" | "waterfall";
 
 export type SelectedTable = {
   tableId: string;
@@ -51,7 +51,7 @@ export type QueryState = {
 };
 
 export type QueryResponse = {
-  status?: "need_clarification" | "need_period" | "need_output_config" | "resolved" | "no_match" | "data_unavailable";
+  status?: "need_clarification" | "need_period" | "need_output_config" | "resolved" | "no_match" | "data_unavailable" | "catalog_only";
   query: string;
   interpretedQuery: string;
   summary: string;
@@ -64,6 +64,24 @@ export type QueryResponse = {
   outputSpec?: {
     status: "ready" | "empty";
     agent: string;
+    summary: string;
+    table: {
+      columns: string[];
+      rows: Array<{ series: string; period: string; value: number; unit: string }>;
+    };
+    explanation: { text: string; method: string; source: string };
+    evidence: Array<{
+      tableId: string;
+      tableName: string;
+      organizationId: string;
+      itemId: string;
+      frequency: string;
+      requestedPeriod: { start: string; end: string };
+      rowCount: number | null;
+      source: string;
+    }>;
+    plotlyFigure?: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> };
+    chartState?: Record<string, unknown>;
     visualization: {
       chartType: ChartType;
       layout: "combined" | "separate";
@@ -81,6 +99,7 @@ export type QueryResponse = {
   seriesCount?: number;
   outputSessionId?: string;
   outputSessionIds?: string[];
+  editSessionId?: string;
   outputOptions?: {
     seriesCount: number;
     pointCount: number;
@@ -107,13 +126,16 @@ export type QueryResponse = {
 
 export type OutputRenderRequest = {
   session_ids: string[];
-  chart_type: ChartType;
+  chart_type: "auto" | ChartType;
   chart_mode: "combined" | "separate";
   title?: string;
   show_legend: boolean;
   x_axis_label?: string;
   y_axis_label?: string;
+  natural_language?: string;
 };
+
+export type OutputEditRequest = { edit_session_id: string; instruction: string };
 
 export type QueryRequest = {
   query: string;

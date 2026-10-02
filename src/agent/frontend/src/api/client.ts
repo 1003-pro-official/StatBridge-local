@@ -1,5 +1,5 @@
 import { mockResponse } from "./mock";
-import type { CatalogResponse, OutputRenderRequest, QueryRequest, QueryResponse } from "./types";
+import type { CatalogResponse, OutputEditRequest, OutputRenderRequest, QueryRequest, QueryResponse } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -61,6 +61,20 @@ export async function submitOutput(payload: OutputRenderRequest): Promise<QueryR
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  if (!response.ok) throw new Error(`출력 Agent API 오류: HTTP ${response.status}`);
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(typeof data.detail === "string" ? data.detail : `출력 Agent API 오류: HTTP ${response.status}`);
+  }
+  return (await response.json()) as QueryResponse;
+}
+
+export async function submitOutputEdit(payload: OutputEditRequest): Promise<QueryResponse> {
+  const response = await fetch(`${API_BASE_URL}/output/edit`, {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(typeof error.detail === "string" ? error.detail : `그래프 수정 오류: HTTP ${response.status}`);
+  }
   return (await response.json()) as QueryResponse;
 }

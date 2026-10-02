@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      plotly.js-dist-min:
+        specifier: ^3.7.0
+        version: 3.7.0
       '@vitejs/plugin-react':
         specifier: latest
         version: 6.1.1(vite@8.3.0)
@@ -395,6 +398,9 @@ packages:
     peerDependencies:
       react: ^19.3.0
 
+  plotly.js-dist-min@3.7.0:
+    resolution: {integrity: sha512-IRWNnBJZmKss3URDnicBK2nvt/VTSi/MD1GnUscAYFjwSuN6g/CTde5R1UC0RYtblehj8rkT4BL8r05e/c8j5Q==}
+
   react@19.3.0:
     resolution: {integrity: sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog==}
     engines: {node: '>=0.10.0'}
@@ -663,6 +669,8 @@ snapshots:
     dependencies:
       react: 19.3.0
       scheduler: 0.28.0
+
+  plotly.js-dist-min@3.7.0: {}
 
   react@19.3.0: {}
 

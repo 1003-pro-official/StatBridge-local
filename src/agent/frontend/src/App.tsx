@@ -1,5 +1,6 @@
-import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
-import { fetchCatalog, submitOutput, submitQuery } from "./api/client";
+import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import Plotly from "plotly.js-dist-min";
+import { fetchCatalog, submitOutput, submitOutputEdit, submitQuery } from "./api/client";
 import type { CatalogResponse, CatalogTable, ChartSeries, ChartType, QueryResponse } from "./api/types";
 
 type IconName =
@@ -229,27 +230,39 @@ function ChartRenderer({ series, chartType = "line", xAxisLabel, yAxisLabel }: {
   </div>;
 }
 
+function PlotlyRenderer({ figure }: { figure: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> } }) {
+  const host = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!host.current) return;
+    const element = host.current;
+    void Plotly.react(element, figure.data, figure.layout, { responsive: true, displaylogo: false });
+    return () => Plotly.purge(element);
+  }, [figure]);
+  return <div ref={host} className="plotly-chart" aria-label="통계 그래프" />;
+}
+
 function LayoutChoice({ mode, setMode }: { mode: "combined"|"separate"; setMode: (v:"combined"|"separate")=>void }) {
   return <div className="setup-block"><strong>그래프 표시 방식</strong><div className="clarification-options"><button type="button" className={mode==="combined"?"selected":""} onClick={()=>setMode("combined")}><span className="multi-check">{mode==="combined"&&<Icon name="check" size={13}/>}</span>여러 계열을 한 그래프에</button><button type="button" className={mode==="separate"?"selected":""} onClick={()=>setMode("separate")}><span className="multi-check">{mode==="separate"&&<Icon name="check" size={13}/>}</span>계열별 그래프 여러 개</button></div></div>;
 }
 
 function ChartTypeChoice({ value, onChange }: { value: "auto"|ChartType; onChange:(value:"auto"|ChartType)=>void }) {
-  return <div className="setup-block"><strong>그래프 종류</strong><div className="clarification-options">{(["auto","line","bar","area","scatter"] as const).map((type)=><button type="button" key={type} className={value===type?"selected":""} onClick={()=>onChange(type)}>{type==="auto"?"자동 선택":type}</button>)}</div></div>;
+  return <div className="setup-block"><strong>그래프 종류</strong><div className="clarification-options">{(["auto","line","bar","stacked_bar","area","scatter","bubble","pie","donut","histogram","box","heatmap","treemap","waterfall"] as const).map((type)=><button type="button" key={type} className={value===type?"selected":""} onClick={()=>onChange(type)}>{type==="auto"?"자동 선택":type}</button>)}</div></div>;
 }
 
-function OutputConfigPanel({ result, loading, submit }: { result: QueryResponse; loading:boolean; submit:(value:{chartType:ChartType;mode:"combined"|"separate";title:string;showLegend:boolean;xAxisLabel:string;yAxisLabel:string})=>void }) {
-  const recommended=result.outputOptions?.recommendedChartType||"line";
-  const [chartType,setChartType]=useState<ChartType>(recommended);
+function OutputConfigPanel({ result, loading, submit }: { result: QueryResponse; loading:boolean; submit:(value:{chartType:"auto"|ChartType;mode:"combined"|"separate";title:string;showLegend:boolean;xAxisLabel:string;yAxisLabel:string;naturalLanguage:string})=>void }) {
+  const [chartType,setChartType]=useState<"auto"|ChartType>("auto");
   const [mode,setMode]=useState<"combined"|"separate">("combined");
+  const [naturalLanguage,setNaturalLanguage]=useState(result.query);
   const [title,setTitle]=useState(""); const [showLegend,setShowLegend]=useState(true);
-  const [xAxisLabel,setXAxisLabel]=useState("시점"); const [yAxisLabel,setYAxisLabel]=useState("값");
+  const [xAxisLabel,setXAxisLabel]=useState(""); const [yAxisLabel,setYAxisLabel]=useState("");
   return <section className="clarification-section" id="analysis-result"><div className="clarification-card">
     <span className="eyebrow">OUTPUT AGENT ORDER</span>
     <div className="clarification-title"><span><Icon name="chart" size={19}/></span><div><h2>MCP 데이터를 어떤 그래프로 출력할까요?</h2><p>{result.seriesCount||0}개 계열의 조회가 끝났습니다. 지금 선택해도 데이터를 다시 조회하지 않습니다.</p></div></div>
-    <ChartTypeChoice value={chartType} onChange={(value)=>setChartType(value==="auto"?recommended:value)}/>
+    <ChartTypeChoice value={chartType} onChange={setChartType}/>
     {(result.seriesCount||0)>1&&<LayoutChoice mode={mode} setMode={setMode}/>}
+    <div className="setup-block"><label><strong>그래프 요청</strong><input value={naturalLanguage} onChange={(e)=>setNaturalLanguage(e.target.value)} placeholder="예: 최근 10년 추이를 선그래프로 보여줘"/></label></div>
     <div className="setup-block"><strong>그래프 편집</strong><div className="period-form"><label>제목<input value={title} placeholder="자동 제목" onChange={(e)=>setTitle(e.target.value)}/></label><label>X축 이름<input value={xAxisLabel} onChange={(e)=>setXAxisLabel(e.target.value)}/></label><label>Y축 이름<input value={yAxisLabel} onChange={(e)=>setYAxisLabel(e.target.value)}/></label></div><label><input type="checkbox" checked={showLegend} onChange={(e)=>setShowLegend(e.target.checked)}/> 범례 표시</label></div>
-    <div className="clarification-submit"><span>출력 에이전트가 선택값으로 최종 그래프 명세를 만듭니다.</span><button disabled={loading} onClick={()=>submit({chartType,mode,title,showLegend,xAxisLabel,yAxisLabel})}>그래프 생성 <Icon name="arrow" size={15}/></button></div>
+    <div className="clarification-submit"><span>출력 에이전트가 선택값으로 최종 그래프 명세를 만듭니다.</span><button disabled={loading} onClick={()=>submit({chartType,mode,title,showLegend,xAxisLabel,yAxisLabel,naturalLanguage})}>그래프 생성 <Icon name="arrow" size={15}/></button></div>
   </div></section>;
 }
 
@@ -346,9 +359,10 @@ function MultiIntentPanel({ query, intents, loading, execute }: { query:string; 
   </div></section>
 }
 
-function Results({ result }: { result: QueryResponse }) {
+function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (instruction: string) => void; loading: boolean }) {
   const [lineageOpen, setLineageOpen] = useState(true);
   const [allDataOpen,setAllDataOpen]=useState(false);
+  const [editInstruction,setEditInstruction]=useState("");
   const allRows=result.chart.flatMap((series)=>series.points.map((point)=>({series,point})));
   const previewRows=result.chart.flatMap((series)=>{
     if(series.points.length<=6)return series.points.map((point)=>({series,point}));
@@ -362,6 +376,8 @@ function Results({ result }: { result: QueryResponse }) {
     const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "statbridge-analysis.csv"; a.click(); URL.revokeObjectURL(url);
   };
   const exportPng=async()=>{
+    const plotlyChart=document.querySelector<HTMLElement>(".chart-panel .plotly-chart");
+    if(plotlyChart){await Plotly.downloadImage(plotlyChart,{format:"png",filename:"statbridge-chart",width:1400,height:800});return;}
     const svgs=Array.from(document.querySelectorAll<SVGSVGElement>(".chart-panel .chart-wrap svg"));
     if(!svgs.length)return;
     const width=1400,chartHeight=500,gap=28;
@@ -391,8 +407,9 @@ function Results({ result }: { result: QueryResponse }) {
         <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length>0&&<button onClick={exportPng}><Icon name="chart" size={17}/> PNG</button>}<button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button><button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
         <div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div>
         {result.warnings?.map((warning, index) => <div className="error-banner" role="status" key={`${index}-${warning}`}>{warning}</div>)}
+        {result.editSessionId&&<form className="chart-edit-form" onSubmit={(event)=>{event.preventDefault();if(editInstruction.trim()){onEdit(editInstruction.trim());setEditInstruction("");}}}><label htmlFor="chart-edit-input">자연어로 그래프 수정</label><div><input id="chart-edit-input" value={editInstruction} onChange={(event)=>setEditInstruction(event.target.value)} placeholder="예: 제목을 바꿔줘, 2024년 이후만 보여줘"/><button type="submit" disabled={loading||!editInstruction.trim()}>수정</button></div></form>}
         <div className="chart-header"><div><h3>{editOptions?.title||(result.chart.length ? "시계열 분석 결과" : "MCP 통계표 탐색 결과")}</h3>{result.chart.length > 0 && editOptions?.showLegend!==false && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>
-        {result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
+        {result.outputSpec?.plotlyFigure ? <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
         {result.insights.length>0&&<div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{result.insights.map((x,index) => <li key={`${index}-${x}`}>{x}</li>)}</ul></div>}
         {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><div><h3>{allDataOpen?"전체 데이터":"주요 데이터 예시"}</h3><p>{allDataOpen?"조회된 모든 관측치를 표시합니다.":"각 계열의 시작과 최근 값을 간략히 보여줍니다."}</p></div><span>전체 {allRows.length}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{visibleRows.map(({series,point}) => <tr key={`${series.id}-${point.date}`}><td>{series.label}</td><td>{point.date}</td><td>{point.value.toLocaleString()} {series.unit}</td></tr>)}</tbody></table>{allRows.length>previewRows.length&&<div className="data-more"><span>{allDataOpen?`전체 ${allRows.length}개를 표시 중입니다.`:`${previewRows.length}개 예시만 표시 중입니다.`}</span><button type="button" aria-expanded={allDataOpen} onClick={()=>setAllDataOpen((current)=>!current)}>{allDataOpen?"간략히 보기":`전체 데이터 더 보기 (${allRows.length}개)`}<Icon name="chevron" size={14}/></button></div>}</div>}
       </article>
@@ -516,20 +533,28 @@ export default function App() {
     finally { setLoading(false); }
   };
 
-  const renderSelectedOutput = async (value:{chartType:ChartType;mode:"combined"|"separate";title:string;showLegend:boolean;xAxisLabel:string;yAxisLabel:string}) => {
+  const renderSelectedOutput = async (value:{chartType:"auto"|ChartType;mode:"combined"|"separate";title:string;showLegend:boolean;xAxisLabel:string;yAxisLabel:string;naturalLanguage:string}) => {
     if (!result) return;
     const sessionIds=result.outputSessionIds||[result.outputSessionId||""].filter(Boolean);
     if(!sessionIds.length)return;
     setLoading(true); setError("");
     try {
-      const data = await submitOutput({session_ids:sessionIds,chart_type:value.chartType,chart_mode:value.mode,title:value.title||undefined,show_legend:value.showLegend,x_axis_label:value.xAxisLabel||undefined,y_axis_label:value.yAxisLabel||undefined});
+      const data = await submitOutput({session_ids:sessionIds,chart_type:value.chartType,chart_mode:value.mode,title:value.title||undefined,show_legend:value.showLegend,x_axis_label:value.xAxisLabel||undefined,y_axis_label:value.yAxisLabel||undefined,natural_language:value.naturalLanguage});
       showResult(data);
     } catch (err) { setError(err instanceof Error ? err.message : "출력 에이전트가 그래프를 만드는 중 오류가 발생했습니다."); }
     finally { setLoading(false); }
   };
 
+  const editSelectedOutput = async (instruction: string) => {
+    if(!result?.editSessionId)return;
+    setLoading(true);setError("");
+    try { showResult(await submitOutputEdit({edit_session_id:result.editSessionId,instruction})); }
+    catch(err){setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");}
+    finally{setLoading(false);}
+  };
+
   return <div className="app-shell">
     <Sidebar open={menuOpen} close={() => setMenuOpen(false)} view={view} selectView={navigateView} goHome={goHome}/>
-    <div className="main-shell"><Header openMenu={() => setMenuOpen(true)}/>{view === "lineage" ? <DataCatalog onQuery={queryCatalogTable} loading={loading}/> : <main><Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/><FeatureStrip/>{error && <div className="error-banner">{error}</div>}{multiIntents&&<MultiIntentPanel query={query} intents={multiIntents} loading={loading} execute={executeMultiIntents}/>} {result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification}/>} {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>} {result?.status === "need_output_config" && <OutputConfigPanel result={result} loading={loading} submit={renderSelectedOutput}/>} {result && !["need_clarification","need_period","need_output_config"].includes(result.status || "") && <Results result={result}/>}<section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x} onClick={() => { setQuery(x); setResult(null); setMultiIntents(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x}</button>)}</section></main>}<footer><span>© 2026 StatBridge</span><span>입력 UI → LangGraph → MCP/KOSIS → 출력 선택 → 출력 Agent → Renderer</span></footer></div>
+    <div className="main-shell"><Header openMenu={() => setMenuOpen(true)}/>{view === "lineage" ? <DataCatalog onQuery={queryCatalogTable} loading={loading}/> : <main><Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/><FeatureStrip/>{error && <div className="error-banner">{error}</div>}{multiIntents&&<MultiIntentPanel query={query} intents={multiIntents} loading={loading} execute={executeMultiIntents}/>} {result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification}/>} {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>} {result?.status === "need_output_config" && <OutputConfigPanel result={result} loading={loading} submit={renderSelectedOutput}/>} {result && !["need_clarification","need_period","need_output_config"].includes(result.status || "") && <Results result={result} onEdit={editSelectedOutput} loading={loading}/>}<section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x} onClick={() => { setQuery(x); setResult(null); setMultiIntents(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x}</button>)}</section></main>}<footer><span>© 2026 StatBridge</span><span>입력 UI → LangGraph → MCP/KOSIS → 출력 선택 → 출력 Agent → Renderer</span></footer></div>
   </div>;
 }

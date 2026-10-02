@@ -86,9 +86,17 @@ class OutputRenderRequest(BaseModel):
     show_legend: bool = True
     x_axis_label: str | None = None
     y_axis_label: str | None = None
+    natural_language: str | None = None
+
+
+class OutputEditRequest(BaseModel):
+    edit_session_id: str
+    instruction: str = Field(min_length=1, max_length=500)
 
 
 OUTPUT_SESSIONS: dict[str, dict[str, Any]] = {}
+EDIT_SESSIONS: dict[str, dict[str, Any]] = {}
+MAX_EDIT_SESSIONS = 100
 
 
 def _table_card(table_id: str) -> dict[str, str]:
@@ -647,9 +655,17 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
         "show_legend": payload.show_legend,
         "x_axis_label": payload.x_axis_label,
         "y_axis_label": payload.y_axis_label,
+        "natural_language": payload.natural_language or " · ".join(str(session["query"]) for session in sessions),
     }
-    rendered = agent.render_output(merged, output_request)
+    try:
+        rendered = agent.render_output(merged, output_request)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     output = rendered.get("output") or {}
+    edit_session_id = uuid4().hex
+    if len(EDIT_SESSIONS) >= MAX_EDIT_SESSIONS:
+        EDIT_SESSIONS.pop(next(iter(EDIT_SESSIONS)))
+    EDIT_SESSIONS[edit_session_id] = {"result": merged, "output": output, "sessions": sessions}
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     plans = rendered.get("api_plans") or [rendered.get("api_plan")]
@@ -672,6 +688,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
         "chartMode": visualization.get("layout") or payload.chart_mode,
         "chartType": visualization.get("chartType") or payload.chart_type,
         "outputSpec": output,
+        "editSessionId": edit_session_id,
         "seriesCount": len(chart),
         "tables": [_table_card(str(plan["table_id"])) for plan in plans],
         "insights": [
@@ -693,3 +710,43 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     for session_id in payload.session_ids:
         OUTPUT_SESSIONS.pop(session_id, None)
     return response
+
+
+@app.post("/api/output/edit")
+def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
+    session = EDIT_SESSIONS.get(payload.edit_session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="output edit session not found or expired")
+    try:
+        output = agent.output_agent.edit(session["result"], session["output"], payload.instruction)
+    except (ValueError, TypeError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    session["output"] = output
+    visualization = output.get("visualization") or {}
+    chart = visualization.get("series") or []
+    sessions = session["sessions"]
+    merged = session["result"]
+    plans = [plan for plan in (merged.get("api_plans") or [merged.get("api_plan")]) if plan]
+    starts = sorted(str(item["period"]["start"]) for item in sessions)
+    ends = sorted(str(item["period"]["end"]) for item in sessions)
+    return {
+        "status": "resolved",
+        "query": " · ".join(str(item["query"]) for item in sessions),
+        "interpretedQuery": " · ".join(str(item["table_name"]) for item in sessions),
+        "summary": output.get("summary") or "",
+        "period": {"start": starts[0], "end": ends[-1]},
+        "frequency": " / ".join(dict.fromkeys(str(item["frequency"]) for item in sessions)),
+        "chart": chart,
+        "chartMode": visualization.get("layout"),
+        "chartType": visualization.get("chartType"),
+        "outputSpec": output,
+        "editSessionId": payload.edit_session_id,
+        "seriesCount": len(chart),
+        "tables": [_table_card(str(plan["table_id"])) for plan in plans],
+        "insights": [f"그래프 수정: {payload.instruction}"],
+        "lineage": [
+            {"id": "mcp", "title": "MCP 통계 서비스", "description": "기존 조회 데이터 사용", "status": "complete"},
+            {"id": "output", "title": "출력 Agent", "description": "검증된 수정 명령 적용", "status": "complete"},
+        ],
+        "warnings": [],
+    }

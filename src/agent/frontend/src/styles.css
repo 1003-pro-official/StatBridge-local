@@ -230,3 +230,10 @@ main { width: min(1460px, 100%); margin: 0 auto; padding: 24px clamp(18px, 3vw, 
 .catalog-query-controls select { max-width: 100%; padding: 8px; }
 .catalog-query-controls button { padding: 12px; cursor: pointer; }
 .catalog-query-controls p { font-size: 13px; }
+.plotly-chart { width: 100%; min-height: 360px; }
+.chart-edit-form { margin: 16px 0; padding: 16px; border: 1px solid #dfe4ef; border-radius: 12px; }
+.chart-edit-form label { display: block; margin-bottom: 8px; font-weight: 600; }
+.chart-edit-form > div { display: flex; gap: 8px; }
+.chart-edit-form input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid #ccd4e2; border-radius: 8px; }
+.chart-edit-form button { padding: 10px 18px; border: 0; border-radius: 8px; background: #4568ff; color: white; cursor: pointer; }
+.chart-edit-form button:disabled { opacity: .5; cursor: not-allowed; }
