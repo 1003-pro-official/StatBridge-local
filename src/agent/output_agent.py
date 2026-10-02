@@ -264,8 +264,10 @@ class OutputAgent:
         if (mixed_frequency or (mixed_units and not spec.secondary_axis_series)) and spec.layout == "combined":
             spec = ChartSpec.model_validate({**spec.model_dump(), "layout": "separate"})
         summary = self._summary(series)
-        explanation = self._explain(series, spec, summary)
         figure = render_plotly(series, spec)
+        # Validate rendering before spending a model call on an explanation.
+        # An invalid automatic proposal may be retried with a safe chart type.
+        explanation = self._explain(series, spec, summary)
         return {
             "status": "ready" if any(s["points"] for s in series) else "empty",
             "agent": "output-agent-chartspec-v2",

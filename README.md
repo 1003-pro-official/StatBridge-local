@@ -35,6 +35,16 @@ GitHub의 **Code → Download ZIP**으로 받은 파일을 먼저 압축 해제�
 
 준비가 끝나면 Agent API·MCP·UI를 실행하고 브라우저를 엽니다. 종료는 `scripts/windows/STOP_STATBRIDGE.cmd`로 합니다. 다른 프로그램이 8000/5173 포트를 사용하면 강제로 종료하지 않고 안내합니다. 실행 로그는 Git에 포함하지 않는 `.venv/cache/evaluation_runs/`에 남습니다. Python/Node 자동 설치는 Windows Package Manager(`winget`)가 필요하며 설치 정책·관리자 권한에 막히면 화면의 안내대로 설치한 뒤 다시 실행합니다.
 
+기존 설치에서 업데이트한 경우에도 런처가 Python Plotly와 프런트 `plotly.js-dist-min`을 검사해 빠진 출력 의존성을 설치합니다. 루트에 별도 CMD를 만들지 않으며 위 실행 경로를 사용합니다.
+
+### 그래프 출력과 수정
+
+입력 UI에서 질의·통계표·기간을 확정하면 `/api/query`가 MCP 데이터를 조회하고 `need_output_config`와 `outputSessionId`를 반환합니다. 화면에서 그래프 종류, 제목·축·범례, 자연어 요청을 선택한 뒤 `/api/output`으로 `session_ids`, `chart_type`, `chart_mode`, `natural_language` 등을 전달합니다. LangGraph의 출력 단계가 별도 `OutputAgent`를 호출하며, 화면은 응답의 `outputSpec.plotlyFigure`를 Plotly로 표시합니다.
+
+`outputSpec.chartState`는 검증된 그래프 상태이고 `editSessionId`는 수정 세션입니다. `/api/output/edit`에 `edit_session_id`와 `instruction`을 보내면 기존 조회 데이터에 자연어 편집을 적용합니다. 이때 KOSIS 자료를 다시 조회하지 않습니다. 자연어 수정에는 CLOVA 키가 필요하며, 잘못된 그래프 요청은 HTTP 422의 `detail`로 표시합니다. 수정 세션은 최대 100개로 제한하고 초과 시 가장 먼저 만들어진 세션을 제거합니다. 서버를 재시작하면 세션은 사라집니다.
+
+선·막대·누적 막대·영역·산점·버블·파이·도넛·히스토그램·박스·히트맵·트리맵·워터폴을 지원합니다. 계열 수와 단위 등 조건을 만족하지 못하는 명시적 선택은 오류로 안내하며, 자동 선택만 안전한 선/막대 그래프로 재시도합니다. 재시도 시 설명 모델은 성공한 그래프에 대해서만 호출합니다.
+
 KOSIS 키가 있으면 로컬 원자료 CSV 없이도 349개 표의 OpenAPI 자료를 조회할 수 있습니다. 개별 분류의 결측값이나 수록기간 차이까지 없어지는 것은 아닙니다. 카탈로그에서 분류를 선택하고 기간을 지정한 뒤, 수신한 자료의 그래프 종류와 편집 항목을 선택합니다.
 
 자세한 변경·검증 범위는 [10월 1일 저녁 작업 기록](docs/2026-10-01-evening-349-update.md)에 정리했습니다.
