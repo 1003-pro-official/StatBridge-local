@@ -67,7 +67,7 @@ class StatBridgeAgent:
         # do not silently create a second network client behind that boundary.
         if ncp_client is not None:
             self.hybrid.enabled = False
-        self.output_agent = OutputAgent()
+        self.output_agent = OutputAgent(self.ncp)
         self.workflow = StatBridgeWorkflow(self, self.output_agent)
 
     @staticmethod
@@ -528,7 +528,11 @@ class StatBridgeAgent:
                     raise RuntimeError(detail or f"{plan['table_name']} 수치 데이터를 가져오지 못했습니다.")
                 label = str(plan.get("series_label") or plan["table_name"])
                 for row in data.get("rows") or []:
-                    enriched=dict(row); enriched["_SERIES_LABEL"] = label; all_rows.append(enriched)
+                    enriched = dict(row)
+                    enriched["_SERIES_LABEL"] = label
+                    enriched["_SOURCE_SERIES_ID"] = str(plan["table_id"])
+                    enriched["_FREQUENCY"] = str(plan["frequency"])
+                    all_rows.append(enriched)
                 sources.append({"table_id": plan["table_id"], "source": data.get("source"), "row_count": len(data.get("rows") or [])})
             execution = {"status": "success", "rows": all_rows, "row_count": len(all_rows), "sources": sources}
             answer = ""

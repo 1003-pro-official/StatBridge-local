@@ -21,7 +21,12 @@ VITE_API_BASE_URL=/api
 VITE_USE_MOCK=false
 ```
 
-프론트엔드는 `POST /api/query`를 호출합니다.
+프론트엔드는 `POST /api/query`로 통계를 조회합니다. 조회가 `need_output_config`를
+반환하면 `POST /api/output`에 `session_ids`, 그래프 종류·배치와 편집 옵션을 보내며,
+응답의 `outputSpec.plotlyFigure`를 Plotly로 표시합니다. 응답의 `editSessionId`로
+`POST /api/output/edit`에 `{ "edit_session_id": "...", "instruction": "제목을 바꿔줘" }`를
+보내면 기존 조회 데이터를 다시 가져오지 않고 그래프를 수정합니다. 자연어 수정에는
+`NCP_CLOVA_API_KEY`가 필요합니다.
 
 ```json
 {
@@ -29,7 +34,7 @@ VITE_USE_MOCK=false
 }
 ```
 
-응답 타입은 `src/api/types.ts`의 `QueryResponse`를 기준으로 합니다. 실제 백엔드 응답이 다른 경우 계약 파일을 변경하지 말고 `src/api/client.ts`에서 어댑트하세요. 로컬 개발 프록시는 `vite.config.ts`에서 백엔드 주소를 변경할 수 있습니다.
+응답 타입은 `src/api/types.ts`의 `QueryResponse`를 기준으로 합니다. 로컬 개발 프록시는 `vite.config.ts`에서 백엔드 주소를 변경할 수 있습니다.
 
 ## 반응형 기준
 
