@@ -72,7 +72,7 @@ echo [OK] %PYTHON_EXE%
 
 echo.
 echo [3/7] Python dependencies
-"%PYTHON_EXE%" -c "import mcp,pandas,requests,dotenv,fastapi,uvicorn,chromadb,langgraph" >nul 2>nul
+"%PYTHON_EXE%" -c "import mcp,pandas,requests,dotenv,fastapi,uvicorn,chromadb,langgraph,plotly" >nul 2>nul
 if errorlevel 1 (
     echo Installing required Python packages. This can take several minutes on first run...
     "%PYTHON_EXE%" -m pip install --disable-pip-version-check -r "%MCP%\requirements.txt"
