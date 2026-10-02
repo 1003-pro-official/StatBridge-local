@@ -16,7 +16,7 @@
 | `src/agent/bridge_api.py` | 화면용 FastAPI (`/api/query`, `/api/catalog`, `/api/health`) |
 | `src/agent/agent_runtime.py`, `src/agent/stat_dictionary/` | 질의 해석, 역질문, 통계표·계열 선택 |
 | `src/agent/frontend/` | React 화면 |
-| `data/processed/`, `data/processed/` | 한국은행 349개 지원 표의 목록·항목·분류·기간 메타데이터 |
+| `data/processed/` | 한국은행 349개 지원 표의 목록·항목·분류·기간 메타데이터 |
 | `data/tables/` | 별도 원본에서 공급하는 347개 통계표 CSV; Git에 포함하지 않음 |
 | `eval/table-discovery/` | 질의 해석~통계표 탐색 평가 v1·v2·v3·v4.1 |
 | `eval/end-to-end/` | 별도 계열의 전체 흐름 평가 v1·v2 초안 |

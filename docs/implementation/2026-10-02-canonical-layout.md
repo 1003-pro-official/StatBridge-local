@@ -38,3 +38,11 @@ MCP 파일별 비교에서는 정본의 루트 환경 설정, 키 누락 시 fal
 이번에는 349개 표의 모든 기간·분류 조합에 대한 외부 호출을 다시 실행하지 않았다. NCP 모델별 실호출 테스트도 실행하지 않았다. 이전 평가 수치와 이번 회귀 검증은 별개의 관측값이다. 2026-09-30 감사 문서의 구경로는 당시 문제를 기록한 인용이며 현재 실행 경로가 아니다. 애매한 MCP 파일의 이동·통합 및 생성 결과 로컬 보관은 사용자 승인에 따라 처리했다.
 
 변경은 ai-assisted이며 최종 병합은 사람의 diff 검토와 승인 후 진행한다.
+
+## CI 실패 항목 재확인
+
+후속 요청에서 언급한 실패는 정본화 이전 head(57e7842)의 구 MCP 사본 로딩 문제였다. 정본화 head 972555e의 GitHub verify는 completed/success이며 PR #13은 mergeable=true로 확인했다. 최신 upstream/main(89b58f2) 기준 재정렬도 Current branch main is up to date로 끝났다.
+
+같은 문제가 재발하지 않도록 bridge_api 로딩 뒤 config/kosis_client/metadata_store/search_engine/statistics_service/server의 실제 __file__이 src/backend/statbridge_mcp에 있는지 검사하는 회귀 테스트를 추가했다. _loads_lenient 존재도 확인한다. 기존 ImportError·키 없는 탐색·검색 결과·healthcheck 테스트는 그대로 유지했다. 실패 관련 파일과 API 통합 및 정본 회귀 테스트를 묶어 재실행해 11개 테스트가 통과했다. 전체 회귀는 56 passed, 355 subtests passed (49.91초), 공개 v4.1 검증기는 VALIDATION OK, UI 빌드는 TypeScript/Vite 성공이다. 세 검증 모두 푸시 전에 완료했다. README의 중복 정본 경로 표기 한 곳도 수정했다.
+
+이미 통합한 파일은 다시 삭제하거나 메타데이터를 덮어쓰지 않았다. 보류 파일은 없으며 대응본 없는 MCP 파일의 이동·통합과 결과물 로컬 보관은 앞서 받은 승인을 유지한다.
