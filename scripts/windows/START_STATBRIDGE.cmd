@@ -72,7 +72,7 @@ echo [OK] %PYTHON_EXE%
 
 echo.
 echo [3/7] Python dependencies
-"%PYTHON_EXE%" -c "import mcp,pandas,requests,dotenv,fastapi,uvicorn,chromadb,langgraph" >nul 2>nul
+"%PYTHON_EXE%" -c "import mcp,pandas,requests,dotenv,fastapi,uvicorn,chromadb,langgraph,plotly" >nul 2>nul
 if errorlevel 1 (
     echo Installing required Python packages. This can take several minutes on first run...
     "%PYTHON_EXE%" -m pip install --disable-pip-version-check -r "%MCP%\requirements.txt"
@@ -117,7 +117,13 @@ if errorlevel 1 (
     echo [ERROR] Node.js 20.19+, 22.12+, or newer LTS is required. Update Node.js LTS and retry.
     goto :NO_NODE
 )
-if not exist "%FRONT%\node_modules\.bin\vite.cmd" (
+set "FRONT_INSTALL="
+if not exist "%FRONT%\node_modules\.bin\vite.cmd" set "FRONT_INSTALL=1"
+pushd "%FRONT%"
+node -e "require.resolve('plotly.js-dist-min')" >nul 2>nul
+if errorlevel 1 set "FRONT_INSTALL=1"
+popd
+if defined FRONT_INSTALL (
     echo Installing frontend packages. This can take several minutes on first run...
     pushd "%FRONT%"
     if exist "%FRONT%\package-lock.json" (call npm.cmd ci) else (call npm.cmd install)

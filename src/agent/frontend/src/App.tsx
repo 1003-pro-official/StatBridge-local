@@ -369,7 +369,7 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
     return [...series.points.slice(0,3),...series.points.slice(-3)].map((point)=>({series,point}));
   });
   const visibleRows=allDataOpen?allRows:previewRows;
-  const editOptions=result.outputSpec?.visualization.editOptions;
+  const editOptions=result.outputSpec?.visualization?.editOptions;
   const exportCsv = () => {
     const rows = ["계열,단위,시점,값", ...result.chart.flatMap((s) => s.points.map((p) => `"${s.label}","${s.unit}",${p.date},${p.value}`))];
     const blob = new Blob(["\ufeff" + rows.join("\n")], { type: "text/csv;charset=utf-8" });
