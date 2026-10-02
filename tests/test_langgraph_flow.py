@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 AGENT_ROOT = ROOT / "src" / "agent"
 sys.path.insert(0, str(AGENT_ROOT))
 
@@ -41,25 +41,26 @@ def verify(status: str, expected_path: list[str], expected_execute_calls: int) -
     assert agent.execute_calls == expected_execute_calls
 
 
-verify("need_clarification", ["resolve_request", "await_clarification"], 0)
-verify("no_match", ["resolve_request", "finish_unresolved"], 0)
-verify("resolved", ["resolve_request", "execute_statistics", "await_output_selection"], 1)
+def test_langgraph_paths():
+    verify("need_clarification", ["resolve_request", "await_clarification"], 0)
+    verify("no_match", ["resolve_request", "finish_unresolved"], 0)
+    verify("resolved", ["resolve_request", "execute_statistics", "await_output_selection"], 1)
 
-agent = FakeAgent("resolved")
-pre_resolved = {"status": "resolved", "selected_table": {"table_id": "DT_EXISTING"}, "api_plan": {"table_id": "DT_EXISTING"}}
-result = StatBridgeWorkflow(agent).invoke(query="테스트", resolution=pre_resolved, execute=False)
-assert agent.resolve_calls == 0
-assert agent.execute_calls == 1
-assert result["execution"]["status"] == "planned_only"
-assert result["api_plan"]["table_id"] == "DT_EXISTING"
+    agent = FakeAgent("resolved")
+    pre_resolved = {"status": "resolved", "selected_table": {"table_id": "DT_EXISTING"}, "api_plan": {"table_id": "DT_EXISTING"}}
+    result = StatBridgeWorkflow(agent).invoke(query="테스트", resolution=pre_resolved, execute=False)
+    assert agent.resolve_calls == 0
+    assert agent.execute_calls == 1
+    assert result["execution"]["status"] == "planned_only"
+    assert result["api_plan"]["table_id"] == "DT_EXISTING"
 
-workflow = StatBridgeWorkflow(agent, OutputAgent())
-data_result = {
-    "execution": {"status": "success", "rows": [{"PRD_DE": "2024", "DT": "10", "ITM_NM": "테스트"}], "row_count": 1},
-    "orchestration": {"path": ["resolve_request", "execute_statistics", "await_output_selection"]},
-}
-rendered = workflow.invoke_output(result=data_result, output_request={"chart_type": "bar", "layout": "combined"})
-assert rendered["orchestration"]["path"][-1] == "prepare_output"
-assert rendered["output"]["visualization"]["chartType"] == "bar"
+    workflow = StatBridgeWorkflow(agent, OutputAgent())
+    data_result = {
+        "execution": {"status": "success", "rows": [{"PRD_DE": "2024", "DT": "10", "ITM_NM": "테스트"}], "row_count": 1},
+        "orchestration": {"path": ["resolve_request", "execute_statistics", "await_output_selection"]},
+    }
+    rendered = workflow.invoke_output(result=data_result, output_request={"chart_type": "bar", "layout": "combined"})
+    assert rendered["orchestration"]["path"][-1] == "prepare_output"
+    assert rendered["output"]["visualization"]["chartType"] == "bar"
 
-print("LANGGRAPH FLOW OK: clarification/no_match/resolved/resume paths")
+    print("LANGGRAPH FLOW OK: clarification/no_match/resolved/resume paths")

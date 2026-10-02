@@ -340,7 +340,7 @@ def build_manifest() -> None:
     cases = read_cases()
     catalog_path = REPO / "data/kosis/hankook_tables.json"
     catalog = json.loads(catalog_path.read_text(encoding="utf-8-sig"))
-    table_summary_path = ROOT.parent / "data/statbridge_mcp_server/data_full/collection/table_summary.csv"
+    table_summary_path = ROOT.parent / "src/backend/data_full/collection/table_summary.csv"
     with table_summary_path.open(encoding="utf-8-sig", newline="") as stream:
         summary = {row["tbl_id"]: row for row in csv.DictReader(stream)}
     api = json.loads((ROOT / "kosis_metadata_export.json").read_text(encoding="utf-8")) if (ROOT / "kosis_metadata_export.json").exists() else {"tables": {}, "exported_at_utc": None, "table_count": 0, "failure_count": 0}
@@ -361,7 +361,7 @@ def build_manifest() -> None:
         tid = table["tbl_id"]
         api_status = api["tables"].get(tid, {}).get("status", "not_queried")
         unit = summary.get(tid, {}).get("units", "")
-        tables.append({"table_id": tid, "table_name": table["tbl_nm"], "org_id": table.get("org_id"), "stat_id": table.get("stat_id"), "catalog_path": table.get("path", []), "snapshot_csv_available": (ROOT.parent / f"data/statbridge_mcp_server/data_full/tables/{tid}.csv").exists(), "case_ids": case_ids_by_table.get(tid, []), "proposed_relatedness_counts": dict(relation_counts.get(tid, {})), "kosis_api_status": api_status, "local_unit_recorded": bool(unit)})
+        tables.append({"table_id": tid, "table_name": table["tbl_nm"], "org_id": table.get("org_id"), "stat_id": table.get("stat_id"), "catalog_path": table.get("path", []), "snapshot_csv_available": (ROOT.parent / f"src/backend/data_full/tables/{tid}.csv").exists(), "case_ids": case_ids_by_table.get(tid, []), "proposed_relatedness_counts": dict(relation_counts.get(tid, {})), "kosis_api_status": api_status, "local_unit_recorded": bool(unit)})
     count_types = Counter(c["primary_type"] for c in cases)
     count_splits = Counter(c["split"] for c in cases)
     status_counts = Counter(c["annotation"]["review_status"] for c in cases)
@@ -377,13 +377,13 @@ def build_manifest() -> None:
             "eval/goldenset/multi_table.json (query and proposed pair seeds only)",
             "eval/goldenset/no_match.json (query and proposed no-match seeds only)",
             "data/kosis/hankook_tables.json",
-            "data/statbridge_mcp_server/data_full/collection/table_summary.csv",
-            "data/statbridge_mcp_server/data_full/tables/*.csv",
+            "src/backend/data_full/collection/table_summary.csv",
+            "src/backend/data_full/tables/*.csv",
         ],
         "new_artifacts": ["golden-set/cases.jsonl", "golden-set/schema.json", "golden-set/review.xlsx", "golden-set/catalog_manifest.json", "golden-set/coverage.csv", "golden-set/kosis_metadata_export.json", "golden-set/README.md", "golden-set/scripts/manage_golden_set.py"],
         "sources": {
             "catalog": {"path": "data/kosis/hankook_tables.json", "collected_at": catalog.get("collected_at"), "record_count": catalog.get("count"), "sha256": sha(catalog_path)},
-            "local_metadata_and_data": {"table_summary_path": "data/statbridge_mcp_server/data_full/collection/table_summary.csv", "table_summary_rows": len(summary), "snapshot_csv_count": sum(t["snapshot_csv_available"] for t in tables), "snapshot_csv_encoding": "UTF-8 with BOM tolerated; all read with utf-8-sig"},
+            "local_metadata_and_data": {"table_summary_path": "src/backend/data_full/collection/table_summary.csv", "table_summary_rows": len(summary), "snapshot_csv_count": sum(t["snapshot_csv_available"] for t in tables), "snapshot_csv_encoding": "UTF-8 with BOM tolerated; all read with utf-8-sig"},
             "api_export": {"path": "golden-set/kosis_metadata_export.json", "source": "project statbridge_mcp.kosis_client KOSIS getMeta(PRD, ITM)", "exported_at_utc": api.get("exported_at_utc"), "unique_candidate_tables_queried": api.get("table_count", 0), "failed_tables": api.get("failure_count", 0), "records_with_any_metadata": sum(v.get("status") == "ok" for v in api.get("tables", {}).values()), "metadata_scope": "period and item/classification endpoints; unit, comments and series definitions are not returned by these endpoints"},
             "hashes": {"table_summary_csv_sha256": sha(table_summary_path)},
         },
@@ -412,7 +412,7 @@ def refresh_kosis() -> None:
     try:
         from statbridge_mcp.kosis_client import KosisClient
     except ImportError as exc:
-        raise SystemExit("KOSIS client dependencies unavailable; install data/statbridge_mcp_server/requirements.txt") from exc
+        raise SystemExit("KOSIS client dependencies unavailable; install src/backend/requirements.txt") from exc
     cases = read_cases(); tids = sorted({x["table_id"] for c in cases for x in c["gold"]["retrieval"]["candidates"]})
     catalog = json.loads((REPO / "data/kosis/hankook_tables.json").read_text(encoding="utf-8-sig"))
     orgs = {t["tbl_id"]: t.get("org_id", "301") for t in catalog["tables"]}

@@ -74,7 +74,7 @@ Split은 `dev` 30 / `validation` 30 / `locked_test` 90입니다. `leakage_group`
 KOSIS 재조회는 프로젝트 의존성이 설치된 Python으로 실행합니다. `.env`에는 API 키가 필요하지만 키 값은 출력하거나 JSON 내보내기에 쓰지 않습니다.
 
 ```bash
-python3 -m pip install -r data/statbridge_mcp_server/requirements.txt
+python3 -m pip install -r src/backend/requirements.txt
 PYTHONPATH=src/backend python3 eval/table-discovery/v2/scripts/manage_v2.py refresh-kosis
 ```
 

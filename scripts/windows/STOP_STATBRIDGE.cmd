@@ -1,6 +1,9 @@
 @echo off
 setlocal
-for %%P in (8000 5173) do (
-  for /f "tokens=5" %%A in ('netstat -ano ^| findstr LISTENING ^| findstr ":%%P "') do taskkill /F /PID %%A >nul 2>nul
-)
-echo StatBridge stopped.
+for %%I in ("%~dp0..\..") do set "ROOT=%%~fI"
+chcp 65001 >nul
+set "STOP_PY=%ROOT%\.venv\Scripts\python.exe"
+if not exist "%STOP_PY%" exit /b 0
+"%STOP_PY%" "%ROOT%\scripts\windows\portable_runtime.py" stop
+echo Done.
+pause

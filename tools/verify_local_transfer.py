@@ -16,17 +16,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main() -> None:
-    load_dotenv(ROOT / "data" / "statbridge_mcp_server" / ".env", override=False)
+    load_dotenv(ROOT / ".env", override=False)
     if len(sys.argv) > 1:
         load_dotenv(sys.argv[1], override=False)
     with socket.socket() as sock:
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
     env = os.environ.copy()
-    env["PYTHONPATH"] = os.pathsep.join([str(ROOT / "src" / "agent"), str(ROOT / "data" / "statbridge_mcp_server")])
-    env["STATBRIDGE_VECTOR_PATH"] = str(ROOT / "data" / "vector_store")
-    env["STATBRIDGE_DATA_DIR"] = str(ROOT / "data" / "runtime_data" / "processed")
-    env["STATBRIDGE_TABLES_DIR"] = str(ROOT / "data" / "runtime_data" / "tables")
+    env["PYTHONPATH"] = os.pathsep.join([str(ROOT / "src" / "agent"), str(ROOT / "src" / "backend")])
+    env["STATBRIDGE_VECTOR_PATH"] = str(ROOT / ".venv" / "cache" / "vector_store_349")
+    env["STATBRIDGE_DATA_DIR"] = str(ROOT / "data" / "processed")
+    env["STATBRIDGE_TABLES_DIR"] = str(ROOT / "data" / "tables")
     server = subprocess.Popen([sys.executable, "-m", "uvicorn", "bridge_api:app", "--host", "127.0.0.1", "--port", str(port)], cwd=ROOT / "src" / "agent", env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     session = requests.Session()
     session.trust_env = False
@@ -53,7 +53,7 @@ def main() -> None:
             output.raise_for_status()
             rendered = output.json()
             result.update(output_status=rendered.get("status"), chart_series=len(rendered.get("chart") or []))
-        destination = ROOT / "eval" / "runs" / "20261001_local_transfer_http.json"
+        destination = ROOT / ".venv" / "cache" / "evaluation_runs" / "20261001_local_transfer_http.json"
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps(result, ensure_ascii=False, indent=2))

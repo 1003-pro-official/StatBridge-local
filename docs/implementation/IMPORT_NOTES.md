@@ -2,7 +2,7 @@
 
 ## 출처와 경계
 
-기존 비Git 작업 폴더의 `statbridge_mcp_server/`, `StatBridge-official/`, `runtime_data/processed/`, `golden-set-v4.1-public/`을 현재 저장소 구조에 맞춰 반영했다. 현재 저장소에 이미 존재하던 v1·v2 평가셋과 이전 검색 API는 보존했다. 현재 UI가 사용하는 주 API는 `src/agent/bridge_api.py`다.
+기존 비Git 작업 폴더의 `src/backend/`, `StatBridge-official/`, `data/processed/`, `golden-set-v4.1-public/`을 현재 저장소 구조에 맞춰 반영했다. 현재 저장소에 이미 존재하던 v1·v2 평가셋과 이전 검색 API는 보존했다. 현재 UI가 사용하는 주 API는 `src/agent/bridge_api.py`다.
 
 비공개 holdout 정답과 평가기, `.env`, 가상환경, `node_modules`, 빌드 산출물, Chroma DB, 임베딩 캐시, 임시 평가 결과는 이 저장소에 넣지 않는다. 비공개 평가기는 PM이 관리하는 별도 접근 제한 저장소에서만 사용한다.
 

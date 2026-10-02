@@ -26,9 +26,9 @@ def main() -> None:
     parser.add_argument("--project-root", required=True)
     args = parser.parse_args()
     golden_root, project_root = Path(args.golden_root), Path(args.project_root)
-    os.environ.setdefault("STATBRIDGE_DATA_DIR", str(project_root / "runtime_data" / "processed"))
-    os.environ.setdefault("STATBRIDGE_TABLES_DIR", str(project_root / "runtime_data" / "tables"))
-    sys.path.insert(0, str(project_root / "statbridge_mcp_server"))
+    os.environ.setdefault("STATBRIDGE_DATA_DIR", str(project_root / "data" / "processed"))
+    os.environ.setdefault("STATBRIDGE_TABLES_DIR", str(project_root / "data" / "tables"))
+    sys.path.insert(0, str(project_root / "src" / "backend"))
     from statbridge_mcp.statistics_service import StatisticsService
 
     cases: list[dict[str, Any]] = []

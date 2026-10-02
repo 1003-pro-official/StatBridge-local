@@ -31,7 +31,7 @@ UI natural language
 
 ## .env location
 
-`statbridge_mcp_server/.env`
+`.env`
 
 Minimum settings:
 
@@ -60,11 +60,11 @@ HCX-003 uses CLOVA Studio Chat Completions v1 by default (`/v1/chat-completions/
 Offline orchestration test:
 
 ```bat
-RUN_AGENT_TEST.cmd
+scripts/windows/RUN_AGENT_TEST.cmd
 ```
 
 Real NCP model smoke test after keys are configured:
 
 ```bat
-statbridge_mcp_server\.venv\Scripts\python.exe TEST_NCP_MODELS.py
+.venv\Scripts\python.exe tests/TEST_NCP_MODELS.py
 ```

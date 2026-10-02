@@ -62,7 +62,7 @@ def main() -> None:
     parser.add_argument("--gold", type=Path, default=ROOT / "eval" / "goldset" / "goldset_statbridge_hcx003_role_100.jsonl")
     parser.add_argument("--hcx", type=Path, required=True)
     parser.add_argument("--jev", type=Path, required=True)
-    parser.add_argument("--out", type=Path, default=ROOT / "eval" / "runs" / "20261001_jev_hybrid_100")
+    parser.add_argument("--out", type=Path, default=ROOT / ".venv" / "cache" / "evaluation_runs" / "20261001_jev_hybrid_100")
     args = parser.parse_args()
     gold = {x["case_id"]: x for x in read_jsonl(args.gold)}
     hcx_rows = read_jsonl(args.hcx)

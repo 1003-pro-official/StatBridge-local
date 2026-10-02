@@ -125,7 +125,7 @@ Dev 50건과 test 70건 모두 최종 decision/exact set 100%를 유지했다.
 ## 9. Regression 및 안전 계약
 
 - Python compile: 통과
-- `TEST_AGENT_FLOW.py`: 통과
+- `tests/TEST_AGENT_FLOW.py`: 통과
 - HCX clarification hard constraint: 통과
 - dictionary ID 기반 MCP plan: 통과
 - KOSIS exact params 및 item/objL 전달: 통과

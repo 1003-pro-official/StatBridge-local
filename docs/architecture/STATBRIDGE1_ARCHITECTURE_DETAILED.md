@@ -2,7 +2,7 @@
 
 ## 0. 문서 목적과 기준
 
-이 문서는 `StatBridge1`의 **현재 실제 코드**를 기준으로 다음 질문에 답한다.
+이 문서는 초기 `StatBridge1` 코드의 흐름을 기록한 문서다. 경로는 2026-10-02 정본 구조로 수정했다. 본문의 347개 표·벡터 캐시 수량은 작성 당시 관측값이며 현재 수량이 아니다. 현재 349개 표와 출력 에이전트 검증 범위는 [정본 통합 기록](../implementation/2026-10-02-canonical-layout.md)을 따른다.
 
 1. 프로그램은 어떤 디렉터리와 프로세스로 구성되는가?
 2. 자연어 질문은 어떻게 통계 검색용 언어로 바뀌는가?
@@ -54,7 +54,7 @@ flowchart LR
 
 | 계층 | 핵심 파일 | 책임 |
 |---|---|---|
-| 실행기 | `START_STATBRIDGE.cmd`, `runtime_scripts/*.cmd` | Python/Node 준비, 프로세스 시작, 포트와 헬스 확인 |
+| 실행기 | `scripts/windows/START_STATBRIDGE.cmd`, `scripts/windows/*.cmd` | Python/Node 준비, 프로세스 시작, 포트와 헬스 확인 |
 | UI | `frontend/src/App.tsx` | 질문 입력, 버튼·기간·그래프 방식 선택, 결과 출력 |
 | UI API 클라이언트 | `frontend/src/api/client.ts` | `/api/query`, `/api/catalog` 호출과 연결 실패 처리 |
 | HTTP 브리지 | `src/agent/bridge_api.py` | UI 계약, 기간 검증, Agent 실행, 차트 JSON 가공 |
@@ -63,9 +63,9 @@ flowchart LR
 | 벡터 검색 | `hybrid_retriever.py` | 질의 임베딩, Chroma 검색, Reranker, 혼합 점수 |
 | NCP 클라이언트 | `ncp_clova_client.py`, `ncp_retrieval_client.py` | HCX-003/007, Embedding v2, Reranker HTTP 호출 |
 | MCP 호환 게이트웨이 | `mcp_gateway.py` | MCP 도구와 같은 메서드로 StatisticsService 직접 호출 |
-| MCP stdio 서버 | `statbridge_mcp_server/statbridge_mcp/server.py` | 외부 MCP 클라이언트에 도구 공개 |
+| MCP stdio 서버 | `src/backend/statbridge_mcp/server.py` | 외부 MCP 클라이언트에 도구 공개 |
 | 통계 서비스 | `statistics_service.py` | 메타데이터, 로컬 CSV, KOSIS 조회와 결과 표준화 |
-| 메타데이터 | `metadata_store.py`, `runtime_data/processed/*.csv` | 표·항목·분류·기간·주석·출처의 정규 구조 생성 |
+| 메타데이터 | `metadata_store.py`, `data/processed/*.csv` | 표·항목·분류·기간·주석·출처의 정규 구조 생성 |
 | KOSIS 클라이언트 | `kosis_client.py` | 인증, rate limit, Parameter OpenAPI 요청 |
 | 임베딩 빌더 | `tools/build_stat_vector_index.py` | 사전을 3종 문서로 바꾸고 Chroma 인덱스 생성 |
 
@@ -74,63 +74,31 @@ flowchart LR
 ## 2. 디렉터리별 역할
 
 ```text
-StatBridge1/
-├─ START_STATBRIDGE.cmd
-├─ STOP_STATBRIDGE.cmd
-├─ runtime_scripts/
-│  ├─ RUN_AGENT.cmd
-│  ├─ RUN_MCP.cmd
-│  └─ RUN_FRONTEND.cmd
-├─ runtime_data/
-│  ├─ processed/
-│  │  ├─ bok_table_master.csv
-│  │  ├─ bok_items.csv
-│  │  ├─ bok_classifications.csv
-│  │  ├─ bok_periods.csv
-│  │  ├─ bok_comments.csv
-│  │  └─ bok_sources.csv
-│  └─ tables/                 # 로컬 수치 CSV가 있을 때 사용하는 위치
-├─ statbridge_mcp_server/
-│  ├─ .env
-│  ├─ requirements.txt
-│  ├─ server.py
-│  └─ statbridge_mcp/
-│     ├─ config.py
-│     ├─ server.py
-│     ├─ metadata_store.py
-│     ├─ search_engine.py
-│     ├─ statistics_service.py
-│     └─ kosis_client.py
-└─ StatBridge-official/
-   ├─ data/
-   │  ├─ vector_documents/
-   │  │  ├─ stat_concepts.json
-   │  │  ├─ stat_tables.json
-   │  │  ├─ stat_dimensions.json
-   │  │  └─ embedding_cache.json
-   │  └─ vector_store/
-   │     ├─ chroma.sqlite3
-   │     └─ <collection-id>/HNSW files
-   ├─ tools/
-   │  ├─ build_stat_vector_index.py
-   │  └─ evaluate_retrieval.py
-   ├─ eval/retrieval/*.json
-   └─ src/agent/
-      ├─ bridge_api.py
-      ├─ statbridge_agent.py
-      ├─ hybrid_retriever.py
-      ├─ ncp_clova_client.py
-      ├─ ncp_retrieval_client.py
-      ├─ mcp_gateway.py
-      ├─ stat_dictionary/
-      │  ├─ stat_language_dictionary.json
-      │  ├─ clarification_groups.csv
-      │  └─ stat_language_resolver.py
-      └─ frontend/
-         ├─ src/App.tsx
-         ├─ src/api/client.ts
-         ├─ src/api/types.ts
-         └─ src/styles.css
+StatBridge-local1/
+├─ .env                         # 로컬 키, Git 제외
+├─ .venv/cache/                 # 벡터 및 실행 결과, Git 제외
+├─ data/
+│  ├─ kosis/
+│  ├─ processed/                # bok_* 메타데이터 CSV 6종, 349개 표
+│  └─ tables/                   # 선택적 원자료 CSV, Git 제외
+├─ src/
+│  ├─ backend/
+│  │  ├─ requirements.txt
+│  │  ├─ server.py
+│  │  └─ statbridge_mcp/
+│  └─ agent/
+│     ├─ bridge_api.py
+│     ├─ agent_runtime.py        # 공개 Agent 진입점
+│     ├─ statbridge_agent.py
+│     ├─ langgraph_workflow.py
+│     ├─ output_agent.py
+│     ├─ stat_dictionary/
+│     └─ frontend/
+├─ scripts/windows/             # START/STOP 및 개별 실행기
+├─ tools/                       # 벡터 빌더, 데이터·검증 도구
+├─ tests/
+├─ eval/
+└─ docs/
 ```
 
 현재 데이터 규모는 다음과 같다.
@@ -154,12 +122,12 @@ StatBridge1/
 
 ## 3. 실행할 때 생성되는 프로세스
 
-`START_STATBRIDGE.cmd`는 다음 순서로 동작한다.
+`scripts/windows/START_STATBRIDGE.cmd`는 다음 순서로 동작한다.
 
 1. `%~dp0`를 기준으로 패키지 루트를 계산한다. 따라서 한글·공백이 있는 다른 경로에 복사해도 절대경로가 고정되지 않는다.
 2. Python 3.11~3.14를 탐색한다.
 3. 없으면 Windows Package Manager인 `winget`으로 Python 3.12를 설치하고 실행기를 다시 연다.
-4. 복사된 `.venv`는 사용하지 않고 `statbridge_mcp_server/.venv_runtime`을 해당 컴퓨터에서 생성한다.
+4. 복사된 `.venv`는 사용하지 않고 `.venv`을 해당 컴퓨터에서 생성한다.
 5. `requirements.txt`의 FastAPI, MCP SDK, pandas, requests, chromadb 등을 검사하고 없으면 설치한다.
 6. `.env`에서 KOSIS와 NCP 키의 존재 여부를 검사한다.
 7. Node.js와 npm을 확인하고, 없으면 Node.js LTS 설치를 시도한다.
@@ -174,7 +142,7 @@ StatBridge1/
 - **Frontend**: Vite/React, `127.0.0.1:5173`
 - **MCP Server**: stdio 서버, 네트워크 포트를 사용하지 않음
 
-`.env`는 `statbridge_mcp_server/.env`에서 읽는다. 주요 변수는 다음과 같다.
+`.env`는 `.env`에서 읽는다. 주요 변수는 다음과 같다.
 
 ```dotenv
 KOSIS_API_KEY=...
@@ -196,7 +164,7 @@ STATBRIDGE_MIN_SCORE_GAP=0.06
 
 ### 4.1 로컬 메타데이터 CSV
 
-`MetadataStore`는 `runtime_data/processed`의 CSV를 읽어 `TableMetadata` 객체를 만든다.
+`MetadataStore`는 `data/processed`의 CSV를 읽어 `TableMetadata` 객체를 만든다.
 
 - `bok_table_master.csv`: `TBL_ID`, 표 이름, 기관, 경로, 상태
 - `bok_items.csv`: `ITM_ID`, 항목명
@@ -481,13 +449,13 @@ Chroma에는 다음 값으로 upsert한다.
 빌드 명령은 다음과 같다.
 
 ```powershell
-RUN_VECTOR_BUILD.cmd
+scripts/windows/RUN_VECTOR_BUILD.cmd
 ```
 
 또는 내부적으로:
 
 ```powershell
-python StatBridge-official\tools\build_stat_vector_index.py
+python tools\build_stat_vector_index.py
 ```
 
 `--documents-only`는 임베딩 호출 없이 문서 JSON만 만들고, `--rebuild`는 기존 벡터 저장소와 캐시를 새로 만든다. `--limit`는 소량 smoke test에 사용한다.
@@ -701,7 +669,7 @@ data = self.service.get_statistics(
 
 ### 11.2 외부 클라이언트가 사용하는 실제 MCP stdio 경로
 
-`statbridge_mcp_server/statbridge_mcp/server.py`는 `MCPServer("StatBridge-MCP")`를 만들고 다음 도구를 공개한다.
+`src/backend/statbridge_mcp/server.py`는 `MCPServer("StatBridge-MCP")`를 만들고 다음 도구를 공개한다.
 
 | 도구 | 입력 | 출력/역할 |
 |---|---|---|
@@ -1112,22 +1080,22 @@ sequenceDiagram
 ### Agent 흐름
 
 ```powershell
-RUN_AGENT_TEST.cmd
-RUN_AGENT_E2E_TEST.cmd
+scripts/windows/RUN_AGENT_TEST.cmd
+scripts/windows/RUN_AGENT_E2E_TEST.cmd
 ```
 
-`TEST_AGENT_FLOW.py`는 HCX 구조화, 역질문, 사전 hard constraint, MCP 호출 인자, 답변 경로를 검사한다.
+`tests/TEST_AGENT_FLOW.py`는 HCX 구조화, 역질문, 사전 hard constraint, MCP 호출 인자, 답변 경로를 검사한다.
 
 ### NCP 모델 연결
 
 ```powershell
-RUN_NCP_TEST.cmd
+scripts/windows/RUN_NCP_TEST.cmd
 ```
 
 ### 검색 평가
 
 ```powershell
-RUN_RETRIEVAL_EVAL.cmd
+scripts/windows/RUN_RETRIEVAL_EVAL.cmd
 ```
 
 평가셋:
@@ -1143,7 +1111,7 @@ RUN_RETRIEVAL_EVAL.cmd
 ### 프런트 빌드
 
 ```powershell
-cd StatBridge-official\src\agent\frontend
+cd src\agent\frontend
 npm run build
 ```
 
