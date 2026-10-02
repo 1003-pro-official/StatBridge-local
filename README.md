@@ -1,6 +1,6 @@
 # StatBridge
 
-현재 작업 저장소는 [Engineer3rd-Class-Kimmin/StatBridge-local1](https://github.com/Engineer3rd-Class-Kimmin/StatBridge-local1)이다. Windows에서는 루트 `START_STATBRIDGE.cmd`로 실행한다. 통합 HTTP 실행 모듈은 `src/agent/agent_runtime.py`이며 기존 `statbridge_agent/` 패키지도 보존한다.
+현재 작업 저장소는 [1003-pro-official/StatBridge-local](https://github.com/1003-pro-official/StatBridge-local)이다. Windows에서는 루트 `START_STATBRIDGE.cmd`로 실행한다. 이 CMD는 `scripts/windows/START_STATBRIDGE.cmd`를 호출한다. 화면용 HTTP API는 `src/agent/bridge_api.py`가 제공한다.
 
 오늘의 출력 에이전트·Jev 패치·평가 기록은 [통합 작업 요약](docs/운영/2026-10-01-통합-작업-요약.md), 저장소 이전 과정은 [저장소 이전 기록](docs/운영/2026-10-01-저장소-이전.md)에 정리했다.
 
@@ -36,7 +36,7 @@ cd src/agent/frontend && pnpm install --frozen-lockfile && cd ../../..
 ```
 
 Windows PowerShell에서는 `.venv/bin/python` 대신 `.venv\Scripts\python.exe`를 사용합니다.
-의존성 설치 후 `scripts\windows\START_STATBRIDGE.cmd`로 Agent API와 화면을 함께 시작할 수 있습니다.
+의존성 설치 후 루트 `START_STATBRIDGE.cmd`로 Agent API와 화면을 함께 시작할 수 있습니다. UI Agent는 MCP와 같은 `StatisticsService`를 프로세스 내부에서 호출하며, 별도 MCP stdio 프로세스를 거쳐 수치를 받지는 않습니다. 수치 조회는 `data/tables/` 또는 `STATBRIDGE_TABLES_DIR`의 CSV를 우선 사용하고, 일치하는 로컬 행이 없으면 KOSIS API를 시도합니다. 실제 출처는 응답의 `execution.sources[].source`에서 확인할 수 있습니다.
 
 CSV가 없어도 메타데이터로 검색과 카탈로그는 확인할 수 있습니다. KOSIS 조회에는 `KOSIS_API_KEY`, HCX·임베딩·재순위화에는 `NCP_CLOVA_API_KEY`가 필요합니다. 키는 루트 `.env`에 두며 Git에 추가하지 않습니다. 예시는 `.env.example`을 참고합니다.
 

@@ -10,7 +10,7 @@ React 입력 UI
   → LangGraph resolve_request
   → 통계언어 사전·HCX·검색
   → LangGraph execute_statistics
-  → MCP StatisticsService / KOSIS
+  → MCP 계약의 StatisticsService (로컬 CSV 우선, 없으면 KOSIS)
   → LangGraph await_output_selection
   → UI 그래프 종류·배치·편집값 선택
   → POST /api/output
@@ -63,6 +63,8 @@ START → prepare_output → END
 ```
 
 역질문과 미해결 경로는 기존처럼 바로 종료된다. MCP 조회에 성공한 경우에만 출력 에이전트가 실행된다.
+
+현재 UI Agent는 별도 MCP stdio 프로세스에 요청하지 않고 `McpToolGateway`를 통해 같은 `StatisticsService`를 프로세스 안에서 호출한다. 수치 데이터는 `STATBRIDGE_TABLES_DIR`(기본 `data/tables/`)의 CSV를 먼저 조회하며, 해당 행이 없으면 KOSIS API를 시도한다. 로컬 CSV 347개는 Git에 포함되지 않으므로 별도로 공급해야 한다. 응답의 `execution.sources[].source`가 `local_csv`인지 확인하면 실제 출처를 알 수 있다.
 
 ## API 계약 스켈레톤
 

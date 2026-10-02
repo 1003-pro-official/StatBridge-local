@@ -514,7 +514,7 @@ class StatBridgeAgent:
 
         try:
             all_rows=[]; sources=[]
-            prefer_local = not bool(os.getenv("KOSIS_API_KEY", "").strip())
+            prefer_local = True
             for plan in plans:
                 data = self.service.get_statistics(
                     table_id=plan["table_id"], item_id=plan["item_id"],

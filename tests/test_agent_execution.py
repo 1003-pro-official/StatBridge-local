@@ -45,6 +45,19 @@ def test_agent_uses_external_csv_when_no_kosis_key(monkeypatch):
     assert result["execution"]["sources"][0]["source"] == "local_csv"
 
 
+def test_agent_prefers_local_csv_with_kosis_key(monkeypatch):
+    monkeypatch.setenv("KOSIS_API_KEY", "configured-key")
+    agent = agent_with_response({
+        "status": "success", "source": "local_csv",
+        "rows": [{"PRD_DE": "202501", "DT": "100.1"}],
+    })
+
+    result = agent.execute_resolution("경제심리지수", {"api_plan": plan()}, generate_answer=False)
+
+    assert agent.service.calls[0]["prefer_local"] is True
+    assert result["execution"]["sources"][0]["source"] == "local_csv"
+
+
 def test_agent_does_not_report_failed_mcp_lookup_as_success(monkeypatch):
     monkeypatch.delenv("KOSIS_API_KEY", raising=False)
     agent = agent_with_response({
