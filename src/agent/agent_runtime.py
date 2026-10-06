@@ -15,6 +15,7 @@ from langgraph_workflow import StatBridgeWorkflow
 from output_agent import OutputAgent
 from jev_series_client import JevSeriesClient
 from jev_series_hybrid import apply_jev_series_decision
+from request_match_guard import structure_request, table_evidence, catalog_mentions, scoped_metric_query, unsupported_quantity_terms
 
 
 @dataclass(slots=True)
@@ -209,6 +210,28 @@ class StatBridgeAgent:
             exact_params=exact,
         )
 
+    def _current_account_component_plans(self, query: str, selected: dict[str, Any], dictionary_query: str) -> list[dict[str, Any]]:
+        """Expand explicitly requested components using this table's verified IDs."""
+        if (str(selected.get("table_id")) != "DT_301Y017" or "경상수지" not in query or
+                not re.search(r"구성\s*(?:항목|요소)|세부\s*항목", query)):
+            return []
+        table = self.tables_by_id["DT_301Y017"]
+        dimension = next((item for item in table.get("dimensions") or [] if item.get("api_param") == "objL1"), None)
+        if not dimension:
+            return []
+        labels = ("경상수지", "상품수지", "서비스수지", "본원소득수지", "이전소득수지")
+        values = {str(value.get("value_name")): str(value.get("value_id")) for value in dimension.get("values") or []}
+        if any(not values.get(label) for label in labels):
+            return []
+        other_hits = [hit for hit in selected.get("dimension_hits") or [] if hit.get("api_param") != "objL1"]
+        plans = []
+        for label in labels:
+            choice = {**selected, "dimension_hits": [*other_hits, {"api_param": "objL1", "value_id": values[label]}]}
+            plan = self.build_api_plan(dictionary_query, choice).as_dict()
+            plan["series_label"] = label
+            plans.append(plan)
+        return plans
+
     @staticmethod
     def _comparison_series(classification: dict[str, Any]) -> list[dict[str, str]]:
         raw = classification.get("series") or []
@@ -233,6 +256,7 @@ class StatBridgeAgent:
         common_terms = " ".join(str(x) for x in (classification.get("qualifiers") or []) if str(x).strip())
         for item in series:
             ranked = self.hybrid.rank(f"{item['label']} {item['query']} {common_terms}".strip(), top_k=8)
+            ranked = [candidate for candidate in ranked if table_evidence(item['query'], self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]]
             if not ranked:
                 missing.append(item["label"])
                 continue
@@ -307,7 +331,62 @@ class StatBridgeAgent:
             # NCP failure must not make the deterministic dictionary unusable.
             return query, {"status": "error", "model": self.ncp.settings.classifier_model, "error": str(exc)}
 
+    def _scoped_comparison(self, query, state, clarification):
+        # A choice for one compared metric must not filter the other metric.
+        text=re.sub(r'(20\d{2})년\s*(?:과|와|부터)\s*(20\d{2})년까지(?:의)?', ' ', query)
+        parts=[p.strip() for p in re.split(r'그리고|\s+및\s+|와\s+|과\s+',text) if p.strip()]
+        if not 2<=len(parts)<=5 or not all(structure_request(p)['metrics'] for p in parts):
+            return None
+        # Exact catalog requests already have a separate, proven matching path.
+        if catalog_mentions(query,self.resolver.tables):
+            return None
+        years=re.findall(r'20\d{2}',query)
+        period=f' {years[0]}년부터 {years[-1]}년까지' if len(years)>=2 else ''
+        confirmed=dict((state or {}).get('confirmed') or {})
+        if clarification:confirmed[str(clarification['clarification_id'])]=str(clarification['value'])
+        plans=[]; selected=[]
+        for index,part in enumerate(parts):
+            part=re.sub(r'신규\s*대출','신규취급액',part)
+            prefix=f'comparison:{index}:'
+            local={k[len(prefix):]:v for k,v in confirmed.items() if k.startswith(prefix)}
+            result=self.resolver.resolve(part+period,confirmed=local,top_k=8)
+            next_state={'original_query':query,'_request_query':query,'_user_query':query,'confirmed':confirmed}
+            if result['status']=='need_clarification':
+                return {**result,'clarification_id':prefix+result['clarification_id'],
+                        'question':f'「{part}」: '+result['question'],'state':next_state}
+            if result['status']!='resolved':return {**result,'state':next_state}
+            candidates=result.get('candidates') or []
+            if '대출' in part and '금리' not in part:
+                candidates=[c for c in candidates if '금리' not in c['table_name']]
+                if '신규취급액' in part:
+                    candidates=[c for c in candidates if '신규취급액' in c['table_name']]
+                if not any(word in part for word in ('비중','비율','구성비')):
+                    candidates=[c for c in candidates if '비중' not in c['table_name']]
+            for product in ('주택담보','신용대출'):
+                if product in part:
+                    candidates=[c for c in candidates if product in c['table_name'] or any(product in str(h.get('value_name') or '') for h in c.get('dimension_hits',[]))]
+            if not candidates:return {'status':'no_match','missing_series':[part],'state':next_state}
+            chosen=next((c for c in candidates if c['table_id']==local.get('table')),None)
+            if local.get('table') and not chosen:
+                return {'status':'no_match','missing_series':[part],'state':next_state}
+            if not chosen and len(candidates)>1:
+                return {'status':'need_clarification','clarification_id':prefix+'table',
+                        'question':f'「{part}」에 사용할 통계표를 선택해 주세요. '+('은행 구분과 금리 기준을 확인해 주세요.' if '금리' in part else '차주당 금액과 전체 금액은 다릅니다.' if '대출' in part else '통계표의 기준과 항목을 확인해 주세요.'),
+                        'options':[{'label':c['table_name']+' ['+c['table_id']+']','value':c['table_id'],'confirmed_terms':[]} for c in candidates[:5]],
+                        'state':next_state}
+            chosen=chosen or candidates[0]
+            selected.append(chosen);plans.append(self.build_api_plan(part+period,chosen).as_dict())
+        return self.validate_resolution(query,{'status':'resolved','selected_table':selected[0],
+            'selected_tables':selected,'api_plan':plans[0],'api_plans':plans,'candidates':selected,
+            'state':{'original_query':query,'_request_query':query,'_user_query':query,'confirmed':confirmed},
+            'dictionary_query':query,'request_query':query,'classification':{'status':'scoped_comparison'}})
+
     def resolve(self, query: str, state: dict[str, Any] | None = None, clarification: dict[str, str] | None = None) -> dict[str, Any]:
+        scoped=self._scoped_comparison(query,state,clarification)
+        if scoped is not None:return scoped
+        request_query = query
+        if state and not structure_request(query)["metrics"] and not structure_request(query)["explicit_ids"]:
+            request_query = str(state.get("_request_query") or state.get("_user_query") or query)
         prior_user_query = ""
         if state and clarification:
             # The resolver state already contains the HCX-003-expanded dictionary query.
@@ -337,10 +416,19 @@ class StatBridgeAgent:
             # the dictionary's button question before HCX expands them into
             # several speculative comparison series.
             preflight = self.resolver.resolve(effective_query, top_k=8)
-            if preflight.get("status") == "need_clarification":
+            if preflight.get("canonical_name_match"):
+                result=preflight
+                dictionary_query=effective_query
+                classification={"status":"canonical_name_match","normalized_query":effective_query,"series":[]}
+            elif preflight.get("status") == "need_clarification":
                 result = preflight
-                result["clarifications"] = self.resolver.collect_clarifications(effective_query, top_k=8)
-                dictionary_query, classification = self._classify(effective_query)
+                if str(preflight.get('clarification_id') or '').startswith('canonical_table:'):
+                    dictionary_query=effective_query
+                    classification={"status":"canonical_name_ambiguity","normalized_query":effective_query,"series":[]}
+                    result['clarifications']=[dict(preflight)]
+                else:
+                    result["clarifications"] = self.resolver.collect_clarifications(effective_query, top_k=8)
+                    dictionary_query, classification = self._classify(effective_query)
                 result["state"]["original_query"] = dictionary_query
             elif preflight.get("status") == "no_match" and preflight.get("missing_series"):
                 # An explicitly named metric that is absent from the trusted
@@ -353,6 +441,7 @@ class StatBridgeAgent:
                 selected=preflight.get("selected_table") or {}
                 reasons=selected.get("reasons") or []
                 deterministic_fast=bool(float(selected.get("score") or 0)>=150 and any(str(reason) in {"table_id","table_name","exact_table_phrase"} for reason in reasons))
+                deterministic_fast = deterministic_fast or bool(preflight.get("status")=="resolved" and len(preflight.get("candidates") or [])==1 and structure_request(effective_query)["metrics"] and table_evidence(effective_query,self.tables_by_id.get(str(selected.get("table_id")),{}))[0])
                 if deterministic_fast:
                     dictionary_query=effective_query
                     classification={"status":"deterministic_fast_path","normalized_query":effective_query,"series":[]}
@@ -371,6 +460,7 @@ class StatBridgeAgent:
                     result = comparison
                 else:
                     hybrid_candidates = self.hybrid.rank(dictionary_query, top_k=12)
+                    hybrid_candidates = [candidate for candidate in hybrid_candidates if table_evidence(request_query, self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]]
                     # Keep deterministic ambiguity gates. Replace its ranking only after
                     # the resolver has decided whether a clarification is required.
                     result = self.resolver.resolve(dictionary_query, top_k=8)
@@ -416,11 +506,19 @@ class StatBridgeAgent:
                 result["api_plan"]=plans[0]
                 result["api_plans"]=plans
 
+        if result.get('canonical_name_match') and not result.get('api_plans') and len(result.get('selected_tables') or [])>1:
+            choices=result['selected_tables']
+            plans=[self.build_api_plan(dictionary_query,choice).as_dict() for choice in choices]
+            result['api_plan']=plans[0]
+            result['api_plans']=plans
+
         result["classification"] = classification
         result["dictionary_query"] = dictionary_query
+        result["request_query"] = request_query
         if isinstance(result.get("state"), dict):
             result["state"]["_user_query"] = query
             result["state"]["_classification"] = classification
+            result["state"]["_request_query"] = request_query
 
         if result.get("status") == "need_clarification":
             # Options are deterministic dictionary values; HCX-007 only phrases the question.
@@ -431,12 +529,64 @@ class StatBridgeAgent:
             return result
 
         if result.get("api_plans"):
-            return result
+            return self.validate_resolution(request_query, result)
         selected = result["selected_table"]
         # Use the expanded statistical language for period hints while retaining the original UI question.
         plan = self.build_api_plan(dictionary_query, selected)
         result["api_plan"] = plan.as_dict()
-        return result
+        component_plans = self._current_account_component_plans(query, selected, dictionary_query)
+        if component_plans:
+            result["api_plan"] = component_plans[0]
+            result["api_plans"] = component_plans
+        return self.validate_resolution(request_query, result)
+
+    def validate_resolution(self, query: str, resolution: dict[str, Any]) -> dict[str, Any]:
+        """Check original intent and canonical IDs again after model/vector ranking."""
+        request = structure_request(query)
+        mentions=catalog_mentions(query,self.tables_by_id.values())
+        plans = resolution.get("api_plans") or ([resolution["api_plan"]] if resolution.get("api_plan") else [])
+        errors = []; covered = set(); covered_products=set()
+        requested_products={p for p in ('주택담보대출','신용대출') if p in re.sub(r'\s+','',query)}
+        unknown=unsupported_quantity_terms(query,self.tables_by_id.values())
+        if unknown:
+            errors.append('정본에서 확인할 수 없는 요청 지표: '+', '.join(unknown))
+        confirmed = (resolution.get("state") or {}).get("confirmed") or {}
+        selected_ids={str(p.get('table_id') or '') for p in plans}
+        missing_ids={tid.upper() for tid in request['explicit_ids']} - {tid.upper() for tid in selected_ids}
+        if missing_ids:
+            errors.append('누락된 요청 통계표 ID: '+', '.join(sorted(missing_ids)))
+        for mention in mentions:
+            if not selected_ids.intersection(mention['table_ids']):
+                errors.append('요청한 통계표 누락: '+mention['text'])
+        for plan in plans:
+            table = self.tables_by_id.get(str(plan.get("table_id") or ""))
+            if not table:
+                errors.append("정본 사전에 없는 통계표 ID입니다."); continue
+            scoped=scoped_metric_query(query,table,mentions)
+            valid, hits, _ = table_evidence(scoped, table)
+            covered.update(hits)
+            if not valid or not self.resolver._matches_metric_intent(scoped, table) or not self.resolver._matches_confirmed_filters(table, confirmed):
+                errors.append(f"요청과 다른 통계표: {table['table_name']} ({table['table_id']})")
+            if str(plan.get("table_name")) != str(table["table_name"]):
+                errors.append("통계표 이름과 ID가 정본 사전에서 일치하지 않습니다.")
+            measured_products=str(table['table_name'])
+            for dimension in table.get('dimensions') or []:
+                codes=str((plan.get('classifications') or {}).get(dimension.get('api_param')) or '').split('+')
+                measured_products+=' '+' '.join(str(v.get('normalized') or v.get('value_name') or '') for v in dimension.get('values') or [] if str(v.get('value_id')) in codes)
+            covered_products.update(p for p in requested_products if p in re.sub(r'\s+','',measured_products))
+        if not plans: errors.append("검증할 통계표가 없습니다.")
+        missing = set(request["metrics"]) - covered
+        missing_products=requested_products-covered_products
+        if missing_products:errors.append('조회 항목에 없는 대출 종류: '+', '.join(sorted(missing_products)))
+        if missing: errors.append("누락된 요청 지표: " + ", ".join(sorted(missing)))
+        validation = {"valid":not errors, "request":request, "errors":errors,
+                      "table_ids":[p.get("table_id") for p in plans]}
+        if errors:
+            return {**resolution,"status":"no_match","selected_table":None,"selected_tables":[],
+                    "api_plan":None,"api_plans":[],"request_validation":validation,
+                    "missing_series":sorted(missing) or request["metrics"],
+                    "state":{**(resolution.get("state") or {}),"status":"no_match"}}
+        return {**resolution,"request_query":query,"request_validation":validation}
 
     def run(
         self,
@@ -496,7 +646,9 @@ class StatBridgeAgent:
         generate_answer: bool = True,
     ) -> dict[str, Any]:
         """Execute an already resolved plan without repeating HCX/vector retrieval."""
-
+        resolution = self.validate_resolution(query, resolution)
+        if resolution.get("status") != "resolved":
+            return {**resolution,"execution":{"status":"request_mismatch","rows":[],"row_count":0},"answer":""}
         plans = resolution.get("api_plans") or [resolution["api_plan"]]
         for plan in plans:
             override = (period_overrides or {}).get(str(plan["table_id"]))
@@ -527,6 +679,8 @@ class StatBridgeAgent:
                     raise RuntimeError(detail or f"{plan['table_name']} 수치 데이터를 가져오지 못했습니다.")
                 label = str(plan.get("series_label") or plan["table_name"])
                 for row in data.get("rows") or []:
+                    if row.get("TBL_ID") and str(row["TBL_ID"]) != str(plan["table_id"]):
+                        raise ValueError("KOSIS 응답의 통계표 ID가 요청한 표와 다릅니다.")
                     enriched = dict(row)
                     enriched["_SERIES_LABEL"] = label
                     enriched["_SOURCE_SERIES_ID"] = str(plan["table_id"])

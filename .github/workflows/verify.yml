@@ -47,6 +47,7 @@ jobs:
         working-directory: src/agent/frontend
         run: |
           pnpm install --frozen-lockfile
+          node --test test-*.mjs
           pnpm build
 
       # CI에는 API 키와 data/tables CSV가 없습니다. 외부 KOSIS·NCP 호출과

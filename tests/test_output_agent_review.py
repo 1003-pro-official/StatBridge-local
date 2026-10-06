@@ -16,7 +16,10 @@ def test_manual_v2_script():
 
 
 def sample_result():
-    return {"execution": {"status": "success", "rows": [
+    return {"status": "resolved", "api_plan": {
+        "table_id": "DT_121Y002", "table_name": "예금은행 수신금리(신규취급액 기준)",
+        "item_id": "mock", "classifications": {}, "frequency": "M",
+    }, "execution": {"status": "success", "rows": [
         {"_SERIES_LABEL": "금리", "PRD_DE": "202401", "DT": "4.2", "UNIT_NM": "%"},
         {"_SERIES_LABEL": "금리", "PRD_DE": "202402", "DT": "4.3", "UNIT_NM": "%"},
     ]}}
@@ -50,7 +53,7 @@ def test_edit_sessions_evict_oldest_after_successful_render(monkeypatch):
 
     monkeypatch.setattr(bridge_api, "EDIT_SESSIONS", {str(i): {} for i in range(100)})
     session = {"result": sample_result(), "period": {"start": "202401", "end": "202402"},
-               "frequency": "M", "query": "금리", "table_name": "금리"}
+               "frequency": "M", "query": "DT_121Y002", "table_name": "금리"}
     monkeypatch.setattr(bridge_api, "OUTPUT_SESSIONS", {"input": session})
     monkeypatch.setattr(bridge_api.agent, "render_output", lambda result, request: {
         **result, "output": OutputAgent().prepare(result, request),
@@ -68,7 +71,7 @@ def test_invalid_output_keeps_input_session_and_returns_detail(monkeypatch):
     from fastapi import HTTPException
 
     monkeypatch.setattr(bridge_api, "OUTPUT_SESSIONS", {"input": {
-        "result": sample_result(), "query": "금리",
+        "result": sample_result(), "query": "DT_121Y002",
     }})
     monkeypatch.setattr(bridge_api, "EDIT_SESSIONS", {})
 
@@ -97,7 +100,7 @@ def test_edit_reuses_cached_rows_without_query(monkeypatch):
     }})
     monkeypatch.setattr(bridge_api.agent, "run", lambda **_: pytest.fail("No new query on edit"))
     monkeypatch.setattr(bridge_api.agent, "execute_resolution", lambda **_: pytest.fail("No new data fetch on edit"))
-    monkeypatch.setattr(bridge_api.agent.output_agent, "edit", lambda saved, current, instruction: {
+    monkeypatch.setattr(bridge_api.edit_agent, "edit", lambda saved, current, instruction, *args, **kwargs: {
         **current, "summary": "수정 완료",
     })
     response = bridge_api.edit_output(bridge_api.OutputEditRequest(edit_session_id="edit", instruction="제목 변경"))
