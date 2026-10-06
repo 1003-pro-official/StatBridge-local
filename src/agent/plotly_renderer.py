@@ -120,6 +120,10 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
                 ticks.append(periods[-1])
             frequency = str(series[0].get("frequency") or "")
             tick_labels = [f"{period[:4]}-{period[4:6]}" if frequency == "M" and len(period) == 6 else period for period in ticks]
+            # KOSIS periods such as 202501 are identifiers, not Plotly dates.
+            # Explicit categories keep every month at its own x position.
+            if chart_type not in {"scatter", "bubble", "histogram", "box"}:
+                fig.update_xaxes(type="category", categoryorder="array", categoryarray=periods)
             fig.update_xaxes(tickmode="array", tickvals=ticks, ticktext=tick_labels, tickangle=0, automargin=True)
         fig.update_xaxes(title_text=spec.x_axis_label)
         fig.update_yaxes(title_text="", automargin=True)
