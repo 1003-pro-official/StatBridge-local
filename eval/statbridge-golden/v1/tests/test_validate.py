@@ -24,3 +24,24 @@ class TestValidateStructure(unittest.TestCase):
     def test_bad_status_is_error(self):
         bad = json.loads(json.dumps(GOOD)); bad["gold"]["graph"]["status"] = "maybe"
         self.assertTrue(any("status invalid" in e for e in V.validate_record(bad)))
+
+    def test_forbidden_overlaps_acceptable_is_error(self):
+        r = json.loads(json.dumps(GOOD))
+        r["gold"]["discovery"] = {"status": "labeled", "expected_status": "select",
+                                  "acceptable_table_ids": ["DT_A"], "required_set": ["DT_A"],
+                                  "forbidden_table_ids": ["DT_A"]}
+        self.assertTrue(any("forbidden overlaps" in e for e in V.validate_record(r)))
+
+    def test_no_match_with_tables_is_error(self):
+        r = json.loads(json.dumps(GOOD))
+        r["gold"]["discovery"] = {"status": "labeled", "expected_status": "no_match",
+                                  "acceptable_table_ids": ["DT_A"], "required_set": [],
+                                  "forbidden_table_ids": []}
+        self.assertTrue(any("no_match has tables" in e for e in V.validate_record(r)))
+
+    def test_context_claim_requires_source(self):
+        r = json.loads(json.dumps(GOOD))
+        r["gold"]["interpretation"] = {"status": "labeled",
+            "required_claims": [{"id": "c1", "type": "direction", "expected": "up"}],
+            "context_claims": [{"id": "x1", "type": "context", "text": "맥락"}]}
+        self.assertTrue(any("context claim without source" in e for e in V.validate_record(r)))

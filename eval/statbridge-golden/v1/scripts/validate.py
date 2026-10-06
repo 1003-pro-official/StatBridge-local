@@ -40,4 +40,30 @@ def validate_record(r):
     for k, v in gold.items():
         if isinstance(v, dict) and v.get("status") not in STATUS:
             errs.append(f"{rid}: {k}.status invalid")
+    d = gold.get("discovery", {})
+    if d.get("status") == "labeled":
+        st = d.get("expected_status")
+        if st not in ("select", "clarify", "no_match", "catalog_only"):
+            errs.append(f"{rid}: bad expected_status")
+        acc = set(d.get("acceptable_table_ids", []))
+        req = set(d.get("required_set", []))
+        forb = set(d.get("forbidden_table_ids", []))
+        if not req <= acc:
+            errs.append(f"{rid}: required_set not subset of acceptable")
+        if acc & forb:
+            errs.append(f"{rid}: forbidden overlaps acceptable")
+        if st == "no_match" and acc:
+            errs.append(f"{rid}: no_match has tables")
+        if st == "clarify" and acc:
+            errs.append(f"{rid}: clarify has tables")
+        if st == "select" and not acc:
+            errs.append(f"{rid}: select without tables")
+    interp = gold.get("interpretation", {})
+    if interp.get("status") == "labeled":
+        for c in interp.get("required_claims", []):
+            if c.get("type") not in CLAIM_TYPES:
+                errs.append(f"{rid}: bad claim type {c.get('type')}")
+        for c in interp.get("context_claims", []):
+            if not c.get("source"):
+                errs.append(f"{rid}: context claim without source")
     return errs
