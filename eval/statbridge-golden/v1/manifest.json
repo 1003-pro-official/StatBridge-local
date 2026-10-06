@@ -1,0 +1,16 @@
+{
+  "lineage": "statbridge-golden",
+  "version": "v1",
+  "schema_version": "gs1",
+  "targets": { "dev": 30, "test": 42, "holdout": 18, "total": 90 },
+  "type_matrix": {
+    "single":       { "dev": 12, "test": 18, "holdout": 6 },
+    "followup":     { "dev": 6,  "test": 8,  "holdout": 4 },
+    "multi":        { "dev": 4,  "test": 6,  "holdout": 3 },
+    "clarify":      { "dev": 4,  "test": 6,  "holdout": 3 },
+    "no_match":     { "dev": 3,  "test": 3,  "holdout": 1 },
+    "catalog_only": { "dev": 1,  "test": 1,  "holdout": 1 }
+  },
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "review": { "human_approval_required": true }
+}
