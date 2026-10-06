@@ -1,6 +1,7 @@
 import copy, json, os, re, unicodedata
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from request_match_guard import table_evidence, catalog_mentions, scoped_metric_query, residual_catalog_query, structure_request, unsupported_quantity_terms
 
 @dataclass
 class QueryState:
@@ -103,7 +104,7 @@ class StatLanguageResolver:
             token=re.sub(r'(을|를|이|가|은|는|의|로|으로)$','',raw)
             if len(token)>=2 and not any(s in token for s in stop): tokens.append(token)
         quantity=[x for x in tokens if x.endswith(('사용량','생산량','소비량','발전량'))]
-        return bool(quantity and not any(x in catalog for x in quantity))
+        return bool(unsupported_quantity_terms(query,self.tables) or (quantity and not any(x in catalog for x in quantity)))
 
     def candidate_shell(self, table_id):
         t=self.tables_by_id[str(table_id)]
@@ -137,6 +138,12 @@ class StatLanguageResolver:
         if not confirmed: return True
         tn=str(table.get('table_name','')).lower()
         for gid,value in confirmed.items():
+            if gid.startswith('canonical_table:'):
+                mentions=catalog_mentions(gid.split(':',1)[1],self.tables)
+                siblings={tid for m in mentions for tid in m['table_ids']}
+                if str(table['table_id']) in siblings and str(table['table_id'])!=str(value):
+                    return False
+                continue
             g=next((x for x in self.groups if x['id']==gid),None)
             if not g: continue
             o=next((x for x in g['options'] if x['value']==value),None)
@@ -207,6 +214,9 @@ class StatLanguageResolver:
         confirmed=confirmed or {}
         confirmed_terms=self._confirmed_terms(confirmed)
         confirmed_weight=float(self.policy.get('confirmed_term_weight',220))
+        mentions=catalog_mentions(query,self.tables)
+        named_ids={tid for m in mentions for tid in m['table_ids']}
+        residual_metrics=structure_request(residual_catalog_query(query,mentions))['metrics']
 
         # Keep the useful v4 public-intent gates, but clarification can override them.
         intent_rules=[
@@ -233,9 +243,20 @@ class StatLanguageResolver:
                 continue
             if not self._matches_confirmed_filters(t, confirmed):
                 continue
-            if not explicit_ids and not self._matches_metric_intent(query, t):
+            if mentions and not residual_metrics and str(t['table_id']) not in named_ids:
+                continue
+            scoped=scoped_metric_query(query,t,mentions)
+            if not explicit_ids and not self._matches_metric_intent(scoped, t):
+                continue
+            matches, metric_hits, _ = table_evidence(scoped, t)
+            if not matches:
                 continue
             score=0.0; reasons=[]; dim_hits=[]
+            if str(t['table_id']) in named_ids:
+                score+=1000; reasons.append('canonical_name')
+            if metric_hits:
+                score += 35 * len(metric_hits)
+                reasons.extend('request_metric:'+term for term in metric_hits)
             tid=self.norm(t['table_id']); tn=self.norm(t['table_name'])
             if not explicit_ids and '상세자금순환' in q.replace(' ',''):
                 score+=160; reasons.append('semantic:상세자금순환')
@@ -316,9 +337,10 @@ class StatLanguageResolver:
                     score+=best[0]; dim_hits.append(best[1])
 
             requested_frequency=None
-            if any(term in q for term in ('월별','매월','월마다')): requested_frequency='M'
-            elif any(term in q for term in ('분기별','분기마다')): requested_frequency='Q'
-            elif any(term in q for term in ('연간','연도별','매년')): requested_frequency='A'
+            frequency_query=residual_catalog_query(query,mentions)
+            if any(term in frequency_query for term in ('월별','매월','월마다')): requested_frequency='M'
+            elif any(term in frequency_query for term in ('분기별','분기마다')): requested_frequency='Q'
+            elif any(term in frequency_query for term in ('연간','연도별','매년')): requested_frequency='A'
             actual_frequency=str(t.get('prd_se') or '').upper()
             if requested_frequency and not explicit_ids:
                 if requested_frequency=='A' and actual_frequency not in {'A','Y'}: continue
@@ -356,9 +378,10 @@ class StatLanguageResolver:
                 end_raw=str(t.get('period_end_observed') or '')[:4]
                 if start_raw.isdigit() and end_raw.isdigit():
                     requested=max(years)
-                    if not int(start_raw) <= requested <= int(end_raw):
-                        continue
-                    score+=12; reasons.append('period_covered')
+                    if int(start_raw) <= requested <= int(end_raw):
+                        score+=12; reasons.append('period_covered')
+                    else:
+                        reasons.append('period_requires_confirmation')
             # Prefer the most specific table phrase. This prevents a broad sibling such
             # as 대외채권 from beating an explicitly requested 순대외채권.
             compact_q=q.replace(' ',''); compact_name=tn.replace(' ','')
@@ -413,6 +436,10 @@ class StatLanguageResolver:
             # 신규취급액/잔액 기준은 예금·대출 가중평균금리의 축이다.
             # 단순히 이름에 "금리"가 들어간 정책·시장금리에 적용하지 않는다.
             if gid == 'interest_basis' and not commercial_rate_named:
+                continue
+            if gid=='loan_type' and self._contains(q,'신용대출'):
+                # Credit loans are an explicit catalog item, not an unanswered
+                # choice between mortgage/household/corporate/industry loans.
                 continue
             if g.get('id') in {'loan_type','loan_measure'} and any(self._contains(q,x) for x in ('산업대출','대출태도','대출수요','신용위험','한국은행 원화대출')):
                 continue
@@ -494,6 +521,12 @@ class StatLanguageResolver:
         """Resolve explicitly requested comparison series without inventing IDs."""
         raw_query=str(query or '')
         ranked=self.rank(query,confirmed=confirmed,top_k=max(40,top_k))
+        mentions=catalog_mentions(query,self.tables)
+        if len(mentions)>1 and all(len(m['table_ids'])==1 for m in mentions):
+            ids=list(dict.fromkeys(m['table_ids'][0] for m in mentions))
+            by_id={c['table_id']:c for c in ranked}
+            if all(tid in by_id for tid in ids):
+                return [by_id[tid] for tid in ids]
         q=self.norm(query); compact=q.replace(' ','')
         if ranked and any(token in str(ranked[0].get('table_name') or '') for token in ('과','및')):
             top_name=self.norm(ranked[0]['table_name']).replace(' ','')
@@ -822,6 +855,9 @@ class StatLanguageResolver:
         explicit_ids=[tid for tid in self.tables_by_id if self.norm(tid) in self.norm(query)]
         if len(explicit_ids)==1:
             candidates=self._score(query,confirmed=None,top_k=top_k)
+            if not candidates:
+                return {'status':'no_match','selected_table':None,'candidates':[],
+                        'state':{'original_query':query,'confirmed':confirmed,'status':'no_match'}}
             return {'status':'resolved','selected_table':candidates[0],'candidates':candidates,
                     'state':{'original_query':query,'confirmed':confirmed,'confirmed_terms':[],
                              'asked_clarifications':asked_clarifications,'status':'resolved'}}
@@ -839,6 +875,24 @@ class StatLanguageResolver:
                        'asked_clarifications':asked_clarifications,'status':'no_match'}
             }
         candidates=self._score(query,confirmed=confirmed,top_k=max(top_k,12))
+        mentions=catalog_mentions(query,self.tables)
+        available_ids={c['table_id'] for c in candidates}
+        choices=[{**m,'table_ids':[tid for tid in m['table_ids'] if tid in available_ids]} for m in mentions]
+        for m in choices:
+            if len(m['table_ids'])>1:
+                gid='canonical_table:'+m['text']
+                return {'status':'need_clarification','clarification_id':gid,
+                        'question':'같은 이름의 통계표가 여러 개입니다. 기준과 통계표 ID를 확인해 선택해 주세요.',
+                        'options':[{'label':self.tables_by_id[tid]['table_name']+' ['+tid+']','value':tid,'confirmed_terms':[]} for tid in m['table_ids']],
+                        'state':{'original_query':query,'confirmed':confirmed,'asked_clarifications':asked_clarifications,'status':'need_clarification'}}
+        if choices and all(len(m['table_ids'])==1 for m in choices) and not structure_request(residual_catalog_query(query,mentions))['metrics']:
+            ids=list(dict.fromkeys(m['table_ids'][0] for m in choices))
+            by_id={c['table_id']:c for c in candidates}
+            if all(tid in by_id for tid in ids):
+                selected=[by_id[tid] for tid in ids]
+                return {'status':'resolved','selected_table':selected[0],'selected_tables':selected,
+                        'candidates':selected,'canonical_name_match':True,
+                        'state':{'original_query':query,'confirmed':confirmed,'asked_clarifications':asked_clarifications,'status':'resolved'}}
         nq=self.norm(query).replace(' ','')
         catalog_matches=[]
         for table in self.catalog_only_tables:
@@ -847,7 +901,7 @@ class StatLanguageResolver:
         grounded=[]
         for candidate in candidates:
             reasons=candidate.get('reasons',[])
-            has_table_evidence=any(str(reason).startswith(('table_name','exact_table_phrase','alias:','alias_core:','core_table_phrase:','concept_normalization:','semantic:','public_query:','public_tokens:','public_intent:','table_tokens:','table_anchors:','confirmed:')) for reason in reasons) or len(candidate.get('dimension_hits') or [])>=2
+            has_table_evidence=any(str(reason).startswith(('request_metric:','table_name','exact_table_phrase','alias:','alias_core:','core_table_phrase:','concept_normalization:','semantic:','public_query:','public_tokens:','public_intent:','table_tokens:','table_anchors:','confirmed:')) for reason in reasons)
             if has_table_evidence:
                 grounded.append(candidate)
         if candidates and not grounded:

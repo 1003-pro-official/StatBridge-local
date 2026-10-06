@@ -230,10 +230,41 @@ main { width: min(1460px, 100%); margin: 0 auto; padding: 24px clamp(18px, 3vw, 
 .catalog-query-controls select { max-width: 100%; padding: 8px; }
 .catalog-query-controls button { padding: 12px; cursor: pointer; }
 .catalog-query-controls p { font-size: 13px; }
-.plotly-chart { width: 100%; min-height: 360px; }
+.plotly-chart { width: 100%; min-width: 0; min-height: 360px; }
+/* Plotly's SVG legend uses the same class as the HTML source key. It is
+   positioned by SVG transforms, not the HTML flex layout above. */
+.plotly-chart .legend { display: inline; font-size: inherit; }
+/* Plotly uses tspan.line for wrapped titles, legend labels and annotations.
+   The fallback chart's path.line rule must not make those letters invisible. */
+.plotly-chart tspan.line { fill: inherit; stroke: none; }
+.unsupported-charts { background: #fafafa; }
+.unsupported-charts .clarification-options button { border-style: dashed; color: #64748b; }
+.chart-blocker { margin-top: 16px; padding: 16px; border: 1px solid #fed7aa; border-radius: 12px; background: #fff7ed; color: #7c2d12; overflow-wrap: anywhere; }
+.chart-blocker p { margin: 10px 0 0; line-height: 1.6; }
 .chart-edit-form { margin: 16px 0; padding: 16px; border: 1px solid #dfe4ef; border-radius: 12px; }
 .chart-edit-form label { display: block; margin-bottom: 8px; font-weight: 600; }
 .chart-edit-form > div { display: flex; gap: 8px; }
 .chart-edit-form input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid #ccd4e2; border-radius: 8px; }
 .chart-edit-form button { padding: 10px 18px; border: 0; border-radius: 8px; background: #4568ff; color: white; cursor: pointer; }
 .chart-edit-form button:disabled { opacity: .5; cursor: not-allowed; }
+.sketch-toolbar { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.sketch-toolbar button,.sketch-mark-list button { padding:7px 10px; border:1px solid #d9dfed; border-radius:6px; background:white; cursor:pointer; }
+.sketch-toolbar button[aria-pressed="true"] { background:#e9edff; border-color:#4568ff; color:#264bd9; }
+.sketch-toolbar button:disabled,.sketch-mark-list button:disabled { opacity:.5; cursor:default; }
+.sketch-fields { display:flex; flex-wrap:wrap; gap:12px; }
+.sketch-fields label { display:flex; flex-direction:column; gap:5px; flex:1; min-width:180px; font-size:13px; }
+.sketch-fields input,.sketch-fields select { padding:8px; border:1px solid #d9dfed; border-radius:6px; width:100%; }
+.sketch-stage { position:relative; }
+.sketch-overlay { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.sketch-overlay.drawing { pointer-events:auto; touch-action:none; cursor:crosshair; }
+.sketch-help { color:#65718d; font-size:12px; line-height:1.6; }
+.sketch-mark-list { padding-left:22px; font-size:13px; }
+.sketch-mark-list li { margin:6px 0; overflow-wrap:anywhere; }
+.sketch-mark-list button { margin-left:8px; }
+.sketch-text-panel label { display:flex; flex-direction:column; gap:8px; }
+.sketch-text-panel textarea { width:100%; min-height:80px; padding:10px; border:1px solid #d9dfed; border-radius:6px; font:inherit; resize:vertical; }
+.graph-request label { display:grid; gap:10px; }
+.graph-request textarea { width:100%; box-sizing:border-box; padding:12px; border:1px solid var(--line); border-radius:10px; font:inherit; resize:vertical; }
+.sketch-text-panel button { padding:8px 12px; border:1px solid #d9dfed; border-radius:6px; background:white; cursor:pointer; }
+.sketch-text-panel button:disabled { opacity:.5; cursor:default; }
+.sketch-mark-list input { display:block; width:100%; padding:8px; margin:6px 0; border:1px solid #d9dfed; border-radius:6px; }
