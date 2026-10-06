@@ -12,3 +12,8 @@
 - `cases/dev.jsonl`, `cases/test.jsonl`: 정답 포함
 - `cases/holdout_queries.jsonl`: 정답 미포함(공개), 정답은 비공개 저장소
 - `fixtures/`: 그래프·수치 스냅샷(로컬 CSV 해시 포함)
+
+## 검증 결과 (2026-10-06)
+- 테스트: `17 passed`
+- validator: `0 errors`
+- scorer 자기채점(dev 2건, gold=pred): `correct=2, forbidden_hit=0, mismatch=0`
