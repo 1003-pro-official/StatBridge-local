@@ -217,7 +217,18 @@ class OutputAgent:
             text, _ = self.ncp_client.chat_main(system, user, max_tokens=380, thinking_effort="none")
             proposed = self.ncp_client._json_object(text)
             allowed = {"chart_type", "title", "subtitle", "x_axis_label", "y_axis_label", "legend_position", "highlights", "series_chart_types", "secondary_axis_series"}
-            return {key: value for key, value in proposed.items() if key in allowed}
+            proposed = {key: value for key, value in proposed.items() if key in allowed}
+            labels = {item["label"] for item in series}
+            if isinstance(proposed.get("series_chart_types"), dict):
+                proposed["series_chart_types"] = {
+                    label: chart_type for label, chart_type in proposed["series_chart_types"].items()
+                    if label in labels
+                }
+            if isinstance(proposed.get("secondary_axis_series"), list):
+                proposed["secondary_axis_series"] = [
+                    label for label in proposed["secondary_axis_series"] if label in labels
+                ]
+            return proposed
         except Exception:
             return {}
 
@@ -259,8 +270,16 @@ class OutputAgent:
             raise ValueError("그래프 명세에 조회되지 않은 계열이 포함되어 있습니다.")
         if spec.secondary_axis_series and spec.chart_type not in {"line", "bar", "stacked_bar", "area"}:
             raise ValueError("보조축은 선·막대·영역 그래프에서만 사용할 수 있습니다.")
-        mixed_units = len({s["unit"] for s in series}) > 1
+        units = {s["unit"] for s in series}
+        mixed_units = len(units) > 1
         mixed_frequency = len({s["frequency"] for s in series if s["frequency"]}) > 1
+        if (spec.layout == "combined" and not mixed_frequency and len(units) == 2
+                and not spec.secondary_axis_series and spec.chart_type in {"line", "bar", "area"}):
+            primary_unit = series[0]["unit"]
+            spec = ChartSpec.model_validate({
+                **spec.model_dump(),
+                "secondary_axis_series": [s["label"] for s in series if s["unit"] != primary_unit],
+            })
         if (mixed_frequency or (mixed_units and not spec.secondary_axis_series)) and spec.layout == "combined":
             spec = ChartSpec.model_validate({**spec.model_dump(), "layout": "separate"})
         summary = self._summary(series)

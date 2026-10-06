@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 from typing import Any
 
 import plotly.graph_objects as go
@@ -104,17 +105,48 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
         fig.update_layout(barmode="stack")
     fig.update_layout(
         title={"text": spec.title + (f"<br><sup>{spec.subtitle}</sup>" if spec.subtitle else "")},
-        showlegend=spec.show_legend,
-        legend={"orientation": "h" if spec.legend_position in {"top", "bottom"} else "v",
-                "x": 0 if spec.legend_position != "right" else 1, "y": -0.2 if spec.legend_position == "bottom" else 1.05},
-        template="plotly_white", height=max(360, len(series) * 260) if layout_mode == "separate" else 440,
+        # The UI shows a wrapping legend above the chart; a second Plotly legend
+        # consumes plotting space and can cover the upper part of long series.
+        showlegend=False,
+        template="plotly_white", height=max(420, len(series) * 300) if layout_mode == "separate" else 520,
+        margin={"l": 76, "r": 76 if dual_axis else 35, "t": 88, "b": 72},
     )
     if chart_type not in {"pie", "donut", "treemap"}:
+        periods = sorted({point["date"] for item in series for point in item["points"]})
+        if periods:
+            step = max(1, math.ceil((len(periods) - 1) / 5))
+            ticks = periods[::step]
+            if ticks[-1] != periods[-1]:
+                ticks.append(periods[-1])
+            frequency = str(series[0].get("frequency") or "")
+            tick_labels = [f"{period[:4]}-{period[4:6]}" if frequency == "M" and len(period) == 6 else period for period in ticks]
+            fig.update_xaxes(tickmode="array", tickvals=ticks, ticktext=tick_labels, tickangle=0, automargin=True)
         fig.update_xaxes(title_text=spec.x_axis_label)
-        fig.update_yaxes(title_text=spec.y_axis_label)
+        fig.update_yaxes(title_text="", automargin=True)
+        left_label = spec.y_axis_label or (series[0].get("unit") or "")
+        if left_label:
+            fig.add_annotation(x=0, y=1.04, xref="paper", yref="paper", text=left_label,
+                               showarrow=False, xanchor="left", yanchor="bottom")
         if dual_axis:
             right_units = {s.get("unit") or "" for s in series if s["label"] in spec.secondary_axis_series}
-            fig.update_yaxes(title_text=" / ".join(sorted(right_units)), secondary_y=True)
+            fig.add_annotation(x=1, y=1.04, xref="paper", yref="paper", text=" / ".join(sorted(right_units)),
+                               showarrow=False, xanchor="right", yanchor="bottom")
+        if layout_mode == "combined" and chart_type in {"line", "bar", "stacked_bar", "area"}:
+            def padded_range(items: list[dict[str, Any]]) -> list[float] | None:
+                values = [point["value"] for item in items for point in item["points"]]
+                if not values:
+                    return None
+                low, high = min(values), max(values)
+                span = high - low or max(abs(high) * 0.1, 1.0)
+                padding = span * 0.12
+                return [min(0, low) - padding if chart_type in {"bar", "stacked_bar"} else low - padding, high + padding]
+
+            left = [item for item in series if item["label"] not in spec.secondary_axis_series]
+            right = [item for item in series if item["label"] in spec.secondary_axis_series]
+            if left and (bounds := padded_range(left)):
+                fig.update_yaxes(range=bounds, secondary_y=False if dual_axis else None)
+            if right and (bounds := padded_range(right)):
+                fig.update_yaxes(range=bounds, secondary_y=True)
     if chart_type in {"line", "bar", "stacked_bar", "area"}:
         for highlight in spec.highlights:
             fig.add_vrect(x0=highlight.start, x1=highlight.end, fillcolor="gold", opacity=0.15,

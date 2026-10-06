@@ -45,6 +45,46 @@ def test_invalid_explicit_chart_does_not_request_explanation(monkeypatch):
         agent.prepare(sample_result(), {"chart_type": "scatter"})
 
 
+def test_model_series_names_are_limited_to_queried_series():
+    import json
+
+    class FakeClient:
+        configured = True
+
+        def chat_main(self, *_args, **_kwargs):
+            return json.dumps({
+                "chart_type": "line",
+                "series_chart_types": {"조회하지 않은 계열": "bar", "예금금리": "line"},
+                "secondary_axis_series": ["조회하지 않은 계열"],
+            }), {}
+
+        @staticmethod
+        def _json_object(text):
+            return json.loads(text)
+
+    agent = OutputAgent(FakeClient())
+    series = [{"label": "예금금리", "unit": "%", "points": [{"date": "202401", "value": 3.0}]}]
+    proposed = agent._propose_spec(series, {})
+    assert proposed["series_chart_types"] == {"예금금리": "line"}
+    assert proposed["secondary_axis_series"] == []
+
+
+def test_combined_series_with_two_units_uses_secondary_axis():
+    result = {"execution": {"status": "success", "rows": [
+        {"_SOURCE_SERIES_ID": "deposit", "_SERIES_LABEL": "예금금리", "PRD_DE": "202401", "DT": "3.0", "UNIT_NM": "%", "_FREQUENCY": "M"},
+        {"_SOURCE_SERIES_ID": "loan", "_SERIES_LABEL": "대출금리", "PRD_DE": "202401", "DT": "4.0", "UNIT_NM": "연리%", "_FREQUENCY": "M"},
+    ]}}
+    output = OutputAgent().prepare(result, {"chart_type": "line", "layout": "combined"})
+    assert output["visualization"]["layout"] == "combined"
+    assert output["chartState"]["secondary_axis_series"] == ["대출금리"]
+    assert len(output["visualization"]["series"]) == 2
+    layout = output["plotlyFigure"]["layout"]
+    assert layout["xaxis"]["tickangle"] == 0
+    assert layout["yaxis"]["range"][1] > 3.0
+    assert layout["yaxis2"]["range"][1] > 4.0
+    assert {annotation["text"] for annotation in layout["annotations"]} >= {"%", "연리%"}
+
+
 def test_edit_sessions_evict_oldest_after_successful_render(monkeypatch):
     import bridge_api
 

@@ -307,7 +307,7 @@ def _resolve_selected_options(query_text: str, state: dict[str, Any], selections
         plan = dict(part.get("api_plan") or {})
         if not plan:
             continue
-        plan["series_label"] = " · ".join(value for _, value in combination)
+        plan["series_label"] = " · ".join([str(plan["table_name"]), *(value for _, value in combination)])
         key = (str(plan.get("table_id")), str(plan.get("item_id")), tuple(sorted((plan.get("classifications") or {}).items())))
         if key not in seen:
             seen.add(key)
