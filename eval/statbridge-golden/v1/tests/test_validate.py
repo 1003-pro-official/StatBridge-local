@@ -45,3 +45,13 @@ class TestValidateStructure(unittest.TestCase):
             "required_claims": [{"id": "c1", "type": "direction", "expected": "up"}],
             "context_claims": [{"id": "x1", "type": "context", "text": "맥락"}]}
         self.assertTrue(any("context claim without source" in e for e in V.validate_record(r)))
+
+    def test_fixture_missing_is_error(self):
+        r = json.loads(json.dumps(GOOD))
+        r["gold"]["graph"] = {"status": "labeled", "fixture": "fixtures/none.json", "snapshot_id": "x"}
+        errs = V.validate_fixtures(r, V1)
+        self.assertTrue(any("fixture missing" in e for e in errs))
+
+    def test_holdout_leakage_is_error(self):
+        errs = V.validate_holdout([{"id": "H1", "query": "q", "prior_turns": [], "table_ids": ["DT_A"]}])
+        self.assertTrue(any("holdout leakage" in e for e in errs))

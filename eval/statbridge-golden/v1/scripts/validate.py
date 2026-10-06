@@ -67,3 +67,74 @@ def validate_record(r):
             if not c.get("source"):
                 errs.append(f"{rid}: context claim without source")
     return errs
+
+
+def validate_fixtures(r, base):
+    errs = []
+    for layer in ("numeric", "graph"):
+        node = r.get("gold", {}).get(layer, {})
+        if node.get("status") != "labeled":
+            continue
+        f = node.get("fixture")
+        if not f:
+            errs.append(f"{r['id']}: {layer} labeled without fixture")
+            continue
+        fp = base / f
+        if not fp.is_file():
+            errs.append(f"{r['id']}: fixture missing {f}")
+            continue
+        if node.get("fixture_sha256") and sha256_file(fp) != node["fixture_sha256"]:
+            errs.append(f"{r['id']}: fixture_sha256 mismatch")
+        fx = json.loads(fp.read_text(encoding="utf-8"))
+        series = fx.get("series", [])
+        if not series:
+            errs.append(f"{r['id']}: fixture has no series")
+        if node.get("snapshot_id") and fx.get("snapshot_id") != node["snapshot_id"]:
+            errs.append(f"{r['id']}: snapshot mismatch")
+        for s in series:
+            ps = [p["period"] for p in s.get("points", [])]
+            if len(ps) != len(set(ps)):
+                errs.append(f"{r['id']}: duplicate periods")
+            if ps != sorted(ps):
+                errs.append(f"{r['id']}: periods not ordered")
+            sf, sha = s.get("source_file"), s.get("source_file_sha256")
+            if sf and sha and (REPO / sf).is_file() and sha256_file(REPO / sf) != sha:
+                errs.append(f"{r['id']}: source_file_sha256 mismatch {sf}")
+    return errs
+
+
+def validate_holdout(records):
+    errs = []
+    for r in records:
+        leaked = set(r) - HOLDOUT_ALLOWED
+        if leaked:
+            errs.append(f"{r['id']}: holdout leakage {sorted(leaked)}")
+    return errs
+
+
+def validate_all():
+    errs = []
+    dev = load(V1 / "cases/dev.jsonl")
+    test = load(V1 / "cases/test.jsonl")
+    holdout = load(V1 / "cases/holdout_queries.jsonl")
+    labeled = dev + test
+    ids = [r["id"] for r in labeled] + [r["id"] for r in holdout]
+    if len(ids) != len(set(ids)):
+        errs.append("duplicate ids across splits")
+    for r in labeled:
+        errs += validate_record(r)
+        errs += validate_fixtures(r, V1)
+    errs += validate_holdout(holdout)
+    return errs
+
+
+def main():
+    errs = validate_all()
+    for e in errs:
+        print(e)
+    print(f"{len(errs)} errors")
+    return 1 if errs else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
