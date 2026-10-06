@@ -1,4 +1,4 @@
-import sys, unittest
+import json, sys, tempfile, unittest
 from pathlib import Path
 V1 = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(V1 / "scripts"))
@@ -58,6 +58,49 @@ class TestInterpretation(unittest.TestCase):
     def test_partial(self):
         out = S.score_interpretation(self.G, {"claims": []})
         self.assertAlmostEqual(out["claim_recall"], 0.0)
+
+    def test_wrong_delta_no_match(self):
+        g = {"status": "labeled",
+             "required_claims": [{"id": "c2", "type": "change", "period": "2025-01~2025-12",
+                                  "expected_delta": 5.0, "tolerance": 0.2}],
+             "forbidden_claims": []}
+        pred = {"claims": [{"type": "change", "period": "2025-01~2025-12", "delta": -3.0}]}
+        out = S.score_interpretation(g, pred)
+        self.assertAlmostEqual(out["claim_recall"], 0.0)
+        self.assertEqual(out["required_hit"], 0)
+
+
+class TestScoreAggregate(unittest.TestCase):
+    REC = {
+        "gold": {
+            "e2e_kpi": {"status": "labeled", "pass": True},
+            "slots": {"status": "not_labeled"},
+            "concepts": {"status": "not_labeled"},
+            "clarification": {"status": "not_labeled"},
+            "plan": {"status": "not_labeled"},
+            "discovery": {"status": "labeled", "expected_status": "select",
+                          "acceptable_table_ids": ["DT_A"], "required_set": ["DT_A"],
+                          "forbidden_table_ids": ["DT_X"]},
+            "numeric": {"status": "not_labeled"},
+            "graph": {"status": "not_labeled"},
+            "interpretation": {"status": "not_labeled"},
+        },
+    }
+
+    def test_two_correct_records(self):
+        gold = [dict(self.REC, id="GS2-9001"), dict(self.REC, id="GS2-9002")]
+        pred = [{"id": i, "status": "select", "table_ids": ["DT_A"], "e2e": {"pass": True}}
+                for i in ("GS2-9001", "GS2-9002")]
+        with tempfile.TemporaryDirectory() as tmp:
+            gpath, ppath = Path(tmp) / "gold.jsonl", Path(tmp) / "pred.jsonl"
+            gpath.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in gold), encoding="utf-8")
+            ppath.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in pred), encoding="utf-8")
+            s = S.score(gpath, ppath, out_dir=tmp)["summary"]
+            self.assertEqual(s["n"], 2)
+            self.assertEqual(s["correct"], 2)
+            self.assertEqual(s["forbidden_hit"], 0)
+            self.assertEqual(s["mismatch"], 0)
+            self.assertTrue((Path(tmp) / "failures.jsonl").exists())
 
 
 class TestGrade(unittest.TestCase):

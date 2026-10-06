@@ -1,4 +1,4 @@
-import json, subprocess, sys, unittest
+import json, sys, unittest
 from pathlib import Path
 V1 = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(V1 / "scripts"))

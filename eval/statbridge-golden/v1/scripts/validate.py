@@ -85,14 +85,18 @@ def validate_fixtures(r, base):
             continue
         if node.get("fixture_sha256") and sha256_file(fp) != node["fixture_sha256"]:
             errs.append(f"{r['id']}: fixture_sha256 mismatch")
-        fx = json.loads(fp.read_text(encoding="utf-8"))
+        try:
+            fx = json.loads(fp.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            errs.append(f"{r['id']}: fixture unreadable {f}")
+            continue
         series = fx.get("series", [])
         if not series:
             errs.append(f"{r['id']}: fixture has no series")
         if node.get("snapshot_id") and fx.get("snapshot_id") != node["snapshot_id"]:
             errs.append(f"{r['id']}: snapshot mismatch")
         for s in series:
-            ps = [p["period"] for p in s.get("points", [])]
+            ps = [p.get("period", "") for p in s.get("points", [])]
             if len(ps) != len(set(ps)):
                 errs.append(f"{r['id']}: duplicate periods")
             if ps != sorted(ps):
@@ -118,7 +122,7 @@ def validate_all():
     test = load(V1 / "cases/test.jsonl")
     holdout = load(V1 / "cases/holdout_queries.jsonl")
     labeled = dev + test
-    ids = [r["id"] for r in labeled] + [r["id"] for r in holdout]
+    ids = [r.get("id", "?") for r in labeled] + [r.get("id", "?") for r in holdout]
     if len(ids) != len(set(ids)):
         errs.append("duplicate ids across splits")
     for r in labeled:

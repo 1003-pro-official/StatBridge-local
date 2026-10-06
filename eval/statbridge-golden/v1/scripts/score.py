@@ -90,21 +90,36 @@ def score_numeric(fixture, pred, tol=0.01):
             "exact": bool(exp_keys == act_keys and ok)}
 
 
+def _num(v):
+    return v if isinstance(v, (int, float)) else None
+
+
 def _claim_match(gc, pc):
     if gc.get("type") != pc.get("type"):
         return False
-    for field in ("series", "period", "subtype", "metric"):
+    for field in ("series", "period", "periods", "subtype", "metric"):
         if gc.get(field) is not None and pc.get(field) != gc.get(field):
             return False
     if "expected" in gc and pc.get("expected") != gc["expected"]:
         return False
     if "expected_value" in gc:
-        if "value" not in pc:
+        pv = _num(pc.get("value", pc.get("expected_value")))
+        if pv is None:
             return False
-        if abs(pc["value"] - gc["expected_value"]) > gc.get("tolerance", 0.0):
+        if abs(pv - gc["expected_value"]) > gc.get("tolerance", 0.0):
             return False
-    if "value" in gc and abs(pc.get("value", 0) - gc["value"]) > gc.get("tolerance", 0.0):
-        return False
+    if "expected_delta" in gc:
+        pd = _num(pc.get("delta", pc.get("value", pc.get("expected_delta"))))
+        if pd is None:
+            return False
+        if abs(pd - gc["expected_delta"]) > gc.get("tolerance", 0.0):
+            return False
+    if "value" in gc:
+        pv = _num(pc.get("value"))
+        if pv is None:
+            return False
+        if abs(pv - gc["value"]) > gc.get("tolerance", 0.0):
+            return False
     return True
 
 
@@ -248,7 +263,7 @@ def score(gold_path, pred_path, out_dir=None, tol=0.01):
         case["grade"] = classify(case)
         results.append(case)
         if case["grade"] != "correct":
-            failures.append({"id": gid, "grade": case["grade"],
+            failures.append({"id": gid, "output": p, "gold": g["gold"],
                              "failed_layer": _first_failed(case), "reason": case["layers"]})
     summary = {"n": len(results),
                "correct": sum(r["grade"] == "correct" for r in results),
