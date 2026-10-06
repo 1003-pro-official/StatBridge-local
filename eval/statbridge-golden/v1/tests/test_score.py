@@ -37,3 +37,24 @@ class TestGraph(unittest.TestCase):
     def test_graph_wrong_type(self):
         out = S.score_graph(self.G, self.FX, {"chart_type": "bar", "layout": "combined", "series": []}, tol=0.01)
         self.assertFalse(out["type_ok"]); self.assertFalse(out["series_ok"])
+
+
+class TestInterpretation(unittest.TestCase):
+    G = {"status": "labeled",
+         "required_claims": [{"id": "c1", "type": "direction", "series": "수출", "period": "2025-01~2025-06", "expected": "down"},
+                             {"id": "c2", "type": "level", "period": "202512", "expected_value": 94.8, "tolerance": 0.5}],
+         "forbidden_claims": [{"type": "hallucination", "text": "하락세였다"}]}
+
+    def test_hit_all(self):
+        claims = [{"type": "direction", "series": "수출", "period": "2025-01~2025-06", "expected": "down"},
+                  {"type": "level", "period": "202512", "value": 94.9}]
+        out = S.score_interpretation(self.G, {"claims": claims})
+        self.assertAlmostEqual(out["claim_recall"], 1.0); self.assertFalse(out["forbidden_hit"])
+
+    def test_forbidden(self):
+        out = S.score_interpretation(self.G, {"claims": [{"type": "hallucination", "text": "하락세였다"}]})
+        self.assertTrue(out["forbidden_hit"])
+
+    def test_partial(self):
+        out = S.score_interpretation(self.G, {"claims": []})
+        self.assertAlmostEqual(out["claim_recall"], 0.0)

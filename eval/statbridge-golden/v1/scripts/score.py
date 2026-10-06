@@ -88,3 +88,36 @@ def score_numeric(fixture, pred, tol=0.01):
         for e in exp_series)
     return {"series_ok": exp_keys == act_keys, "points_ok": bool(ok),
             "exact": bool(exp_keys == act_keys and ok)}
+
+
+def _claim_match(gc, pc):
+    if gc.get("type") != pc.get("type"):
+        return False
+    for field in ("series", "period", "subtype", "metric"):
+        if gc.get(field) is not None and pc.get(field) != gc.get(field):
+            return False
+    if "expected" in gc and pc.get("expected") != gc["expected"]:
+        return False
+    if "expected_value" in gc:
+        if "value" not in pc:
+            return False
+        if abs(pc["value"] - gc["expected_value"]) > gc.get("tolerance", 0.0):
+            return False
+    if "value" in gc and abs(pc.get("value", 0) - gc["value"]) > gc.get("tolerance", 0.0):
+        return False
+    return True
+
+
+def score_interpretation(gold, pred):
+    req = gold.get("required_claims", [])
+    pcs = pred.get("claims", [])
+    hit = sum(1 for gc in req if any(_claim_match(gc, pc) for pc in pcs))
+    forbidden = gold.get("forbidden_claims", [])
+    fhit = any(fc.get("type") == pc.get("type") and fc.get("text") == pc.get("text")
+               for fc in forbidden for pc in pcs)
+    return {
+        "claim_recall": hit / len(req) if req else 1.0,
+        "required_hit": hit, "required_total": len(req),
+        "forbidden_hit": fhit,
+        "exact": bool(not fhit and hit == len(req)),
+    }
