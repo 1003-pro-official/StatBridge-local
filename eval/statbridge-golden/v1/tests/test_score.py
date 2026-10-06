@@ -58,3 +58,10 @@ class TestInterpretation(unittest.TestCase):
     def test_partial(self):
         out = S.score_interpretation(self.G, {"claims": []})
         self.assertAlmostEqual(out["claim_recall"], 0.0)
+
+
+class TestGrade(unittest.TestCase):
+    def test_status_hierarchy(self):
+        self.assertEqual(S.classify({"forbidden_hit": True, "exact": True}), "forbidden_hit")
+        self.assertEqual(S.classify({"forbidden_hit": False, "exact": True}), "correct")
+        self.assertEqual(S.classify({"forbidden_hit": False, "exact": False}), "mismatch")
