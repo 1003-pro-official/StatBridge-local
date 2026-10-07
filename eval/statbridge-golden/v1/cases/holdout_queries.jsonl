@@ -1,18 +1,18 @@
-{"id": "GS2-H100", "query": "총지수(원화기준) 요즘 어때?", "prior_turns": []}
-{"id": "GS2-H101", "query": "총지수(원화기준) 작년 대비 흐름 보여줘", "prior_turns": []}
-{"id": "GS2-H102", "query": "총지수 월별로 보여줘", "prior_turns": []}
-{"id": "GS2-H103", "query": "총지수 최근 추이 알려줘", "prior_turns": []}
-{"id": "GS2-H104", "query": "수신합계 그래프로 보여주고 설명해줘", "prior_turns": []}
-{"id": "GS2-H105", "query": "합계 동향 알려줘", "prior_turns": []}
-{"id": "GS2-H106", "query": "총지수 월별 흐름 보여주고 해석해줘", "prior_turns": []}
-{"id": "GS2-H200", "query": "수출물가지수(원화기준)와 수입물가지수(원화기준) 비교해서 보여주고 해석해줘", "prior_turns": []}
-{"id": "GS2-H201", "query": "총지수와 총지수 비교해서 보여주고 해석해줘", "prior_turns": []}
-{"id": "GS2-H202", "query": "총지수와 총지수 비교해서 보여주고 해석해줘", "prior_turns": []}
-{"id": "GS2-H300", "query": "그럼 이건?", "prior_turns": [{"role": "user", "text": "총지수 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
-{"id": "GS2-H301", "query": "작년은?", "prior_turns": [{"role": "user", "text": "수신합계 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
-{"id": "GS2-H302", "query": "이번엔?", "prior_turns": [{"role": "user", "text": "합계 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
-{"id": "GS2-H303", "query": "다른 건?", "prior_turns": [{"role": "user", "text": "총지수 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
-{"id": "GS2-H400", "query": "물가 지표 보여줘", "prior_turns": []}
-{"id": "GS2-H401", "query": "금리 알려줘", "prior_turns": []}
-{"id": "GS2-H402", "query": "통화량 보여줘", "prior_turns": []}
+{"id": "GS2-H100", "query": "수입물가지수 월간 지표 흐름 알려줘", "prior_turns": []}
+{"id": "GS2-H101", "query": "수출물가지수 최근 흐름 정리 부탁해", "prior_turns": []}
+{"id": "GS2-H102", "query": "국내공급물가지수 어떤 방향으로 갔어?", "prior_turns": []}
+{"id": "GS2-H103", "query": "총산출물가지수 구간별로 알려줘", "prior_turns": []}
+{"id": "GS2-H104", "query": "예금은행 총수신 그래프와 수치로 보여줘", "prior_turns": []}
+{"id": "GS2-H105", "query": "예금은행 정기예금 추이 요약해줘", "prior_turns": []}
+{"id": "GS2-H106", "query": "수출물량지수 최근 동향 정리", "prior_turns": []}
+{"id": "GS2-H200", "query": "수출금액지수와 수입물량지수 비교해서 보여주고 해석해줘", "prior_turns": []}
+{"id": "GS2-H201", "query": "수출물량지수와 수입금액지수 비교해서 보여주고 해석해줘", "prior_turns": []}
+{"id": "GS2-H202", "query": "생산자물가지수와 총산출물가지수 비교해서 보여주고 해석해줘", "prior_turns": []}
+{"id": "GS2-H300", "query": "총산출물가지수 상황은?", "prior_turns": [{"role": "user", "text": "총산출물가지수 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
+{"id": "GS2-H301", "query": "예금은행 총수신은 지난달엔?", "prior_turns": [{"role": "user", "text": "예금은행 총수신 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
+{"id": "GS2-H302", "query": "예금은행 정기예금 최근엔?", "prior_turns": [{"role": "user", "text": "예금은행 정기예금 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
+{"id": "GS2-H303", "query": "수출물량지수도 보여줘", "prior_turns": [{"role": "user", "text": "수출물량지수 보여줘"}, {"role": "assistant", "text": "그래프입니다."}]}
+{"id": "GS2-H400", "query": "어느 금리를 말하는 거야?", "prior_turns": []}
+{"id": "GS2-H401", "query": "통화지표 중 어떤 걸 볼까?", "prior_turns": []}
+{"id": "GS2-H402", "query": "물가 중 뭘 보여줄까?", "prior_turns": []}
 {"id": "GS2-H500", "query": "미국 실업률 알려줘", "prior_turns": []}
