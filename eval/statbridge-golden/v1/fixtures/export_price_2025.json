@@ -1,0 +1,71 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_402Y014",
+      "item_id": "13103134642999",
+      "label": "총지수(원화기준)",
+      "frequency": "M",
+      "unit": "2020=100",
+      "classifications": {
+        "objL1": "13102134642ACC_CD.*AA",
+        "objL2": "13102134642CRR_CTRT_CD.W"
+      },
+      "source_file": "data/tables/DT_402Y014__수출물가지수(기본분류).csv",
+      "source_file_sha256": "20de37771a42edcbb1f3b1c957ee1f9155d11a913d05635a142aedddad03df3d",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 135.31
+        },
+        {
+          "period": "202502",
+          "value": 134.56
+        },
+        {
+          "period": "202503",
+          "value": 135.11
+        },
+        {
+          "period": "202504",
+          "value": 133.05
+        },
+        {
+          "period": "202505",
+          "value": 128.39
+        },
+        {
+          "period": "202506",
+          "value": 126.88
+        },
+        {
+          "period": "202507",
+          "value": 127.86
+        },
+        {
+          "period": "202508",
+          "value": 128.69
+        },
+        {
+          "period": "202509",
+          "value": 129.37
+        },
+        {
+          "period": "202510",
+          "value": 134.7
+        },
+        {
+          "period": "202511",
+          "value": 139.42
+        },
+        {
+          "period": "202512",
+          "value": 140.28
+        }
+      ]
+    }
+  ]
+}
