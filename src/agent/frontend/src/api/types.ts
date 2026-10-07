@@ -12,6 +12,7 @@ export type ChartSeries = {
 };
 
 export type ChartType = "line" | "bar" | "stacked_bar" | "area" | "scatter" | "bubble" | "pie" | "donut" | "histogram" | "box" | "heatmap" | "treemap" | "waterfall";
+export type ChartLayout = "combined" | "separate" | "horizontal" | "grid";
 
 export type SelectedTable = {
   tableId: string;
@@ -51,7 +52,9 @@ export type QueryState = {
 };
 
 export type QueryResponse = {
-  status?: "need_clarification" | "need_period" | "need_output_config" | "resolved" | "no_match" | "data_unavailable" | "catalog_only";
+  periodSelection?: {source:"text"|"ui";requested?:{start:string;end:string};applied?:{start:string;end:string};start?:string;end?:string};
+  requestValidation?: {valid:boolean;request:Record<string,unknown>;errors:string[];table_ids:string[]};
+  status?: "need_clarification" | "need_period" | "need_output_config" | "resolved" | "no_match" | "data_unavailable";
   query: string;
   interpretedQuery: string;
   summary: string;
@@ -59,7 +62,7 @@ export type QueryResponse = {
   availablePeriod?: { min: string; max: string };
   frequency: string;
   chart: ChartSeries[];
-  chartMode?: "combined" | "separate" | null;
+  chartMode?: ChartLayout | null;
   chartType?: ChartType;
   outputSpec?: {
     status: "ready" | "empty";
@@ -82,9 +85,15 @@ export type QueryResponse = {
     }>;
     plotlyFigure?: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> };
     chartState?: Record<string, unknown>;
+    editAgent?: { model: string; supportsImages: boolean; markCount: number; path: string[] };
+    editCapabilities?: { model: string; supportsImages: boolean };
+    editVersion?: number;
+    editChanges?: string[];
+    canUndo?: boolean;
+    canRedo?: boolean;
     visualization: {
       chartType: ChartType;
-      layout: "combined" | "separate";
+      layout: ChartLayout;
       editable: boolean;
       editOptions: {
         title?: string | null;
@@ -92,7 +101,7 @@ export type QueryResponse = {
         xAxisLabel?: string | null;
         yAxisLabel?: string | null;
         supportedChartTypes?: ChartType[];
-        supportedLayouts?: Array<"combined" | "separate">;
+        supportedLayouts?: ChartLayout[];
       };
     };
   };
@@ -105,7 +114,9 @@ export type QueryResponse = {
     pointCount: number;
     recommendedChartType: ChartType;
     supportedChartTypes: ChartType[];
-    supportedLayouts: Array<"combined" | "separate">;
+    unavailableChartTypes?: Partial<Record<ChartType,string>>;
+    combinedLayoutReason?: string;
+    supportedLayouts: ChartLayout[];
     editableFields: string[];
   };
   tables: SelectedTable[];
@@ -135,7 +146,24 @@ export type OutputRenderRequest = {
   natural_language?: string;
 };
 
-export type OutputEditRequest = { edit_session_id: string; instruction: string };
+export type SketchMark = {
+  id: string;
+  tool: "pen" | "arrow" | "rectangle" | "text";
+  points: Array<{ x: number; y: number }>;
+  text: string;
+  target: string;
+  selection?: EditSelection;
+};
+export type EditSelection = { label:string; scope:"series"|"segment"|"point"; start?:string; end?:string };
+export type VisualEditContext = {
+  marks: SketchMark[];
+  selected_target: string;
+  selection?: EditSelection;
+  graph_image?: string;
+  marked_image?: string;
+};
+export type ChartEditInput = { instruction: string; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
+export type OutputEditRequest = ChartEditInput & { edit_session_id: string };
 
 export type QueryRequest = {
   query: string;

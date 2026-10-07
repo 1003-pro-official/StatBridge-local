@@ -8,7 +8,8 @@ import calendar
 from uuid import uuid4
 from itertools import product
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
+from threading import RLock
 
 ROOT = Path(__file__).resolve().parents[2]
 MCP_ROOT = ROOT / "src" / "backend"
@@ -26,6 +27,10 @@ from pydantic import BaseModel, Field
 from statbridge_mcp.statistics_service import StatisticsService
 from agent_runtime import StatBridgeAgent
 from mcp_gateway import McpToolGateway
+from chart_edit_agent import ChartEditAgent, Hcx007EditModel
+from output_schema import VisualEditContext, ChartSpec
+from request_match_guard import structure_request, catalog_mentions, unsupported_quantity_terms
+from request_period import explicit_period
 
 
 class _NoKeyClient:
@@ -57,6 +62,7 @@ except RuntimeError as exc:
     service = StatisticsService(client=_NoKeyClient())
 mcp_gateway = McpToolGateway(service)
 agent = StatBridgeAgent(service=mcp_gateway)
+edit_agent = ChartEditAgent(Hcx007EditModel(agent.ncp), agent.output_agent)
 
 
 class ClarificationSelection(BaseModel):
@@ -89,14 +95,22 @@ class OutputRenderRequest(BaseModel):
     natural_language: str | None = None
 
 
+class OutputOptionsRequest(BaseModel):
+    session_ids: list[str] = Field(min_length=1, max_length=50)
+
+
 class OutputEditRequest(BaseModel):
     edit_session_id: str
-    instruction: str = Field(min_length=1, max_length=500)
+    instruction: str = Field(default="", max_length=1000)
+    visual: VisualEditContext | None = None
+    action: Literal["edit", "undo", "redo"] = "edit"
+    revision: int | None = Field(default=None, ge=0)
 
 
 OUTPUT_SESSIONS: dict[str, dict[str, Any]] = {}
 EDIT_SESSIONS: dict[str, dict[str, Any]] = {}
 MAX_EDIT_SESSIONS = 100
+EDIT_LOCK = RLock()
 
 
 def _table_card(table_id: str) -> dict[str, str]:
@@ -292,7 +306,12 @@ def _resolve_selected_options(query_text: str, state: dict[str, Any], selections
     groups = [(str(group.get("clarification_id") or ""), [str(v) for v in (group.get("values") or []) if str(v)])
               for group in selections]
     groups = [(group_id, values) for group_id, values in groups if group_id and values]
-    combinations = list(product(*[[(group_id, value) for value in values] for group_id, values in groups]))[:5]
+    count=1
+    for _,values in groups:
+        count*=len(values)
+    if count>5:
+        raise HTTPException(status_code=422,detail='선택 조합은 최대 5개입니다. 조건을 줄여 주세요. 일부 조건만 조회하지 않습니다.')
+    combinations = list(product(*[[(group_id, value) for value in values] for group_id, values in groups]))
     resolved_parts: list[dict[str, Any]] = []
     plans: list[dict[str, Any]] = []
     seen: set[tuple[str, str, tuple[tuple[str, str], ...]]] = set()
@@ -303,23 +322,29 @@ def _resolve_selected_options(query_text: str, state: dict[str, Any], selections
         next_state["confirmed"] = confirmed
         part = agent.run(query=query_text, state=next_state, execute=False, generate_answer=False)
         if part.get("status") != "resolved":
-            continue
-        plan = dict(part.get("api_plan") or {})
-        if not plan:
-            continue
-        plan["series_label"] = " · ".join(value for _, value in combination)
-        key = (str(plan.get("table_id")), str(plan.get("item_id")), tuple(sorted((plan.get("classifications") or {}).items())))
-        if key not in seen:
-            seen.add(key)
-            plans.append(plan)
-            resolved_parts.append(part)
+            # Ask the next unresolved question; never drop that branch and show
+            # successful siblings as if they represented the entire request.
+            return part
+        part_plans=part.get('api_plans') or ([part['api_plan']] if part.get('api_plan') else [])
+        if not part_plans:
+            return {'status':'no_match','missing_series':[query_text]}
+        for raw_plan in part_plans:
+            plan=dict(raw_plan)
+            labels=[value for gid,value in combination if not gid.startswith('canonical_table:')]
+            if labels:
+                plan['series_label']=plan.get('series_label') or plan['table_name']+' · '+' · '.join(labels)
+            key = (str(plan.get("table_id")), str(plan.get("item_id")), tuple(sorted((plan.get("classifications") or {}).items())))
+            if key not in seen:
+                seen.add(key)
+                plans.append(plan)
+                resolved_parts.append(part)
     if not plans:
         return {"status": "no_match", "missing_series": [value for _, values in groups for value in values]}
     base = resolved_parts[0]
     base["api_plan"] = plans[0]
     base["api_plans"] = plans
     base["selected_table"] = base.get("selected_table") or {}
-    return base
+    return agent.validate_resolution(query_text,base)
 
 
 @app.get("/api/health")
@@ -362,7 +387,8 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     agent_state = payload.state
     agent_clarification = payload.clarification.model_dump() if payload.clarification else None
     if selected_values:
-        agent_query = f"{q} {' '.join(selected_values)}" + (" 비교" if len(selected_values) > 1 else "")
+        # Selection values are constraints in state, not additions to the user's
+        # text. Appending one selected ID would prohibit other requested tables.
         result = _resolve_selected_options(q, dict(payload.state or {}), payload.selections or [])
     else:
         result = agent.run(
@@ -372,6 +398,8 @@ def query(payload: QueryRequest) -> dict[str, Any]:
             execute=False,
         )
     resolve_ms = round((time.perf_counter() - request_started) * 1000)
+    if result.get("status") == "resolved":
+        result = agent.validate_resolution(q, result)
 
     if result.get("status") == "need_clarification":
         candidate_ids = [str(x.get("table_id") or "") for x in (result.get("state", {}).get("candidate_tables") or [])]
@@ -444,7 +472,8 @@ def query(payload: QueryRequest) -> dict[str, Any]:
                 {"id": "ui", "title": "UI 자연어 수신", "description": q, "status": "complete"},
                 {"id": "agent", "title": "Agent 사전 검색", "description": "후보 없음", "status": "active"},
             ],
-            "warnings": ["일부 지표를 다른 표현으로 바꾸거나 지원되는 지표만 선택해 주세요."],
+            "warnings": (result.get("request_validation") or {}).get("errors") or ["일부 지표를 다른 표현으로 바꾸거나 지원되는 지표만 선택해 주세요."],
+            "requestValidation": result.get("request_validation"),
         }
 
     dimension_selection = payload.dimension_values if payload.dimension_values is not None else (payload.state or {}).get("_dimension_values", {})
@@ -472,13 +501,22 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     table_name = " · ".join(str(x.get("series_label") or x["table_name"]) for x in plans)
     frequencies = list(dict.fromkeys(str(x["frequency"]) for x in plans))
     frequency_label = "/".join(frequencies)
-    if not payload.period_start or not payload.period_end:
-        available_period = _availability_from_plans(plans)
+    available_period = _availability_from_plans(plans)
+    text_period = None
+    if not payload.period_start and not payload.period_end:
+        try:
+            text_period = explicit_period(q, latest=available_period["max"])
+        except (ValueError, OverflowError) as exc:
+            raise HTTPException(status_code=400, detail=f"날짜를 확인해 주세요: {exc}") from exc
+    period_start = payload.period_start or (text_period or {}).get("start")
+    period_end = payload.period_end or (text_period or {}).get("end")
+    outside = bool(text_period and ((available_period["min"] and period_start < available_period["min"]) or (available_period["max"] and period_end > available_period["max"])))
+    if not period_start or not period_end or outside or (text_period and not payload.execute):
         return {
             "status": "need_period",
             "query": q,
             "interpretedQuery": table_name,
-            "summary": "통계표를 찾았습니다. 그래프로 볼 정확한 시작일과 종료일을 입력해 주세요.",
+            "summary": "텍스트의 기간이 제공 범위를 벗어났습니다. 사용 가능한 기간을 확인해 주세요." if outside else ("텍스트의 조회 기간을 확인했습니다. 날짜를 다시 선택할 필요가 없습니다." if text_period else "통계표를 찾았습니다. 그래프로 볼 정확한 시작일과 종료일을 입력해 주세요."),
             "period": {"start": available_period["min"], "end": available_period["max"]},
             "availablePeriod": available_period,
             "frequency": frequency_label,
@@ -490,14 +528,16 @@ def query(payload: QueryRequest) -> dict[str, Any]:
                 {"id": "table", "title": "통계표 확정", "description": table_name, "status": "complete"},
                 {"id": "period", "title": "조회 기간", "description": "사용자 입력 대기", "status": "active"},
             ],
-            "warnings": [],
+            "warnings": [f"요청 기간: {period_start}–{period_end}; 제공 기간: {available_period['min']}–{available_period['max']}"] if outside else [],
+            "periodSelection": {"source":"text","requested":{"start":period_start,"end":period_end},"applied":{"start":period_start,"end":period_end}} if text_period and not outside else text_period,
             "state": result.get("state") or {},
             "debug": {"timingMs": {"resolve": resolve_ms, "total": resolve_ms}},
         }
 
     available_period = _availability_from_plans(plans)
-    selected_start = payload.period_start
-    selected_end = payload.period_end
+    selected_start = period_start
+    selected_end = period_end
+    period_selection = {"source":"text" if text_period else "ui","requested":{"start":period_start,"end":period_end},"applied":{"start":selected_start,"end":selected_end}}
     adjusted_period = False
     if available_period["min"] and selected_start < available_period["min"]:
         selected_start = available_period["min"]
@@ -507,6 +547,7 @@ def query(payload: QueryRequest) -> dict[str, Any]:
         adjusted_period = True
     if selected_start > selected_end:
         raise HTTPException(status_code=400, detail="선택한 통계표들이 함께 제공되는 기간이 없습니다.")
+    period_selection["applied"] = {"start":selected_start,"end":selected_end}
 
     period_overrides = {
         str(x["table_id"]): (
@@ -531,6 +572,11 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     )
     execute_ms = round((time.perf_counter() - execution_started) * 1000)
 
+    if result.get("status") == "no_match":
+        return {"status":"no_match", "query":q, "summary":"입력한 통계와 조회 대상이 일치하지 않아 출력을 중단했습니다.",
+                "state":result.get("state"), "warnings":result.get("request_validation",{}).get("errors",[]),
+                "requestValidation":result.get("request_validation"), "chart":[], "rows":[]}
+
     plan = result["api_plan"]
     plans = result.get("api_plans") or [plan]
     table_name = " · ".join(str(x.get("series_label") or x["table_name"]) for x in plans)
@@ -552,10 +598,12 @@ def query(payload: QueryRequest) -> dict[str, Any]:
             "period": {"start": selected_start, "end": selected_end},
             "available_period": available_period, "adjusted_period": adjusted_period,
             "resolve_ms": resolve_ms, "execute_ms": execute_ms,
+            "periodSelection": period_selection,
         }
         inspection = agent.output_agent.inspect(result)
         return {
             "status": "need_output_config",
+            "periodSelection": period_selection,
             "query": q,
             "interpretedQuery": table_name,
             "summary": "MCP 데이터 조회가 끝났습니다. 출력할 그래프 종류와 편집 옵션을 선택해 주세요.",
@@ -588,6 +636,7 @@ def query(payload: QueryRequest) -> dict[str, Any]:
 
     return {
         "status": "resolved" if execution_status in {"success", "planned_only"} else "data_unavailable",
+        "periodSelection": period_selection,
         "query": q,
         "interpretedQuery": table_name,
         "summary": summary,
@@ -627,6 +676,19 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     }
 
 
+@app.post("/api/output/options")
+def inspect_output_options(payload: OutputOptionsRequest) -> dict[str, Any]:
+    sessions=[OUTPUT_SESSIONS.get(identifier) for identifier in payload.session_ids]
+    if any(session is None for session in sessions):
+        raise HTTPException(status_code=404,detail="출력 데이터가 만료되었습니다. 다시 조회해 주세요.")
+    results=[session["result"] for session in sessions]
+    merged={"execution":{"rows":[row for result in results for row in (result.get("execution") or {}).get("rows",[])]}}
+    try:
+        return agent.output_agent.inspect(merged)
+    except ValueError as exc:
+        raise HTTPException(status_code=422,detail=str(exc)) from exc
+
+
 @app.post("/api/output")
 def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     sessions = []
@@ -638,6 +700,20 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
 
     base = sessions[0]
     results = [session["result"] for session in sessions]
+    for session in sessions:
+        checked = agent.validate_resolution(str(session["query"]), session["result"])
+        if checked.get("status") != "resolved":
+            raise HTTPException(status_code=422, detail="요청과 통계표가 일치하지 않습니다. 다시 검색해 주세요.")
+    output_intent=structure_request(payload.natural_language or '')
+    if payload.natural_language and (output_intent['metrics'] or output_intent['explicit_ids']
+            or catalog_mentions(payload.natural_language,agent.tables_by_id.values())
+            or unsupported_quantity_terms(payload.natural_language,agent.tables_by_id.values())):
+        # Each session's clarification constraints were checked above. They belong
+        # to that session, not to unrelated tables merged from another request.
+        checked = agent.validate_resolution(payload.natural_language, {**results[0],"state":{},"api_plans":[plan for result in results for plan in (result.get("api_plans") or [result.get("api_plan")]) if plan]})
+        if checked.get("status") != "resolved":
+            reasons=' / '.join(checked.get('request_validation',{}).get('errors',[]))
+            raise HTTPException(status_code=422, detail="출력 요청과 조회된 통계표를 확인해 주세요. "+reasons)
     merged = dict(results[0])
     merged_execution = {
         "status": "success",
@@ -647,6 +723,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     }
     merged["execution"] = merged_execution
     merged["api_plans"] = [plan for result in results for plan in (result.get("api_plans") or [result.get("api_plan")]) if plan]
+    merged["request_validation"] = {"valid":True,"table_ids":[p["table_id"] for p in merged["api_plans"]],"requests":[s["query"] for s in sessions]}
     merged["candidates"] = [candidate for result in results for candidate in (result.get("candidates") or [])]
     output_request = {
         "chart_type": payload.chart_type,
@@ -662,10 +739,12 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     output = rendered.get("output") or {}
+    output["editCapabilities"] = {"model": edit_agent.model.model_name, "supportsImages": edit_agent.model.supports_images}
     edit_session_id = uuid4().hex
     if len(EDIT_SESSIONS) >= MAX_EDIT_SESSIONS:
         EDIT_SESSIONS.pop(next(iter(EDIT_SESSIONS)))
-    EDIT_SESSIONS[edit_session_id] = {"result": merged, "output": output, "sessions": sessions}
+    output.update(editVersion=0, canUndo=False, canRedo=False)
+    EDIT_SESSIONS[edit_session_id] = {"result": merged, "output": output, "sessions": sessions, "undo": [], "redo": []}
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     plans = rendered.get("api_plans") or [rendered.get("api_plan")]
@@ -677,8 +756,10 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     candidates = rendered.get("candidates") or []
     adjusted = any(bool(session.get("adjusted_period")) for session in sessions)
     warnings = (["선택 기간 일부를 원자료 제공 범위에 맞춰 조정했습니다."] if adjusted else [])
+    warnings.extend(output.get('warnings') or [])
     response = {
         "status": "resolved",
+        "periodSelection": base.get("periodSelection"),
         "query": " · ".join(str(session["query"]) for session in sessions),
         "interpretedQuery": table_name,
         "summary": str(output.get("summary") or "출력 에이전트가 그래프 명세를 생성했습니다."),
@@ -717,11 +798,36 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
     session = EDIT_SESSIONS.get(payload.edit_session_id)
     if session is None:
         raise HTTPException(status_code=404, detail="output edit session not found or expired")
+    previous = session["output"]
+    revision = previous.get("editVersion", 0)
+    if payload.revision is not None and payload.revision != revision:
+        raise HTTPException(status_code=409, detail="그래프가 변경되었습니다. 최신 그래프에서 다시 수정해 주세요.")
     try:
-        output = agent.output_agent.edit(session["result"], session["output"], payload.instruction)
+        if payload.action == "edit":
+            output = edit_agent.edit(session["result"], previous, payload.instruction,
+                                     payload.visual.model_dump() if payload.visual else None)
+        else:
+            history = session.get(payload.action, [])
+            if not history:
+                raise ValueError("취소/다시 적용할 편집이 없습니다.")
+            output = agent.output_agent._build(session["result"], ChartSpec.model_validate(history[-1]["chartState"]), generate_explanation=False)
+            output["editHistory"] = history[-1].get("editHistory", [])
+            output["editCapabilities"] = previous.get("editCapabilities", {})
     except (ValueError, TypeError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
-    session["output"] = output
+    with EDIT_LOCK:
+        if session["output"] is not previous:
+            raise HTTPException(status_code=409, detail="다른 수정이 먼저 적용되었습니다. 최신 그래프에서 다시 시도해 주세요.")
+        snapshot = {"chartState": previous["chartState"], "editHistory": previous.get("editHistory", [])}
+        if payload.action == "edit":
+            session["undo"] = [*session.get("undo", []), snapshot][-20:]
+            session["redo"] = []
+        else:
+            session[payload.action] = session[payload.action][:-1]
+            opposite = "redo" if payload.action == "undo" else "undo"
+            session[opposite] = [*session.get(opposite, []), snapshot][-20:]
+        output.update(editVersion=revision+1, canUndo=bool(session.get("undo")), canRedo=bool(session.get("redo")))
+        session["output"] = output
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     sessions = session["sessions"]
@@ -743,10 +849,11 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         "editSessionId": payload.edit_session_id,
         "seriesCount": len(chart),
         "tables": [_table_card(str(plan["table_id"])) for plan in plans],
-        "insights": [f"그래프 수정: {payload.instruction}"],
+        "insights": output.get("editChanges") or ["편집 취소" if payload.action == "undo" else "편집 다시 적용"],
         "lineage": [
             {"id": "mcp", "title": "MCP 통계 서비스", "description": "기존 조회 데이터 사용", "status": "complete"},
-            {"id": "output", "title": "출력 Agent", "description": "검증된 수정 명령 적용", "status": "complete"},
+            {"id": "edit", "title": "수정 Agent", "description": "텍스트·그림 표시를 검증 가능한 명령으로 해석", "status": "complete"},
+            {"id": "output", "title": "출력 Agent", "description": "수정 명령 적용 및 그래프 렌더링", "status": "complete"},
         ],
         "warnings": [],
     }
