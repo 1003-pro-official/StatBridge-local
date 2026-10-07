@@ -175,7 +175,7 @@ def test_provider_uses_actual_parameters_not_gold():
 
 
 def test_real_edit_preserves_raw_and_checks_change(cases):
-    c = next(c for c in read_jsonl(BASE / "internal/components/cases.jsonl") if c["mode"] == "edit" and c["input"]["offline_edit_command"]["operation"] == "set_title")
+    c = next(c for c in read_jsonl(BASE / "internal/components/cases.jsonl") if c["id"] == "SBV2-0070")
     observed, trace = execute_input("edit", c["input"])
     assert observed["source_data_preserved"] is True
     assert observed["statistics_calls_during_edit"] == 0

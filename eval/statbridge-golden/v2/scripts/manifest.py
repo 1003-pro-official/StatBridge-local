@@ -14,6 +14,7 @@ def main():
     files.append(BASE / "candidate_probes.json")
     files.append(BASE / "unit_rules.json")
     files.append(BASE / "dataset_policy.json")
+    files.extend(BASE / name for name in (".gitattributes", ".gitignore"))
     files.extend(p for p in (BASE / "internal/components").rglob("*") if p.is_file() and p.suffix in {".json", ".jsonl", ".md"})
     for folder, pattern in [("fixtures", "*.json"), ("claims", "*.json"), ("scripts", "*.py"), ("tests", "*.py"), ("review", "*.jsonl")]:
         files.extend((BASE / folder).glob(pattern))

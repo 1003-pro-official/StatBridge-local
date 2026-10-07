@@ -100,4 +100,3 @@ def test_pipeline_error_does_not_claim_unobserved_edit_corruption():
     assert "edit_changed_source_data" not in result["failures"]
     assert "edit_requeried_data" not in result["failures"]
     assert result["unobserved_checks"] == ["data", "output", "edit"]
-

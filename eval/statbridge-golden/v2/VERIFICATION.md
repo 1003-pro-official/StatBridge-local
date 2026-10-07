@@ -54,4 +54,3 @@ v4.1 검증기 및 프런트엔드 빌드 성공. 큰 JS 번들 경고는 남아
 노트북: Python exec로 코드 셀 12개 및 그래프 2개 확인. 실제 Jupyter 커널 UI 검증은 하지 않았습니다.
 변경 규칙과 한계는 HARDENING.md, 실행 관측과 상세 보고서는 Git 제외 results/HARDENING_REPORT.md에 있습니다.
 전체 72건의 새 실행과 live 검증은 이번 단계에서 수행하지 않았습니다.
-

@@ -43,6 +43,25 @@ def test_empty_unit_is_blocked():
     assert "missing documented unit" in validate_fixture({"series": [series]}, catalog_contract())
 
 
+@pytest.mark.parametrize("mutation", [None, "day", "month", "value", "axis", "frequency"])
+def test_iso_monthly_plotly_coordinates_preserve_exact_period_and_value(mutation):
+    series = [{"label": "x", "frequency": "M", "points": [{"period": "202401", "value": 1}]}]
+    figure = {"data": [{"type": "scatter", "mode": "lines", "name": "x", "x": ["2024-01-01"], "y": [1]}],
+              "layout": {"xaxis": {"type": "date"}}}
+    if mutation == "day":
+        figure["data"][0]["x"] = ["2024-01-02"]
+    elif mutation == "month":
+        figure["data"][0]["x"] = ["2024-02-01"]
+    elif mutation == "value":
+        figure["data"][0]["y"] = [2]
+    elif mutation == "axis":
+        figure["layout"]["xaxis"]["type"] = "category"
+    elif mutation == "frequency":
+        series[0]["frequency"] = "Q"
+    failures = check_plotly(series, figure, "line")
+    assert failures == ([] if mutation is None else ["plotly_values"])
+
+
 def test_unit_normalization_is_explicit_and_unscaled():
     assert normalized_unit("DT_514Y001", "") == "지수"
     assert normalized_unit("unknown", "") == ""

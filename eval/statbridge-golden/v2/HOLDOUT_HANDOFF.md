@@ -35,6 +35,12 @@
 
 ## 인계본과 다음 단계
 
+PR 제출 전 최신 main(bece852)을 반영해 월별 ISO Plotly 좌표 검사를 보완했습니다.
+현재 사용할 인계본은 results/holdout-kit-002/이며 네 모드 합성 검사를 통과했습니다.
+bundle-manifest.json SHA-256:
+8f8b79dcabce589d51427374827d18ed93e7dbb29f3aa9c7356c2bba841af6fa
+아래 001 인계본은 수정 전 이력으로 보존하며 새 제작에는 사용하지 않습니다.
+
 로컬 인계본: results/holdout-kit-001/ (Git 제외).
 bundle-manifest.json SHA-256:
 8238c04e85f6a920e9120e62bb5ba77479ca9aef6140635fe29e9594de958043

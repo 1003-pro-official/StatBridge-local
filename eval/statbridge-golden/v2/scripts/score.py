@@ -66,7 +66,14 @@ def check_plotly(series, figure, chart_type, layout="combined"):
                 failures.append("plotly_hidden_line")
         if trace.get("name") != s["label"]:
             failures.append("plotly_series_label")
-        if trace["x"] != [p["period"] for p in s["points"]] or trace["y"] != [p["value"] for p in s["points"]]:
+        periods = [p["period"] for p in s["points"]]
+        x_matches = trace["x"] == periods
+        if (not x_matches and all(item.get("frequency") == "M" for item in series)
+                and all(re.fullmatch(r"[0-9]{4}(0[1-9]|1[0-2])", p) for p in periods)):
+            iso = [p[:4] + "-" + p[4:] + "-01" for p in periods]
+            axis = "xaxis" + trace.get("xaxis", "x")[1:]
+            x_matches = trace["x"] == iso and figure.get("layout", {}).get(axis, {}).get("type") == "date"
+        if not x_matches or trace["y"] != [p["value"] for p in s["points"]]:
             failures.append("plotly_values")
         if chart_type == "area" and trace.get("fill") != "tozeroy":
             failures.append("plotly_area_fill")

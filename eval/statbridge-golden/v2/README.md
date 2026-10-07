@@ -21,6 +21,7 @@ v1과 기존 end-to-end/v2를 수정하거나 점수를 합치지 않는 독립 
 - source_inventory.json: 후보 5종의 분포, 채택 연구 결과물 14개, 제외 사유
 - candidate_probes.json: 미채택 연차·지급결제 원본 탐색 및 제목 확인 여부
 - dataset_manifest.json: 공개 사례·fixture·도구의 재현 해시
+- .gitattributes: Git 줄바꿈 변환을 막아 기록된 바이트 해시를 체크아웃에서도 보존
 - pilot.jsonl: 최종 72건에 포함되는 대표 12건
 - [Jupyter 검토 노트북](notebooks/review.ipynb): 사례 필터, 정답·관측·그래프·근거 비교, 실패 코드와 구현 코드 탐색
 

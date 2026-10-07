@@ -46,4 +46,3 @@ clarification_options_correct를 true/false로 기록하세요. reviewer와 huma
 선택지가 틀린 응답도 검수 완료이면 human_approved는 true, 정오 판단은 false입니다.
 관측 해시가 다른 응답에는 해당 판정을 적용하지 않습니다.
 편집 문구 계약과 단위 표기 규칙의 한계는 ../HARDENING.md를 참고하세요.
-
