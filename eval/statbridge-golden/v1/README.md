@@ -7,6 +7,7 @@
 - 검증: `python3 eval/statbridge-golden/v1/scripts/validate.py`
 - 채점: `python3 eval/statbridge-golden/v1/scripts/score.py <gold.jsonl> <pred.jsonl>`
 - 테스트: `python3 -m pytest eval/statbridge-golden/v1/tests -q`
+- 직접 확인(노트북): `notebooks/verify.ipynb` — 문제/정답 열람, validator, 채점 시연(정답·금지·오류)
 
 ## 구성
 - `cases/dev.jsonl`, `cases/test.jsonl`: 정답 포함
