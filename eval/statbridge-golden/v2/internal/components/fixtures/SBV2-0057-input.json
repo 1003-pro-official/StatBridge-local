@@ -1,0 +1,175 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요4:2",
+      "label": "국고채(3년) 금리",
+      "unit": "연%",
+      "frequency": "D",
+      "points": [
+        {
+          "period": "20240102",
+          "value": 3.24
+        },
+        {
+          "period": "20240103",
+          "value": 3.28
+        },
+        {
+          "period": "20240104",
+          "value": 3.23
+        },
+        {
+          "period": "20240105",
+          "value": 3.28
+        },
+        {
+          "period": "20240108",
+          "value": 3.3
+        },
+        {
+          "period": "20240109",
+          "value": 3.26
+        },
+        {
+          "period": "20240110",
+          "value": 3.27
+        },
+        {
+          "period": "20240111",
+          "value": 3.23
+        },
+        {
+          "period": "20240112",
+          "value": 3.2
+        },
+        {
+          "period": "20240115",
+          "value": 3.19
+        },
+        {
+          "period": "20240116",
+          "value": 3.24
+        },
+        {
+          "period": "20240117",
+          "value": 3.28
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요4:4",
+      "label": "코스피",
+      "unit": "1980년 1월 4일=100",
+      "frequency": "D",
+      "points": [
+        {
+          "period": "20240102",
+          "value": 2669.8
+        },
+        {
+          "period": "20240103",
+          "value": 2607.3
+        },
+        {
+          "period": "20240104",
+          "value": 2587
+        },
+        {
+          "period": "20240105",
+          "value": 2578.1
+        },
+        {
+          "period": "20240108",
+          "value": 2567.8
+        },
+        {
+          "period": "20240109",
+          "value": 2561.2
+        },
+        {
+          "period": "20240110",
+          "value": 2542
+        },
+        {
+          "period": "20240111",
+          "value": 2540.3
+        },
+        {
+          "period": "20240112",
+          "value": 2525.1
+        },
+        {
+          "period": "20240115",
+          "value": 2526
+        },
+        {
+          "period": "20240116",
+          "value": 2497.6
+        },
+        {
+          "period": "20240117",
+          "value": 2435.9
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요4:5",
+      "label": "원/달러 환율",
+      "unit": "원/달러",
+      "frequency": "D",
+      "points": [
+        {
+          "period": "20240102",
+          "value": 1300.4
+        },
+        {
+          "period": "20240103",
+          "value": 1304.8
+        },
+        {
+          "period": "20240104",
+          "value": 1310
+        },
+        {
+          "period": "20240105",
+          "value": 1315.4
+        },
+        {
+          "period": "20240108",
+          "value": 1316
+        },
+        {
+          "period": "20240109",
+          "value": 1315.7
+        },
+        {
+          "period": "20240110",
+          "value": 1320.1
+        },
+        {
+          "period": "20240111",
+          "value": 1312.9
+        },
+        {
+          "period": "20240112",
+          "value": 1313.5
+        },
+        {
+          "period": "20240115",
+          "value": 1320.2
+        },
+        {
+          "period": "20240116",
+          "value": 1331.8
+        },
+        {
+          "period": "20240117",
+          "value": 1344.2
+        }
+      ]
+    }
+  ]
+}

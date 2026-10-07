@@ -1,0 +1,175 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요5:2",
+      "label": "서울",
+      "unit": "전월대비, %",
+      "frequency": "M",
+      "points": [
+        {
+          "period": "202201",
+          "value": 0.04
+        },
+        {
+          "period": "202202",
+          "value": -0.041
+        },
+        {
+          "period": "202203",
+          "value": -0.008
+        },
+        {
+          "period": "202204",
+          "value": 0.038
+        },
+        {
+          "period": "202205",
+          "value": 0.042
+        },
+        {
+          "period": "202206",
+          "value": -0.004
+        },
+        {
+          "period": "202207",
+          "value": -0.086
+        },
+        {
+          "period": "202208",
+          "value": -0.243
+        },
+        {
+          "period": "202209",
+          "value": -0.467
+        },
+        {
+          "period": "202210",
+          "value": -0.805
+        },
+        {
+          "period": "202211",
+          "value": -1.337
+        },
+        {
+          "period": "202212",
+          "value": -1.964
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요5:3",
+      "label": "수도권",
+      "unit": "전월대비, %",
+      "frequency": "M",
+      "points": [
+        {
+          "period": "202201",
+          "value": 0.055
+        },
+        {
+          "period": "202202",
+          "value": -0.026
+        },
+        {
+          "period": "202203",
+          "value": -0.04
+        },
+        {
+          "period": "202204",
+          "value": 0.029
+        },
+        {
+          "period": "202205",
+          "value": -0.036
+        },
+        {
+          "period": "202206",
+          "value": -0.044
+        },
+        {
+          "period": "202207",
+          "value": -0.145
+        },
+        {
+          "period": "202208",
+          "value": -0.402
+        },
+        {
+          "period": "202209",
+          "value": -0.644
+        },
+        {
+          "period": "202210",
+          "value": -1.019
+        },
+        {
+          "period": "202211",
+          "value": -1.771
+        },
+        {
+          "period": "202212",
+          "value": -2.597
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요5:4",
+      "label": "비수도권",
+      "unit": "전월대비, %",
+      "frequency": "M",
+      "points": [
+        {
+          "period": "202201",
+          "value": 0.136
+        },
+        {
+          "period": "202202",
+          "value": 0.079
+        },
+        {
+          "period": "202203",
+          "value": 0.068
+        },
+        {
+          "period": "202204",
+          "value": 0.085
+        },
+        {
+          "period": "202205",
+          "value": 0.058
+        },
+        {
+          "period": "202206",
+          "value": 0.027
+        },
+        {
+          "period": "202207",
+          "value": -0.014
+        },
+        {
+          "period": "202208",
+          "value": -0.182
+        },
+        {
+          "period": "202209",
+          "value": -0.348
+        },
+        {
+          "period": "202210",
+          "value": -0.549
+        },
+        {
+          "period": "202211",
+          "value": -1.01
+        },
+        {
+          "period": "202212",
+          "value": -1.423
+        }
+      ]
+    }
+  ]
+}

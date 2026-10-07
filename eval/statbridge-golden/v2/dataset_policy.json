@@ -1,0 +1,12 @@
+{
+  "revision": "ui-aligned-20261007",
+  "ai_assisted": true,
+  "human_approved": false,
+  "public_scope": "supported query/output/edit API scenarios; NOT browser UI verification",
+  "e2e_subtypes": {
+    "single": 24,
+    "multi": 6
+  },
+  "internal_component_cases": 18,
+  "offline_edit_scope": "command replay, not natural-language interpretation"
+}

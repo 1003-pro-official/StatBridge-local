@@ -1,0 +1,33 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_514Y001",
+      "item_id": "13103134672999",
+      "classifications": {
+        "objL1": "13102134672ACC_CD.AA"
+      },
+      "label": "국내은행-차주가중종합지수",
+      "frequency": "Q",
+      "unit": "지수",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": -3.0
+        },
+        {
+          "period": "2024Q2",
+          "value": -6.0
+        },
+        {
+          "period": "2024Q3",
+          "value": -17.0
+        },
+        {
+          "period": "2024Q4",
+          "value": -27.0
+        }
+      ]
+    }
+  ]
+}

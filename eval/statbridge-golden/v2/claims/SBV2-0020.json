@@ -1,0 +1,77 @@
+{
+  "fixture_sha256": "023cef4e01b42fa86df871bc46ad8b3f0c1e487c28559225e30e2b7af48ff9a3",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_121Y002",
+        "13103134588999",
+        [
+          [
+            "objL1",
+            "13102134588ACC_ITEM.BEABAA1"
+          ]
+        ],
+        "M",
+        "연리%"
+      ],
+      "unit": "연리%",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202301",
+        "value": 3.83
+      },
+      "last": {
+        "period": "202312",
+        "value": 3.84
+      },
+      "minimum": {
+        "period": "202304",
+        "value": 3.41
+      },
+      "maximum": {
+        "period": "202311",
+        "value": 3.97
+      },
+      "absolute_change": 0.009999999999999787,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "kosis",
+        "DT_121Y006",
+        "13103134553999",
+        [
+          [
+            "objL1",
+            "13102134553ACC_ITEM.BECBLA01"
+          ]
+        ],
+        "M",
+        "연%"
+      ],
+      "unit": "연%",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202301",
+        "value": 5.46
+      },
+      "last": {
+        "period": "202312",
+        "value": 5.14
+      },
+      "minimum": {
+        "period": "202304",
+        "value": 5.01
+      },
+      "maximum": {
+        "period": "202301",
+        "value": 5.46
+      },
+      "absolute_change": -0.3200000000000003,
+      "change_formula": "last - first"
+    }
+  ]
+}

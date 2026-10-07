@@ -1,0 +1,33 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_200Y109",
+      "item_id": "13103136270999",
+      "classifications": {
+        "objL1": "13102136270ACC_ITEM.1020111"
+      },
+      "label": "건설투자",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 77386.7
+        },
+        {
+          "period": "2024Q2",
+          "value": 98818.1
+        },
+        {
+          "period": "2024Q3",
+          "value": 89254.3
+        },
+        {
+          "period": "2024Q4",
+          "value": 93261.7
+        }
+      ]
+    }
+  ]
+}

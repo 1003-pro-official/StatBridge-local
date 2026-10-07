@@ -1,0 +1,121 @@
+{
+  "fixture_sha256": "35109830badc6e8be81806b31d14468530b92a9e46e9bbac8007d56b35258e82",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요6:2",
+        "M",
+        "조원"
+      ],
+      "unit": "조원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202301",
+        "value": 0
+      },
+      "last": {
+        "period": "202312",
+        "value": 51.60000000000001
+      },
+      "minimum": {
+        "period": "202302",
+        "value": -0.3
+      },
+      "maximum": {
+        "period": "202312",
+        "value": 51.60000000000001
+      },
+      "absolute_change": 51.60000000000001,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요6:3",
+        "M",
+        "조원"
+      ],
+      "unit": "조원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202301",
+        "value": -4.6
+      },
+      "last": {
+        "period": "202312",
+        "value": -14.7
+      },
+      "minimum": {
+        "period": "202312",
+        "value": -14.7
+      },
+      "maximum": {
+        "period": "202301",
+        "value": -4.6
+      },
+      "absolute_change": -10.1,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요6:4",
+        "M",
+        "조원"
+      ],
+      "unit": "조원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202301",
+        "value": -2.9
+      },
+      "last": {
+        "period": "202312",
+        "value": -28.000000000000004
+      },
+      "minimum": {
+        "period": "202312",
+        "value": -28.000000000000004
+      },
+      "maximum": {
+        "period": "202301",
+        "value": -2.9
+      },
+      "absolute_change": -25.100000000000005,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요6:5",
+        "M",
+        "조원"
+      ],
+      "unit": "조원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202301",
+        "value": -7.6
+      },
+      "last": {
+        "period": "202312",
+        "value": 8.700000000000001
+      },
+      "minimum": {
+        "period": "202304",
+        "value": -18.5
+      },
+      "maximum": {
+        "period": "202312",
+        "value": 8.700000000000001
+      },
+      "absolute_change": 16.3,
+      "change_formula": "last - first"
+    }
+  ]
+}

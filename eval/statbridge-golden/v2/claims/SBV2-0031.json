@@ -1,0 +1,77 @@
+{
+  "fixture_sha256": "5288e5c1177a3e9e3ec2c599e6032283f65c3a9e7036101eb32ca9d51ae78865",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_514Y002",
+        "13103134565999",
+        [
+          [
+            "objL1",
+            "13102134565ACC_CD.BB"
+          ]
+        ],
+        "Q",
+        "지수"
+      ],
+      "unit": "지수",
+      "frequency": "Q",
+      "missing_periods": [],
+      "first": {
+        "period": "2024Q1",
+        "value": 32.0
+      },
+      "last": {
+        "period": "2024Q4",
+        "value": 28.0
+      },
+      "minimum": {
+        "period": "2024Q3",
+        "value": 26.0
+      },
+      "maximum": {
+        "period": "2024Q1",
+        "value": 32.0
+      },
+      "absolute_change": -4.0,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "kosis",
+        "DT_514Y003",
+        "13103134487999",
+        [
+          [
+            "objL1",
+            "13102134487ACC_CD.CC"
+          ]
+        ],
+        "Q",
+        "지수"
+      ],
+      "unit": "지수",
+      "frequency": "Q",
+      "missing_periods": [],
+      "first": {
+        "period": "2024Q1",
+        "value": 24.0
+      },
+      "last": {
+        "period": "2024Q4",
+        "value": 7.0
+      },
+      "minimum": {
+        "period": "2024Q2",
+        "value": 5.0
+      },
+      "maximum": {
+        "period": "2024Q1",
+        "value": 24.0
+      },
+      "absolute_change": -17.0,
+      "change_formula": "last - first"
+    }
+  ]
+}

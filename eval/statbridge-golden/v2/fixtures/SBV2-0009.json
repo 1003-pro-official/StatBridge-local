@@ -1,0 +1,53 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_101Y004",
+      "item_id": "13103134508999",
+      "classifications": {
+        "objL1": "13102134508ACC_ITEM.BBHA00"
+      },
+      "label": "M2(평잔 원계열)",
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "200401",
+          "value": 901048.5
+        },
+        {
+          "period": "200402",
+          "value": 906803.8
+        },
+        {
+          "period": "200403",
+          "value": 916675.5
+        },
+        {
+          "period": "200404",
+          "value": 918329.7
+        },
+        {
+          "period": "200405",
+          "value": 921252.0
+        },
+        {
+          "period": "200406",
+          "value": 927101.8
+        },
+        {
+          "period": "200407",
+          "value": 931581.5
+        },
+        {
+          "period": "200408",
+          "value": 936302.7
+        },
+        {
+          "period": "200409",
+          "value": 946264.9
+        }
+      ]
+    }
+  ]
+}

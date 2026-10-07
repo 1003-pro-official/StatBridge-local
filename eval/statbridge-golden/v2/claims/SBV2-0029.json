@@ -1,0 +1,77 @@
+{
+  "fixture_sha256": "22b46fd188cabc0a605b399c5c601ed87493bc957b0cbc4cea26b124394b3f89",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_101Y003",
+        "13103134507999",
+        [
+          [
+            "objL1",
+            "13102134507ACC_ITEM.BBHS00"
+          ]
+        ],
+        "M",
+        "십억원"
+      ],
+      "unit": "십억원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "200401",
+        "value": 900001.7938
+      },
+      "last": {
+        "period": "200409",
+        "value": 948552.4665
+      },
+      "minimum": {
+        "period": "200401",
+        "value": 900001.7938
+      },
+      "maximum": {
+        "period": "200409",
+        "value": 948552.4665
+      },
+      "absolute_change": 48550.672699999996,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "kosis",
+        "DT_101Y004",
+        "13103134508999",
+        [
+          [
+            "objL1",
+            "13102134508ACC_ITEM.BBHA00"
+          ]
+        ],
+        "M",
+        "십억원"
+      ],
+      "unit": "십억원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "200401",
+        "value": 901048.5
+      },
+      "last": {
+        "period": "200409",
+        "value": 946264.9
+      },
+      "minimum": {
+        "period": "200401",
+        "value": 901048.5
+      },
+      "maximum": {
+        "period": "200409",
+        "value": 946264.9
+      },
+      "absolute_change": 45216.40000000002,
+      "change_formula": "last - first"
+    }
+  ]
+}

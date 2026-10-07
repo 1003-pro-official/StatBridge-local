@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StatBridge public scenario v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "schema_version", "split", "group_id", "mode", "tags", "input", "expected", "evidence", "review"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^SBV2-[0-9]{4}$"},
+    "schema_version": {"const": "2.0"},
+    "split": {"enum": ["dev", "test"]},
+    "group_id": {"type": "string", "minLength": 1},
+    "mode": {"enum": ["discovery", "e2e", "output", "edit"]},
+    "tags": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "input": {
+      "type": "object", "additionalProperties": false,
+      "required": ["query", "reference_date", "prior_turns", "actions"],
+      "properties": {
+        "query": {"type": "string", "minLength": 1},
+        "reference_date": {"type": "string", "format": "date"},
+        "prior_turns": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+          "required": ["role", "text"], "properties": {"role": {"enum": ["user", "assistant"]}, "text": {"type": "string", "minLength": 1}}}},
+        "actions": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["kind"], "properties": {
+          "kind": {"enum": ["confirm_period", "configure_output", "clarify", "edit"]},
+          "start": {"type": "string", "format": "date"}, "end": {"type": "string", "format": "date"},
+          "chart_type": {"enum": ["line", "bar", "area", "stacked_bar"]},
+          "layout": {"enum": ["combined", "separate"]}, "value": {"type": "string", "minLength": 1},
+          "instruction": {"type": "string", "minLength": 1}},
+          "allOf": [
+            {"if": {"properties": {"kind": {"const": "confirm_period"}}}, "then": {"required": ["start", "end"]}},
+            {"if": {"properties": {"kind": {"const": "configure_output"}}}, "then": {"required": ["chart_type", "layout"]}},
+            {"if": {"properties": {"kind": {"const": "clarify"}}}, "then": {"required": ["value"]}},
+            {"if": {"properties": {"kind": {"const": "edit"}}}, "then": {"required": ["instruction"]}}
+          ]}},
+        "data_fixture": {"type": "string", "pattern": "^(fixtures|internal/components/fixtures)/.+\\.json$"},
+        "data_fixture_sha256": {"$ref": "#/$defs/hash"},
+        "output_request": {"type": "object"},
+        "offline_edit_command": {"type": "object", "additionalProperties": false, "required": ["operation", "kind"],
+          "properties": {
+            "operation": {"enum": ["set_title", "set_legend", "set_transform", "filter_period"]},
+            "kind": {"enum": ["STYLE_EDIT", "DATA_EDIT"]},
+            "value": {"type": ["string", "boolean"]},
+            "start": {"type": "string", "pattern": "^[0-9]{6}$"},
+            "end": {"type": "string", "pattern": "^[0-9]{6}$"}
+          },
+          "allOf": [
+            {"if": {"properties": {"operation": {"const": "set_title"}}}, "then": {"required": ["value"], "properties": {"kind": {"const": "STYLE_EDIT"}, "value": {"type": "string", "minLength": 1}}}},
+            {"if": {"properties": {"operation": {"const": "set_legend"}}}, "then": {"required": ["value"], "properties": {"kind": {"const": "STYLE_EDIT"}, "value": {"type": "boolean"}}}},
+            {"if": {"properties": {"operation": {"const": "set_transform"}}}, "then": {"required": ["value"], "properties": {"kind": {"const": "DATA_EDIT"}, "value": {"enum": ["growth_rate", "year_over_year", "cumulative"]}}}},
+            {"if": {"properties": {"operation": {"const": "filter_period"}}}, "then": {"required": ["start", "end"], "properties": {"kind": {"const": "DATA_EDIT"}}}}
+          ]}
+      }
+    },
+    "expected": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "resolution": {"type": "object", "additionalProperties": false, "required": ["decision", "acceptable_table_sets", "clarification"],
+          "properties": {"decision": {"enum": ["resolved", "clarify", "unsupported"]},
+            "acceptable_table_sets": {"type": "array", "uniqueItems": true, "items": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}},
+            "series_selection": {"type": "array", "items": {"type": "object"}},
+            "clarification": {"type": "object", "required": ["required", "dimensions", "option_groups"], "properties": {
+              "required": {"type": "boolean"}, "dimensions": {"type": "array", "items": {"type": "string"}},
+              "option_groups": {"type": "array", "items": {"type": "array", "minItems": 1, "items": {"type": "string"}}}}}}},
+        "data": {"type": "object", "additionalProperties": false, "required": ["fixture", "fixture_sha256", "absolute_tolerance", "period_policy", "missing_policy"],
+          "properties": {"fixture": {"type": "string", "pattern": "^(fixtures|internal/components/fixtures)/.+\\.json$"}, "fixture_sha256": {"$ref": "#/$defs/hash"},
+            "source_fixture": {"type": "string", "pattern": "^fixtures/.+\\.json$"}, "source_fixture_sha256": {"$ref": "#/$defs/hash"},
+            "absolute_tolerance": {"type": "number", "minimum": 0}, "period_policy": {"const": "exact"}, "missing_policy": {"const": "preserve"}}},
+        "output": {"type": "object", "required": ["acceptable_chart_types", "layout", "claims"], "properties": {
+          "acceptable_chart_types": {"type": "array", "minItems": 1, "items": {"enum": ["line", "bar", "area", "stacked_bar", "scatter", "heatmap", "pie", "donut", "histogram", "box", "treemap", "waterfall", "bubble"]}},
+          "layout": {"enum": ["combined", "separate"]}, "claims": {"type": "string", "pattern": "^(claims|internal/components/claims)/.+\\.json$"}, "state": {"type": "object"}, "preserve_data": {"type": "boolean"}}}
+      }
+    },
+    "evidence": {"type": "object", "additionalProperties": false, "required": ["research_result_ids", "sources", "catalog_snapshot", "relationship"], "properties": {
+      "research_result_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+      "sources": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false,
+        "required": ["path", "sha256", "locator", "extraction", "publisher"], "properties": {
+        "path": {"type": "string"}, "sha256": {"$ref": "#/$defs/hash"}, "locator": {"type": "string", "minLength": 1},
+        "extraction": {"type": "string", "minLength": 1}, "publisher": {"type": "string", "minLength": 1}}}},
+      "catalog_snapshot": {"$ref": "#/$defs/hash"}, "relationship": {"enum": ["purpose_reconstruction", "attachment_subset", "unsupported_subject"]}}},
+    "review": {"type": "object", "additionalProperties": false, "required": ["status", "reviewer", "human_approved", "annotation_method"], "properties": {
+      "status": {"enum": ["draft", "ready_for_review", "approved", "rejected"]}, "reviewer": {"type": ["string", "null"]},
+      "human_approved": {"type": "boolean"}, "annotation_method": {"const": "ai-assisted-source-grounded"}}}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

@@ -1,0 +1,41 @@
+{
+  "fixture_sha256": "5f15e06e89f0c0c0f595c1e827b42efc9cf35615867bbf7b383951205c9c3e4c",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_200Y107",
+        "13103136276999",
+        [
+          [
+            "objL1",
+            "13102136276ACC_ITEM.10601"
+          ]
+        ],
+        "Q",
+        "십억원"
+      ],
+      "unit": "십억원",
+      "frequency": "Q",
+      "missing_periods": [],
+      "first": {
+        "period": "2023Q1",
+        "value": 588642.8
+      },
+      "last": {
+        "period": "2023Q4",
+        "value": 617070.8
+      },
+      "minimum": {
+        "period": "2023Q1",
+        "value": 588642.8
+      },
+      "maximum": {
+        "period": "2023Q4",
+        "value": 617070.8
+      },
+      "absolute_change": 28428.0,
+      "change_formula": "last - first"
+    }
+  ]
+}

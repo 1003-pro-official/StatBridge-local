@@ -1,0 +1,41 @@
+{
+  "fixture_sha256": "34aed94ffc7c91e0d6432f43dfc1747632ac93bdecb09c13363ffc5298ec70f6",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_121Y002",
+        "13103134588999",
+        [
+          [
+            "objL1",
+            "13102134588ACC_ITEM.BEABAA1"
+          ]
+        ],
+        "M",
+        "연리%"
+      ],
+      "unit": "연리%",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202301",
+        "value": 3.83
+      },
+      "last": {
+        "period": "202312",
+        "value": 3.84
+      },
+      "minimum": {
+        "period": "202304",
+        "value": 3.41
+      },
+      "maximum": {
+        "period": "202311",
+        "value": 3.97
+      },
+      "absolute_change": 0.009999999999999787,
+      "change_formula": "last - first"
+    }
+  ]
+}

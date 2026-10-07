@@ -1,0 +1,33 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_200Y108",
+      "item_id": "13103136297999",
+      "classifications": {
+        "objL1": "13102136297ACC_ITEM.1010110"
+      },
+      "label": "민간",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2023Q1",
+          "value": 271141.0
+        },
+        {
+          "period": "2023Q2",
+          "value": 271083.4
+        },
+        {
+          "period": "2023Q3",
+          "value": 271483.3
+        },
+        {
+          "period": "2023Q4",
+          "value": 272646.4
+        }
+      ]
+    }
+  ]
+}

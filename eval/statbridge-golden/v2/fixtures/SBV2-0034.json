@@ -1,0 +1,33 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_200Y110",
+      "item_id": "13103136261999",
+      "classifications": {
+        "objL1": "13102136261ACC_ITEM.10301"
+      },
+      "label": "재화와 서비스의 수출",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 222868.8
+        },
+        {
+          "period": "2024Q2",
+          "value": 228434.1
+        },
+        {
+          "period": "2024Q3",
+          "value": 230169.8
+        },
+        {
+          "period": "2024Q4",
+          "value": 240639.4
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "fixture_sha256": "11d42028356a78480a99593441beb155d50a2a694edec23961b2cef5e30bbb98",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_514Y003",
+        "13103134487999",
+        [
+          [
+            "objL1",
+            "13102134487ACC_CD.CC"
+          ]
+        ],
+        "Q",
+        "지수"
+      ],
+      "unit": "지수",
+      "frequency": "Q",
+      "missing_periods": [],
+      "first": {
+        "period": "2024Q1",
+        "value": 24.0
+      },
+      "last": {
+        "period": "2024Q4",
+        "value": 7.0
+      },
+      "minimum": {
+        "period": "2024Q2",
+        "value": 5.0
+      },
+      "maximum": {
+        "period": "2024Q1",
+        "value": 24.0
+      },
+      "absolute_change": -17.0,
+      "change_formula": "last - first"
+    }
+  ]
+}

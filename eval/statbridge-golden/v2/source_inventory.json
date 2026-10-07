@@ -1,0 +1,51 @@
+{
+  "candidate_report_types": {
+    "경제전망보고서": 1016,
+    "금융안정보고서": 1425,
+    "연차보고서": 394,
+    "지급결제보고서": 178,
+    "통화신용정책보고서": 1014
+  },
+  "selected_unique_result_ids_by_report_type": {
+    "경제전망보고서": 4,
+    "금융안정보고서": 2,
+    "통화신용정책보고서": 8
+  },
+  "selected_unique_results": 14,
+  "selection_note": "UI-aligned public cases; original attachment cases retained ONLY in internal/components.",
+  "excluded_candidates": [
+    {
+      "subject": "Financial support loan rate 2012-2015",
+      "reason": "Original rate cells contain ranges, e.g. 0.5~1.25; excluded from scalar numeric tasks. Loan limits retained."
+    }
+  ],
+  "originals": {
+    "research/bok-archive/01-통화신용정책보고서/2026-09-10_통화신용정책보고서(2026년 9월)/그림 원본 데이터(2026년 9월).xlsx": "c5f574eb7d77acd9a3f872cb913f4adc7b2f8c2d74b2f0716054e13ff9629c76",
+    "data/tables/DT_101Y001__M2 상품별 구성내역(말잔, 계절조정계열).csv": "2f7d9715eb80da5582e52bbc687f386e6bf96bd8ba528c919f9a08d651adbf0b",
+    "data/tables/DT_101Y002__M2 상품별 구성내역(말잔, 원계열).csv": "842c3e1622970e86e54de4c767b7e90df37bab82dff351b3d9f1a587c5546360",
+    "data/tables/DT_121Y002__예금은행 수신금리(신규취급액 기준).csv": "c0a159e4b4d7dbb5f525401a27fea881b2e3abca9d1b2483b38361e3a066d169",
+    "data/tables/DT_121Y006__예금은행 대출금리(신규취급액 기준).csv": "47b285867771536be31c1aa9d7c802ddfd6b9c9c33a67027b930f6b53f2e3386",
+    "research/bok-archive/02-금융안정보고서/2023-12-28_금융안정보고서(2023년 12월)/금융안정보고서(2023년 12월) 그림 데이터.xlsx": "255aff8d1419cdbc8aedc100663555812251e4a557c64cbe9be72b3a183b3212",
+    "data/tables/DT_151Y001__가계신용(업권별, 분기).csv": "7f4f5cb1d66cc9ad609d7caf575251ac50e4a7bc0e852126808ab4b686bc8784",
+    "research/bok-archive/03-경제전망보고서/2023-11-30_경제전망보고서(2023년 11월)/2023년 11월 경제전망보고서(Indigo Book).pdf": "d06d08bca57f7a0d0c595620568f3e0fe8bcda8cd250f1a3ee89eb6072ddb9ef",
+    "data/tables/DT_200Y107__국내총생산에 대한 지출(계절조정, 명목, 분기).csv": "053f9cb0ab9fb7b0151d996433d3a1dcea63a5299bf35c789a7fba07a130a87b",
+    "data/tables/DT_200Y108__국내총생산에 대한 지출(계절조정, 실질, 분기).csv": "37aca6e0ab7754c20b28561cb5d751f3679c9b10af883feeaa07d87bdbabaa2f",
+    "research/bok-archive/01-통화신용정책보고서/2026-03-12_통화신용정책보고서(2026년 3월)/그림 원본 데이터(2026년 3월).xlsx": "8411af4e72d0c541f20f1e65ea6aa6ba923b5b8550bb4baffd099e90e3bdc48a",
+    "data/tables/DT_101Y003__M2 상품별 구성내역(평잔, 계절조정계열).csv": "5248068bda4aa4c2e99c9eb1cbf14eb33519588163ff7f75cd8586d0f7d76e58",
+    "data/tables/DT_101Y004__M2 상품별 구성내역(평잔, 원계열).csv": "53b71117d810c9ba06193a8011313c6978a74bd36357d4f09ac128d7ffad3fde",
+    "data/tables/DT_121Y013__예금은행 수신금리(잔액 기준).csv": "a1be15eae81df7e459cb61ec4ee06518597cf14a48ba3f4ae52b6db4950fefbf",
+    "data/tables/DT_121Y015__예금은행 대출금리(잔액 기준).csv": "512e23e92d64c1e00d83f1ba55c158734f95b21715a760849cf5f9084a20eef6",
+    "research/bok-archive/02-금융안정보고서/2024-12-24_금융안정보고서(2024년 12월)/금융안정보고서(2024년 12월) 그림 데이터.xlsx": "d6fa03d27c0eb62bfb5e375898fd2d1843f98eb4b9d201600cc6d416319210b7",
+    "data/tables/DT_151Y004__가계신용(용도별, 분기).csv": "771609725851692ca6023abb20528833898273daecc065f680c210035d2ff3cc",
+    "research/bok-archive/03-경제전망보고서/2024-02-22_경제전망보고서(2024년 2월)/2024년 2월 경제전망보고서(Indigo Book).pdf": "73f2418fb420d8b890478598111eed843109ad657039a317e3f7f42f0ce31dc2",
+    "data/tables/DT_200Y109__국내총생산에 대한 지출(원계열, 명목, 분기 및 연간).csv": "0afaa7a27d9c2a96cab3c29e86369c2186a7a14b1273b31dd436182148f36c68",
+    "data/tables/DT_200Y110__국내총생산에 대한 지출(원계열, 실질, 분기 및 연간).csv": "95f1f09a265786e122a8f19352736cf1636dade92d08be97edab6df59b0fed6a",
+    "research/bok-archive/03-경제전망보고서/2024-11-28_경제전망보고서(2024년 11월)/2024년 11월 경제전망보고서(Indigo Book)_FFFFF.pdf": "4761e101de022bae1854c788a5647e46c5dbfedf86301fec91b60ed077788fa6",
+    "data/tables/DT_301Y017__경상수지(계절조정).csv": "7ff2a7b37d1a9679debf74de1c0b3e6307bac2fe7c762596b0f3a1525127b5f6",
+    "data/tables/DT_514Y001__대출행태서베이(대출태도).csv": "2f983c73af6b3a6180f5fe7e3c266d321434e9a42d1fcb101eec771d31351fce",
+    "eval/statbridge-golden/v2/unit_rules.json": "8cf90ef80b7f2f9eb6b12b8590295fd1511566e08ea5de01f83b1e0ac77c49af",
+    "eval/statbridge-golden/v2/results/source-originals/lending-survey-definition.pdf": "c437b5c7978647c37798a24abc66e8931b88cd79368d5ffc162c3dec6f9c9337",
+    "data/tables/DT_514Y002__대출행태서베이(신용위험).csv": "123bc2e7d8108ec447bb633ac40c0eee5ce4b12098ec42d32585b1a1c8267ee7",
+    "data/tables/DT_514Y003__대출행태서베이(대출수요).csv": "274f6d48d897330d0af6872261e46f64569c4cc329a8cca4a928d1b8ea33f57c"
+  }
+}

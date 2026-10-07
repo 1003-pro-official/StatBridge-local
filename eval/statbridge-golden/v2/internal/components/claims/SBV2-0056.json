@@ -1,0 +1,63 @@
+{
+  "fixture_sha256": "8c4e76be963be9dcba2a47c9fdac3cb0414b65c2235bede7fa35b1e561c8b917",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요3:2",
+        "M",
+        "전년동기대비, %"
+      ],
+      "unit": "전년동기대비, %",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202401",
+        "value": 2.8
+      },
+      "last": {
+        "period": "202412",
+        "value": 1.9
+      },
+      "minimum": {
+        "period": "202410",
+        "value": 1.3
+      },
+      "maximum": {
+        "period": "202402",
+        "value": 3.1
+      },
+      "absolute_change": -0.8999999999999999,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요3:4",
+        "M",
+        "전년동기대비, %"
+      ],
+      "unit": "전년동기대비, %",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202401",
+        "value": 2.5
+      },
+      "last": {
+        "period": "202412",
+        "value": 1.8
+      },
+      "minimum": {
+        "period": "202410",
+        "value": 1.8
+      },
+      "maximum": {
+        "period": "202401",
+        "value": 2.5
+      },
+      "absolute_change": -0.7,
+      "change_formula": "last - first"
+    }
+  ]
+}

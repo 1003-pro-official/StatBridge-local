@@ -1,0 +1,118 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요1:4",
+      "label": "미 국채 (10년) 금리",
+      "unit": "연%",
+      "frequency": "D",
+      "points": [
+        {
+          "period": "20240101",
+          "value": 3.88
+        },
+        {
+          "period": "20240102",
+          "value": 3.93
+        },
+        {
+          "period": "20240103",
+          "value": 3.92
+        },
+        {
+          "period": "20240104",
+          "value": 4
+        },
+        {
+          "period": "20240105",
+          "value": 4.05
+        },
+        {
+          "period": "20240108",
+          "value": 4.03
+        },
+        {
+          "period": "20240109",
+          "value": 4.01
+        },
+        {
+          "period": "20240110",
+          "value": 4.03
+        },
+        {
+          "period": "20240111",
+          "value": 3.97
+        },
+        {
+          "period": "20240112",
+          "value": 3.94
+        },
+        {
+          "period": "20240115",
+          "value": 3.94
+        },
+        {
+          "period": "20240116",
+          "value": 4.06
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요1:5",
+      "label": "일본 국채 (10년) 금리",
+      "unit": "연%",
+      "frequency": "D",
+      "points": [
+        {
+          "period": "20240101",
+          "value": 0.61
+        },
+        {
+          "period": "20240102",
+          "value": 0.61
+        },
+        {
+          "period": "20240103",
+          "value": 0.61
+        },
+        {
+          "period": "20240104",
+          "value": 0.62
+        },
+        {
+          "period": "20240105",
+          "value": 0.61
+        },
+        {
+          "period": "20240108",
+          "value": 0.61
+        },
+        {
+          "period": "20240109",
+          "value": 0.59
+        },
+        {
+          "period": "20240110",
+          "value": 0.59
+        },
+        {
+          "period": "20240111",
+          "value": 0.6
+        },
+        {
+          "period": "20240112",
+          "value": 0.61
+        },
+        {
+          "period": "20240115",
+          "value": 0.57
+        },
+        {
+          "period": "20240116",
+          "value": 0.6
+        }
+      ]
+    }
+  ]
+}

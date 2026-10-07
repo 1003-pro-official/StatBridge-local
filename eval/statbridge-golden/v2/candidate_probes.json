@@ -1,0 +1,24 @@
+[
+  {
+    "report_type": "연차보고서",
+    "research_result_id": "BOK-20240329-1d931f5947ea-그림-0264280127f88db0",
+    "original": "research/bok-archive/05-연차보고서/2024-03-29_2023년도 연차보고서/(붙임2) 2023년도 연차보고서.pdf",
+    "sha256": "80c1d5cbab6c9b2b6da4b49a9335bb7ffa096c8f94d4f12fc09066249807ff30",
+    "locator": "PDF page 19",
+    "title": "세계경제 성장률 추이",
+    "title_observed": true,
+    "selected": false,
+    "reason": "Candidate inspected only; independent numeric extraction and supported-series mapping not completed. Do not promote inferred metadata to gold."
+  },
+  {
+    "report_type": "지급결제보고서",
+    "research_result_id": "BOK-20240415-d93aa3d55345-그림-50406367417cd8e3",
+    "original": "research/bok-archive/04-지급결제보고서/2024-04-15_2023년도 지급결제보고서/2023년도 지급결제보고서 그림 데이터(2024년 4월).xlsx",
+    "sha256": "254d2d282543c8bf4065d40e2751ac932a01df5a7116479c77b2e1f7c7d56e5a",
+    "locator": "<그림Ⅰ-1>!A1:F12",
+    "title": "한은금융망 증권거래자금 결제규모 3",
+    "title_observed": false,
+    "selected": false,
+    "reason": "Candidate inspected only; independent numeric extraction and supported-series mapping not completed. Do not promote inferred metadata to gold."
+  }
+]

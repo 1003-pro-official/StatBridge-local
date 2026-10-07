@@ -1,0 +1,65 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_301Y017",
+      "item_id": "13103134664999",
+      "classifications": {
+        "objL1": "13102134664ACC_CD.SA000"
+      },
+      "label": "경상수지",
+      "frequency": "M",
+      "unit": "백만달러",
+      "points": [
+        {
+          "period": "202401",
+          "value": 8841.8
+        },
+        {
+          "period": "202402",
+          "value": 6783.4
+        },
+        {
+          "period": "202403",
+          "value": 7430.9
+        },
+        {
+          "period": "202404",
+          "value": 5386.6
+        },
+        {
+          "period": "202405",
+          "value": 9378.6
+        },
+        {
+          "period": "202406",
+          "value": 10046.3
+        },
+        {
+          "period": "202407",
+          "value": 7990.5
+        },
+        {
+          "period": "202408",
+          "value": 7070.1
+        },
+        {
+          "period": "202409",
+          "value": 9452.0
+        },
+        {
+          "period": "202410",
+          "value": 8696.5
+        },
+        {
+          "period": "202411",
+          "value": 9426.5
+        },
+        {
+          "period": "202412",
+          "value": 9469.9
+        }
+      ]
+    }
+  ]
+}

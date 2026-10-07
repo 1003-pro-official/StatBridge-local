@@ -1,0 +1,206 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요8:2",
+      "label": "한도",
+      "unit": "%",
+      "frequency": "M",
+      "points": [
+        {
+          "period": "201002",
+          "value": 0.0
+        },
+        {
+          "period": "201003",
+          "value": 0.0
+        },
+        {
+          "period": "201004",
+          "value": 0.0
+        },
+        {
+          "period": "201005",
+          "value": 0.0
+        },
+        {
+          "period": "201006",
+          "value": 0.0
+        },
+        {
+          "period": "201007",
+          "value": -15.000000000000002
+        },
+        {
+          "period": "201008",
+          "value": 0.0
+        },
+        {
+          "period": "201009",
+          "value": 0.0
+        },
+        {
+          "period": "201010",
+          "value": 0.0
+        },
+        {
+          "period": "201011",
+          "value": 0.0
+        },
+        {
+          "period": "201012",
+          "value": 0.0
+        },
+        {
+          "period": "201101",
+          "value": -11.764705882352944
+        },
+        {
+          "period": "201102",
+          "value": 0.0
+        },
+        {
+          "period": "201103",
+          "value": 0.0
+        },
+        {
+          "period": "201104",
+          "value": 0.0
+        },
+        {
+          "period": "201105",
+          "value": 0.0
+        },
+        {
+          "period": "201106",
+          "value": 0.0
+        },
+        {
+          "period": "201107",
+          "value": 0.0
+        },
+        {
+          "period": "201108",
+          "value": 0.0
+        },
+        {
+          "period": "201109",
+          "value": 0.0
+        },
+        {
+          "period": "201110",
+          "value": 0.0
+        },
+        {
+          "period": "201111",
+          "value": 0.0
+        },
+        {
+          "period": "201112",
+          "value": 0.0
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-09-10:개요8:3",
+      "label": "금리",
+      "unit": "%",
+      "frequency": "M",
+      "points": [
+        {
+          "period": "201002",
+          "value": 0.0
+        },
+        {
+          "period": "201003",
+          "value": 0.0
+        },
+        {
+          "period": "201004",
+          "value": 0.0
+        },
+        {
+          "period": "201005",
+          "value": 0.0
+        },
+        {
+          "period": "201006",
+          "value": 0.0
+        },
+        {
+          "period": "201007",
+          "value": 0.0
+        },
+        {
+          "period": "201008",
+          "value": 0.0
+        },
+        {
+          "period": "201009",
+          "value": 0.0
+        },
+        {
+          "period": "201010",
+          "value": 0.0
+        },
+        {
+          "period": "201011",
+          "value": 0.0
+        },
+        {
+          "period": "201012",
+          "value": 0.0
+        },
+        {
+          "period": "201101",
+          "value": 0.0
+        },
+        {
+          "period": "201102",
+          "value": 0.0
+        },
+        {
+          "period": "201103",
+          "value": 19.999999999999996
+        },
+        {
+          "period": "201104",
+          "value": 0.0
+        },
+        {
+          "period": "201105",
+          "value": 0.0
+        },
+        {
+          "period": "201106",
+          "value": 0.0
+        },
+        {
+          "period": "201107",
+          "value": 0.0
+        },
+        {
+          "period": "201108",
+          "value": 0.0
+        },
+        {
+          "period": "201109",
+          "value": 0.0
+        },
+        {
+          "period": "201110",
+          "value": 0.0
+        },
+        {
+          "period": "201111",
+          "value": 0.0
+        },
+        {
+          "period": "201112",
+          "value": 0.0
+        }
+      ]
+    }
+  ]
+}

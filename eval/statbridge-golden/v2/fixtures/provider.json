@@ -1,0 +1,838 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_101Y001",
+      "item_id": "13103134693999",
+      "classifications": {
+        "objL1": "13102134693ACC_ITEM.BBGS00"
+      },
+      "label": "M2(말잔 계절조정계열)",
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "200301",
+          "value": 882004.1252
+        },
+        {
+          "period": "200302",
+          "value": 883705.5584
+        },
+        {
+          "period": "200303",
+          "value": 887466.369
+        },
+        {
+          "period": "200304",
+          "value": 882446.3475
+        },
+        {
+          "period": "200305",
+          "value": 883262.6406
+        },
+        {
+          "period": "200306",
+          "value": 880029.7947
+        },
+        {
+          "period": "200307",
+          "value": 888595.9499
+        },
+        {
+          "period": "200308",
+          "value": 889963.4738
+        },
+        {
+          "period": "200309",
+          "value": 889643.1667
+        },
+        {
+          "period": "200310",
+          "value": 891214.0131
+        },
+        {
+          "period": "200311",
+          "value": 895503.651
+        },
+        {
+          "period": "200312",
+          "value": 895639.8006
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_101Y002",
+      "item_id": "13103134509999",
+      "classifications": {
+        "objL1": "13102134509ACC_ITEM.BBGA00"
+      },
+      "label": "M2(말잔 원계열)",
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "200301",
+          "value": 880756.1
+        },
+        {
+          "period": "200302",
+          "value": 886044.7
+        },
+        {
+          "period": "200303",
+          "value": 887799.0
+        },
+        {
+          "period": "200304",
+          "value": 881195.8
+        },
+        {
+          "period": "200305",
+          "value": 885498.0
+        },
+        {
+          "period": "200306",
+          "value": 881989.1
+        },
+        {
+          "period": "200307",
+          "value": 883237.5
+        },
+        {
+          "period": "200308",
+          "value": 890077.2
+        },
+        {
+          "period": "200309",
+          "value": 880971.9
+        },
+        {
+          "period": "200310",
+          "value": 889773.1
+        },
+        {
+          "period": "200311",
+          "value": 901002.1
+        },
+        {
+          "period": "200312",
+          "value": 898069.4
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y002",
+      "item_id": "13103134588999",
+      "classifications": {
+        "objL1": "13102134588ACC_ITEM.BEABAA1"
+      },
+      "label": "저축성수신(금융채 제외) 1)",
+      "frequency": "M",
+      "unit": "연리%",
+      "points": [
+        {
+          "period": "202301",
+          "value": 3.83
+        },
+        {
+          "period": "202302",
+          "value": 3.52
+        },
+        {
+          "period": "202303",
+          "value": 3.53
+        },
+        {
+          "period": "202304",
+          "value": 3.41
+        },
+        {
+          "period": "202305",
+          "value": 3.52
+        },
+        {
+          "period": "202306",
+          "value": 3.66
+        },
+        {
+          "period": "202307",
+          "value": 3.65
+        },
+        {
+          "period": "202308",
+          "value": 3.61
+        },
+        {
+          "period": "202309",
+          "value": 3.77
+        },
+        {
+          "period": "202310",
+          "value": 3.92
+        },
+        {
+          "period": "202311",
+          "value": 3.97
+        },
+        {
+          "period": "202312",
+          "value": 3.84
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y006",
+      "item_id": "13103134553999",
+      "classifications": {
+        "objL1": "13102134553ACC_ITEM.BECBLA01"
+      },
+      "label": "대출평균 1)",
+      "frequency": "M",
+      "unit": "연%",
+      "points": [
+        {
+          "period": "202301",
+          "value": 5.46
+        },
+        {
+          "period": "202302",
+          "value": 5.32
+        },
+        {
+          "period": "202303",
+          "value": 5.17
+        },
+        {
+          "period": "202304",
+          "value": 5.01
+        },
+        {
+          "period": "202305",
+          "value": 5.12
+        },
+        {
+          "period": "202306",
+          "value": 5.17
+        },
+        {
+          "period": "202307",
+          "value": 5.11
+        },
+        {
+          "period": "202308",
+          "value": 5.1
+        },
+        {
+          "period": "202309",
+          "value": 5.17
+        },
+        {
+          "period": "202310",
+          "value": 5.24
+        },
+        {
+          "period": "202311",
+          "value": 5.26
+        },
+        {
+          "period": "202312",
+          "value": 5.14
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_151Y001",
+      "item_id": "13103134771999",
+      "classifications": {
+        "objL1": "13102134771ACC_ITEM.1000000"
+      },
+      "label": "가계신용",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2023Q1",
+          "value": 1850744.4
+        },
+        {
+          "period": "2023Q2",
+          "value": 1858832.8
+        },
+        {
+          "period": "2023Q3",
+          "value": 1875807.6
+        },
+        {
+          "period": "2023Q4",
+          "value": 1882633.9
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_200Y107",
+      "item_id": "13103136276999",
+      "classifications": {
+        "objL1": "13102136276ACC_ITEM.10601"
+      },
+      "label": "국내총생산에 대한 지출",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2023Q1",
+          "value": 588642.8
+        },
+        {
+          "period": "2023Q2",
+          "value": 595519.3
+        },
+        {
+          "period": "2023Q3",
+          "value": 606342.9
+        },
+        {
+          "period": "2023Q4",
+          "value": 617070.8
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_200Y108",
+      "item_id": "13103136297999",
+      "classifications": {
+        "objL1": "13102136297ACC_ITEM.1010110"
+      },
+      "label": "민간",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2023Q1",
+          "value": 271141.0
+        },
+        {
+          "period": "2023Q2",
+          "value": 271083.4
+        },
+        {
+          "period": "2023Q3",
+          "value": 271483.3
+        },
+        {
+          "period": "2023Q4",
+          "value": 272646.4
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_101Y003",
+      "item_id": "13103134507999",
+      "classifications": {
+        "objL1": "13102134507ACC_ITEM.BBHS00"
+      },
+      "label": "M2(평잔 계절조정계열)",
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "200401",
+          "value": 900001.7938
+        },
+        {
+          "period": "200402",
+          "value": 907172.7684
+        },
+        {
+          "period": "200403",
+          "value": 913480.8263
+        },
+        {
+          "period": "200404",
+          "value": 915889.1509
+        },
+        {
+          "period": "200405",
+          "value": 923429.4437
+        },
+        {
+          "period": "200406",
+          "value": 925036.3183
+        },
+        {
+          "period": "200407",
+          "value": 930641.7722
+        },
+        {
+          "period": "200408",
+          "value": 940205.5287
+        },
+        {
+          "period": "200409",
+          "value": 948552.4665
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_101Y004",
+      "item_id": "13103134508999",
+      "classifications": {
+        "objL1": "13102134508ACC_ITEM.BBHA00"
+      },
+      "label": "M2(평잔 원계열)",
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "200401",
+          "value": 901048.5
+        },
+        {
+          "period": "200402",
+          "value": 906803.8
+        },
+        {
+          "period": "200403",
+          "value": 916675.5
+        },
+        {
+          "period": "200404",
+          "value": 918329.7
+        },
+        {
+          "period": "200405",
+          "value": 921252.0
+        },
+        {
+          "period": "200406",
+          "value": 927101.8
+        },
+        {
+          "period": "200407",
+          "value": 931581.5
+        },
+        {
+          "period": "200408",
+          "value": 936302.7
+        },
+        {
+          "period": "200409",
+          "value": 946264.9
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y013",
+      "item_id": "13103134701999",
+      "classifications": {
+        "objL1": "13102134701ACC_ITEM.BEABAB221"
+      },
+      "label": "저축예금",
+      "frequency": "M",
+      "unit": "연리%",
+      "points": [
+        {
+          "period": "202401",
+          "value": 0.24
+        },
+        {
+          "period": "202402",
+          "value": 0.24
+        },
+        {
+          "period": "202403",
+          "value": 0.26
+        },
+        {
+          "period": "202404",
+          "value": 0.25
+        },
+        {
+          "period": "202405",
+          "value": 0.26
+        },
+        {
+          "period": "202406",
+          "value": 0.26
+        },
+        {
+          "period": "202407",
+          "value": 0.26
+        },
+        {
+          "period": "202408",
+          "value": 0.26
+        },
+        {
+          "period": "202409",
+          "value": 0.28
+        },
+        {
+          "period": "202410",
+          "value": 0.29
+        },
+        {
+          "period": "202411",
+          "value": 0.3
+        },
+        {
+          "period": "202412",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y015",
+      "item_id": "13103134612999",
+      "classifications": {
+        "objL1": "13102134612ACC_ITEM.BECBLB0202"
+      },
+      "label": "가계대출 2)",
+      "frequency": "M",
+      "unit": "연리%",
+      "points": [
+        {
+          "period": "202301",
+          "value": 4.84
+        },
+        {
+          "period": "202302",
+          "value": 4.95
+        },
+        {
+          "period": "202303",
+          "value": 5.01
+        },
+        {
+          "period": "202304",
+          "value": 5.04
+        },
+        {
+          "period": "202305",
+          "value": 5.06
+        },
+        {
+          "period": "202306",
+          "value": 5.05
+        },
+        {
+          "period": "202307",
+          "value": 5.03
+        },
+        {
+          "period": "202308",
+          "value": 5.03
+        },
+        {
+          "period": "202309",
+          "value": 5.04
+        },
+        {
+          "period": "202310",
+          "value": 5.06
+        },
+        {
+          "period": "202311",
+          "value": 5.08
+        },
+        {
+          "period": "202312",
+          "value": 5.08
+        },
+        {
+          "period": "202401",
+          "value": 5.07
+        },
+        {
+          "period": "202402",
+          "value": 5.03
+        },
+        {
+          "period": "202403",
+          "value": 5.0
+        },
+        {
+          "period": "202404",
+          "value": 4.96
+        },
+        {
+          "period": "202405",
+          "value": 4.92
+        },
+        {
+          "period": "202406",
+          "value": 4.87
+        },
+        {
+          "period": "202407",
+          "value": 4.82
+        },
+        {
+          "period": "202408",
+          "value": 4.78
+        },
+        {
+          "period": "202409",
+          "value": 4.74
+        },
+        {
+          "period": "202410",
+          "value": 4.71
+        },
+        {
+          "period": "202411",
+          "value": 4.7
+        },
+        {
+          "period": "202412",
+          "value": 4.67
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_151Y004",
+      "item_id": "13103134772999",
+      "classifications": {
+        "objL1": "13102134772ACC_ITEM.11000A0"
+      },
+      "label": "주택관련대출",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 1078697.307604
+        },
+        {
+          "period": "2024Q2",
+          "value": 1094703.474802
+        },
+        {
+          "period": "2024Q3",
+          "value": 1113972.931149
+        },
+        {
+          "period": "2024Q4",
+          "value": 1125870.898206
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_200Y109",
+      "item_id": "13103136270999",
+      "classifications": {
+        "objL1": "13102136270ACC_ITEM.1020111"
+      },
+      "label": "건설투자",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 77386.7
+        },
+        {
+          "period": "2024Q2",
+          "value": 98818.1
+        },
+        {
+          "period": "2024Q3",
+          "value": 89254.3
+        },
+        {
+          "period": "2024Q4",
+          "value": 93261.7
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_200Y110",
+      "item_id": "13103136261999",
+      "classifications": {
+        "objL1": "13102136261ACC_ITEM.10301"
+      },
+      "label": "재화와 서비스의 수출",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 222868.8
+        },
+        {
+          "period": "2024Q2",
+          "value": 228434.1
+        },
+        {
+          "period": "2024Q3",
+          "value": 230169.8
+        },
+        {
+          "period": "2024Q4",
+          "value": 240639.4
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_301Y017",
+      "item_id": "13103134664999",
+      "classifications": {
+        "objL1": "13102134664ACC_CD.SA000"
+      },
+      "label": "경상수지",
+      "frequency": "M",
+      "unit": "백만달러",
+      "points": [
+        {
+          "period": "202401",
+          "value": 8841.8
+        },
+        {
+          "period": "202402",
+          "value": 6783.4
+        },
+        {
+          "period": "202403",
+          "value": 7430.9
+        },
+        {
+          "period": "202404",
+          "value": 5386.6
+        },
+        {
+          "period": "202405",
+          "value": 9378.6
+        },
+        {
+          "period": "202406",
+          "value": 10046.3
+        },
+        {
+          "period": "202407",
+          "value": 7990.5
+        },
+        {
+          "period": "202408",
+          "value": 7070.1
+        },
+        {
+          "period": "202409",
+          "value": 9452.0
+        },
+        {
+          "period": "202410",
+          "value": 8696.5
+        },
+        {
+          "period": "202411",
+          "value": 9426.5
+        },
+        {
+          "period": "202412",
+          "value": 9469.9
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_514Y001",
+      "item_id": "13103134672999",
+      "classifications": {
+        "objL1": "13102134672ACC_CD.AA"
+      },
+      "label": "국내은행-차주가중종합지수",
+      "frequency": "Q",
+      "unit": "지수",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": -3.0
+        },
+        {
+          "period": "2024Q2",
+          "value": -6.0
+        },
+        {
+          "period": "2024Q3",
+          "value": -17.0
+        },
+        {
+          "period": "2024Q4",
+          "value": -27.0
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_514Y002",
+      "item_id": "13103134565999",
+      "classifications": {
+        "objL1": "13102134565ACC_CD.BB"
+      },
+      "label": "국내은행-차주가중종합지수",
+      "frequency": "Q",
+      "unit": "지수",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 32.0
+        },
+        {
+          "period": "2024Q2",
+          "value": 30.0
+        },
+        {
+          "period": "2024Q3",
+          "value": 26.0
+        },
+        {
+          "period": "2024Q4",
+          "value": 28.0
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_514Y003",
+      "item_id": "13103134487999",
+      "classifications": {
+        "objL1": "13102134487ACC_CD.CC"
+      },
+      "label": "국내은행-차주가중종합지수",
+      "frequency": "Q",
+      "unit": "지수",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 24.0
+        },
+        {
+          "period": "2024Q2",
+          "value": 5.0
+        },
+        {
+          "period": "2024Q3",
+          "value": 17.0
+        },
+        {
+          "period": "2024Q4",
+          "value": 7.0
+        }
+      ]
+    }
+  ]
+}

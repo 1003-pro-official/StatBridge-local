@@ -1,0 +1,126 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y013",
+      "item_id": "13103134701999",
+      "classifications": {
+        "objL1": "13102134701ACC_ITEM.BEABAB221"
+      },
+      "label": "저축예금",
+      "frequency": "M",
+      "unit": "연리%",
+      "points": [
+        {
+          "period": "202401",
+          "value": 0.24
+        },
+        {
+          "period": "202402",
+          "value": 0.24
+        },
+        {
+          "period": "202403",
+          "value": 0.26
+        },
+        {
+          "period": "202404",
+          "value": 0.25
+        },
+        {
+          "period": "202405",
+          "value": 0.26
+        },
+        {
+          "period": "202406",
+          "value": 0.26
+        },
+        {
+          "period": "202407",
+          "value": 0.26
+        },
+        {
+          "period": "202408",
+          "value": 0.26
+        },
+        {
+          "period": "202409",
+          "value": 0.28
+        },
+        {
+          "period": "202410",
+          "value": 0.29
+        },
+        {
+          "period": "202411",
+          "value": 0.3
+        },
+        {
+          "period": "202412",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y015",
+      "item_id": "13103134612999",
+      "classifications": {
+        "objL1": "13102134612ACC_ITEM.BECBLB0202"
+      },
+      "label": "가계대출 2)",
+      "frequency": "M",
+      "unit": "연리%",
+      "points": [
+        {
+          "period": "202401",
+          "value": 5.07
+        },
+        {
+          "period": "202402",
+          "value": 5.03
+        },
+        {
+          "period": "202403",
+          "value": 5.0
+        },
+        {
+          "period": "202404",
+          "value": 4.96
+        },
+        {
+          "period": "202405",
+          "value": 4.92
+        },
+        {
+          "period": "202406",
+          "value": 4.87
+        },
+        {
+          "period": "202407",
+          "value": 4.82
+        },
+        {
+          "period": "202408",
+          "value": 4.78
+        },
+        {
+          "period": "202409",
+          "value": 4.74
+        },
+        {
+          "period": "202410",
+          "value": 4.71
+        },
+        {
+          "period": "202411",
+          "value": 4.7
+        },
+        {
+          "period": "202412",
+          "value": 4.67
+        }
+      ]
+    }
+  ]
+}

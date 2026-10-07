@@ -1,0 +1,63 @@
+{
+  "fixture_sha256": "abddb05342cfc22f548834827145517d0dc57a7f2ba908cd8b68748738af2bfd",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요5:2",
+        "W",
+        "전주대비, %"
+      ],
+      "unit": "전주대비, %",
+      "frequency": "W",
+      "missing_periods": [],
+      "first": {
+        "period": "20200106",
+        "value": 0.069
+      },
+      "last": {
+        "period": "20200323",
+        "value": -0.003
+      },
+      "minimum": {
+        "period": "20200323",
+        "value": -0.003
+      },
+      "maximum": {
+        "period": "20200106",
+        "value": 0.069
+      },
+      "absolute_change": -0.07200000000000001,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요5:4",
+        "W",
+        "전주대비, %"
+      ],
+      "unit": "전주대비, %",
+      "frequency": "W",
+      "missing_periods": [],
+      "first": {
+        "period": "20200106",
+        "value": 0.044
+      },
+      "last": {
+        "period": "20200323",
+        "value": 0.02
+      },
+      "minimum": {
+        "period": "20200323",
+        "value": 0.02
+      },
+      "maximum": {
+        "period": "20200224",
+        "value": 0.101
+      },
+      "absolute_change": -0.023999999999999997,
+      "change_formula": "last - first"
+    }
+  ]
+}
