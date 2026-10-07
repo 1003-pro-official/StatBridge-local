@@ -4,7 +4,7 @@
     {
       "table_id": "DT_104Y013",
       "item_id": "13103860881999",
-      "label": "수신합계",
+      "label": "예금은행 총수신",
       "frequency": "M",
       "unit": "십억원",
       "classifications": {

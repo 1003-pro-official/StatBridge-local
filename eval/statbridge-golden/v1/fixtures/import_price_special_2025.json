@@ -4,7 +4,7 @@
     {
       "table_id": "DT_401Y016",
       "item_id": "13103134482999",
-      "label": "총지수(계약통화기준)",
+      "label": "수입물가지수(특수분류)",
       "frequency": "M",
       "unit": "2020=100",
       "classifications": {

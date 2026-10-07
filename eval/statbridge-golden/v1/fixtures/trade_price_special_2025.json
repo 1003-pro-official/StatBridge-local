@@ -2,132 +2,134 @@
   "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
   "series": [
     {
-      "table_id": "DT_403Y002",
-      "item_id": "13103134523999",
-      "label": "수출물량지수",
+      "table_id": "DT_401Y016",
+      "item_id": "13103134482999",
+      "label": "수입물가지수(특수분류)",
       "frequency": "M",
       "unit": "2020=100",
       "classifications": {
-        "objL1": "13102134523ACC_CD.*AA"
+        "objL1": "13102134482ACC_CD.*AA",
+        "objL2": "13102134482CRR_CTRT_CD.C"
       },
-      "source_file": "data/tables/DT_403Y002__수출물량지수.csv",
-      "source_file_sha256": "a10bba3f0a902ec4b922c67b9be14e14381c4e49e915c3ef3ff39bd354737b85",
+      "source_file": "data/tables/DT_401Y016__수입물가지수(특수분류).csv",
+      "source_file_sha256": "460134402763f3a61b8feabffb4ae425967de38504c48ab98ecdd61d4b37090d",
       "source_last_changed_dates": [
         "2026-09-13"
       ],
       "points": [
         {
           "period": "202501",
-          "value": 101.49
+          "value": 121.75
         },
         {
           "period": "202502",
-          "value": 111.36
+          "value": 121.02
         },
         {
           "period": "202503",
-          "value": 120.62
+          "value": 119.33
         },
         {
           "period": "202504",
-          "value": 122.66
+          "value": 117.14
         },
         {
           "period": "202505",
-          "value": 121.31
+          "value": 116.42
         },
         {
           "period": "202506",
-          "value": 125.95
+          "value": 117.64
         },
         {
           "period": "202507",
-          "value": 127.79
+          "value": 117.97
         },
         {
           "period": "202508",
-          "value": 121.87
+          "value": 117.22
         },
         {
           "period": "202509",
-          "value": 137.21
+          "value": 117.3
         },
         {
           "period": "202510",
-          "value": 117.76
+          "value": 117.37
         },
         {
           "period": "202511",
-          "value": 124.9
+          "value": 117.73
         },
         {
           "period": "202512",
-          "value": 142.25
+          "value": 117.94
         }
       ]
     },
     {
-      "table_id": "DT_403Y004",
-      "item_id": "13103134626999",
-      "label": "수입물량지수",
+      "table_id": "DT_402Y015",
+      "item_id": "13103134541999",
+      "label": "수출물가지수(특수분류)",
       "frequency": "M",
       "unit": "2020=100",
       "classifications": {
-        "objL1": "13102134626ACC_CD.*AA"
+        "objL1": "13102134541ACC_CD.*AA",
+        "objL2": "13102134541CRR_CTRT_CD.C"
       },
-      "source_file": "data/tables/DT_403Y004__수입물량지수.csv",
-      "source_file_sha256": "a982b91622e1783ac4b1dadd5fea7c0e1b4fbe4b58ef38f1dcdf4cc6b3f02327",
+      "source_file": "data/tables/DT_402Y015__수출물가지수(특수분류).csv",
+      "source_file_sha256": "faf7963ef07075f6f1b0aa2d81bcf6ec3764be688b59a2099af09ef5bbb4894e",
       "source_last_changed_dates": [
         "2026-09-13"
       ],
       "points": [
         {
           "period": "202501",
-          "value": 110.7
+          "value": 112.38
         },
         {
           "period": "202502",
-          "value": 103.07
+          "value": 112.36
         },
         {
           "period": "202503",
-          "value": 114.01
+          "value": 111.7
         },
         {
           "period": "202504",
-          "value": 115.67
+          "value": 110.65
         },
         {
           "period": "202505",
-          "value": 110.39
+          "value": 110.38
         },
         {
           "period": "202506",
-          "value": 112.81
+          "value": 111.06
         },
         {
           "period": "202507",
-          "value": 117.94
+          "value": 111.23
         },
         {
           "period": "202508",
-          "value": 113.01
+          "value": 110.87
         },
         {
           "period": "202509",
-          "value": 124.55
+          "value": 111.25
         },
         {
           "period": "202510",
-          "value": 116.75
+          "value": 113.49
         },
         {
           "period": "202511",
-          "value": 112.28
+          "value": 114.93
         },
         {
           "period": "202512",
-          "value": 126.06
+          "value": 114.84
         }
       ]
     }
