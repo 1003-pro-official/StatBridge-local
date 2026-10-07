@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_403Y003",
+      "item_id": "13103134563999",
+      "label": "수입금액지수",
+      "frequency": "M",
+      "unit": "2020=100",
+      "classifications": {
+        "objL1": "13102134563ACC_CD.*AA"
+      },
+      "source_file": "data/tables/DT_403Y003__수입금액지수.csv",
+      "source_file_sha256": "7e536089b72167a838bf282c41e5dab829140162e6d0a2e806267bf524b239d3",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 131.11
+        },
+        {
+          "period": "202502",
+          "value": 123.71
+        },
+        {
+          "period": "202503",
+          "value": 136.2
+        },
+        {
+          "period": "202504",
+          "value": 136.12
+        },
+        {
+          "period": "202505",
+          "value": 128.4
+        },
+        {
+          "period": "202506",
+          "value": 130.02
+        },
+        {
+          "period": "202507",
+          "value": 138.31
+        },
+        {
+          "period": "202508",
+          "value": 132.5
+        },
+        {
+          "period": "202509",
+          "value": 144.68
+        },
+        {
+          "period": "202510",
+          "value": 136.65
+        },
+        {
+          "period": "202511",
+          "value": 130.65
+        },
+        {
+          "period": "202512",
+          "value": 146.64
+        }
+      ]
+    }
+  ]
+}

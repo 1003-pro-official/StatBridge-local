@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_404Y015",
+      "item_id": "13103134727999",
+      "label": "생산자물가지수(특수분류)",
+      "frequency": "M",
+      "unit": "2020=100",
+      "classifications": {
+        "objL1": "13102134727ACC_CD.*AA"
+      },
+      "source_file": "data/tables/DT_404Y015__생산자물가지수(특수분류).csv",
+      "source_file_sha256": "909e4f745253c07799cc1cb58fd2c5a61a7bb18f15bae2f9310e6c9f5ac14926",
+      "source_last_changed_dates": [
+        "2026-09-14"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 120.27
+        },
+        {
+          "period": "202502",
+          "value": 120.33
+        },
+        {
+          "period": "202503",
+          "value": 120.36
+        },
+        {
+          "period": "202504",
+          "value": 120.14
+        },
+        {
+          "period": "202505",
+          "value": 119.64
+        },
+        {
+          "period": "202506",
+          "value": 119.77
+        },
+        {
+          "period": "202507",
+          "value": 120.19
+        },
+        {
+          "period": "202508",
+          "value": 120.11
+        },
+        {
+          "period": "202509",
+          "value": 120.54
+        },
+        {
+          "period": "202510",
+          "value": 120.94
+        },
+        {
+          "period": "202511",
+          "value": 121.31
+        },
+        {
+          "period": "202512",
+          "value": 121.76
+        }
+      ]
+    }
+  ]
+}

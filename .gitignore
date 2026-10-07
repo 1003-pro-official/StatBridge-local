@@ -49,3 +49,6 @@ research/그림표-분석/.runtime/
 research/그림표-분석/보완캐시/
 research/그림표-분석/백업/
 research/그림표-분석/원본스냅샷/
+
+# SDD/subagent scratch
+.superpowers/

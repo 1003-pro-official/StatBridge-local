@@ -1,0 +1,41 @@
+{
+  "fixture_sha256": "d4f74badb1b8238129b8ccb649f3795c6fd5aa2ec3e278b4dec9afc7dce72296",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_121Y015",
+        "13103134612999",
+        [
+          [
+            "objL1",
+            "13102134612ACC_ITEM.BECBLB0202"
+          ]
+        ],
+        "M",
+        "%"
+      ],
+      "unit": "%",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202401",
+        "value": 4.752066115702491
+      },
+      "last": {
+        "period": "202412",
+        "value": -8.070866141732292
+      },
+      "minimum": {
+        "period": "202412",
+        "value": -8.070866141732292
+      },
+      "maximum": {
+        "period": "202401",
+        "value": 4.752066115702491
+      },
+      "absolute_change": -12.822932257434783,
+      "change_formula": "last - first"
+    }
+  ]
+}

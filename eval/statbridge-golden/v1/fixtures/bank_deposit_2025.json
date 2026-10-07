@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_104Y013",
+      "item_id": "13103860881999",
+      "label": "예금은행 총수신",
+      "frequency": "M",
+      "unit": "십억원",
+      "classifications": {
+        "objL1": "13102860881ACC_ITEM.BCB8"
+      },
+      "source_file": "data/tables/DT_104Y013__예금은행 총수신(말잔).csv",
+      "source_file_sha256": "1c9564ff89abe5c2e39ac29162bcf005f1493a3931358a525297ac8c2eb153ab",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 2645355.6
+        },
+        {
+          "period": "202502",
+          "value": 2658241.1
+        },
+        {
+          "period": "202503",
+          "value": 2671758.1
+        },
+        {
+          "period": "202504",
+          "value": 2657776.3
+        },
+        {
+          "period": "202505",
+          "value": 2667208.4
+        },
+        {
+          "period": "202506",
+          "value": 2712633.6
+        },
+        {
+          "period": "202507",
+          "value": 2696057.3
+        },
+        {
+          "period": "202508",
+          "value": 2725103.1
+        },
+        {
+          "period": "202509",
+          "value": 2758138.9
+        },
+        {
+          "period": "202510",
+          "value": 2736910.0
+        },
+        {
+          "period": "202511",
+          "value": 2774983.1
+        },
+        {
+          "period": "202512",
+          "value": 2814538.4
+        }
+      ]
+    }
+  ]
+}

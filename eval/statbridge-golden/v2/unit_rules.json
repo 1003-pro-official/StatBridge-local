@@ -1,0 +1,20 @@
+{
+  "annotation_method": "ai-assisted",
+  "human_approved": false,
+  "rules": [
+    {
+      "table_ids": ["DT_514Y001", "DT_514Y002", "DT_514Y003"],
+      "source_unit": "",
+      "display_unit": "지수",
+      "scale": 1,
+      "meaning": "Dimensionless balance index, not a percentage growth rate; values are unchanged. This is an evaluator display convention supported by the official formula, NOT a UNIT_NM value observed in CSV.",
+      "definition_url": "https://kostat.go.kr/boardDownload.es?bid=12030&list_no=351218&seq=3",
+      "definition_path": "eval/statbridge-golden/v2/results/source-originals/lending-survey-definition.pdf",
+      "definition_sha256": "c437b5c7978647c37798a24abc66e8931b88cd79368d5ffc162c3dec6f9c9337",
+      "locator": "PDF page 16 (printed page 13), section VI.1.1",
+      "publisher": "한국은행; 통계청 통계정보 보고서",
+      "retrieved_date": "2026-10-07",
+      "verification": "Original PDF formula independently read; weighted response shares multiplied by 100. Local catalog identifies each table as the corresponding borrower-weighted composite index."
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+[
+  {
+    "provider": "kosis",
+    "table_id": "DT_101Y001",
+    "item_id": "13103134693999",
+    "classifications": {
+      "objL1": "13102134693ACC_ITEM.BBGS00"
+    },
+    "label": "M2(말잔 계절조정계열)",
+    "frequency": "M",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_101Y002",
+    "item_id": "13103134509999",
+    "classifications": {
+      "objL1": "13102134509ACC_ITEM.BBGA00"
+    },
+    "label": "M2(말잔 원계열)",
+    "frequency": "M",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_121Y002",
+    "item_id": "13103134588999",
+    "classifications": {
+      "objL1": "13102134588ACC_ITEM.BEABAA1"
+    },
+    "label": "저축성수신(금융채 제외) 1)",
+    "frequency": "M",
+    "unit": "연리%"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_121Y006",
+    "item_id": "13103134553999",
+    "classifications": {
+      "objL1": "13102134553ACC_ITEM.BECBLA01"
+    },
+    "label": "대출평균 1)",
+    "frequency": "M",
+    "unit": "연%"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_151Y001",
+    "item_id": "13103134771999",
+    "classifications": {
+      "objL1": "13102134771ACC_ITEM.1000000"
+    },
+    "label": "가계신용",
+    "frequency": "Q",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_200Y107",
+    "item_id": "13103136276999",
+    "classifications": {
+      "objL1": "13102136276ACC_ITEM.10601"
+    },
+    "label": "국내총생산에 대한 지출",
+    "frequency": "Q",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_200Y108",
+    "item_id": "13103136297999",
+    "classifications": {
+      "objL1": "13102136297ACC_ITEM.1010110"
+    },
+    "label": "민간",
+    "frequency": "Q",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_101Y003",
+    "item_id": "13103134507999",
+    "classifications": {
+      "objL1": "13102134507ACC_ITEM.BBHS00"
+    },
+    "label": "M2(평잔 계절조정계열)",
+    "frequency": "M",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_101Y004",
+    "item_id": "13103134508999",
+    "classifications": {
+      "objL1": "13102134508ACC_ITEM.BBHA00"
+    },
+    "label": "M2(평잔 원계열)",
+    "frequency": "M",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_121Y013",
+    "item_id": "13103134701999",
+    "classifications": {
+      "objL1": "13102134701ACC_ITEM.BEABAB221"
+    },
+    "label": "저축예금",
+    "frequency": "M",
+    "unit": "연리%"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_121Y015",
+    "item_id": "13103134612999",
+    "classifications": {
+      "objL1": "13102134612ACC_ITEM.BECBLB0202"
+    },
+    "label": "가계대출 2)",
+    "frequency": "M",
+    "unit": "연리%"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_151Y004",
+    "item_id": "13103134772999",
+    "classifications": {
+      "objL1": "13102134772ACC_ITEM.11000A0"
+    },
+    "label": "주택관련대출",
+    "frequency": "Q",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_200Y109",
+    "item_id": "13103136270999",
+    "classifications": {
+      "objL1": "13102136270ACC_ITEM.1020111"
+    },
+    "label": "건설투자",
+    "frequency": "Q",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_200Y110",
+    "item_id": "13103136261999",
+    "classifications": {
+      "objL1": "13102136261ACC_ITEM.10301"
+    },
+    "label": "재화와 서비스의 수출",
+    "frequency": "Q",
+    "unit": "십억원"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_301Y017",
+    "item_id": "13103134664999",
+    "classifications": {
+      "objL1": "13102134664ACC_CD.SA000"
+    },
+    "label": "경상수지",
+    "frequency": "M",
+    "unit": "백만달러"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_514Y001",
+    "item_id": "13103134672999",
+    "classifications": {
+      "objL1": "13102134672ACC_CD.AA"
+    },
+    "label": "국내은행-차주가중종합지수",
+    "frequency": "Q",
+    "unit": "지수"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_514Y002",
+    "item_id": "13103134565999",
+    "classifications": {
+      "objL1": "13102134565ACC_CD.BB"
+    },
+    "label": "국내은행-차주가중종합지수",
+    "frequency": "Q",
+    "unit": "지수"
+  },
+  {
+    "provider": "kosis",
+    "table_id": "DT_514Y003",
+    "item_id": "13103134487999",
+    "classifications": {
+      "objL1": "13102134487ACC_CD.CC"
+    },
+    "label": "국내은행-차주가중종합지수",
+    "frequency": "Q",
+    "unit": "지수"
+  }
+]

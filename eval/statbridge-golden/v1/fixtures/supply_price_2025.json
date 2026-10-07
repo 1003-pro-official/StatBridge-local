@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_405Y006",
+      "item_id": "13103134640999",
+      "label": "국내공급물가지수",
+      "frequency": "M",
+      "unit": "2020=100",
+      "classifications": {
+        "objL1": "13102134640ACC_CD.*A"
+      },
+      "source_file": "data/tables/DT_405Y006__국내공급물가지수.csv",
+      "source_file_sha256": "4a978cab0dce7470626e96617a030c0889c1961072c4442302468ef6e8412cec",
+      "source_last_changed_dates": [
+        "2026-09-14"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 125.75
+        },
+        {
+          "period": "202502",
+          "value": 125.97
+        },
+        {
+          "period": "202503",
+          "value": 126.08
+        },
+        {
+          "period": "202504",
+          "value": 125.22
+        },
+        {
+          "period": "202505",
+          "value": 123.5
+        },
+        {
+          "period": "202506",
+          "value": 122.8
+        },
+        {
+          "period": "202507",
+          "value": 123.77
+        },
+        {
+          "period": "202508",
+          "value": 124.0
+        },
+        {
+          "period": "202509",
+          "value": 124.11
+        },
+        {
+          "period": "202510",
+          "value": 125.28
+        },
+        {
+          "period": "202511",
+          "value": 126.1
+        },
+        {
+          "period": "202512",
+          "value": 126.63
+        }
+      ]
+    }
+  ]
+}

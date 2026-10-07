@@ -1,0 +1,166 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-03-12:개요8:2",
+      "label": "금융중개지원대출 총한도",
+      "unit": "조원",
+      "frequency": "M",
+      "points": [
+        {
+          "period": "201201",
+          "value": 7.5
+        },
+        {
+          "period": "201202",
+          "value": 7.5
+        },
+        {
+          "period": "201203",
+          "value": 7.5
+        },
+        {
+          "period": "201204",
+          "value": 7.5
+        },
+        {
+          "period": "201205",
+          "value": 7.5
+        },
+        {
+          "period": "201206",
+          "value": 7.5
+        },
+        {
+          "period": "201207",
+          "value": 7.5
+        },
+        {
+          "period": "201208",
+          "value": 7.5
+        },
+        {
+          "period": "201209",
+          "value": 7.5
+        },
+        {
+          "period": "201210",
+          "value": 9
+        },
+        {
+          "period": "201211",
+          "value": 9
+        },
+        {
+          "period": "201212",
+          "value": 9
+        },
+        {
+          "period": "201301",
+          "value": 9
+        },
+        {
+          "period": "201302",
+          "value": 9
+        },
+        {
+          "period": "201303",
+          "value": 9
+        },
+        {
+          "period": "201304",
+          "value": 12
+        },
+        {
+          "period": "201305",
+          "value": 12
+        },
+        {
+          "period": "201306",
+          "value": 12
+        },
+        {
+          "period": "201307",
+          "value": 12
+        },
+        {
+          "period": "201308",
+          "value": 12
+        },
+        {
+          "period": "201309",
+          "value": 12
+        },
+        {
+          "period": "201310",
+          "value": 12
+        },
+        {
+          "period": "201311",
+          "value": 12
+        },
+        {
+          "period": "201312",
+          "value": 12
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-03-12:개요7:2",
+      "label": "기준금리",
+      "unit": "연%",
+      "frequency": "D",
+      "points": [
+        {
+          "period": "20170101",
+          "value": 1.25
+        },
+        {
+          "period": "20170102",
+          "value": 1.25
+        },
+        {
+          "period": "20170103",
+          "value": 1.25
+        },
+        {
+          "period": "20170104",
+          "value": 1.25
+        },
+        {
+          "period": "20170105",
+          "value": 1.25
+        },
+        {
+          "period": "20170106",
+          "value": 1.25
+        },
+        {
+          "period": "20170107",
+          "value": 1.25
+        },
+        {
+          "period": "20170108",
+          "value": 1.25
+        },
+        {
+          "period": "20170109",
+          "value": 1.25
+        },
+        {
+          "period": "20170110",
+          "value": 1.25
+        },
+        {
+          "period": "20170111",
+          "value": 1.25
+        },
+        {
+          "period": "20170112",
+          "value": 1.25
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-03-12:개요7:2",
+      "label": "기준금리",
+      "unit": "연%",
+      "frequency": "D",
+      "points": [
+        {
+          "period": "20170101",
+          "value": 1.25
+        },
+        {
+          "period": "20170102",
+          "value": 1.25
+        },
+        {
+          "period": "20170103",
+          "value": 1.25
+        },
+        {
+          "period": "20170104",
+          "value": 1.25
+        },
+        {
+          "period": "20170105",
+          "value": 1.25
+        },
+        {
+          "period": "20170106",
+          "value": 1.25
+        },
+        {
+          "period": "20170107",
+          "value": 1.25
+        },
+        {
+          "period": "20170108",
+          "value": 1.25
+        },
+        {
+          "period": "20170109",
+          "value": 1.25
+        },
+        {
+          "period": "20170110",
+          "value": 1.25
+        },
+        {
+          "period": "20170111",
+          "value": 1.25
+        },
+        {
+          "period": "20170112",
+          "value": 1.25
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_101Y003",
+      "item_id": "13103134507999",
+      "classifications": {
+        "objL1": "13102134507ACC_ITEM.BBHS00"
+      },
+      "label": "M2(평잔 계절조정계열)",
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "200401",
+          "value": 900001.7938
+        },
+        {
+          "period": "200402",
+          "value": 907172.7684
+        },
+        {
+          "period": "200403",
+          "value": 913480.8263
+        },
+        {
+          "period": "200404",
+          "value": 915889.1509
+        },
+        {
+          "period": "200405",
+          "value": 923429.4437
+        },
+        {
+          "period": "200406",
+          "value": 925036.3183
+        },
+        {
+          "period": "200407",
+          "value": 930641.7722
+        },
+        {
+          "period": "200408",
+          "value": 940205.5287
+        },
+        {
+          "period": "200409",
+          "value": 948552.4665
+        }
+      ]
+    }
+  ]
+}

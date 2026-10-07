@@ -1,0 +1,33 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_151Y001",
+      "item_id": "13103134771999",
+      "classifications": {
+        "objL1": "13102134771ACC_ITEM.1000000"
+      },
+      "label": "가계신용",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2023Q1",
+          "value": 1850744.4
+        },
+        {
+          "period": "2023Q2",
+          "value": 1858832.8
+        },
+        {
+          "period": "2023Q3",
+          "value": 1875807.6
+        },
+        {
+          "period": "2023Q4",
+          "value": 1882633.9
+        }
+      ]
+    }
+  ]
+}

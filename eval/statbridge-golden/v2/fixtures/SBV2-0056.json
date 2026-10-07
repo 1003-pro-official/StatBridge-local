@@ -1,0 +1,126 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y002",
+      "item_id": "13103134588999",
+      "classifications": {
+        "objL1": "13102134588ACC_ITEM.BEABAA1"
+      },
+      "label": "저축성수신(금융채 제외) 1)",
+      "frequency": "M",
+      "unit": "연리%",
+      "points": [
+        {
+          "period": "202301",
+          "value": 3.83
+        },
+        {
+          "period": "202302",
+          "value": 3.52
+        },
+        {
+          "period": "202303",
+          "value": 3.53
+        },
+        {
+          "period": "202304",
+          "value": 3.41
+        },
+        {
+          "period": "202305",
+          "value": 3.52
+        },
+        {
+          "period": "202306",
+          "value": 3.66
+        },
+        {
+          "period": "202307",
+          "value": 3.65
+        },
+        {
+          "period": "202308",
+          "value": 3.61
+        },
+        {
+          "period": "202309",
+          "value": 3.77
+        },
+        {
+          "period": "202310",
+          "value": 3.92
+        },
+        {
+          "period": "202311",
+          "value": 3.97
+        },
+        {
+          "period": "202312",
+          "value": 3.84
+        }
+      ]
+    },
+    {
+      "provider": "kosis",
+      "table_id": "DT_121Y006",
+      "item_id": "13103134553999",
+      "classifications": {
+        "objL1": "13102134553ACC_ITEM.BECBLA01"
+      },
+      "label": "대출평균 1)",
+      "frequency": "M",
+      "unit": "연%",
+      "points": [
+        {
+          "period": "202301",
+          "value": 5.46
+        },
+        {
+          "period": "202302",
+          "value": 5.32
+        },
+        {
+          "period": "202303",
+          "value": 5.17
+        },
+        {
+          "period": "202304",
+          "value": 5.01
+        },
+        {
+          "period": "202305",
+          "value": 5.12
+        },
+        {
+          "period": "202306",
+          "value": 5.17
+        },
+        {
+          "period": "202307",
+          "value": 5.11
+        },
+        {
+          "period": "202308",
+          "value": 5.1
+        },
+        {
+          "period": "202309",
+          "value": 5.17
+        },
+        {
+          "period": "202310",
+          "value": 5.24
+        },
+        {
+          "period": "202311",
+          "value": 5.26
+        },
+        {
+          "period": "202312",
+          "value": 5.14
+        }
+      ]
+    }
+  ]
+}

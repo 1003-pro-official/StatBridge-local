@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "statbridge-local-csv-frozen-2026-09-28",
+  "series": [
+    {
+      "table_id": "DT_104Y010",
+      "item_id": "13103860888999",
+      "label": "예금은행 정기예금",
+      "frequency": "M",
+      "unit": "십억원",
+      "classifications": {
+        "objL1": "13102860888ACC_ITEM.1000000"
+      },
+      "source_file": "data/tables/DT_104Y010__예금은행 정기예금(기간별, 말잔).csv",
+      "source_file_sha256": "ef8a5bd89947a31e5874781b046b0de884a1a13657f378becbedc6e292240c3c",
+      "source_last_changed_dates": [
+        "2026-09-13"
+      ],
+      "points": [
+        {
+          "period": "202501",
+          "value": 1069858.1
+        },
+        {
+          "period": "202502",
+          "value": 1085794.7
+        },
+        {
+          "period": "202503",
+          "value": 1073150.9
+        },
+        {
+          "period": "202504",
+          "value": 1073905.2
+        },
+        {
+          "period": "202505",
+          "value": 1092919.5
+        },
+        {
+          "period": "202506",
+          "value": 1086864.5
+        },
+        {
+          "period": "202507",
+          "value": 1096525.1
+        },
+        {
+          "period": "202508",
+          "value": 1108514.4
+        },
+        {
+          "period": "202509",
+          "value": 1107723.9
+        },
+        {
+          "period": "202510",
+          "value": 1119748.2
+        },
+        {
+          "period": "202511",
+          "value": 1124322.4
+        },
+        {
+          "period": "202512",
+          "value": 1094837.8
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-03-12:개요3:2",
+      "label": "소비자물가",
+      "unit": "전년동기대비, %",
+      "frequency": "Q",
+      "points": [
+        {
+          "period": "2023Q1",
+          "value": 4.6
+        },
+        {
+          "period": "2023Q2",
+          "value": 3.3
+        },
+        {
+          "period": "2023Q3",
+          "value": 3.1
+        },
+        {
+          "period": "2023Q4",
+          "value": 3.4
+        },
+        {
+          "period": "2024Q1",
+          "value": 3
+        },
+        {
+          "period": "2024Q2",
+          "value": 2.7
+        },
+        {
+          "period": "2024Q3",
+          "value": 2.1
+        },
+        {
+          "period": "2024Q4",
+          "value": 1.6
+        },
+        {
+          "period": "2025Q1",
+          "value": 2.1
+        },
+        {
+          "period": "2025Q2",
+          "value": 2.1
+        },
+        {
+          "period": "2025Q3",
+          "value": 2
+        },
+        {
+          "period": "2025Q4",
+          "value": 2.4
+        },
+        {
+          "period": "2026Q1",
+          "value": null
+        },
+        {
+          "period": "2026Q2",
+          "value": null
+        },
+        {
+          "period": "2026Q3",
+          "value": null
+        },
+        {
+          "period": "2026Q4",
+          "value": null
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-03-12:개요3:3",
+      "label": "소비자물가 전망",
+      "unit": "전년동기대비, %",
+      "frequency": "Q",
+      "points": [
+        {
+          "period": "2023Q1",
+          "value": null
+        },
+        {
+          "period": "2023Q2",
+          "value": null
+        },
+        {
+          "period": "2023Q3",
+          "value": null
+        },
+        {
+          "period": "2023Q4",
+          "value": null
+        },
+        {
+          "period": "2024Q1",
+          "value": null
+        },
+        {
+          "period": "2024Q2",
+          "value": null
+        },
+        {
+          "period": "2024Q3",
+          "value": null
+        },
+        {
+          "period": "2024Q4",
+          "value": null
+        },
+        {
+          "period": "2025Q1",
+          "value": null
+        },
+        {
+          "period": "2025Q2",
+          "value": null
+        },
+        {
+          "period": "2025Q3",
+          "value": null
+        },
+        {
+          "period": "2025Q4",
+          "value": null
+        },
+        {
+          "period": "2026Q1",
+          "value": 2.1
+        },
+        {
+          "period": "2026Q2",
+          "value": 2.2
+        },
+        {
+          "period": "2026Q3",
+          "value": 2.3
+        },
+        {
+          "period": "2026Q4",
+          "value": 2.1
+        }
+      ]
+    }
+  ]
+}

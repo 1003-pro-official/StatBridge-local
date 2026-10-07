@@ -1,0 +1,109 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2025-09-11:개요8:2",
+      "label": "금융중개지원대출 \n총한도",
+      "unit": "조원",
+      "frequency": "M",
+      "points": [
+        {
+          "period": "201401",
+          "value": 12
+        },
+        {
+          "period": "201402",
+          "value": 12
+        },
+        {
+          "period": "201403",
+          "value": 12
+        },
+        {
+          "period": "201404",
+          "value": 12
+        },
+        {
+          "period": "201405",
+          "value": 12
+        },
+        {
+          "period": "201406",
+          "value": 12
+        },
+        {
+          "period": "201407",
+          "value": 12
+        },
+        {
+          "period": "201408",
+          "value": 12
+        },
+        {
+          "period": "201409",
+          "value": 15
+        },
+        {
+          "period": "201410",
+          "value": 15
+        },
+        {
+          "period": "201411",
+          "value": 15
+        },
+        {
+          "period": "201412",
+          "value": 15
+        },
+        {
+          "period": "201501",
+          "value": 15
+        },
+        {
+          "period": "201502",
+          "value": 15
+        },
+        {
+          "period": "201503",
+          "value": 15
+        },
+        {
+          "period": "201504",
+          "value": 20
+        },
+        {
+          "period": "201505",
+          "value": 20
+        },
+        {
+          "period": "201506",
+          "value": 20
+        },
+        {
+          "period": "201507",
+          "value": 20
+        },
+        {
+          "period": "201508",
+          "value": 20
+        },
+        {
+          "period": "201509",
+          "value": 20
+        },
+        {
+          "period": "201510",
+          "value": 20
+        },
+        {
+          "period": "201511",
+          "value": 20
+        },
+        {
+          "period": "201512",
+          "value": 20
+        }
+      ]
+    }
+  ]
+}

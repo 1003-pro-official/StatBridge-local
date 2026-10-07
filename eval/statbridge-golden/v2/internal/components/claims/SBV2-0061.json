@@ -1,0 +1,81 @@
+{
+  "fixture_sha256": "f61208ed96cd25974b892614bb412e5d619c8025c0979b0d67ad2ff3c5338bbb",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요3:2",
+        "Q",
+        "전년동기대비, %"
+      ],
+      "unit": "전년동기대비, %",
+      "frequency": "Q",
+      "missing_periods": [
+        "2026Q1",
+        "2026Q2",
+        "2026Q3",
+        "2026Q4"
+      ],
+      "first": {
+        "period": "2023Q1",
+        "value": 4.6
+      },
+      "last": {
+        "period": "2025Q4",
+        "value": 2.4
+      },
+      "minimum": {
+        "period": "2024Q4",
+        "value": 1.6
+      },
+      "maximum": {
+        "period": "2023Q1",
+        "value": 4.6
+      },
+      "absolute_change": -2.1999999999999997,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요3:3",
+        "Q",
+        "전년동기대비, %"
+      ],
+      "unit": "전년동기대비, %",
+      "frequency": "Q",
+      "missing_periods": [
+        "2023Q1",
+        "2023Q2",
+        "2023Q3",
+        "2023Q4",
+        "2024Q1",
+        "2024Q2",
+        "2024Q3",
+        "2024Q4",
+        "2025Q1",
+        "2025Q2",
+        "2025Q3",
+        "2025Q4"
+      ],
+      "first": {
+        "period": "2026Q1",
+        "value": 2.1
+      },
+      "last": {
+        "period": "2026Q4",
+        "value": 2.1
+      },
+      "minimum": {
+        "period": "2026Q1",
+        "value": 2.1
+      },
+      "maximum": {
+        "period": "2026Q3",
+        "value": 2.3
+      },
+      "absolute_change": 0.0,
+      "change_formula": "last - first"
+    }
+  ]
+}

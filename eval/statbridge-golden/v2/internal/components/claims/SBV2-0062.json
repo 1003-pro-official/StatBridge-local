@@ -1,0 +1,63 @@
+{
+  "fixture_sha256": "8779bc7dc9518b5e976ce6d77d12e72d86f406e592fc0a45ef60d354ce8e3b02",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요4:2",
+        "D",
+        "연%"
+      ],
+      "unit": "연%",
+      "frequency": "D",
+      "missing_periods": [],
+      "first": {
+        "period": "20240205",
+        "value": 3.31
+      },
+      "last": {
+        "period": "20240222",
+        "value": 3.34
+      },
+      "minimum": {
+        "period": "20240206",
+        "value": 3.29
+      },
+      "maximum": {
+        "period": "20240214",
+        "value": 3.43
+      },
+      "absolute_change": 0.029999999999999805,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-03-12:개요4:3",
+        "D",
+        "연%"
+      ],
+      "unit": "연%",
+      "frequency": "D",
+      "missing_periods": [],
+      "first": {
+        "period": "20240205",
+        "value": 4.03
+      },
+      "last": {
+        "period": "20240222",
+        "value": 4
+      },
+      "minimum": {
+        "period": "20240207",
+        "value": 4
+      },
+      "maximum": {
+        "period": "20240214",
+        "value": 4.11
+      },
+      "absolute_change": -0.03000000000000025,
+      "change_formula": "last - first"
+    }
+  ]
+}
