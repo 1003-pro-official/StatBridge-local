@@ -5,6 +5,7 @@ No benchmark queries, IDs, answers or response fixtures are loaded here.
 from itertools import product
 import re
 from request_match_guard import structure_request, unsupported_quantity_terms
+from canonical_request_planner import selections as canonical_selections
 
 def compact(text):
     return re.sub('[^a-z0-9가-힣]', '', str(text).lower())
@@ -82,6 +83,9 @@ def dimension_values(query, dimension):
     return list(bycode.values())
 
 def selections(query, tables):
+    explicit = canonical_selections(query, tables)
+    if explicit:
+        return explicit
     q = normalize(query)
     result = []
     # Explicit full table titles own their qualifiers in the canonical resolver.

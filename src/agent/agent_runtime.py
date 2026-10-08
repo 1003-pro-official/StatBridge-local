@@ -17,6 +17,7 @@ from output_agent import OutputAgent
 from jev_series_client import JevSeriesClient
 from jev_series_hybrid import apply_jev_series_decision
 from request_match_guard import structure_request, table_evidence, catalog_mentions, scoped_metric_query, unsupported_quantity_terms
+from canonical_request_planner import instruction_text
 from catalog_request_planner import selections as catalog_selections, unavailable as unavailable_catalog_quantity
 
 
@@ -114,6 +115,7 @@ class StatBridgeAgent:
         observed_start = self._normalize_observed_period(str(table.get("period_start_observed") or ""), frequency)
         observed_end = self._normalize_observed_period(str(table.get("period_end_observed") or ""), frequency, end=True)
 
+        query = instruction_text(query, self.tables_by_id.values())
         # explicit range / 'YYYY년 이후'
         years = [int(x) for x in re.findall(r"((?:19|20)\d{2})\s*년?", query)]
         if years:
@@ -581,7 +583,7 @@ class StatBridgeAgent:
                 'valid': True, 'errors': [], 'table_ids': [p['table_id'] for p in observed],
                 'evidence': 'measured_concept_and_each_catalog_dimension',
             }}
-        if grounded_plans:
+        if grounded_plans and all('exact_params' in p for p in observed):
             return {**resolution, 'status': 'no_match', 'selected_table': None,
                     'selected_tables': [], 'api_plan': None, 'api_plans': [],
                     'request_validation': {'valid': False, 'errors': [
