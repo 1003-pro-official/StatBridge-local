@@ -1,0 +1,18 @@
+import {strict as assert} from "node:assert";
+import {resolveMarkRegion} from "./chartSelection.ts";
+const categories=["202001","202002","202003","202004","202101"];
+const plot={getBoundingClientRect:()=>({left:10,top:20,width:400,height:400}),data:[{customdata:[["series","202003"]],xaxis:"x",yaxis:"y"}],_fullLayout:{_size:{l:50,t:50,w:300,h:300},xaxis:{type:"category",_categories:categories,_offset:50,l2p:i=>i*75},yaxis:{_offset:50,p2d:p=>2000-p*4}}};
+const stage={getBoundingClientRect:()=>({left:10,top:20,width:400,height:400})};
+const mark={tool:"rectangle",target:"chart",points:[{x:.25,y:.25},{x:.75,y:.75}],selection:{label:"series",scope:"segment",start:"202003",end:"202003"}};
+const region=resolveMarkRegion(mark,plot,stage);
+assert.ok(Math.abs(region.x0-1/6)<1e-10);
+assert.ok(Math.abs(region.x1-5/6)<1e-10);
+assert.ok(Math.abs(region.y0-1/6)<1e-10);
+assert.ok(Math.abs(region.y1-5/6)<1e-10);
+assert.equal(region.data_anchor.start,"202002");
+assert.equal(region.data_anchor.end,"202004");
+assert.ok(Math.abs(region.data_anchor.start_offset+1/3)<1e-10);
+assert.ok(Math.abs(region.data_anchor.end_offset-1/3)<1e-10);
+assert.equal(region.data_anchor.y0,1000);
+assert.equal(region.data_anchor.y1,1800);
+console.log("REGION_FULL_CORNERS_AND_DATA_ANCHORS_OK");

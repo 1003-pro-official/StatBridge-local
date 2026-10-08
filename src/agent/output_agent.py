@@ -196,7 +196,7 @@ class OutputAgent:
     @staticmethod
     def _model_data(series: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [{
-            "label": s["label"], "unit": s["unit"], "pointCount": len(s["points"]),
+            "label": s["label"], "unit": s["unit"], "frequency": s.get("frequency"), "pointCount": len(s["points"]),
             "first": s["points"][0] if s["points"] else None,
             "last": s["points"][-1] if s["points"] else None,
             "minimum": min(s["points"], key=lambda p: p["value"]) if s["points"] else None,
@@ -209,6 +209,7 @@ class OutputAgent:
         system = (
             "너는 통계 그래프 설명자다. 제공된 숫자와 시점만 근거로 한국어 2~3문장으로 설명한다. "
             "원인, 예측, 정책 효과를 추측하지 마라. 다른 단위를 직접 크기 비교하지 마라. "
+            "frequency=Q의 YYYY01~YYYY04는 1~4분기이며 월이 아니다. frequency=M일 때만 YYYYMM을 월로 설명한다. "
             "원자료의 모든 점을 받은 것은 아니므로 중간 구간의 세부 추세를 단정하지 마라."
         )
         user = json.dumps({"chart_type": spec.chart_type, "title": spec.title,
@@ -233,6 +234,7 @@ class OutputAgent:
             "highlights([{start,end,label}]), series_chart_types(계열 이름별 line/bar/area), secondary_axis_series만 허용한다. "
             "막대와 선을 함께 요청하면 각 계열의 유형을 series_chart_types에 넣고, 단위가 다른 보조 계열을 secondary_axis_series에 넣어라. "
             "데이터에 필요한 차원이 없으면 line 또는 bar를 선택하라. "
+            "frequency=Q의 YYYY01~YYYY04는 1~4분기이며 월이 아니다. 실제 주기를 제목과 부제에 반영한다. "
             "통계 수치나 데이터 계열을 새로 만들지 마라."
             "series_chart_types의 키와 secondary_axis_series 값은 제공된 series.label을 띄어쓰기와 구분 기호까지 그대로 복사하라. "
             "주택담보대출처럼 줄인 지표명으로 바꾸지 마라. 원·도넛 등에는 계열별 선/막대 유형이나 보조축을 넣지 마라."
@@ -242,9 +244,7 @@ class OutputAgent:
             text, _ = self.ncp_client.chat_main(system, user, max_tokens=380, thinking_effort="none")
             proposed = self.ncp_client._json_object(text)
             allowed = {"chart_type", "title", "subtitle", "x_axis_label", "y_axis_label", "legend_position", "highlights", "series_chart_types", "secondary_axis_series"}
-            proposed = {key: value for key, value in proposed.items() if key in allowed}
-            # prepare() validates proposed labels and reports discarded suggestions.
-            return proposed
+            return {key: value for key, value in proposed.items() if key in allowed}
         except Exception:
             return {}
 
@@ -333,6 +333,9 @@ class OutputAgent:
         raw = request or {}
         series = self._series((result.get("execution") or {}).get("rows") or [])
         proposed = self._propose_spec(series, raw)
+        # Initial output is neutral. Background highlights are user edits,
+        # not decorations that the presentation model may invent.
+        proposed.pop("highlights", None)
         labels={s['label'] for s in series}
         references=[]
         mapping=proposed.get('series_chart_types')
@@ -348,7 +351,12 @@ class OutputAgent:
         requested_type = str(raw.get("chart_type") or "auto")
         if requested_type not in SUPPORTED_CHART_TYPES:
             raise ValueError("지원하지 않는 그래프 종류입니다.")
-        if requested_type != "auto": proposed["chart_type"] = requested_type
+        if requested_type != "auto":
+            proposed["chart_type"] = requested_type
+            # A model's per-series suggestion must not override the explicit
+            # chart type selected by the user. Mixed types remain available via
+            # explicit follow-up edits and automatic output planning.
+            proposed.pop("series_chart_types", None)
         elif proposed.get("chart_type") not in SUPPORTED_CHART_TYPES - {"auto"}:
             proposed["chart_type"] = self._select_chart_type("auto", series)
         if proposed.get('chart_type') not in {'line','bar','stacked_bar','area'}:
@@ -427,8 +435,16 @@ class OutputAgent:
         if extended is not None:
             return extended
         updates: dict[str, Any] = {}
+        if command.params and (command.operation != "highlight_period" or set(command.params) - {"color", "opacity"}):
+            raise ValueError(f"{command.operation} 명령에 적용할 수 없는 설정이 있습니다: {', '.join(command.params)}. 설정을 확인해 주세요.")
         value = command.value
-        if command.operation == "set_title": updates["title"] = str(value or "")
+        if command.operation == "remove_annotation":
+            text=str(value or "")
+            if not text: raise ValueError("삭제할 주석 텍스트를 지정해 주세요.")
+            updates.update(annotations=[a for a in current.annotations if a.text != text],
+                notes=[n for n in current.notes if n.text != text],
+                highlights=[h.model_copy(update={"label":""}) if h.label == text else h for h in current.highlights])
+        elif command.operation == "set_title": updates["title"] = str(value or "")
         elif command.operation == "set_subtitle": updates["subtitle"] = str(value or "")
         elif command.operation == "set_axis_labels":
             if command.x_axis_label is None and command.y_axis_label is None:
@@ -455,7 +471,7 @@ class OutputAgent:
             if isinstance(value, bool): updates["show_legend"] = value
             else: updates["legend_position"] = value
         elif command.operation == "set_line_width": updates["line_width"] = value
-        elif command.operation == "highlight_period": updates["highlights"] = [*current.highlights, Highlight(start=command.start or "", end=command.end or "", label=command.label or "")]
+        elif command.operation == "highlight_period": updates["highlights"] = [*current.highlights, Highlight(start=command.start or "", end=command.end or "", label=command.label or "", **{k:v for k,v in command.params.items() if k in {"color","opacity"}})]
         elif command.operation == "highlight_series":
             if value not in labels: raise ValueError("선택한 계열이 조회 결과에 없습니다.")
             updates["highlighted_series"] = str(value)

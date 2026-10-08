@@ -268,3 +268,7 @@ main { width: min(1460px, 100%); margin: 0 auto; padding: 24px clamp(18px, 3vw, 
 .sketch-text-panel button { padding:8px 12px; border:1px solid #d9dfed; border-radius:6px; background:white; cursor:pointer; }
 .sketch-text-panel button:disabled { opacity:.5; cursor:default; }
 .sketch-mark-list input { display:block; width:100%; padding:8px; margin:6px 0; border:1px solid #d9dfed; border-radius:6px; }
+
+.chart-edit-help section { margin:14px 0; }
+.chart-edit-help ul { margin:5px 0; padding-left:18px; }
+.chart-edit-help li { margin:5px 0; color:#475569; }

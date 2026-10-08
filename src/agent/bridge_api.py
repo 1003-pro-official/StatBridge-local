@@ -11,12 +11,14 @@ from pathlib import Path
 from typing import Any, Literal
 from threading import RLock
 
-ROOT = Path(__file__).resolve().parents[2]
-MCP_ROOT = ROOT / "src" / "backend"
-DATA_DIR = ROOT / "data" / "processed"
+from runtime_paths import layout
+PATHS = layout()
+ROOT = PATHS["root"]
+MCP_ROOT = PATHS["backend"]
+DATA_DIR = PATHS["data"]
 
 os.environ.setdefault("STATBRIDGE_DATA_DIR", str(DATA_DIR))
-os.environ.setdefault("STATBRIDGE_TABLES_DIR", str(ROOT / "data" / "tables"))
+os.environ.setdefault("STATBRIDGE_TABLES_DIR", str(PATHS["tables"]))
 if str(MCP_ROOT) not in sys.path:
     sys.path.insert(0, str(MCP_ROOT))
 
@@ -31,6 +33,7 @@ from chart_edit_agent import ChartEditAgent, Hcx007EditModel
 from output_schema import VisualEditContext, ChartSpec
 from request_match_guard import structure_request, catalog_mentions, unsupported_quantity_terms
 from request_period import explicit_period
+from chart_edit_period import revise_period
 from canonical_request_planner import instruction_text
 
 
@@ -100,10 +103,16 @@ class OutputOptionsRequest(BaseModel):
     session_ids: list[str] = Field(min_length=1, max_length=50)
 
 
+class EditConversationMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    text: str = Field(max_length=2000)
+
+
 class OutputEditRequest(BaseModel):
     edit_session_id: str
     instruction: str = Field(default="", max_length=1000)
     visual: VisualEditContext | None = None
+    conversation: list[EditConversationMessage] = Field(default_factory=list)
     action: Literal["edit", "undo", "redo"] = "edit"
     revision: int | None = Field(default=None, ge=0)
 
@@ -701,8 +710,15 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
 
     base = sessions[0]
     results = [session["result"] for session in sessions]
+    output_periods = {}
     for session in sessions:
-        checked = agent.validate_resolution(str(session["query"]), session["result"])
+        plans = session["result"].get("api_plans") or [session["result"].get("api_plan")]
+        confirmed_periods = {str(plan["table_id"]): (
+            _api_period(session["period"]["start"], str(plan["frequency"])),
+            _api_period(session["period"]["end"], str(plan["frequency"]), end=True),
+        ) for plan in plans if plan and session.get("period")}
+        output_periods.update(confirmed_periods)
+        checked = agent.validate_resolution(str(session["query"]), session["result"], confirmed_periods=confirmed_periods)
         if checked.get("status") != "resolved":
             raise HTTPException(status_code=422, detail="요청과 통계표가 일치하지 않습니다. 다시 검색해 주세요.")
     output_intent=structure_request(payload.natural_language or '')
@@ -711,7 +727,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
             or unsupported_quantity_terms(payload.natural_language,agent.tables_by_id.values())):
         # Each session's clarification constraints were checked above. They belong
         # to that session, not to unrelated tables merged from another request.
-        checked = agent.validate_resolution(payload.natural_language, {**results[0],"state":{},"api_plans":[plan for result in results for plan in (result.get("api_plans") or [result.get("api_plan")]) if plan]})
+        checked = agent.validate_resolution(payload.natural_language, {**results[0],"state":{},"api_plans":[plan for result in results for plan in (result.get("api_plans") or [result.get("api_plan")]) if plan]}, confirmed_periods=output_periods)
         if checked.get("status") != "resolved":
             reasons=' / '.join(checked.get('request_validation',{}).get('errors',[]))
             raise HTTPException(status_code=422, detail="출력 요청과 조회된 통계표를 확인해 주세요. "+reasons)
@@ -803,15 +819,32 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
     revision = previous.get("editVersion", 0)
     if payload.revision is not None and payload.revision != revision:
         raise HTTPException(status_code=409, detail="그래프가 변경되었습니다. 최신 그래프에서 다시 수정해 주세요.")
+    candidate_result=session["result"]
+    candidate_sessions=session["sessions"]
+    period_update=None
     try:
         if payload.action == "edit":
-            output = edit_agent.edit(session["result"], previous, payload.instruction,
-                                     payload.visual.model_dump() if payload.visual else None)
+            period_update=revise_period(session,payload.instruction,agent.output_agent,agent.execute_resolution,_availability_from_plans,_api_period)
+            if period_update:
+                candidate_result=period_update["result"]
+                candidate_sessions=period_update["sessions"]
+            if period_update and period_update["only_period"] and not (payload.visual and any(m.text.strip() for m in payload.visual.marks)):
+                output=period_update["output"]
+            else:
+                baseline=period_update["output"] if period_update else previous
+                try:
+                    output = edit_agent.edit(candidate_result, {**baseline, "editConversation": [m.model_dump() for m in payload.conversation[-40:]]}, payload.instruction,
+                                         payload.visual.model_dump() if payload.visual else None)
+                except ValueError as error:
+                    if period_update and "변경된 내용이 없습니다" in str(error): output=period_update["output"]
+                    else: raise
         else:
             history = session.get(payload.action, [])
             if not history:
                 raise ValueError("취소/다시 적용할 편집이 없습니다.")
-            output = agent.output_agent._build(session["result"], ChartSpec.model_validate(history[-1]["chartState"]), generate_explanation=False)
+            candidate_result=history[-1].get("result",session["result"])
+            candidate_sessions=history[-1].get("sessions",session["sessions"])
+            output = agent.output_agent._build(candidate_result, ChartSpec.model_validate(history[-1]["chartState"]), generate_explanation=False)
             output["editHistory"] = history[-1].get("editHistory", [])
             output["editCapabilities"] = previous.get("editCapabilities", {})
     except (ValueError, TypeError) as exc:
@@ -819,7 +852,7 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
     with EDIT_LOCK:
         if session["output"] is not previous:
             raise HTTPException(status_code=409, detail="다른 수정이 먼저 적용되었습니다. 최신 그래프에서 다시 시도해 주세요.")
-        snapshot = {"chartState": previous["chartState"], "editHistory": previous.get("editHistory", [])}
+        snapshot = {"chartState": previous["chartState"], "editHistory": previous.get("editHistory", []), "result":session["result"], "sessions":session["sessions"]}
         if payload.action == "edit":
             session["undo"] = [*session.get("undo", []), snapshot][-20:]
             session["redo"] = []
@@ -829,6 +862,8 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
             session[opposite] = [*session.get(opposite, []), snapshot][-20:]
         output.update(editVersion=revision+1, canUndo=bool(session.get("undo")), canRedo=bool(session.get("redo")))
         session["output"] = output
+        session["result"] = candidate_result
+        session["sessions"] = candidate_sessions
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     sessions = session["sessions"]
@@ -841,6 +876,7 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         "query": " · ".join(str(item["query"]) for item in sessions),
         "interpretedQuery": " · ".join(str(item["table_name"]) for item in sessions),
         "summary": output.get("summary") or "",
+        "periodSelection":sessions[0].get("periodSelection"),
         "period": {"start": starts[0], "end": ends[-1]},
         "frequency": " / ".join(dict.fromkeys(str(item["frequency"]) for item in sessions)),
         "chart": chart,
@@ -852,9 +888,9 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         "tables": [_table_card(str(plan["table_id"])) for plan in plans],
         "insights": output.get("editChanges") or ["편집 취소" if payload.action == "undo" else "편집 다시 적용"],
         "lineage": [
-            {"id": "mcp", "title": "MCP 통계 서비스", "description": "기존 조회 데이터 사용", "status": "complete"},
+            {"id": "mcp", "title": "MCP 통계 서비스", "description": "변경 기간의 원자료 재조회" if period_update else "기존 조회 데이터 사용", "status": "complete"},
             {"id": "edit", "title": "수정 Agent", "description": "텍스트·그림 표시를 검증 가능한 명령으로 해석", "status": "complete"},
             {"id": "output", "title": "출력 Agent", "description": "수정 명령 적용 및 그래프 렌더링", "status": "complete"},
         ],
-        "warnings": [],
+        "warnings":period_update["warnings"] if period_update else [],
     }

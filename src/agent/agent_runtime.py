@@ -564,10 +564,18 @@ class StatBridgeAgent:
             result["api_plans"] = component_plans
         return self.validate_resolution(request_query, result)
 
-    def validate_resolution(self, query: str, resolution: dict[str, Any]) -> dict[str, Any]:
+    def validate_resolution(self, query: str, resolution: dict[str, Any], *,
+                            confirmed_periods: dict[str, tuple[str, str]] | None = None) -> dict[str, Any]:
         """Check original intent and canonical IDs again after model/vector ranking."""
         grounded = catalog_selections(query, self.resolver.tables)
         grounded_plans = [self.build_api_plan(query, item).as_dict() for item in grounded]
+        # Only a server-owned output session supplies these boundaries. All
+        # table, item, classification and non-period parameters stay canonical.
+        for plan in grounded_plans:
+            period = (confirmed_periods or {}).get(str(plan["table_id"]))
+            if period:
+                plan.update(start_period=period[0], end_period=period[1])
+                plan["exact_params"].update(startPrdDe=period[0], endPrdDe=period[1])
         observed = resolution.get('api_plans') or ([resolution['api_plan']] if resolution.get('api_plan') else [])
         confirmed = (resolution.get('state') or {}).get('confirmed') or {}
 
@@ -692,9 +700,10 @@ class StatBridgeAgent:
         end_period: str | None = None,
         period_overrides: dict[str, tuple[str, str]] | None = None,
         generate_answer: bool = True,
+        confirmed_periods: dict[str, tuple[str, str]] | None = None,
     ) -> dict[str, Any]:
         """Execute an already resolved plan without repeating HCX/vector retrieval."""
-        resolution = self.validate_resolution(query, resolution)
+        resolution = self.validate_resolution(query, resolution, confirmed_periods=confirmed_periods)
         if resolution.get("status") != "resolved":
             return {**resolution,"execution":{"status":"request_mismatch","rows":[],"row_count":0},"answer":""}
         plans = resolution.get("api_plans") or [resolution["api_plan"]]

@@ -250,7 +250,7 @@ function PlotlyRenderer({ figure }: { figure: { data: Array<Record<string, unkno
     observer.observe(element);
     return () => {active=false;observer.disconnect();Plotly.purge(element);};
   }, [figure]);
-  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}<div ref={host} className="plotly-chart" aria-label="통계 그래프" /></>;
+  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}<div ref={host} className="plotly-chart" style={{height:typeof figure.layout.height==="number"?figure.layout.height:580}} aria-label="통계 그래프" /></>;
 }
 
 function LayoutChoice({ mode, setMode, reason }: { mode: "combined"|"separate"; setMode: (v:"combined"|"separate")=>void; reason?:string }) {
@@ -394,8 +394,8 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
   const [allDataOpen,setAllDataOpen]=useState(false);
   const allRows=result.chart.flatMap((series)=>series.points.map((point)=>({series,point})));
   const previewRows=result.chart.flatMap((series)=>{
-    if(series.points.length<=6)return series.points.map((point)=>({series,point}));
-    return [...series.points.slice(0,3),...series.points.slice(-3)].map((point)=>({series,point}));
+    if(series.points.length<=5)return series.points.map((point)=>({series,point}));
+    return [...series.points.slice(0,2),...series.points.slice(-3)].map((point)=>({series,point}));
   });
   const visibleRows=allDataOpen?allRows:previewRows;
   const editOptions=result.outputSpec?.visualization?.editOptions;
@@ -579,7 +579,7 @@ export default function App() {
     if(!result?.editSessionId)return false;
     setLoading(true);setError("");
     try { showResult(await submitOutputEdit({edit_session_id:result.editSessionId,revision:result.outputSpec?.editVersion,...input})); return true; }
-    catch(err){setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");return false;}
+    catch(err){setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");throw err;}
     finally{setLoading(false);}
   };
 

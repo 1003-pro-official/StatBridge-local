@@ -3,200 +3,657 @@
     {
       "id": "detailed_flow_of_funds_basis",
       "priority": 1,
-      "trigger_terms": [
-        "상세자금순환",
-        "상세 자금순환"
-      ],
-      "skip_if_terms": [
-        "잔액",
-        "보유액",
-        "거래",
-        "순거래"
-      ],
+      "trigger_terms": ["상세자금순환", "상세 자금순환"],
+      "skip_if_terms": ["잔액", "보유액", "거래", "순거래"],
       "question": "상세자금순환표에서 보유 잔액과 기간 중 거래 중 무엇을 볼까요?",
       "ui": "single_select_buttons",
       "options": [
-        {
-          "label": "잔액표 · 보유 잔액",
-          "value": "잔액표",
-          "confirmed_terms": [
-            "상세자금순환표 잔액표"
-          ],
-          "table_name_any": [
-            "잔액표"
-          ]
-        },
-        {
-          "label": "거래표 · 기간 중 거래",
-          "value": "거래표",
-          "confirmed_terms": [
-            "상세자금순환표 거래표"
-          ],
-          "table_name_any": [
-            "거래표"
-          ]
-        }
+        {"label": "잔액표 · 보유 잔액", "value": "잔액표", "confirmed_terms": ["상세자금순환표 잔액표"], "table_name_any": ["잔액표"]},
+        {"label": "거래표 · 기간 중 거래", "value": "거래표", "confirmed_terms": ["상세자금순환표 거래표"], "table_name_any": ["거래표"]}
       ]
     },
     {
       "id": "industry_loan_institution",
       "priority": 11,
-      "trigger_terms": ["산업별대출", "산업별 대출"],
-      "skip_if_terms": ["예금은행", "비은행예금취급기관", "예금취급기관"],
+      "trigger_terms": [
+        "산업별대출",
+        "산업별 대출"
+      ],
+      "skip_if_terms": [
+        "예금은행",
+        "비은행예금취급기관",
+        "예금취급기관"
+      ],
       "question": "어느 금융기관의 산업별 대출을 볼까요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "예금은행", "value": "예금은행", "confirmed_terms": ["예금은행"], "table_name_any": ["산업별대출금(예금은행"]},
-        {"label": "비은행예금취급기관", "value": "비은행예금취급기관", "confirmed_terms": ["비은행예금취급기관"], "table_name_any": ["산업별대출금(비은행예금취급기관"]},
-        {"label": "예금취급기관 전체", "value": "예금취급기관", "confirmed_terms": ["예금취급기관"], "table_name_any": ["산업별대출금(예금취급기관"]}
+        {
+          "label": "예금은행",
+          "value": "예금은행",
+          "confirmed_terms": [
+            "예금은행"
+          ],
+          "table_name_any": [
+            "산업별대출금(예금은행"
+          ]
+        },
+        {
+          "label": "비은행예금취급기관",
+          "value": "비은행예금취급기관",
+          "confirmed_terms": [
+            "비은행예금취급기관"
+          ],
+          "table_name_any": [
+            "산업별대출금(비은행예금취급기관"
+          ]
+        },
+        {
+          "label": "예금취급기관 전체",
+          "value": "예금취급기관",
+          "confirmed_terms": [
+            "예금취급기관"
+          ],
+          "table_name_any": [
+            "산업별대출금(예금취급기관"
+          ]
+        }
       ]
     },
     {
       "id": "industry_loan_breakdown",
       "priority": 12,
-      "trigger_terms": ["산업별대출", "산업별 대출"],
-      "skip_if_terms": ["기업형태별", "용도별", "전산업", "기업규모별"],
+      "trigger_terms": [
+        "산업별대출",
+        "산업별 대출"
+      ],
+      "skip_if_terms": [
+        "기업형태별",
+        "용도별",
+        "전산업",
+        "기업규모별"
+      ],
       "question": "산업별 대출을 어떤 기준으로 나눠 볼까요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "전산업", "value": "전산업", "confirmed_terms": ["전산업"], "table_name_any": ["전산업"]},
-        {"label": "용도별", "value": "용도별", "confirmed_terms": ["용도별"], "table_name_any": ["용도별"]},
-        {"label": "기업형태별", "value": "기업형태별", "confirmed_terms": ["기업형태별"], "table_name_any": ["기업형태별"]},
-        {"label": "기업규모별", "value": "기업규모별", "confirmed_terms": ["기업규모별"], "table_name_any": ["기업규모별"]}
+        {
+          "label": "전산업",
+          "value": "전산업",
+          "confirmed_terms": [
+            "전산업"
+          ],
+          "table_name_any": [
+            "전산업"
+          ]
+        },
+        {
+          "label": "용도별",
+          "value": "용도별",
+          "confirmed_terms": [
+            "용도별"
+          ],
+          "table_name_any": [
+            "용도별"
+          ]
+        },
+        {
+          "label": "기업형태별",
+          "value": "기업형태별",
+          "confirmed_terms": [
+            "기업형태별"
+          ],
+          "table_name_any": [
+            "기업형태별"
+          ]
+        },
+        {
+          "label": "기업규모별",
+          "value": "기업규모별",
+          "confirmed_terms": [
+            "기업규모별"
+          ],
+          "table_name_any": [
+            "기업규모별"
+          ]
+        }
       ]
     },
     {
       "id": "bond_data_scope",
       "priority": 12,
-      "trigger_terms": ["채권 자료", "채권 통계", "채권"],
-      "skip_if_terms": ["발행액", "발행잔액", "보유잔액", "순발행액", "순취득액", "채권시장", "대외채권", "대외채무"],
+      "trigger_terms": [
+        "채권 자료",
+        "채권 통계",
+        "채권"
+      ],
+      "skip_if_terms": [
+        "발행액",
+        "발행잔액",
+        "보유잔액",
+        "순발행액",
+        "순취득액",
+        "채권시장",
+        "대외채권",
+        "대외채무"
+      ],
       "question": "채권의 발행액·발행잔액·보유잔액 중 어떤 자료를 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "발행액", "value": "발행액", "confirmed_terms": ["발행액"], "table_name_any": ["발행액"]},
-        {"label": "발행잔액", "value": "발행잔액", "confirmed_terms": ["발행잔액"], "table_name_any": ["발행잔액"]},
-        {"label": "보유잔액", "value": "보유잔액", "confirmed_terms": ["보유잔액"], "table_name_any": ["보유잔액"]}
+        {
+          "label": "발행액",
+          "value": "발행액",
+          "confirmed_terms": [
+            "발행액"
+          ],
+          "table_name_any": [
+            "발행액"
+          ]
+        },
+        {
+          "label": "발행잔액",
+          "value": "발행잔액",
+          "confirmed_terms": [
+            "발행잔액"
+          ],
+          "table_name_any": [
+            "발행잔액"
+          ]
+        },
+        {
+          "label": "보유잔액",
+          "value": "보유잔액",
+          "confirmed_terms": [
+            "보유잔액"
+          ],
+          "table_name_any": [
+            "보유잔액"
+          ]
+        }
       ]
     },
     {
       "id": "financial_deposit_scope",
       "priority": 13,
-      "trigger_terms": ["금융기관 수신", "수신 추이", "수신 자료"],
-      "skip_if_terms": ["예금은행", "비은행", "지역별", "수신금리", "예금금리"],
+      "trigger_terms": [
+        "금융기관 수신",
+        "수신 추이",
+        "수신 자료"
+      ],
+      "skip_if_terms": [
+        "예금은행",
+        "비은행",
+        "지역별",
+        "수신금리",
+        "예금금리"
+      ],
       "question": "예금은행·비은행 또는 지역별 수신 중 어떤 자료를 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "예금은행", "value": "예금은행", "confirmed_terms": ["예금은행 수신"], "table_name_any": ["예금은행"]},
-        {"label": "비은행", "value": "비은행", "confirmed_terms": ["비은행금융기관 수신"], "table_name_any": ["비은행금융기관"]},
-        {"label": "지역별", "value": "지역별", "confirmed_terms": ["예금은행 지역별 수신"], "table_name_any": ["지역별 수신"]}
+        {
+          "label": "예금은행",
+          "value": "예금은행",
+          "confirmed_terms": [
+            "예금은행 수신"
+          ],
+          "table_name_any": [
+            "예금은행"
+          ]
+        },
+        {
+          "label": "비은행",
+          "value": "비은행",
+          "confirmed_terms": [
+            "비은행금융기관 수신"
+          ],
+          "table_name_any": [
+            "비은행금융기관"
+          ]
+        },
+        {
+          "label": "지역별",
+          "value": "지역별",
+          "confirmed_terms": [
+            "예금은행 지역별 수신"
+          ],
+          "table_name_any": [
+            "지역별 수신"
+          ]
+        }
       ]
     },
     {
       "id": "consumption_expenditure_basis",
       "priority": 35,
-      "trigger_terms": ["소비지출", "최종소비지출"],
-      "skip_if_terms": ["명목", "실질", "계절조정", "원계열"],
+      "trigger_terms": [
+        "소비지출",
+        "최종소비지출"
+      ],
+      "skip_if_terms": [
+        "명목",
+        "실질",
+        "계절조정",
+        "원계열"
+      ],
       "question": "명목·실질과 계절조정 여부 중 어떤 기준을 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "명목 계절조정", "value": "명목 계절조정", "confirmed_terms": ["명목", "계절조정"], "table_name_any": ["계절조정 명목"]},
-        {"label": "실질 계절조정", "value": "실질 계절조정", "confirmed_terms": ["실질", "계절조정"], "table_name_any": ["계절조정 실질"]},
-        {"label": "명목 원계열", "value": "명목 원계열", "confirmed_terms": ["명목", "원계열"], "table_name_any": ["원계열 명목"]},
-        {"label": "실질 원계열", "value": "실질 원계열", "confirmed_terms": ["실질", "원계열"], "table_name_any": ["원계열 실질"]}
+        {
+          "label": "명목 계절조정",
+          "value": "명목 계절조정",
+          "confirmed_terms": [
+            "명목",
+            "계절조정"
+          ],
+          "table_name_any": [
+            "계절조정 명목"
+          ]
+        },
+        {
+          "label": "실질 계절조정",
+          "value": "실질 계절조정",
+          "confirmed_terms": [
+            "실질",
+            "계절조정"
+          ],
+          "table_name_any": [
+            "계절조정 실질"
+          ]
+        },
+        {
+          "label": "명목 원계열",
+          "value": "명목 원계열",
+          "confirmed_terms": [
+            "명목",
+            "원계열"
+          ],
+          "table_name_any": [
+            "원계열 명목"
+          ]
+        },
+        {
+          "label": "실질 원계열",
+          "value": "실질 원계열",
+          "confirmed_terms": [
+            "실질",
+            "원계열"
+          ],
+          "table_name_any": [
+            "원계열 실질"
+          ]
+        }
       ]
     },
     {
       "id": "international_investment_scope",
       "priority": 36,
-      "trigger_terms": ["국제투자", "국제투자대조표"],
-      "skip_if_terms": ["지역별", "통화별", "전체"],
+      "trigger_terms": [
+        "국제투자",
+        "국제투자대조표"
+      ],
+      "skip_if_terms": [
+        "지역별",
+        "통화별",
+        "전체"
+      ],
       "question": "전체·지역별·통화별 국제투자대조표 중 무엇을 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "전체", "value": "전체", "confirmed_terms": ["국제투자대조표"], "table_name_any": ["국제투자대조표(IIP)"]},
-        {"label": "지역별", "value": "지역별", "confirmed_terms": ["지역별"], "table_name_any": ["지역별 국제투자대조표"]},
-        {"label": "통화별", "value": "통화별", "confirmed_terms": ["통화별"], "table_name_any": ["통화별 국제투자대조표"]}
+        {
+          "label": "전체",
+          "value": "전체",
+          "confirmed_terms": [
+            "국제투자대조표"
+          ],
+          "table_name_any": [
+            "국제투자대조표(IIP)"
+          ]
+        },
+        {
+          "label": "지역별",
+          "value": "지역별",
+          "confirmed_terms": [
+            "지역별"
+          ],
+          "table_name_any": [
+            "지역별 국제투자대조표"
+          ]
+        },
+        {
+          "label": "통화별",
+          "value": "통화별",
+          "confirmed_terms": [
+            "통화별"
+          ],
+          "table_name_any": [
+            "통화별 국제투자대조표"
+          ]
+        }
       ]
     },
     {
       "id": "export_index_type",
       "priority": 37,
-      "trigger_terms": ["수출 지수", "수출지수"],
-      "skip_if_terms": ["수출물가", "수출금액", "수출물량"],
+      "trigger_terms": [
+        "수출 지수",
+        "수출지수"
+      ],
+      "skip_if_terms": [
+        "수출물가",
+        "수출금액",
+        "수출물량"
+      ],
       "question": "수출물가·수출금액·수출물량 중 어떤 지수를 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "수출물가", "value": "수출물가", "confirmed_terms": ["수출물가지수"], "table_name_any": ["수출물가지수"]},
-        {"label": "수출금액", "value": "수출금액", "confirmed_terms": ["수출금액지수"], "table_name_any": ["수출금액지수"]},
-        {"label": "수출물량", "value": "수출물량", "confirmed_terms": ["수출물량지수"], "table_name_any": ["수출물량지수"]}
+        {
+          "label": "수출물가",
+          "value": "수출물가",
+          "confirmed_terms": [
+            "수출물가지수"
+          ],
+          "table_name_any": [
+            "수출물가지수"
+          ]
+        },
+        {
+          "label": "수출금액",
+          "value": "수출금액",
+          "confirmed_terms": [
+            "수출금액지수"
+          ],
+          "table_name_any": [
+            "수출금액지수"
+          ]
+        },
+        {
+          "label": "수출물량",
+          "value": "수출물량",
+          "confirmed_terms": [
+            "수출물량지수"
+          ],
+          "table_name_any": [
+            "수출물량지수"
+          ]
+        }
       ]
     },
     {
       "id": "import_index_type",
       "priority": 38,
-      "trigger_terms": ["수입 지수", "수입지수"],
-      "skip_if_terms": ["수입물가", "수입금액", "수입물량"],
+      "trigger_terms": [
+        "수입 지수",
+        "수입지수"
+      ],
+      "skip_if_terms": [
+        "수입물가",
+        "수입금액",
+        "수입물량"
+      ],
       "question": "수입물가·수입금액·수입물량 중 어떤 지수를 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "수입물가", "value": "수입물가", "confirmed_terms": ["수입물가지수"], "table_name_any": ["수입물가지수"]},
-        {"label": "수입금액", "value": "수입금액", "confirmed_terms": ["수입금액지수"], "table_name_any": ["수입금액지수"]},
-        {"label": "수입물량", "value": "수입물량", "confirmed_terms": ["수입물량지수"], "table_name_any": ["수입물량지수"]}
+        {
+          "label": "수입물가",
+          "value": "수입물가",
+          "confirmed_terms": [
+            "수입물가지수"
+          ],
+          "table_name_any": [
+            "수입물가지수"
+          ]
+        },
+        {
+          "label": "수입금액",
+          "value": "수입금액",
+          "confirmed_terms": [
+            "수입금액지수"
+          ],
+          "table_name_any": [
+            "수입금액지수"
+          ]
+        },
+        {
+          "label": "수입물량",
+          "value": "수입물량",
+          "confirmed_terms": [
+            "수입물량지수"
+          ],
+          "table_name_any": [
+            "수입물량지수"
+          ]
+        }
       ]
     },
     {
       "id": "gdp_basis",
       "priority": 39,
-      "trigger_terms": ["GDP", "국내총생산"],
-      "skip_if_terms": ["명목", "실질", "계절조정", "원계열", "디플레이터"],
+      "trigger_terms": [
+        "GDP",
+        "국내총생산"
+      ],
+      "skip_if_terms": [
+        "명목",
+        "실질",
+        "계절조정",
+        "원계열",
+        "디플레이터"
+      ],
       "question": "명목·실질과 계절조정 여부 중 어떤 GDP를 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "명목 계절조정", "value": "명목 계절조정", "confirmed_terms": ["명목", "계절조정"], "table_name_any": ["계절조정 명목"]},
-        {"label": "실질 계절조정", "value": "실질 계절조정", "confirmed_terms": ["실질", "계절조정"], "table_name_any": ["계절조정 실질"]},
-        {"label": "명목 원계열", "value": "명목 원계열", "confirmed_terms": ["명목", "원계열"], "table_name_any": ["원계열 명목"]},
-        {"label": "실질 원계열", "value": "실질 원계열", "confirmed_terms": ["실질", "원계열"], "table_name_any": ["원계열 실질"]}
+        {
+          "label": "명목 계절조정",
+          "value": "명목 계절조정",
+          "confirmed_terms": [
+            "명목",
+            "계절조정"
+          ],
+          "table_name_any": [
+            "계절조정 명목"
+          ]
+        },
+        {
+          "label": "실질 계절조정",
+          "value": "실질 계절조정",
+          "confirmed_terms": [
+            "실질",
+            "계절조정"
+          ],
+          "table_name_any": [
+            "계절조정 실질"
+          ]
+        },
+        {
+          "label": "명목 원계열",
+          "value": "명목 원계열",
+          "confirmed_terms": [
+            "명목",
+            "원계열"
+          ],
+          "table_name_any": [
+            "원계열 명목"
+          ]
+        },
+        {
+          "label": "실질 원계열",
+          "value": "실질 원계열",
+          "confirmed_terms": [
+            "실질",
+            "원계열"
+          ],
+          "table_name_any": [
+            "원계열 실질"
+          ]
+        }
       ]
     },
     {
       "id": "corporate_finance_view",
       "priority": 41,
-      "trigger_terms": ["기업 재무", "기업경영 지표", "기업경영"],
-      "skip_if_terms": ["재무상태표", "손익계산서", "성장성", "손익 지표", "자산회전율", "생산성"],
+      "trigger_terms": [
+        "기업 재무",
+        "기업경영 지표",
+        "기업경영"
+      ],
+      "skip_if_terms": [
+        "재무상태표",
+        "손익계산서",
+        "성장성",
+        "손익 지표",
+        "자산회전율",
+        "생산성"
+      ],
       "question": "재무상태·손익·성장성·회전율·생산성 중 어떤 자료를 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "재무상태표", "value": "재무상태표", "confirmed_terms": ["재무상태표"], "table_name_any": ["재무상태표"]},
-        {"label": "손익계산서", "value": "손익계산서", "confirmed_terms": ["손익계산서"], "table_name_any": ["손익계산서"]},
-        {"label": "성장성", "value": "성장성", "confirmed_terms": ["성장성 지표"], "table_name_any": ["성장성 지표"]},
-        {"label": "자산회전율", "value": "자산회전율", "confirmed_terms": ["자산/자본 회전율"], "table_name_any": ["자산/자본 회전율"]},
-        {"label": "생산성", "value": "생산성", "confirmed_terms": ["생산성 지표"], "table_name_any": ["생산성 지표"]}
+        {
+          "label": "재무상태표",
+          "value": "재무상태표",
+          "confirmed_terms": [
+            "재무상태표"
+          ],
+          "table_name_any": [
+            "재무상태표"
+          ]
+        },
+        {
+          "label": "손익계산서",
+          "value": "손익계산서",
+          "confirmed_terms": [
+            "손익계산서"
+          ],
+          "table_name_any": [
+            "손익계산서"
+          ]
+        },
+        {
+          "label": "성장성",
+          "value": "성장성",
+          "confirmed_terms": [
+            "성장성 지표"
+          ],
+          "table_name_any": [
+            "성장성 지표"
+          ]
+        },
+        {
+          "label": "자산회전율",
+          "value": "자산회전율",
+          "confirmed_terms": [
+            "자산/자본 회전율"
+          ],
+          "table_name_any": [
+            "자산/자본 회전율"
+          ]
+        },
+        {
+          "label": "생산성",
+          "value": "생산성",
+          "confirmed_terms": [
+            "생산성 지표"
+          ],
+          "table_name_any": [
+            "생산성 지표"
+          ]
+        }
       ]
     },
     {
       "id": "payment_card_scope",
       "priority": 42,
-      "trigger_terms": ["카드 결제", "결제 규모"],
-      "skip_if_terms": ["신용카드", "전자지급결제대행", "결제시스템", "지급수단"],
+      "trigger_terms": [
+        "카드 결제",
+        "결제 규모"
+      ],
+      "skip_if_terms": [
+        "신용카드",
+        "전자지급결제대행",
+        "결제시스템",
+        "지급수단"
+      ],
       "question": "신용카드와 전자지급결제대행 중 어떤 결제 자료를 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "신용카드", "value": "신용카드", "confirmed_terms": ["신용카드"], "table_name_any": ["신용카드"]},
-        {"label": "전자지급결제대행", "value": "전자지급결제대행", "confirmed_terms": ["전자지급결제대행"], "table_name_any": ["전자지급결제대행"]}
+        {
+          "label": "신용카드",
+          "value": "신용카드",
+          "confirmed_terms": [
+            "신용카드"
+          ],
+          "table_name_any": [
+            "신용카드"
+          ]
+        },
+        {
+          "label": "전자지급결제대행",
+          "value": "전자지급결제대행",
+          "confirmed_terms": [
+            "전자지급결제대행"
+          ],
+          "table_name_any": [
+            "전자지급결제대행"
+          ]
+        }
       ]
     },
     {
       "id": "base_money_basis",
       "priority": 43,
-      "trigger_terms": ["본원통화 구성"],
-      "skip_if_terms": ["말잔", "평잔", "계절조정", "원계열"],
+      "trigger_terms": [
+        "본원통화 구성"
+      ],
+      "skip_if_terms": [
+        "말잔",
+        "평잔",
+        "계절조정",
+        "원계열"
+      ],
       "question": "말잔·평잔과 계절조정 여부 중 어떤 본원통화 구성을 원하시나요?",
       "ui": "single_select_buttons",
       "options": [
-        {"label": "말잔 원계열", "value": "말잔 원계열", "confirmed_terms": ["말잔", "원계열"], "table_name_any": ["말잔 원계열"]},
-        {"label": "평잔 원계열", "value": "평잔 원계열", "confirmed_terms": ["평잔", "원계열"], "table_name_any": ["평잔 원계열"]},
-        {"label": "말잔 계절조정", "value": "말잔 계절조정", "confirmed_terms": ["말잔", "계절조정"], "table_name_any": ["말잔 계절조정"]},
-        {"label": "평잔 계절조정", "value": "평잔 계절조정", "confirmed_terms": ["평잔", "계절조정"], "table_name_any": ["평잔 계절조정"]}
+        {
+          "label": "말잔 원계열",
+          "value": "말잔 원계열",
+          "confirmed_terms": [
+            "말잔",
+            "원계열"
+          ],
+          "table_name_any": [
+            "말잔 원계열"
+          ]
+        },
+        {
+          "label": "평잔 원계열",
+          "value": "평잔 원계열",
+          "confirmed_terms": [
+            "평잔",
+            "원계열"
+          ],
+          "table_name_any": [
+            "평잔 원계열"
+          ]
+        },
+        {
+          "label": "말잔 계절조정",
+          "value": "말잔 계절조정",
+          "confirmed_terms": [
+            "말잔",
+            "계절조정"
+          ],
+          "table_name_any": [
+            "말잔 계절조정"
+          ]
+        },
+        {
+          "label": "평잔 계절조정",
+          "value": "평잔 계절조정",
+          "confirmed_terms": [
+            "평잔",
+            "계절조정"
+          ],
+          "table_name_any": [
+            "평잔 계절조정"
+          ]
+        }
       ]
     }
   ],

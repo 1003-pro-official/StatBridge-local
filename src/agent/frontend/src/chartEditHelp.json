@@ -1,0 +1,174 @@
+[
+  {
+    "title": "제목·부제·글자",
+    "operations": [
+      "set_title",
+      "set_subtitle",
+      "set_presentation"
+    ],
+    "examples": [
+      "제목을 주택담보대출 신규취급액으로 바꾸고 가운데로 옮겨줘.",
+      "부제를 삭제하고 글꼴은 Arial, 제목 크기는 24, 글자색은 검정으로 해줘.",
+      "배경을 흰색, 그래프 높이를 600, 왼쪽 여백을 80으로 해줘.",
+      "막대를 가로로 그리고 막대 간격을 0.1로, 쌓기 방식으로 바꿔줘.",
+      "색상 척도를 파랑으로 바꾸고 색상 방향을 뒤집어줘.",
+      "숫자를 소수점 두 자리까지 표시하고 패널의 세로축 범위를 공유해줘."
+    ]
+  },
+  {
+    "title": "축·격자·눈금",
+    "operations": [
+      "set_axis_labels",
+      "set_axis_style"
+    ],
+    "examples": [
+      "가로축 제목을 기간, 세로축 제목을 신규취급액으로 바꿔줘.",
+      "격자와 영점선을 숨기고 가로축 눈금 글자를 45도로 기울여줘.",
+      "세로축 범위는 1000부터 2500까지, 눈금 간격은 500으로 해줘.",
+      "세로축을 로그 눈금으로, 방향을 거꾸로 하고 눈금 값을 소수점 두 자리로 해줘."
+    ]
+  },
+  {
+    "title": "범례",
+    "operations": [
+      "set_legend"
+    ],
+    "examples": [
+      "범례를 오른쪽 위로 옮겨줘.",
+      "범례를 숨기고 범례 글자 크기를 14로 해줘."
+    ]
+  },
+  {
+    "title": "그래프 종류·배치",
+    "operations": [
+      "set_chart_type",
+      "set_layout",
+      "set_series_chart_type"
+    ],
+    "examples": [
+      "전체 그래프를 막대 그래프로 바꿔줘.",
+      "계열을 각각 나눠 좌우로 배치해줘.",
+      "계열 이름을 지정해 해당 계열만 영역 그래프로 바꿔줘."
+    ]
+  },
+  {
+    "title": "계열·선·점·막대",
+    "operations": [
+      "set_line_width",
+      "set_series_color",
+      "set_series_dash",
+      "set_series_style",
+      "set_segment_style",
+      "set_point_style"
+    ],
+    "examples": [
+      "선 색을 빨간색으로, 두께를 4로, 점선으로 바꿔줘.",
+      "점 모양을 다이아몬드, 크기를 8로 하고 값을 표시해줘.",
+      "2024년 1분기부터 2024년 4분기까지만 노란색으로 바꿔줘.",
+      "2024년 2분기 막대만 빨간색으로 바꿔줘.",
+      "점과 값 표시를 숨기고 선을 부드럽게, 투명도를 0.5로 바꿔줘."
+    ]
+  },
+  {
+    "title": "계열 이름·순서·표시",
+    "operations": [
+      "rename_series",
+      "reorder_series",
+      "hide_series",
+      "show_series",
+      "highlight_series",
+      "clear_highlight"
+    ],
+    "examples": [
+      "계열의 표시 이름을 신규취급액으로 바꿔줘.",
+      "계열 이름들을 나열한 순서로 표시해줘.",
+      "계열 이름을 지정해 숨기거나 다시 표시하고, 해당 계열을 강조하거나 강조를 해제해줘."
+    ]
+  },
+  {
+    "title": "보조축",
+    "operations": [
+      "set_secondary_axis",
+      "remove_secondary_axis"
+    ],
+    "examples": [
+      "계열 이름을 지정해 오른쪽 보조축에 표시해줘.",
+      "해당 계열의 보조축을 해제해줘."
+    ]
+  },
+  {
+    "title": "기간·계산·상위 항목",
+    "operations": [
+      "filter_period",
+      "set_top_n",
+      "set_transform"
+    ],
+    "examples": [
+      "조회된 데이터에서 2024년 1분기부터 2025년 4분기까지만 보여줘.",
+      "상위 3개 계열만 보여줘.",
+      "전기 대비 증가율로 보여줘.",
+      "전년 동기 대비 증가율, 평균선 또는 누적으로 보여줘. 원자료로 다시 보여줘."
+    ]
+  },
+  {
+    "title": "기간 강조",
+    "operations": [
+      "highlight_period",
+      "update_highlight",
+      "remove_highlight"
+    ],
+    "examples": [
+      "2024년 1분기부터 2024년 4분기까지 주황색으로 강조해줘.",
+      "기존 강조 영역의 색이나 기간을 바꾸고 투명도를 0.2로 해줘.",
+      "해당 강조 영역을 삭제해줘."
+    ]
+  },
+  {
+    "title": "주석·메모",
+    "operations": [
+      "add_annotation",
+      "remove_annotation",
+      "add_note",
+      "update_note",
+      "remove_note"
+    ],
+    "examples": [
+      "최초 시점과 마지막 시점 텍스트를 삭제해줘.",
+      "2024년 2분기에 증가 시작이라는 주석을 추가해줘.",
+      "그래프 위쪽 가운데에 출처: 한국은행이라는 메모를 넣어줘.",
+      "기존 메모의 위치·내용·색·글자 크기를 바꾸거나 삭제해줘."
+    ]
+  },
+  {
+    "title": "기준선",
+    "operations": [
+      "add_reference_line",
+      "add_guide",
+      "update_guide",
+      "remove_guide"
+    ],
+    "examples": [
+      "세로축 값 2000에 수평 기준선을 넣어줘.",
+      "2024년 1분기에 파란 수직 기준선을 넣고 시작이라고 적어줘.",
+      "기존 기준선의 수치·위치·색·점선·두께를 바꾸거나 삭제해줘."
+    ]
+  },
+  {
+    "title": "도형·부분 스타일·초기화",
+    "operations": [
+      "add_shape",
+      "update_shape",
+      "remove_shape",
+      "remove_range_style",
+      "clear_range_styles",
+      "reset_styles"
+    ],
+    "examples": [
+      "그래프 왼쪽 20%, 위쪽 20%부터 오른쪽 40%, 위쪽 40%까지 사각형을 추가해줘.",
+      "기존 도형의 위치·색·투명도·테두리를 바꾸거나 삭제해줘.",
+      "해당 구간의 부분 스타일만 삭제해줘.",
+      "모든 부분 스타일을 해제해줘.",
+      "원자료와 표시 기간은 유지하고 표현 스타일을 초기화해줘."
+    ]
+  }
+]

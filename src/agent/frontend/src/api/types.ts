@@ -146,9 +146,11 @@ export type OutputRenderRequest = {
   natural_language?: string;
 };
 
-export type SketchMark = {
+export type ShapeAnchor = {label:string;start:string;end:string;start_offset:number;end_offset:number;y0:number;y1:number};
+export type SketchRegion = {x0:number;x1:number;y0:number;y1:number;data_anchor?:ShapeAnchor};
+export type SketchMark = {region?:SketchRegion;
   id: string;
-  tool: "pen" | "arrow" | "rectangle" | "text";
+  tool: "pen" | "arrow" | "rectangle" | "ellipse" | "text";
   points: Array<{ x: number; y: number }>;
   text: string;
   target: string;
@@ -162,7 +164,7 @@ export type VisualEditContext = {
   graph_image?: string;
   marked_image?: string;
 };
-export type ChartEditInput = { instruction: string; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
+export type ChartEditInput = { instruction: string; conversation?: Array<{role:"user"|"assistant";text:string}>; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
 export type OutputEditRequest = ChartEditInput & { edit_session_id: string };
 
 export type QueryRequest = {
