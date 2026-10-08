@@ -34,19 +34,29 @@ def selections(query,tables):
     # Explicitly named catalog objects establish a boundary. Short product words
     # inside semantic questions remain owned by the measured-concept planner.
     if not hits or not (re.search(r'[「《“"].*[」》”"]',query) or
-                        any('(' in t['table_name'] for _,_,t in hits)):
+                        any('(' in t['table_name'] for _,_,t in hits) or
+                        re.search(r'\bDT_[0-9A-Za-z]+\b',query)):
         return []
     groups={}
     for a,b,t in hits:groups.setdefault((a,b),[]).append(t)
     chosen=[]
+    assigned_ids=set()
     spans=sorted(groups)
     for i,(a,b) in enumerate(spans):
         candidates=groups[(a,b)]
-        following=query[b:spans[i+1][0] if i+1<len(spans) else len(query)]
-        ids=re.findall(r'\bDT_[0-9A-Za-z]+\b',following)
-        if ids:candidates=[t for t in candidates if t['table_id'] in ids]
+        # Bind only an immediately adjacent ID. A later clause's prefix ID
+        # cannot narrow the current title; duplicate titles retain their own IDs.
+        before=re.search(r'\[(DT_[0-9A-Za-z]+)\]\s*$',query[:a])
+        after=re.match(r'\s*[」》”"]?\s*\[(DT_[0-9A-Za-z]+)\]',query[b:])
+        ids={m.group(1) for m in (before,after) if m}
+        if len(ids)>1:return []
+        if ids:
+            candidates=[t for t in candidates if t['table_id'] in ids]
+            assigned_ids.update(ids)
         if len(candidates)!=1:return []
         chosen.append(candidates[0])
+    if assigned_ids != set(re.findall(r'\bDT_[0-9A-Za-z]+\b',query)):
+        return []
     chars=list(query)
     for a,b,_ in hits:chars[a:b]=' '*(b-a)
     residual=''.join(chars)

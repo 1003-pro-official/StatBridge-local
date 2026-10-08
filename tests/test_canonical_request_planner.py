@@ -37,3 +37,23 @@ def test_exact_spaces_take_priority_and_external_dates_survive():
     q='「산업별 통계(2010~)」 자료를 2020년부터 2025년까지'
     assert selections(q,tables)[0]['table_id']=='DT_B'
     assert explicit_period(instruction_text(q,tables))['start']=='2020-01-01'
+
+
+def test_four_duplicate_titles_accept_prefix_ids_in_reversed_order():
+    tables=[table('DT_A','같은 표'),table('DT_B','같은 표'),table('DT_C','다른 표'),table('DT_D','다른 표')]
+    q='[DT_D] 다른 표; [DT_C] 다른 표; [DT_B] 같은 표; [DT_A] 같은 표 각각 찾아줘'
+    assert [x['table_id'] for x in selections(q,tables)]==['DT_D','DT_C','DT_B','DT_A']
+
+
+def test_mixed_id_positions_do_not_leak_to_adjacent_title():
+    tables=[table('DT_A','첫 통계'),table('DT_B','둘째 통계'),table('DT_C','셋째 통계'),table('DT_D','넷째 통계')]
+    q='「첫 통계」 [DT_A]; [DT_B] 둘째 통계; 「셋째 통계」; [DT_D] 넷째 통계'
+    assert [x['table_id'] for x in selections(q,tables)]==['DT_A','DT_B','DT_C','DT_D']
+
+
+def test_conflicting_or_unknown_ids_are_not_grounded():
+    tables=[table('DT_A','첫 통계'),table('DT_B','둘째 통계')]
+    assert selections('[DT_B] 첫 통계',tables)==[]
+    assert selections('[DT_Z] 첫 통계',tables)==[]
+    assert selections('[DT_A] 첫 통계 [DT_B]',tables)==[]
+    assert selections('「첫 통계」 [DT_A] 와 알 수 없는 [DT_Z]',tables)==[]
