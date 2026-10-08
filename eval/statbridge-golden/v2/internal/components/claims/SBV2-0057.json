@@ -1,0 +1,92 @@
+{
+  "fixture_sha256": "194b87ca948fdaccaf5062d468d39c84f9927cbb5b2c990b6560b97b5023bcac",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요4:2",
+        "D",
+        "연%"
+      ],
+      "unit": "연%",
+      "frequency": "D",
+      "missing_periods": [],
+      "first": {
+        "period": "20240102",
+        "value": 3.24
+      },
+      "last": {
+        "period": "20240117",
+        "value": 3.28
+      },
+      "minimum": {
+        "period": "20240115",
+        "value": 3.19
+      },
+      "maximum": {
+        "period": "20240108",
+        "value": 3.3
+      },
+      "absolute_change": 0.03999999999999959,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요4:4",
+        "D",
+        "1980년 1월 4일=100"
+      ],
+      "unit": "1980년 1월 4일=100",
+      "frequency": "D",
+      "missing_periods": [],
+      "first": {
+        "period": "20240102",
+        "value": 2669.8
+      },
+      "last": {
+        "period": "20240117",
+        "value": 2435.9
+      },
+      "minimum": {
+        "period": "20240117",
+        "value": 2435.9
+      },
+      "maximum": {
+        "period": "20240102",
+        "value": 2669.8
+      },
+      "absolute_change": -233.9000000000001,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요4:5",
+        "D",
+        "원/달러"
+      ],
+      "unit": "원/달러",
+      "frequency": "D",
+      "missing_periods": [],
+      "first": {
+        "period": "20240102",
+        "value": 1300.4
+      },
+      "last": {
+        "period": "20240117",
+        "value": 1344.2
+      },
+      "minimum": {
+        "period": "20240102",
+        "value": 1300.4
+      },
+      "maximum": {
+        "period": "20240117",
+        "value": 1344.2
+      },
+      "absolute_change": 43.799999999999955,
+      "change_formula": "last - first"
+    }
+  ]
+}

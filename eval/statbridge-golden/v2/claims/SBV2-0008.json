@@ -1,0 +1,41 @@
+{
+  "fixture_sha256": "656e0014acc01b34c2cb02a15bdf0529d5cabc54becf05fec9348220cb8f7fc5",
+  "facts": [
+    {
+      "identity": [
+        "kosis",
+        "DT_101Y003",
+        "13103134507999",
+        [
+          [
+            "objL1",
+            "13102134507ACC_ITEM.BBHS00"
+          ]
+        ],
+        "M",
+        "십억원"
+      ],
+      "unit": "십억원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "200401",
+        "value": 900001.7938
+      },
+      "last": {
+        "period": "200409",
+        "value": 948552.4665
+      },
+      "minimum": {
+        "period": "200401",
+        "value": 900001.7938
+      },
+      "maximum": {
+        "period": "200409",
+        "value": 948552.4665
+      },
+      "absolute_change": 48550.672699999996,
+      "change_formula": "last - first"
+    }
+  ]
+}

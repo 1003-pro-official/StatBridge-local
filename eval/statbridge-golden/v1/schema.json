@@ -1,0 +1,8 @@
+{
+  "schema_version": "gs1",
+  "gold_layers": ["e2e_kpi", "slots", "concepts", "clarification", "plan", "discovery", "numeric", "graph", "interpretation"],
+  "status": ["labeled", "not_labeled", "not_applicable"],
+  "expected_status": ["select", "clarify", "no_match", "catalog_only"],
+  "claim_types": ["direction", "level", "extreme", "comparison", "change", "turning_point", "subperiod", "pace", "volatility", "context"],
+  "id_prefix": "GS2-"
+}

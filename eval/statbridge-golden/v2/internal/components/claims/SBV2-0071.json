@@ -1,0 +1,34 @@
+{
+  "fixture_sha256": "1ac250b78731496d85f08e730948f81bedc34f219c0f74379d2fa61f3c865f9c",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2025-09-11:개요8:2",
+        "M",
+        "조원"
+      ],
+      "unit": "조원",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "201501",
+        "value": 15
+      },
+      "last": {
+        "period": "201512",
+        "value": 20
+      },
+      "minimum": {
+        "period": "201501",
+        "value": 15
+      },
+      "maximum": {
+        "period": "201504",
+        "value": 20
+      },
+      "absolute_change": 5,
+      "change_formula": "last - first"
+    }
+  ]
+}

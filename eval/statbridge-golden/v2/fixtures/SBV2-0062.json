@@ -1,0 +1,33 @@
+{
+  "series": [
+    {
+      "provider": "kosis",
+      "table_id": "DT_151Y004",
+      "item_id": "13103134772999",
+      "classifications": {
+        "objL1": "13102134772ACC_ITEM.11000A0"
+      },
+      "label": "주택관련대출",
+      "frequency": "Q",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "2024Q1",
+          "value": 1078697.307604
+        },
+        {
+          "period": "2024Q2",
+          "value": 1094703.474802
+        },
+        {
+          "period": "2024Q3",
+          "value": 1113972.931149
+        },
+        {
+          "period": "2024Q4",
+          "value": 1125870.898206
+        }
+      ]
+    }
+  ]
+}

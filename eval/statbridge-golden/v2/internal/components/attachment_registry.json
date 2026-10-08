@@ -1,0 +1,205 @@
+[
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요1:4",
+    "label": "미 국채 (10년) 금리",
+    "unit": "연%",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요1:5",
+    "label": "일본 국채 (10년) 금리",
+    "unit": "연%",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요3:2",
+    "label": "소비자물가",
+    "unit": "전년동기대비, %",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요3:4",
+    "label": "근원물가",
+    "unit": "전년동기대비, %",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요4:2",
+    "label": "국고채(3년) 금리",
+    "unit": "연%",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요4:4",
+    "label": "코스피",
+    "unit": "1980년 1월 4일=100",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요4:5",
+    "label": "원/달러 환율",
+    "unit": "원/달러",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요5:2",
+    "label": "서울",
+    "unit": "전월대비, %",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요5:3",
+    "label": "수도권",
+    "unit": "전월대비, %",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요5:4",
+    "label": "비수도권",
+    "unit": "전월대비, %",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요8:2",
+    "label": "한도",
+    "unit": "조원",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-09-10:개요8:3",
+    "label": "금리",
+    "unit": "연%",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요1:2",
+    "label": "전세계 MSCI 지수",
+    "unit": "2022.1.1=100",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요1:3",
+    "label": "DXY 지수",
+    "unit": "1973.3월=100",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요3:2",
+    "label": "소비자물가",
+    "unit": "전년동기대비, %",
+    "frequency": "Q"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요3:3",
+    "label": "소비자물가 전망",
+    "unit": "전년동기대비, %",
+    "frequency": "Q"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요4:2",
+    "label": "국고채(3년) 금리",
+    "unit": "연%",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요4:3",
+    "label": "회사채(AA-, 3년) 금리",
+    "unit": "연%",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요5:2",
+    "label": "서울",
+    "unit": "전주대비, %",
+    "frequency": "W"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요5:4",
+    "label": "비수도권",
+    "unit": "전주대비, %",
+    "frequency": "W"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요6:2",
+    "label": "예금은행 주택담보대출",
+    "unit": "전월대비, 조원",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요6:3",
+    "label": "예금은행 기타대출",
+    "unit": "전월대비, 조원",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요6:4",
+    "label": "비은행예금취급기관 가계대출",
+    "unit": "전월대비, 조원",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요6:5",
+    "label": "전체",
+    "unit": "전월대비, 조원",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요7:2",
+    "label": "기준금리",
+    "unit": "연%",
+    "frequency": "D"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2026-03-12:개요8:2",
+    "label": "금융중개지원대출 총한도",
+    "unit": "조원",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2025-03-13:개요8:2",
+    "label": "금융중개지원대출 \n총한도",
+    "unit": "조 원",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2025-03-13:개요8:3",
+    "label": "금융중개지원대출 \n금리",
+    "unit": "연%",
+    "frequency": "M"
+  },
+  {
+    "provider": "attachment",
+    "series_id": "attachment:2025-09-11:개요8:2",
+    "label": "금융중개지원대출 \n총한도",
+    "unit": "조원",
+    "frequency": "M"
+  }
+]

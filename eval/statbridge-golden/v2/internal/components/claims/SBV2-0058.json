@@ -1,0 +1,92 @@
+{
+  "fixture_sha256": "d0dec8f037ec5309b2789866a903f7d0bbcb044eba6a0ded80d637aa626e2138",
+  "facts": [
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요5:2",
+        "M",
+        "전월대비, %"
+      ],
+      "unit": "전월대비, %",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202201",
+        "value": 0.04
+      },
+      "last": {
+        "period": "202212",
+        "value": -1.964
+      },
+      "minimum": {
+        "period": "202212",
+        "value": -1.964
+      },
+      "maximum": {
+        "period": "202205",
+        "value": 0.042
+      },
+      "absolute_change": -2.004,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요5:3",
+        "M",
+        "전월대비, %"
+      ],
+      "unit": "전월대비, %",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202201",
+        "value": 0.055
+      },
+      "last": {
+        "period": "202212",
+        "value": -2.597
+      },
+      "minimum": {
+        "period": "202212",
+        "value": -2.597
+      },
+      "maximum": {
+        "period": "202201",
+        "value": 0.055
+      },
+      "absolute_change": -2.652,
+      "change_formula": "last - first"
+    },
+    {
+      "identity": [
+        "attachment",
+        "attachment:2026-09-10:개요5:4",
+        "M",
+        "전월대비, %"
+      ],
+      "unit": "전월대비, %",
+      "frequency": "M",
+      "missing_periods": [],
+      "first": {
+        "period": "202201",
+        "value": 0.136
+      },
+      "last": {
+        "period": "202212",
+        "value": -1.423
+      },
+      "minimum": {
+        "period": "202212",
+        "value": -1.423
+      },
+      "maximum": {
+        "period": "202201",
+        "value": 0.136
+      },
+      "absolute_change": -1.5590000000000002,
+      "change_formula": "last - first"
+    }
+  ]
+}

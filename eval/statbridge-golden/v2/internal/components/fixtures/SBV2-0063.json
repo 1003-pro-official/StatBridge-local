@@ -1,0 +1,118 @@
+{
+  "series": [
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-03-12:개요5:2",
+      "label": "서울",
+      "unit": "전주대비, %",
+      "frequency": "W",
+      "points": [
+        {
+          "period": "20200106",
+          "value": 0.069
+        },
+        {
+          "period": "20200113",
+          "value": 0.045
+        },
+        {
+          "period": "20200120",
+          "value": 0.032
+        },
+        {
+          "period": "20200127",
+          "value": 0.022
+        },
+        {
+          "period": "20200203",
+          "value": 0.015
+        },
+        {
+          "period": "20200210",
+          "value": 0.011
+        },
+        {
+          "period": "20200217",
+          "value": 0.005
+        },
+        {
+          "period": "20200224",
+          "value": 0.013
+        },
+        {
+          "period": "20200302",
+          "value": 0.015
+        },
+        {
+          "period": "20200309",
+          "value": 0.022
+        },
+        {
+          "period": "20200316",
+          "value": 0.005
+        },
+        {
+          "period": "20200323",
+          "value": -0.003
+        }
+      ]
+    },
+    {
+      "provider": "attachment",
+      "series_id": "attachment:2026-03-12:개요5:4",
+      "label": "비수도권",
+      "unit": "전주대비, %",
+      "frequency": "W",
+      "points": [
+        {
+          "period": "20200106",
+          "value": 0.044
+        },
+        {
+          "period": "20200113",
+          "value": 0.054
+        },
+        {
+          "period": "20200120",
+          "value": 0.065
+        },
+        {
+          "period": "20200127",
+          "value": 0.062
+        },
+        {
+          "period": "20200203",
+          "value": 0.037
+        },
+        {
+          "period": "20200210",
+          "value": 0.049
+        },
+        {
+          "period": "20200217",
+          "value": 0.092
+        },
+        {
+          "period": "20200224",
+          "value": 0.101
+        },
+        {
+          "period": "20200302",
+          "value": 0.056
+        },
+        {
+          "period": "20200309",
+          "value": 0.045
+        },
+        {
+          "period": "20200316",
+          "value": 0.045
+        },
+        {
+          "period": "20200323",
+          "value": 0.02
+        }
+      ]
+    }
+  ]
+}
