@@ -31,6 +31,53 @@ def rgba(color: str, opacity: float) -> str:
     return f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},{opacity})"
 
 
+def arrange_top_captions(fig: Any, period_count: int) -> None:
+    """Deduplicate automatic captions and place nearby captions in separate lanes.
+
+    Explicit notes/arrows retain their requested coordinates and pixel offsets.
+    """
+    kept, seen, lanes = [], set(), []
+    for annotation in fig.layout.annotations or []:
+        automatic = (annotation.yref == "paper" or str(annotation.yref or "").endswith(" domain")) and annotation.y == 1 and not annotation.showarrow and not annotation.name
+        if not automatic:
+            kept.append(annotation)
+            continue
+        top = 1
+        if str(annotation.yref or "").endswith(" domain"):
+            axis_name = str(annotation.yref).split()[0].replace("y", "yaxis", 1)
+            axis = getattr(fig.layout, axis_name, None)
+            domain = getattr(axis, "domain", None)
+            top = domain[1] if domain else 1
+        coordinate_frame = (annotation.xref or "x", top)
+        key = (coordinate_frame, annotation.x, annotation.text)
+        if key in seen:
+            continue
+        seen.add(key)
+        if isinstance(annotation.x, (int, float)) and (annotation.xref or "x").startswith("x"):
+            # Approximate text extents in category units; lanes prevent start/min
+            # and end/max captions at neighboring observations from overlapping.
+            half_width = max(1, len(str(annotation.text or ""))) * .012 * max(1, period_count - 1)
+            lane = 0
+            while lane < len(lanes) and any(ref == coordinate_frame and abs(x-annotation.x) < width+half_width for ref,x,width in lanes[lane]):
+                lane += 1
+            if lane == len(lanes): lanes.append([])
+            lanes[lane].append((coordinate_frame, annotation.x, half_width))
+            annotation.yshift = (annotation.yshift or 0) + lane * 22
+            annotation.yanchor = "bottom"
+        kept.append(annotation)
+    fig.layout.annotations = kept
+    if len(lanes) > 1:
+        fig.update_layout(margin_t=max(fig.layout.margin.t or 0, 80+(len(lanes)-1)*22))
+    # A top legend occupies the same margin as caption lanes. Reserve a
+    # separate row above the highest caption instead of moving captions into it.
+    legend = fig.layout.legend
+    if lanes and legend.y is not None and legend.y > 1:
+        fig.update_layout(margin_t=max(fig.layout.margin.t or 0, 120+(len(lanes)-1)*22))
+        plot_height=max(100,(fig.layout.height or 580)-(fig.layout.margin.t or 0)-(fig.layout.margin.b or 0))
+        legend.y=max(legend.y,1+(len(lanes)*22+18)/plot_height)
+        legend.yanchor="bottom"
+
+
 def cartesian_traces(item: dict, spec: ChartSpec, kind: str) -> list[Any]:
     label, points = item["label"], item["points"]
     x, y = [p["date"] for p in points], [p["value"] for p in points]
@@ -77,7 +124,7 @@ def cartesian_traces(item: dict, spec: ChartSpec, kind: str) -> list[Any]:
 def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> None:
     p = spec.presentation
     fig.update_layout(font=dict(family=p.font_family, size=p.font_size, color=p.font_color),
-        title=dict(font=dict(size=p.title_size), x=p.title_x), legend=dict(font=dict(size=p.legend_size)),
+        title=dict(font=dict(size=p.title_size), x=p.title_x, xref="container", xanchor="center" if 0 < p.title_x < 1 else ("left" if p.title_x == 0 else "right")), legend=dict(font=dict(size=p.legend_size)),
         paper_bgcolor=p.background, plot_bgcolor=p.background,
         margin=dict(l=p.margin_left, r=p.margin_right, t=p.margin_top, b=p.margin_bottom), bargap=p.bar_gap)
     if p.width:
@@ -101,6 +148,17 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
             settings["tickformat"] = f".{axis.decimals}f"
         if axis.tick_step is not None:
             settings["dtick"] = axis.tick_step
+            if period_axis:
+                dates=sorted({p["date"] for s in series for p in s["points"]})
+                step=max(1,int(axis.tick_step))
+                tick_dates=dates[::step]
+                frequency=next((s.get("frequency") for s in series if s.get("frequency")),"")
+                def tick_label(date):
+                    if len(date)==6 and date.isdigit():
+                        if frequency=="Q":return date[:4]+"년" if step%4==0 else date[:4]+"년 "+str(int(date[4:]))+"분기"
+                        if frequency=="M":return date[:4]+"년" if step%12==0 else date[:4]+"년 "+str(int(date[4:]))+"월"
+                    return date
+                settings.update(tickmode="array",tickvals=tick_dates,ticktext=[tick_label(d) for d in tick_dates])
         if axis.minimum is not None:
             bounds = [axis.minimum, axis.maximum]
             if axis.scale == "log":
@@ -127,7 +185,7 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
         else:
             x, y, xref, yref = note.x, note.y, "paper", "paper"
         fig.add_annotation(name=note.id, x=x, y=y, xref=xref, yref=yref, text=escape(note.text),
-            showarrow=note.arrow, ax=note.ax, ay=note.ay, arrowhead=2, arrowcolor=note.color,
+            showarrow=note.arrow, ax=note.ax, ay=note.ay, arrowhead=2, arrowcolor=note.color, arrowwidth=note.arrow_width, arrowsize=note.arrow_size, opacity=note.opacity,
             font=dict(size=note.font_size, color=note.color))
     for guide in spec.guides:
         if guide.label in spec.hidden_series:
@@ -144,6 +202,18 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
                 xref=f"{xref} domain" if horizontal else xref, yref=yref if horizontal else f"{yref} domain",
                 text=escape(guide.text), showarrow=False, font=dict(color=guide.color))
     for shape in spec.paper_shapes:
+        anchor=shape.data_anchor
+        if anchor:
+            item=by_label.get(anchor.label)
+            if not item: continue
+            periods=sorted({p["date"] for s in series for p in s["points"]})
+            if anchor.start not in periods or anchor.end not in periods: continue
+            xref,yref=refs(anchor.label)
+            fig.add_shape(name=shape.id,type=shape.type,xref=xref,yref=yref,
+                x0=periods.index(anchor.start)+anchor.start_offset,x1=periods.index(anchor.end)+anchor.end_offset,
+                y0=anchor.y0,y1=anchor.y1,fillcolor=shape.fill,opacity=shape.opacity,
+                line=dict(color=shape.color,width=shape.width,dash=shape.dash))
+            continue
         fig.add_shape(name=shape.id, type=shape.type, xref="paper", yref="paper", x0=shape.x0, x1=shape.x1,
             y0=shape.y0, y1=shape.y1, fillcolor=shape.fill, opacity=shape.opacity,
             line=dict(color=shape.color, width=shape.width, dash=shape.dash))

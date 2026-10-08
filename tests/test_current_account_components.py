@@ -33,5 +33,5 @@ def test_current_account_breakdown_uses_five_validated_dimension_values():
     ]
     output = OutputAgent().prepare({"execution": {"rows": rows}, "api_plans": plans}, {"chart_type": "line"})
     assert len(output["plotlyFigure"]["data"]) == 5
-    assert all(trace["x"][0] == "2025-01-01" and trace["x"][-1] == "2025-12-01"
+    assert all(trace["x"][0] == "202501" and trace["x"][-1] == "202512"
                for trace in output["plotlyFigure"]["data"])

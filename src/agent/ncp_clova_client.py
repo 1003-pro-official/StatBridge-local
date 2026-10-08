@@ -12,12 +12,13 @@ from typing import Any
 
 import requests
 from dotenv import load_dotenv
+from runtime_paths import layout
 
 
 def _load_env() -> None:
     here = Path(__file__).resolve()
     candidates = [
-        here.parents[2] / ".env",
+        layout()["env"],
         Path.cwd() / ".env",
     ]
     for path in candidates:

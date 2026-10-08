@@ -136,3 +136,34 @@ def test_output_endpoint_renders_both_tables_and_rejects_changed_title(monkeypat
     assert len(result['outputSpec']['plotlyFigure']['data'])==2
     assert result['chartMode']=='separate'  # Percentages and amounts are not added.
     api.EDIT_SESSIONS.pop(result['editSessionId'],None)
+
+
+def test_output_session_accepts_confirmed_period_without_accepting_changed_item(monkeypatch):
+    import copy
+    import bridge_api as api
+    from fastapi.testclient import TestClient
+    from output_agent import OutputAgent
+    query='「차주당 주택담보대출 신규취급액」 자료를 한 계열로 찾아줘'
+    result=copy.deepcopy(api.agent.resolve(query))
+    plan=result['api_plans'][0]
+    plan.update(start_period='202001',end_period='202602')
+    plan['exact_params'].update(startPrdDe='202001',endPrdDe='202602')
+    result['execution']={'status':'success','row_count':2,'rows':[
+        {'PRD_DE':p,'DT':str(i),'UNIT_NM':'십만원','_SERIES_LABEL':plan['table_name'],'_FREQUENCY':'Q'}
+        for i,p in enumerate(['202001','202602'],1)]}
+    session={'query':query,'result':result,'table_name':plan['table_name'],'frequency':'Q',
+             'period':{'start':'2020-01-01','end':'2026-06-30'}}
+    monkeypatch.setitem(api.OUTPUT_SESSIONS,'confirmed-period-test',session)
+    monkeypatch.setattr(api.agent,'output_agent',OutputAgent())
+    client=TestClient(api.app)
+    payload={'session_ids':['confirmed-period-test'],'chart_type':'line','natural_language':query}
+    original=plan['exact_params']['itmId']
+    plan['exact_params']['itmId']='invented'
+    assert client.post('/api/output',json=payload).status_code==422
+    assert 'confirmed-period-test' in api.OUTPUT_SESSIONS
+    plan['exact_params']['itmId']=original
+    response=client.post('/api/output',json=payload)
+    assert response.status_code==200,response.text
+    assert response.json()['period']==session['period']
+    assert response.json()['chart'][0]['points'][0]['date']=='202001'
+    api.EDIT_SESSIONS.pop(response.json()['editSessionId'],None)

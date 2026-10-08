@@ -52,7 +52,7 @@ def test_edit_sessions_evict_oldest_after_successful_render(monkeypatch):
     import bridge_api
 
     monkeypatch.setattr(bridge_api, "EDIT_SESSIONS", {str(i): {} for i in range(100)})
-    session = {"result": sample_result(), "period": {"start": "202401", "end": "202402"},
+    session = {"result": sample_result(), "period": {"start": "2024-01-01", "end": "2024-02-29"},
                "frequency": "M", "query": "DT_121Y002", "table_name": "금리"}
     monkeypatch.setattr(bridge_api, "OUTPUT_SESSIONS", {"input": session})
     monkeypatch.setattr(bridge_api.agent, "render_output", lambda result, request: {
@@ -72,6 +72,7 @@ def test_invalid_output_keeps_input_session_and_returns_detail(monkeypatch):
 
     monkeypatch.setattr(bridge_api, "OUTPUT_SESSIONS", {"input": {
         "result": sample_result(), "query": "DT_121Y002",
+        "period": {"start": "2024-01-01", "end": "2024-02-29"},
     }})
     monkeypatch.setattr(bridge_api, "EDIT_SESSIONS", {})
 

@@ -6,12 +6,15 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+PORTABLE = PACKAGE_ROOT.name == 'statbridge_mcp_server'
+PROJECT_ROOT = PACKAGE_ROOT.parent if PORTABLE else PACKAGE_ROOT.parents[1]
+ENV_FILE = PACKAGE_ROOT / '.env' if PORTABLE else PROJECT_ROOT / '.env'
 
 
 def _load_env() -> None:
     candidates = [
-        PROJECT_ROOT / '.env',
+        ENV_FILE,
         Path.cwd() / '.env',
     ]
     for p in candidates:
@@ -23,8 +26,9 @@ def _load_env() -> None:
 
 _load_env()
 
-_default_data = PROJECT_ROOT / 'data' / 'processed'
-_default_tables = PROJECT_ROOT / 'data' / 'tables'
+_data_root = PROJECT_ROOT / ('runtime_data' if PORTABLE else 'data')
+_default_data = _data_root / 'processed'
+_default_tables = _data_root / 'tables'
 
 
 def _resolve_data_dir() -> Path:

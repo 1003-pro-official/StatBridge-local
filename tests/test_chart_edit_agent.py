@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src/agent"))
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "StatBridge-official/src/agent"))
 from chart_edit_agent import ChartEditAgent, Hcx007EditModel
 from ncp_clova_client import NcpClovaClient, NcpSettings
 from output_agent import OutputAgent
@@ -147,3 +147,63 @@ def test_http_sketch_request_and_failed_session_rollback(monkeypatch):
     assert record["output"] == before
     response = client.post("/api/output/edit", json={"edit_session_id": "sketch-test", "instruction": "수정", "visual": {"graph_image": "https://example.com"}})
     assert response.status_code == 422
+
+
+def test_followup_edit_receives_conversation_and_current_state():
+    source=fixture_result()
+    agent=OutputAgent()
+    initial=agent.prepare(source, {"chart_type":"line"})
+    conversation=[{"role":"user","text":"범례를 아래로 옮겨줘"},{"role":"assistant","text":"적용했습니다"}]
+    initial["editConversation"]=conversation
+    model=FakeEditModel({"commands":[{"operation":"set_title","value":"후속 제목"}]})
+    result=ChartEditAgent(model, agent).edit(source, initial, "제목도 바꿔줘")
+    assert model.context["conversation"]==conversation
+    assert model.context["chartState"]==initial["chartState"]
+    assert result["chartState"]["title"]=="후속 제목"
+
+
+def test_batch_title_center_segment_highlight_and_transparent_grid():
+    from test_research_chart_edit import source
+    from output_schema import ChartSpec
+    agent=OutputAgent();data=source(1)
+    initial=agent._build(data,ChartSpec(chart_type="line",annotations=[{"period":"202401","text":"최초 시점"},{"period":"202405","text":"마지막 시점"}]))
+    model=FakeEditModel({"commands":[
+        {"operation":"set_title","value":"주택담보대출 신규취급액"},
+        {"operation":"set_presentation","params":{"title_x":.5,"grid_color":"transparent"}},
+        {"operation":"set_segment_style","label":"계열0","start":"202403","end":"202405","params":{"color":"#ffff00"},"mark_id":"arrow"},
+        {"operation":"update_highlight","value":"box","params":{"color":"#FFA500"}},
+        {"operation":"remove_annotation","value":"최초 시점"},
+        {"operation":"remove_annotation","value":"마지막 시점"}]})
+    marks=[{"id":id,"tool":tool,"target":"chart","points":[{"x":.2,"y":.3},{"x":.5,"y":.4}],"selection":{"label":"계열0","scope":"segment","start":start,"end":end}} for id,tool,start,end in [("arrow","arrow","202403","202405"),("box","ellipse","202402","202403")]]
+    result=ChartEditAgent(model,agent).edit(data,initial,"제목을 바꾸고 가운데로, 화살표 뒤 색은 노란색, 원 부분 강조, 격자 투명, 최초 시점과 마지막 시점 글자 삭제",{"marks":marks})
+    spec=result["chartState"]
+    assert spec["title"]=="주택담보대출 신규취급액"
+    assert spec["presentation"]["title_x"]==.5
+    assert not spec["axes"]["x"]["show_grid"] and not spec["axes"]["y"]["show_grid"]
+    assert spec["range_styles"][0]["style"]["color"]=="#ffff00"
+    assert spec["highlights"][0]["color"]=="#FFA500" and not spec["annotations"]
+    assert result["table"]==initial["table"]
+
+
+def test_omitted_drawing_instructions_recovered_before_batch_render():
+    from test_research_chart_edit import source
+    data=source(1); agent=OutputAgent(); initial=agent.prepare(data,{"chart_type":"line"})
+    class Model(FakeEditModel):
+        calls=0
+        def interpret(self,system,context):
+            self.calls+=1
+            if self.calls==1:
+                return {"commands":[{"operation":"set_title","value":"새 제목"}]}
+            assert context["instruction"]==""
+            assert len(context["visual"]["marks"])==2
+            return {"commands":[
+                {"operation":"highlight_period","mark_id":"box","params":{"color":"#FFA500"}},
+                {"operation":"set_segment_style","mark_id":"arrow","label":"계열0","params":{"color":"#ff0000"}}]}
+    model=Model({})
+    marks=[{"id":identifier,"tool":tool,"target":"chart","text":text,"points":[{"x":.2,"y":.3},{"x":.5,"y":.4}],"selection":{"label":"계열0","scope":"segment","start":"202402","end":"202403"}} for identifier,tool,text in [("box","rectangle","해당 범위를 강조해줘"),("arrow","arrow","선 색을 빨간색으로 바꿔줘")]]
+    result=ChartEditAgent(model,agent).edit(data,initial,"제목을 새 제목으로 바꿔줘",{"marks":marks})
+    assert model.calls==2
+    assert result["chartState"]["title"]=="새 제목"
+    assert result["chartState"]["highlights"][0]["color"]=="#FFA500"
+    assert result["chartState"]["range_styles"][0]["style"]["color"]=="#ff0000"
+    assert result["table"]==initial["table"]
