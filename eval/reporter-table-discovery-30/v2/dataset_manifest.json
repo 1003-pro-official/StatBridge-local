@@ -1,0 +1,29 @@
+{
+  "dataset": "reporter-table-discovery-30",
+  "version": "v2",
+  "schema_version": "reporter30-discovery-2",
+  "created_at": "2026-10-08",
+  "review": {
+    "human_approved": false,
+    "ai_assisted": true
+  },
+  "counts": {
+    "cases": 30,
+    "statuses": {
+      "need_clarification": 1,
+      "no_match": 8,
+      "resolved": 21
+    },
+    "series": 39,
+    "tables": 17
+  },
+  "dataset_sha256": "2d99ffb4c5c08cc74501d17e4ec72eb3802a1575202234a5171cfb1191f0aea2",
+  "catalog_path": "src/agent/stat_dictionary/stat_language_dictionary.json",
+  "catalog_sha256": "1811e26fdf91205c6917631c2c84427cc011b141af790fdb1d98656bd478c461",
+  "reference_date": "2026-10-08",
+  "benchmark_scope": "query_interpretation_table_item_classification_api_plan_and_resolution",
+  "numeric_gold": "not_created",
+  "source_boundary": "KOSIS Korea Bank of Korea only",
+  "sha256_normalization": "LF",
+  "period_policy": "Explicit periods are converted to inclusive KOSIS periods; missing periods retain the runtime plan but expect the API need_period follow-up."
+}
