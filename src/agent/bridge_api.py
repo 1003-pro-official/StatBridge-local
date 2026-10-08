@@ -31,6 +31,7 @@ from chart_edit_agent import ChartEditAgent, Hcx007EditModel
 from output_schema import VisualEditContext, ChartSpec
 from request_match_guard import structure_request, catalog_mentions, unsupported_quantity_terms
 from request_period import explicit_period
+from canonical_request_planner import instruction_text
 
 
 class _NoKeyClient:
@@ -505,7 +506,7 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     text_period = None
     if not payload.period_start and not payload.period_end:
         try:
-            text_period = explicit_period(q, latest=available_period["max"])
+            text_period = explicit_period(instruction_text(q, agent.resolver.tables), latest=available_period["max"])
         except (ValueError, OverflowError) as exc:
             raise HTTPException(status_code=400, detail=f"날짜를 확인해 주세요: {exc}") from exc
     period_start = payload.period_start or (text_period or {}).get("start")
