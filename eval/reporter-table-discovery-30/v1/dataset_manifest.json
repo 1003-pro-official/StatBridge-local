@@ -1,0 +1,26 @@
+{
+  "dataset": "reporter-table-discovery-30",
+  "version": "v1",
+  "schema_version": "reporter30-draft-2",
+  "created_at": "2026-10-08",
+  "review": {
+    "human_approved": false,
+    "ai_assisted": true
+  },
+  "counts": {
+    "series": 57,
+    "tables": 26,
+    "cases": 30,
+    "categories": {
+      "same_table_multi_series": 10,
+      "single_series": 8,
+      "cross_table_multi_series": 12
+    }
+  },
+  "dataset_sha256": "6cc7805d5f6fc37bc6a4f181ffe703d0673f71a435968ddc2f9dc8ce2ad7641e",
+  "catalog_path": "src/agent/stat_dictionary/stat_language_dictionary.json",
+  "catalog_sha256": "1811e26fdf91205c6917631c2c84427cc011b141af790fdb1d98656bd478c461",
+  "numeric_gold": "not_created",
+  "benchmark_scope": "query_interpretation_table_and_series_selection",
+  "sha256_normalization": "LF"
+}

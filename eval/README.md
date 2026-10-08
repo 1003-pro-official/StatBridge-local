@@ -8,6 +8,7 @@
 | 표 탐색 | [`table-discovery/v2`](table-discovery/v2/README.md) | ClaBi에서 가져온 150건 구조 개선 초안, 사람 승인 0건 |
 | 표 탐색 | [`table-discovery/v3`](table-discovery/v3/README.md) | ClaBi에서 가져온 dev 30건, 사람 승인 0건 |
 | 표 탐색 | [`table-discovery/v4.1`](table-discovery/v4.1/README.md) | 공개 dev 50·test 70건과 정답 없는 holdout 질문 30건, 사람 승인 전 평가 준비본 |
+| 표 탐색 | [`reporter-table-discovery-30/v1`](reporter-table-discovery-30/v1/README.md) | 기자 자연어 질문 30건·정답 계열 57개·단계별 정답, 사람 검수 전 공개 개발용 초안 |
 | 전체 흐름 | [`end-to-end/v1`](end-to-end/v1/README.md) | 간행물 기반 150건·그래프 fixture 30건; 현재 측정값은 검색과 정답 계열을 지정한 로컬 그래프 데이터에 한정, 보류셋 개발 노출 |
 | 전체 흐름 | [`end-to-end/v2`](end-to-end/v2/README.md) | v1 회귀 150건과 미작성 신규 사례 큐 50건; 출시 평가 준비 전 |
 | 표 탐색+해석 | [`statbridge-golden/v1`](statbridge-golden/v1/README.md) | 자체 설계 계열(9계층·오답 함정·해석). 초기 시드 진행 중, 사람 승인 전 |
