@@ -1,0 +1,10 @@
+{
+  "cases": 36,
+  "groups": 12,
+  "variants": 3,
+  "tables": 48,
+  "dataset_sha256": "25739149f8be2e918aca693302fe154f5cc550fc370d7a5f598c64d50d64ac08",
+  "catalog_sha256": "1811e26fdf91205c6917631c2c84427cc011b141af790fdb1d98656bd478c461",
+  "v3_original_sha256": "b20fc7794bcdaef2c920b9f1875a40d77c2b4fd9b56539030c14da507a433b04",
+  "human_approved": false
+}
