@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+import copy
+import json
 import re
 import sys
 import time
@@ -30,7 +32,8 @@ from statbridge_mcp.statistics_service import StatisticsService
 from agent_runtime import StatBridgeAgent
 from mcp_gateway import McpToolGateway
 from chart_edit_agent import ChartEditAgent, Hcx007EditModel
-from output_schema import VisualEditContext, ChartSpec
+from output_schema import VisualEditContext, ChartSpec, ChartSticker, ChartEditCommand
+from advanced_chart_spec import ReportOptions, TEMPLATES
 from request_match_guard import structure_request, catalog_mentions, unsupported_quantity_terms
 from request_period import explicit_period
 from chart_edit_period import revise_period
@@ -46,17 +49,6 @@ class _NoKeyClient:
         raise RuntimeError("KOSIS_API_KEY가 설정되지 않았습니다.")
 
 app = FastAPI(title="StatBridge Agent API", version="0.6.0")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5173", "http://localhost:5173",
-        "http://127.0.0.1:5174", "http://localhost:5174",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # The agent is the only UI-facing orchestration layer. It calls the same service exposed as MCP tools.
 try:
     service = StatisticsService()
@@ -115,11 +107,140 @@ class OutputEditRequest(BaseModel):
     conversation: list[EditConversationMessage] = Field(default_factory=list)
     action: Literal["edit", "undo", "redo"] = "edit"
     revision: int | None = Field(default=None, ge=0)
+    stickers: list[ChartSticker] | None = Field(default=None, max_length=40)
+    report: ReportOptions | None = None
+    clear_report: bool = False
+    commands: list[ChartEditCommand] = Field(default_factory=list, max_length=12)
+    document: dict[str, Any] | None = None
+    append_session_ids: list[str] = Field(default_factory=list,max_length=8)
+    replace_session_ids: list[str] = Field(default_factory=list,max_length=8)
+    restore_initial: bool = False
+    undo_property: Literal['title','subtitle','legend_position','series_color'] | None = None
+    property_label: str | None = Field(default=None,max_length=300)
+
+
+@app.get('/api/chart/designs')
+def chart_designs():
+    from chart_designs import DESIGNS
+    return {'items':[{'id':key,**value} for key,value in DESIGNS.items()]}
+
+
+def workspace_data(session, ids, replace=False):
+    added=[]
+    for identifier in ids:
+        item=OUTPUT_SESSIONS.get(identifier)
+        if not item:raise ValueError('데이터 조회 세션이 만료되었습니다. 다시 조회해 주세요.')
+        plans=item['result'].get('api_plans') or [item['result'].get('api_plan')]
+        confirmed={str(p['table_id']):(_api_period(item['period']['start'],str(p['frequency'])),_api_period(item['period']['end'],str(p['frequency']),end=True)) for p in plans if p}
+        if agent.validate_resolution(item['query'],item['result'],confirmed_periods=confirmed).get('status')!='resolved':
+            raise ValueError('추가할 데이터의 요청·조회 일치 검증에 실패했습니다.')
+        added.append(item)
+    sessions=added if replace else [*session['sessions'],*added]
+    results=[s['result'] for s in sessions]
+    merged=copy.deepcopy(results[0]);plans=[p for r in results for p in (r.get('api_plans') or [r.get('api_plan')]) if p]
+    merged.update(api_plans=plans,request_validation={'valid':True,'table_ids':[p['table_id'] for p in plans]})
+    rows=[row for r in results for row in r.get('execution',{}).get('rows',[])]
+    merged['execution']={'status':'success','rows':rows,'row_count':len(rows),'sources':[s for r in results for s in r.get('execution',{}).get('sources',[])]}
+    spec=ChartSpec.model_validate(session['output']['chartState'])
+    old_series=agent.output_agent._series(session['result'].get('execution',{}).get('rows',[]))
+    labels={s['label'] for s in agent.output_agent._series(rows)}
+    if not replace:
+        old_labels={s['label'] for s in agent.output_agent._series(session['result'].get('execution',{}).get('rows',[]))}
+        if not (labels-old_labels):raise ValueError('같은 데이터 항목이 이미 포함되어 있습니다. 다른 통계나 분류를 선택해 주세요.')
+        if spec.series_order:spec.series_order=[*spec.series_order,*[s['label'] for s in agent.output_agent._series(rows) if s['label'] not in spec.series_order]]
+    if replace:
+        for field in ['series_colors','series_styles','series_dashes','display_names','series_chart_types']:
+            setattr(spec,field,{k:v for k,v in getattr(spec,field).items() if k in labels})
+        spec.hidden_series=[s for s in spec.hidden_series if s in labels];spec.series_order=[];spec.secondary_axis_series=[]
+        spec.range_styles=[];spec.guides=[];spec.notes=[n for n in spec.notes if not n.label];spec.annotations=[];spec.highlights=[]
+        if spec.report:spec.report=spec.report.model_copy(update={'intervals':[],'events':[],'right_axis':[],'forecast_start':None,'kind':'forecast'})
+    series=agent.output_agent._series(rows)
+    if replace and {s['frequency'] for s in old_series}!={s['frequency'] for s in series}:spec.x_axis_label=''
+    if replace or len({s['unit'] for s in series})>1:
+        spec.y_axis_label=''
+        spec.axes={name:axis.model_copy(update={'minimum':None,'maximum':None,'title':None,'tick_step':None}) if name in {'y','y2'} else axis for name,axis in spec.axes.items()}
+    if len({s['unit'] for s in series})>1 or len({s['frequency'] for s in series})>1:
+        spec.layout='grid'
+        if spec.report:spec.report=spec.report.model_copy(update={'kind':'panels'})
+    return merged,sessions,agent.output_agent._build(merged,spec,generate_explanation=False)
+
+
+@app.get("/api/stickers")
+def get_stickers() -> dict[str, Any]:
+    from chart_stickers import sticker_catalog
+    return {"items": sticker_catalog(), "maxItems": 40}
+
+
+@app.get('/api/report/templates')
+def report_templates():
+    return {'schemaVersion':'statbridge.report/1','templates':[{'id':key,**value} for key,value in TEMPLATES.items()],
+        'unsupported':['dotplot','yield_curve','network'],'confidencePolicy':'실제 경계·방법·출처를 제공해야 함'}
+
+
+class ReportExportRequest(BaseModel):
+    edit_session_id: str
+    format: Literal['json','png','svg','pdf']
+    revision: int | None = Field(default=None,ge=0)
+
+
+@app.post('/api/report/recommend')
+def recommend_current_report(payload:ReportExportRequest):
+    from advanced_chart_spec import recommend_report
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(payload.edit_session_id)
+        if not session:raise HTTPException(status_code=404,detail='그래프 편집 세션이 없습니다.')
+        if payload.revision is not None and payload.revision!=session['output'].get('editVersion',0):
+            raise HTTPException(status_code=409,detail='최신 그래프에서 추천을 요청해 주세요.')
+        series=copy.deepcopy(session['output']['visualization']['series'])
+        result=copy.deepcopy(session['result'])
+    plans=result.get('api_plans') or ([result['api_plan']] if result.get('api_plan') else [])
+    return recommend_report(series,plans)
+
+
+@app.post('/api/report/export')
+def export_report(payload: ReportExportRequest):
+    from fastapi.responses import Response
+    from report_export import document,render_file
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(payload.edit_session_id)
+        if session is None:raise HTTPException(status_code=404,detail='그래프 편집 세션이 없습니다.')
+        version=session['output'].get('editVersion',0)
+        if payload.revision is not None and payload.revision!=version:
+            raise HTTPException(status_code=409,detail='최신 그래프 버전으로 다시 출력해 주세요.')
+        result=copy.deepcopy(session['result'])
+        state=copy.deepcopy(session['output']['chartState'])
+    try:
+        spec=ChartSpec.model_validate(state)
+        if payload.format=='json':
+            content=json.dumps(document(result,spec),ensure_ascii=False,allow_nan=False,indent=2).encode('utf-8')
+            if len(content)>8_000_000:raise ValueError('복원 가능한 JSON 크기 제한 8MB를 초과했습니다. 표시 기간·계열 수를 줄여 주세요.')
+        else:
+            original=agent.output_agent._series(result.get('execution',{}).get('rows',[]))
+            series=agent.output_agent._apply_data_edits(original,spec)
+            content=render_file(series,spec,result,payload.format)
+    except (ValueError,TypeError) as error:
+        raise HTTPException(status_code=422,detail=str(error)) from error
+    mime={'json':'application/json','png':'image/png','svg':'image/svg+xml','pdf':'application/pdf'}[payload.format]
+    return Response(content,media_type=mime,headers={'Content-Disposition':f'attachment; filename="statbridge-report.{payload.format}"','X-Chart-Version':str(version)})
 
 
 OUTPUT_SESSIONS: dict[str, dict[str, Any]] = {}
 EDIT_SESSIONS: dict[str, dict[str, Any]] = {}
 MAX_EDIT_SESSIONS = 100
+import account_auth
+account_auth.install(app,ROOT,OUTPUT_SESSIONS,EDIT_SESSIONS)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5173", "http://localhost:5173",
+        "http://127.0.0.1:5174", "http://localhost:5174",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 EDIT_LOCK = RLock()
 
 
@@ -603,7 +724,7 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     if execution_status == "success" and not output:
         session_id = uuid4().hex
         OUTPUT_SESSIONS[session_id] = {
-            "created": time.time(), "result": result, "query": q,
+            "created": time.time(), "result": result, "query": q, "account_id":(account_auth.USER.get() or {}).get("id"),
             "table_name": table_name, "frequency": frequency_label,
             "period": {"start": selected_start, "end": selected_end},
             "available_period": available_period, "adjusted_period": adjusted_period,
@@ -761,7 +882,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     if len(EDIT_SESSIONS) >= MAX_EDIT_SESSIONS:
         EDIT_SESSIONS.pop(next(iter(EDIT_SESSIONS)))
     output.update(editVersion=0, canUndo=False, canRedo=False)
-    EDIT_SESSIONS[edit_session_id] = {"result": merged, "output": output, "sessions": sessions, "undo": [], "redo": []}
+    EDIT_SESSIONS[edit_session_id] = {"account_id":(account_auth.USER.get() or {}).get("id"), "result": merged, "output": output, "sessions": sessions, "undo": [], "redo": [],'initial':copy.deepcopy({'result':merged,'sessions':sessions,'chartState':output['chartState']})}
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     plans = rendered.get("api_plans") or [rendered.get("api_plan")]
@@ -823,20 +944,97 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
     candidate_sessions=session["sessions"]
     period_update=None
     try:
-        if payload.action == "edit":
+        data_change=bool(payload.append_session_ids or payload.replace_session_ids)
+        if sum([data_change,payload.restore_initial,bool(payload.undo_property)])>1:raise ValueError('데이터 변경·복원·개별 취소를 따로 실행해 주세요.')
+        if (data_change or payload.restore_initial or payload.undo_property) and (payload.action!='edit' or payload.instruction or payload.commands or payload.report or payload.clear_report or payload.document or payload.visual or payload.stickers is not None):
+            raise ValueError('데이터 변경·원본 복원은 다른 수정과 분리해 실행하세요.')
+        if payload.append_session_ids and payload.replace_session_ids:raise ValueError('추가와 교체를 동시에 요청할 수 없습니다.')
+        direct=list(payload.commands)
+        if payload.report is not None:
+            direct.append(ChartEditCommand(operation='set_report',kind='STYLE_EDIT',params={'patch':payload.report.model_dump()}))
+        if payload.clear_report:
+            if payload.report is not None:raise ValueError('보고서 적용과 해제를 함께 요청할 수 없습니다.')
+            direct.append(ChartEditCommand(operation='set_report',kind='STYLE_EDIT',params={'clear':True}))
+        if direct and (payload.action!='edit' or payload.instruction.strip() or payload.visual is not None):
+            raise ValueError('직접 설정 명령은 텍스트·그림 지시 또는 되돌리기와 분리해 적용하세요.')
+        if payload.stickers is not None and payload.action != "edit":
+            raise ValueError("이모티콘 배치는 편집 요청에서만 적용할 수 있습니다.")
+        if payload.undo_property:
+            state=copy.deepcopy(previous['chartState']);field='series_colors' if payload.undo_property=='series_color' else payload.undo_property
+            if field=='series_colors':
+                labels={s['label'] for s in agent.output_agent._series(candidate_result.get('execution',{}).get('rows',[]))}
+                if payload.property_label not in labels:raise ValueError('되돌릴 데이터 항목을 선택해 주세요.')
+                def value(item):
+                    from chart_designs import palette
+                    from advanced_chart_spec import PALETTE
+                    chosen=ChartSpec.model_validate(item['chartState'])
+                    if payload.property_label in chosen.series_styles and chosen.series_styles[payload.property_label].color:
+                        return chosen.series_styles[payload.property_label].color
+                    if payload.property_label in chosen.series_colors:return chosen.series_colors[payload.property_label]
+                    raw=agent.output_agent._series(item.get('result',candidate_result).get('execution',{}).get('rows',[]))
+                    shown=agent.output_agent._apply_data_edits(raw,chosen)
+                    colors=palette(chosen) or (PALETTE if chosen.report else None)
+                    for i,s in enumerate(shown):
+                        if s['label']==payload.property_label:return colors[i%len(colors)] if colors else s['color']
+                    return None
+                current=value({'chartState':state,'result':candidate_result})
+            else:
+                current=state[field];value=lambda item:item['chartState'][field]
+            old=next((item for item in reversed(session.get('undo',[])) if value(item)!=current),None)
+            if not old:raise ValueError('선택한 속성의 이전 수정이 없습니다.')
+            if field=='series_colors':
+                if value(old) is None:state[field].pop(payload.property_label,None)
+                else:state[field][payload.property_label]=value(old)
+                if payload.property_label in state['series_styles']:state['series_styles'][payload.property_label]['color']=None
+            else:state[field]=value(old)
+            output=agent.output_agent._build(candidate_result,ChartSpec.model_validate(state),generate_explanation=False)
+            output['editCapabilities']=previous.get('editCapabilities',{})
+        elif data_change:
+            candidate_result,candidate_sessions,output=workspace_data(session,payload.replace_session_ids or payload.append_session_ids,bool(payload.replace_session_ids))
+            output['editCapabilities']=previous.get('editCapabilities',{})
+        elif payload.restore_initial:
+            original=session.get('initial') or {'chartState':previous['chartState'],'result':session['result'],'sessions':session['sessions']}
+            candidate_result=original['result'];candidate_sessions=original['sessions']
+            output=agent.output_agent._build(candidate_result,ChartSpec.model_validate(original['chartState']),generate_explanation=False)
+            output['editCapabilities']=previous.get('editCapabilities',{})
+        elif payload.document is not None:
+            from report_export import restore_document
+            if payload.action!='edit' or payload.instruction or payload.visual or payload.stickers is not None or direct:
+                raise ValueError('JSON 복원은 별도 요청으로 실행해 주세요.')
+            if len(json.dumps(payload.document,ensure_ascii=False))>8_000_000:
+                raise ValueError('보고서 JSON은 최대 8MB입니다.')
+            restored=restore_document(candidate_result,payload.document)
+            output=agent.output_agent._build(candidate_result,restored,generate_explanation=False)
+            output['editCapabilities']=previous.get('editCapabilities',{})
+        elif direct:
+            if payload.stickers is not None:
+                direct.append(ChartEditCommand(operation='set_stickers',kind='STYLE_EDIT',params={'items':[s.model_dump() for s in payload.stickers]}))
+            output=agent.output_agent.apply_edits(candidate_result,previous,direct,generate_explanation=False)
+            output['editCapabilities']=previous.get('editCapabilities',{})
+        elif payload.stickers is not None and not payload.instruction.strip() and payload.visual is None:
+            output = agent.output_agent.apply_edits(candidate_result, previous,
+                [ChartEditCommand(operation="set_stickers", kind="STYLE_EDIT",
+                    params={"items": [s.model_dump() for s in payload.stickers]})], generate_explanation=False)
+            output["editCapabilities"] = previous.get("editCapabilities", {})
+        elif payload.action == "edit":
             period_update=revise_period(session,payload.instruction,agent.output_agent,agent.execute_resolution,_availability_from_plans,_api_period)
             if period_update:
                 candidate_result=period_update["result"]
                 candidate_sessions=period_update["sessions"]
+            baseline=period_update["output"] if period_update else previous
+            if payload.stickers is not None:
+                baseline=agent.output_agent.apply_edits(candidate_result, baseline,
+                    [ChartEditCommand(operation="set_stickers", kind="STYLE_EDIT",
+                        params={"items": [s.model_dump() for s in payload.stickers]})], generate_explanation=False)
+                baseline["editCapabilities"] = previous.get("editCapabilities", {})
             if period_update and period_update["only_period"] and not (payload.visual and any(m.text.strip() for m in payload.visual.marks)):
-                output=period_update["output"]
+                output=baseline
             else:
-                baseline=period_update["output"] if period_update else previous
                 try:
                     output = edit_agent.edit(candidate_result, {**baseline, "editConversation": [m.model_dump() for m in payload.conversation[-40:]]}, payload.instruction,
                                          payload.visual.model_dump() if payload.visual else None)
                 except ValueError as error:
-                    if period_update and "변경된 내용이 없습니다" in str(error): output=period_update["output"]
+                    if period_update and "변경된 내용이 없습니다" in str(error): output=baseline
                     else: raise
         else:
             history = session.get(payload.action, [])
@@ -853,6 +1051,7 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         if session["output"] is not previous:
             raise HTTPException(status_code=409, detail="다른 수정이 먼저 적용되었습니다. 최신 그래프에서 다시 시도해 주세요.")
         snapshot = {"chartState": previous["chartState"], "editHistory": previous.get("editHistory", []), "result":session["result"], "sessions":session["sessions"]}
+        if 'initial' not in session:session['initial']=copy.deepcopy(snapshot)
         if payload.action == "edit":
             session["undo"] = [*session.get("undo", []), snapshot][-20:]
             session["redo"] = []
@@ -864,6 +1063,11 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         session["output"] = output
         session["result"] = candidate_result
         session["sessions"] = candidate_sessions
+    return workspace_response(session,payload,period_update)
+
+
+def workspace_response(session,payload,period_update=None):
+    output=session["output"]
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     sessions = session["sessions"]
@@ -892,5 +1096,74 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
             {"id": "edit", "title": "수정 Agent", "description": "텍스트·그림 표시를 검증 가능한 명령으로 해석", "status": "complete"},
             {"id": "output", "title": "출력 Agent", "description": "수정 명령 적용 및 그래프 렌더링", "status": "complete"},
         ],
-        "warnings":period_update["warnings"] if period_update else [],
+        "warnings":[*(period_update["warnings"] if period_update else []),*output.get('warnings',[])],
     }
+
+
+def _saved_workspace_path(identifier):
+    import re
+    if not re.fullmatch(r'[a-zA-Z0-9_-]{1,80}',identifier):raise HTTPException(status_code=422,detail='잘못된 저장 그래프 ID입니다.')
+    return Path(__file__).resolve().parents[2]/'.venv'/'cache'/'chart_workspaces'/('user-'+str(account_auth.current_user()['id']))/(identifier+'.json.gz')
+
+
+def _load_saved_workspace(identifier):
+    import gzip
+    from advanced_chart_spec import fingerprint
+    path=_saved_workspace_path(identifier)
+    if not path.exists():return None
+    try:
+        with gzip.open(path,'rb') as stream:raw=stream.read(64_000_001)
+        if len(raw)>64_000_000:raise ValueError('저장 파일 크기 제한을 초과했습니다.')
+        expected=account_auth.STORE.graph_content(account_auth.current_user()['id'],identifier)
+        if expected and expected!=__import__('hashlib').sha256(raw).digest():raise ValueError('저장 파일 무결성 오류')
+        saved=json.loads(raw)
+        if saved.get('version')!=1:raise ValueError('저장 파일 버전을 확인해 주세요.')
+        session=saved['session']
+        if fingerprint(agent.output_agent._series(session['result'].get('execution',{}).get('rows',[])))!=saved['dataset_version']:raise ValueError('저장 자료의 무결성 검증에 실패했습니다.')
+        old=session['output'];output=agent.output_agent._build(session['result'],ChartSpec.model_validate(old['chartState']),generate_explanation=False)
+        output.update(editVersion=old.get('editVersion',0),canUndo=bool(session.get('undo')),canRedo=bool(session.get('redo')),editCapabilities=old.get('editCapabilities',{}),savedAt=saved.get('saved_at'),cachedSnapshot=True)
+        session['output']=output
+        if len(EDIT_SESSIONS)>=MAX_EDIT_SESSIONS:EDIT_SESSIONS.pop(next(iter(EDIT_SESSIONS)))
+        EDIT_SESSIONS[identifier]=session
+        return session
+    except (ValueError,KeyError,TypeError,OSError) as exc:raise HTTPException(status_code=422,detail='저장 그래프를 불러오지 못했습니다. 파일 손상·버전·글꼴을 확인해 주세요.') from exc
+
+
+@app.post('/api/workspace/{edit_session_id}/save')
+def save_workspace(edit_session_id: str,payload:ReportExportRequest):
+    import gzip
+    import re
+    from datetime import datetime,timezone
+    from advanced_chart_spec import fingerprint
+    if payload.edit_session_id!=edit_session_id:raise HTTPException(status_code=422,detail='저장 대상이 일치하지 않습니다.')
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(edit_session_id)
+        if not session:raise HTTPException(status_code=404,detail='편집 세션이 없습니다.')
+        if payload.revision is not None and payload.revision!=session['output'].get('editVersion',0):raise HTTPException(status_code=409,detail='최신 그래프에서 다시 저장해 주세요.')
+        snapshot=copy.deepcopy(session)
+    def sanitize(value):
+        if isinstance(value,dict):return {k:sanitize(v) for k,v in value.items() if not re.search(r'api.?key|authorization|access.?token',str(k),re.I)}
+        if isinstance(value,list):return [sanitize(v) for v in value]
+        if isinstance(value,str):return re.sub(r'(?i)([?&](?:apiKey|api_key|access_token)=)[^&\s]+',r'\1[redacted]',value)
+        return value
+    saved={'version':1,'saved_at':datetime.now(timezone.utc).isoformat(),'dataset_version':fingerprint(agent.output_agent._series(snapshot['result'].get('execution',{}).get('rows',[]))),'session':sanitize(snapshot)}
+    content=json.dumps(saved,ensure_ascii=False,allow_nan=False).encode('utf-8')
+    if len(content)>64_000_000:raise HTTPException(status_code=422,detail='저장 크기가 64MB를 초과합니다. 표시 데이터와 이력을 줄여 주세요.')
+    path=_saved_workspace_path(edit_session_id);path.parent.mkdir(parents=True,exist_ok=True)
+    temp=path.with_name(path.name+'.'+uuid4().hex+'.tmp')
+    with gzip.open(temp,'wb') as stream:stream.write(content)
+    try:
+        account_auth.STORE.save_graph(account_auth.current_user()['id'],edit_session_id,str(snapshot['output']['chartState'].get('title') or '통계 그래프'),__import__('hashlib').sha256(content).digest(),lambda:temp.replace(path))
+    except Exception:
+        temp.unlink(missing_ok=True)
+        raise
+    return {'status':'saved','saved_at':saved['saved_at'],'revision':snapshot['output'].get('editVersion',0)}
+
+
+@app.get("/api/workspace/{edit_session_id}")
+def read_workspace(edit_session_id: str):
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(edit_session_id) or _load_saved_workspace(edit_session_id)
+        if not session:raise HTTPException(status_code=404,detail="편집 세션이 만료되었습니다. 같은 데이터를 다시 조회한 뒤 저장한 설정을 열어 주세요.")
+        snapshot=copy.deepcopy(session)
+    return workspace_response(snapshot,OutputEditRequest(edit_session_id=edit_session_id))

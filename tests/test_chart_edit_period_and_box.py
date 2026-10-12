@@ -95,7 +95,7 @@ def test_explicit_box_move_updates_geometry_instead_of_using_old_data_anchor():
 
 
 def test_http_period_edit_undo_redo_restore_data_and_style(monkeypatch):
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     import bridge_api as api
     output, session = fixture_session()
     original = copy.deepcopy(session)

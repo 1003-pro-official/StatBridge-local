@@ -184,7 +184,7 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
             x, y, (xref, yref) = note.period, point["value"], refs(note.label)
         else:
             x, y, xref, yref = note.x, note.y, "paper", "paper"
-        fig.add_annotation(name=note.id, x=x, y=y, xref=xref, yref=yref, text=escape(note.text),
+        fig.add_annotation(name=note.id, captureevents=True, x=x, y=y, xref=xref, yref=yref, text=escape(note.text),
             showarrow=note.arrow, ax=note.ax, ay=note.ay, arrowhead=2, arrowcolor=note.color, arrowwidth=note.arrow_width, arrowsize=note.arrow_size, opacity=note.opacity,
             font=dict(size=note.font_size, color=note.color))
     for guide in spec.guides:
@@ -217,5 +217,11 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
         fig.add_shape(name=shape.id, type=shape.type, xref="paper", yref="paper", x0=shape.x0, x1=shape.x1,
             y0=shape.y0, y1=shape.y1, fillcolor=shape.fill, opacity=shape.opacity,
             line=dict(color=shape.color, width=shape.width, dash=shape.dash))
+    for sticker in spec.stickers:
+        from chart_stickers import sticker_source
+        fig.add_layout_image(name=sticker.id, source=sticker_source(sticker.asset_id, sticker.angle),
+            xref="paper", yref="paper", x=sticker.x, y=sticker.y,
+            sizex=sticker.size, sizey=sticker.size, xanchor="center", yanchor="middle",
+            sizing="contain", layer="above", opacity=sticker.opacity)
     if p.notes:
         fig.add_annotation(x=0, y=-.2, xref="paper", yref="paper", text=escape(p.notes), showarrow=False, xanchor="left")

@@ -130,7 +130,7 @@ def test_mixed_units_separate_and_validation():
 
 def test_http_query_output_edit_does_not_refetch(monkeypatch):
     monkeypatch.setenv("KOSIS_API_KEY", "offline-test-key")
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     import bridge_api as api
 
     model = FakeModel({"operation": "set_title", "value": "수정 제목"})

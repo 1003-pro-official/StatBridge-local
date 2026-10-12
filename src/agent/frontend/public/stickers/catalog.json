@@ -1,0 +1,20 @@
+[
+  {
+    "id": "report-arrow-up",
+    "name": "상승 화살표",
+    "category": "보고서 주석",
+    "file": "report-arrow-up.png",
+    "width": 128,
+    "height": 128,
+    "source": "한국은행 통화신용정책보고서 2026년 9월, PDF 17쪽 그림 I-4의 표기를 참고해 새로 그린 기본 기호"
+  },
+  {
+    "id": "report-arrow-down",
+    "name": "하락 화살표",
+    "category": "보고서 주석",
+    "file": "report-arrow-down.png",
+    "width": 128,
+    "height": 128,
+    "source": "한국은행 통화신용정책보고서 2026년 9월, PDF 17쪽 그림 I-4의 표기를 참고해 새로 그린 기본 기호"
+  }
+]

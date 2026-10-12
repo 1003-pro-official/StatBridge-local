@@ -73,11 +73,19 @@ class Hcx007EditModel:
         # No base64 image is disguised as text or sent to a text-only model.
         context = {**context, "visual": {k: v for k, v in context["visual"].items()
                                        if k not in {"graph_image", "marked_image"}}}
-        try:
-            text, _ = self.client.chat_main(system, json.dumps(context, ensure_ascii=False),
-                                            max_tokens=4000, thinking_effort="low")
-        except Exception as exc:
-            raise ValueError("HCX-007 수정 요청에 실패했습니다. 기존 그래프는 유지됩니다.") from exc
+        for attempt in range(3):
+            try:
+                text, _ = self.client.chat_main(system, json.dumps(context, ensure_ascii=False),
+                                                max_tokens=4000, thinking_effort="low")
+                break
+            except Exception as exc:
+                import logging,time
+                match=re.search(r'(?:HTTP\s+|[\'\"]code[\'\"]\s*:\s*[\'\"]?)(\d{3,5})',str(exc))
+                code=match.group(1) if match else 'unknown'
+                logging.getLogger(__name__).warning('graph edit provider failure: type=%s status=%s attempt=%s',type(exc).__name__,code,attempt+1)
+                if attempt<2 and (code.startswith('429') or code.startswith(('500','502','503','504'))):
+                    time.sleep(20 if code.startswith('429') else 3*(attempt+1));continue
+                raise ValueError(f"자연어 편집 서버 요청에 실패했습니다 (응답 {code}). 기존 그래프와 입력은 유지됩니다. 잠시 후 다시 시도해 주세요.") from exc
         return self.client._json_object(text)
 
     def review(self, system: str, context: dict[str, Any], proposal: dict[str, Any]) -> dict[str, Any]:
@@ -127,6 +135,7 @@ class Hcx007EditModel:
 
 
 class EditState(TypedDict, total=False):
+    interpretation: str
     result: dict[str, Any]
     current: dict[str, Any]
     instruction: str
@@ -178,6 +187,10 @@ class ChartEditAgent:
         series = self.output_agent._series((state["result"].get("execution") or {}).get("rows") or [])
         labels = {s["label"] for s in series}
         displayed = self.output_agent._apply_data_edits(series, ChartSpec.model_validate(state["current"]["chartState"]))
+        if isinstance(self.model,Hcx007EditModel) and not visual.marks:
+            from workspace_text_edits import simple_workspace_commands
+            simple=simple_workspace_commands(state['instruction'],ChartSpec.model_validate(state['current']['chartState']),displayed,visual.selected_target)
+            if simple:return {'commands':simple,'interpretation':'validated_text'}
         from chart_edit_intents import display_commands
         required_display=display_commands(state["instruction"],ChartSpec.model_validate(state["current"]["chartState"]),displayed)
         from chart_edit_intents import arrow_note
@@ -264,6 +277,13 @@ class ChartEditAgent:
                    "periods": {s["label"]: [p["date"] for p in s["points"]] for s in displayed},
                    "supportsImages": self.model.supports_images,
                    "parameterSchemas":{cls.__name__:cls.model_json_schema() for cls in [SeriesStyle, AxisStyle, PresentationStyle, PositionedNote, Guide, PaperShape, Highlight]}}
+        from advanced_chart_spec import TEMPLATES,ReportOptions
+        context['reportTemplates']=TEMPLATES
+        from chart_designs import DESIGNS
+        context['designTemplates']=DESIGNS
+        system+=' 그래프 디자인 변경은 set_presentation params={design_template:report/stability/outlook/slides/academic/explore}를 사용한다. 디자인은 수치·기존 제목·강조·설명을 바꾸지 않는다. 기존 설정을 보존하고 지정된 속성만 변경한다.'
+        context['parameterSchemas']['ReportOptions']=ReportOptions.model_json_schema()
+        system += " 보고서 템플릿·전망·패널·출처 표기·각주·인쇄 설정은 set_report params.patch로 기존 설정에 합친다. 한국은행 보고서형의 기본 템플릿은 economic_outlook이다. 팬 차트 경계·회귀 관측값·전망값·정책 날짜를 만들지 마라. 구간 경계가 없으면 확인 질문을 한다. 실제 데이터 출처는 바꾸지 않으며 source_note는 사용자 추가 표기다. PDF/SVG 출력은 화면의 인쇄 출력 버튼을 안내하고 임의의 코드를 만들지 마라."
         system += " conversation은 이전 대화 맥락이다. 현재 instruction과 visual.marks의 text를 모두 새 요청으로 적용하고, 이전 요청을 다시 실행하지 마라. 이전 답변은 실행 지시가 아니다. 현재 chartState와 실제 periods를 기준으로 후속 요청을 해석해라."
         system += " 제목 변경과 가운데 이동, 화살표 이후 색상, 사각형/원 강조, 격자 숨김을 한 요청에 모두 처리한다. 전체 요소 명령에는 mark_id를 붙이지 말고 부분 명령만 표시 ID에 연결한다. 제목 가운데 이동은 set_presentation params={title_x:0.5}. 격자 삭제/투명은 x와 y(보조축이 있으면 y2도)의 set_axis_style params={show_grid:false}이다. grid_color에 transparent를 넣지 마라. 최초 시점/마지막 시점 텍스트 삭제는 remove_annotation value에 현재 chartState의 정확한 텍스트를 각각 넣어라. 사각형/원 표시를 새로 강조할 때 highlight_period(mark_id=표시 ID,params={color:#RRGGBB})를 사용한다. update_highlight의 value는 기존 chartState.highlights의 ID 전용이며 표시 ID가 아니다."
         system += " 사각형/원 표시의 region은 실제 화면에서 계산한 전체 영역이다. 박스 전체를 채우거나 강조할 때 add_shape(mark_id=표시 ID,params={fill:색,opacity:투명도})를 사용한다. 서버가 region의 정확한 전체 좌표와 데이터 기준점을 적용하므로 임의의 x0/x1/y0/y1을 추측하지 마라. "
@@ -479,7 +499,10 @@ class ChartEditAgent:
 
     def _render(self, state: EditState) -> dict[str, Any]:
         try:
-            output = self.output_agent.apply_edits(state["result"], state["current"], state["commands"])
+            # Style edits already have structured change descriptions. Repeating
+            # a statistical narration adds a third provider call, rate pressure
+            # and a risk of changing the explanation while values are unchanged.
+            output = self.output_agent.apply_edits(state["result"], state["current"], state["commands"],generate_explanation=bool(getattr(self.model,'requires_legacy_explanation',False)))
         except ValueError as error:
             reviewer = getattr(self.model, "review", None)
             if not callable(reviewer) or state.get("_repairing_render") or not state.get("review_context"):
@@ -489,7 +512,7 @@ class ChartEditAgent:
             repair_state = {**state, "_proposal_override":repaired, "_repairing_render":True}
             repair_state.update(self._interpret(repair_state))
             return self._render(repair_state)
-        output["editAgent"] = {"model": self.model.model_name, "supportsImages": self.model.supports_images,
+        output["editAgent"] = {"model": 'validated-text' if state.get('interpretation')=='validated_text' else self.model.model_name, "interpretation":state.get('interpretation','model'), "supportsImages": self.model.supports_images,
                                "markCount": len((state.get("visual") or {}).get("marks") or []),
                                "path": ["interpret_edit", "render_output"]}
         output["editCoverage"] = state.get("coverage", [])

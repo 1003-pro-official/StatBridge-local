@@ -13,7 +13,7 @@ import webbrowser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-STATE = ROOT / '.venv/cache/evaluation_runs' / 'portable_runtime.json'
+STATE = Path(os.environ.get('STATBRIDGE_RUNTIME_STATE',str(ROOT / '.venv/cache/evaluation_runs' / 'portable_runtime.json')))
 
 
 def free_port(port: int) -> bool:

@@ -4,6 +4,7 @@ export type ChartPoint = {
 };
 
 export type ChartSeries = {
+  frequency?: string;
   id: string;
   label: string;
   unit: string;
@@ -85,6 +86,9 @@ export type QueryResponse = {
     }>;
     plotlyFigure?: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> };
     chartState?: Record<string, unknown>;
+    echartsOption?: Record<string, unknown>;
+    echartsUnavailable?: string;
+    reportDocument?: Record<string, unknown>;
     editAgent?: { model: string; supportsImages: boolean; markCount: number; path: string[] };
     editCapabilities?: { model: string; supportsImages: boolean };
     editVersion?: number;
@@ -164,7 +168,9 @@ export type VisualEditContext = {
   graph_image?: string;
   marked_image?: string;
 };
-export type ChartEditInput = { instruction: string; conversation?: Array<{role:"user"|"assistant";text:string}>; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
+export type ChartSticker = {id:string;asset_id:string;x:number;y:number;size:number;angle:number;opacity:number};
+export type StickerAsset = {id:string;name:string;category:string;file:string;width:number;height:number};
+export type ChartEditInput = { undo_property?:'title'|'subtitle'|'legend_position'|'series_color'; property_label?:string; append_session_ids?:string[]; replace_session_ids?:string[]; restore_initial?:boolean; instruction: string; stickers?: ChartSticker[]; report?:Record<string,unknown>; clear_report?:boolean; document?:Record<string,unknown>; commands?:Array<{operation:string;kind:"STYLE_EDIT"|"DATA_EDIT";value?:unknown;params?:Record<string,unknown>;label?:string;start?:string;end?:string}>; conversation?: Array<{role:"user"|"assistant";text:string}>; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
 export type OutputEditRequest = ChartEditInput & { edit_session_id: string };
 
 export type QueryRequest = {

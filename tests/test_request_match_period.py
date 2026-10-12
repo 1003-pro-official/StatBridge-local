@@ -93,7 +93,7 @@ def test_execute_guard_blocks_stale_or_model_replaced_plan(monkeypatch):
 ])
 def test_api_text_dates_skip_picker_and_use_source_frequency(monkeypatch,frequency,table_id,expected):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     selected=api.agent.resolver.candidate_shell(table_id)
     plan=api.agent.build_api_plan(table_id,selected).as_dict();plan['frequency']=frequency
     resolution={'status':'resolved','api_plan':plan,'selected_table':selected,'state':{}}
@@ -115,7 +115,7 @@ def test_api_text_dates_skip_picker_and_use_source_frequency(monkeypatch,frequen
 
 def test_api_outside_dates_ask_confirmation_without_fetch(monkeypatch):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     calls=[];monkeypatch.setattr(api.service,'get_statistics',lambda **kwargs:calls.append(kwargs))
     monkeypatch.setattr(api,'_availability_from_plans',lambda plans:{'min':'2000-01-01','max':'2025-12-31'})
     result=TestClient(api.app).post('/api/query',json={'query':'DT_513Y001 2020년부터 2026년까지'}).json()
@@ -124,7 +124,7 @@ def test_api_outside_dates_ask_confirmation_without_fetch(monkeypatch):
 
 def test_reported_export_query_api_never_fetches_loans(monkeypatch):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     calls=[];monkeypatch.setattr(api.service,'get_statistics',lambda **kwargs:calls.append(kwargs))
     monkeypatch.setattr(api.agent.ncp.settings,'api_key','')
     monkeypatch.setattr(api.agent.hybrid,'rank',lambda *args,**kwargs:[])
@@ -136,7 +136,7 @@ def test_reported_export_query_api_never_fetches_loans(monkeypatch):
 
 def test_api_clarification_preview_confirms_text_dates_without_fetch(monkeypatch):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     calls=[];monkeypatch.setattr(api.service,'get_statistics',lambda **kwargs:calls.append(kwargs))
     monkeypatch.setattr(api,'_availability_from_plans',lambda plans:{'min':'2000-01-01','max':'2025-12-31'})
     result=TestClient(api.app).post('/api/query',json={'query':'DT_513Y001 2020년부터 2025년까지','execute':False}).json()
@@ -158,7 +158,7 @@ def test_unbound_sketch_cannot_become_whole_series_edit():
 
 def test_output_endpoint_revalidates_query_not_just_cached_success(monkeypatch):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     selected=api.agent.resolver.candidate_shell('DT_132Y001')
     plan=api.agent.build_api_plan('DT_132Y001',selected).as_dict()
     session={'query':'수출 통화','result':{'status':'resolved','api_plan':plan,'selected_table':selected}}

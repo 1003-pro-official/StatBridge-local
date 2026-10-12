@@ -217,7 +217,7 @@ def test_hide_show_preserves_style_and_secondary_axis():
 
 def test_edit_api_undo_redo_and_stale_revision(monkeypatch):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     agent=OutputAgent();data=source();initial=agent.prepare(data,{"chart_type":"line"})
     monkeypatch.setattr(api.agent,"output_agent",agent)
     monkeypatch.setattr(api,"edit_agent",ChartEditAgent(FakeEditModel({"commands":[{"operation":"set_title","value":"수정"}]}),agent))

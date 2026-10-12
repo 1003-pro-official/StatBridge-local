@@ -4,6 +4,7 @@ from typing import Literal
 from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from advanced_chart_spec import ReportOptions
 
 
 ChartType = Literal[
@@ -71,6 +72,8 @@ class AxisStyle(StrictStyle):
 
 
 class PresentationStyle(StrictStyle):
+    design_template: Literal['report','stability','outlook','slides','academic','explore'] | None = None
+    panel_columns: int = Field(default=2,ge=1,le=4)
     font_family: str = Field(default="Arial, sans-serif", max_length=100)
     font_size: int = Field(default=12, ge=8, le=32)
     title_size: int = Field(default=18, ge=10, le=42)
@@ -178,8 +181,34 @@ class Annotation(BaseModel):
     text: str = Field(min_length=1, max_length=200)
 
 
+class ChartSticker(StrictStyle):
+    id: str = Field(min_length=1, max_length=80, pattern=r"^[a-zA-Z0-9_-]+$")
+    asset_id: str = Field(min_length=1, max_length=80)
+    x: float = Field(default=.5, ge=0, le=1)
+    y: float = Field(default=.5, ge=0, le=1)
+    size: float = Field(default=.25, ge=.02, le=1)
+    angle: float = Field(default=0, ge=-360, le=360)
+    opacity: float = Field(default=1, ge=0, le=1)
+
+    @model_validator(mode="after")
+    def check_asset(self) -> "ChartSticker":
+        from chart_stickers import sticker_asset
+        sticker_asset(self.asset_id)
+        return self
+
+
 class ChartSpec(BaseModel):
+    @model_validator(mode='before')
+    @classmethod
+    def remove_retired_stickers(cls, value):
+        if isinstance(value,dict) and isinstance(value.get('stickers'),list):
+            import json
+            from pathlib import Path
+            retired=set(json.loads((Path(__file__).with_name('retired_sticker_ids.json')).read_text(encoding='utf-8')))
+            value={**value,'stickers':[s for s in value['stickers'] if not isinstance(s,dict) or s.get('asset_id') not in retired]}
+        return value
     model_config = ConfigDict(allow_inf_nan=False)
+    report: ReportOptions | None = None
     chart_type: ChartType = "auto"
     layout: Layout = "combined"
     title: str = Field(default="", max_length=150)
@@ -211,9 +240,12 @@ class ChartSpec(BaseModel):
     notes: list[PositionedNote] = Field(default_factory=list, max_length=40)
     guides: list[Guide] = Field(default_factory=list, max_length=30)
     paper_shapes: list[PaperShape] = Field(default_factory=list, max_length=30)
+    stickers: list[ChartSticker] = Field(default_factory=list, max_length=40)
 
     @model_validator(mode="after")
     def check_period(self) -> "ChartSpec":
+        if len({s.id for s in self.stickers}) != len(self.stickers):
+            raise ValueError("이모티콘 ID는 중복될 수 없습니다.")
         if self.period_start and self.period_end and self.period_start > self.period_end:
             raise ValueError("조회 시작 시점은 종료 시점보다 늦을 수 없습니다.")
         return self
@@ -232,7 +264,7 @@ class ChartEditCommand(BaseModel):
         "set_series_style", "rename_series", "reorder_series", "show_series", "clear_highlight",
         "set_axis_style", "set_presentation", "remove_secondary_axis",
         "add_note", "update_note", "remove_note", "add_guide", "update_guide", "remove_guide",
-        "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles",
+        "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles", "set_stickers", "set_report",
     ]
     kind: Literal["STYLE_EDIT", "DATA_EDIT"]
     value: str | float | int | bool | dict | list[str] | None = None

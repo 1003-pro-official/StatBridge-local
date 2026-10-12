@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 os.environ.setdefault("STATBRIDGE_DATA_DIR", str(ROOT / "data/processed"))
 os.environ.setdefault("STATBRIDGE_HYBRID_RETRIEVAL", "0")
 sys.path[:0] = [str(ROOT / "src/agent"), str(ROOT / "src/backend")]
-from fastapi.testclient import TestClient
+from authenticated_client import TestClient
 import bridge_api as api
 
 

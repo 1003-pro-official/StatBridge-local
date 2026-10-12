@@ -1,7 +1,9 @@
+import {accountKey} from './accountApi';
+import {ownsHistory} from './accountScope';
 import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import Plotly from "plotly.js-dist-min";
 import ChartSketchEditor from "./ChartSketchEditor";
-import { fetchCatalog, inspectOutputOptions, submitOutput, submitOutputEdit, submitQuery } from "./api/client";
+import { fetchCatalog, fetchWorkspace, inspectOutputOptions, submitOutput, submitOutputEdit, submitQuery } from "./api/client";
 import {allowedCharts,blockedCharts,chartLabels,chartDescriptions} from "./chartChoices";
 import {initialQueryRequest} from "./querySubmission";
 import type { CatalogResponse, CatalogTable, ChartEditInput, ChartSeries, ChartType, QueryResponse } from "./api/types";
@@ -57,44 +59,6 @@ function DateSelector({ value, min, max, onChange, label }: { value:string; min?
     <button type="button" className={`date-trigger ${value?"has-value":""}`} aria-expanded={open} aria-label={`${label} 선택`} onClick={()=>{setDraft(value||fallback);setOpen((current)=>!current)}}><Icon name="history" size={16}/><span>{value||"날짜 선택"}</span><Icon name="chevron" size={14}/></button>
     {open&&<div className="date-popover"><div className="date-popover-head"><div><small>{label}</small><strong>{draft.replaceAll("-",".")}</strong></div><button type="button" aria-label="날짜 선택 닫기" onClick={()=>setOpen(false)}><Icon name="close" size={15}/></button></div><div className="date-select-grid"><label>년<select value={year} onChange={(event)=>updateDraft(Number(event.target.value),month,day)}>{years.map((item)=><option key={item} value={item}>{item}년</option>)}</select></label><label>월<select value={month} onChange={(event)=>updateDraft(year,Number(event.target.value),day)}>{Array.from({length:12},(_,index)=>index+1).map((item)=><option key={item} value={item}>{item}월</option>)}</select></label><label>일<select value={day} onChange={(event)=>updateDraft(year,month,Number(event.target.value))}>{days.map((item)=><option key={item} value={item}>{item}일</option>)}</select></label></div>{min&&max&&<p>{min}부터 {max}까지 선택할 수 있습니다.</p>}<button type="button" className="date-confirm" disabled={!valid} onClick={()=>{onChange(draft);setOpen(false)}}>이 날짜로 선택</button></div>}
   </div>;
-}
-
-const navItems: { label: string; icon: IconName }[] = [
-  { label: "홈", icon: "home" },
-  { label: "대화하기", icon: "chat" },
-  { label: "통계 탐색", icon: "chart" },
-  { label: "비교 분석", icon: "compare" },
-  { label: "데이터 계보", icon: "lineage" },
-];
-
-function Sidebar({ open, close, view, selectView, goHome }: { open: boolean; close: () => void; view: string; selectView: (view: "home" | "lineage") => void; goHome:()=>void }) {
-  return <>
-    {open && <button className="backdrop" aria-label="메뉴 닫기" onClick={close} />}
-    <aside className={`sidebar ${open ? "is-open" : ""}`}>
-      <div className="brand-row">
-        <button type="button" className="brand-home" aria-label="StatBridge 홈으로 이동" onClick={()=>{goHome();close()}}><span className="brand-mark"><Icon name="logo" size={23}/></span><span><strong>StatBridge</strong><small>통계를 잇는 가장 투명한 방법</small></span></button>
-        <button className="mobile-close" onClick={close} aria-label="메뉴 닫기"><Icon name="close"/></button>
-      </div>
-      <nav className="main-nav" aria-label="주 메뉴">
-        {navItems.map((item) => { const target = item.label === "데이터 계보" ? "lineage" : "home"; const active = view === target && (target === "lineage" || item.label === "홈"); return <button key={item.label} className={active ? "active" : ""} onClick={() => { selectView(target); close(); }}><Icon name={item.icon}/><span>{item.label}</span>{active && <span className="active-dot"/>}</button>; })}
-      </nav>
-      <div className="side-divider" />
-      <div className="source-group">
-        <p>연결된 데이터</p>
-        <div><span className="source-icon">K</span><span>한국은행 · KOSIS</span><span className="live-dot"/></div>
-        <div><span className="source-icon muted">+</span><span className="muted-text">데이터 소스 추가</span></div>
-      </div>
-      <div className="trust-card">
-        <span className="eyebrow">WHY STATBRIDGE</span>
-        <strong>숫자의 출처까지<br/>확인하세요.</strong>
-        <p>모든 분석 결과에 통계표와 가공 과정을 남깁니다.</p>
-        <div className="mini-chart"><i/><i/><i/><i/><i/></div>
-      </div>
-      <div className="side-profile">
-        <div className="avatar">SB</div><div><strong>StatBridge 팀</strong><span>PoC Workspace</span></div><button aria-label="알림"><Icon name="bell" size={18}/></button>
-      </div>
-    </aside>
-  </>;
 }
 
 function ExpandableValues({ values, previewCount = 3 }: { values: string[]; previewCount?: number }) {
@@ -154,7 +118,7 @@ function DataCatalog({ onQuery, loading }: { onQuery: (query: string, dimensionV
   const middleNode = middles.find((x) => x.name === middle) || middles[0];
   useEffect(() => { setMiddle(""); setSelected(null); }, [major]);
   useEffect(() => { setSelected(null); }, [middle]);
-  return <main className="catalog-page" id="data-catalog">
+  return <main className="catalog-page" id="data-catalog" tabIndex={-1}>
     <section className="catalog-hero"><span className="eyebrow">DATA LINEAGE CATALOG</span><h1>조회 가능한 데이터 계보</h1><p>StatBridge에서 조회할 수 있는 통계표를 대분류·중분류·소분류 순서로 탐색합니다.</p><div><strong>{catalog?.total ?? "-"}</strong><span>조회 가능 통계표</span><small>{catalog?.source || "불러오는 중"}</small></div></section>
     {error && <div className="error-banner">{error}</div>}
     {catalog && <section className="catalog-browser panel">
@@ -166,48 +130,89 @@ function DataCatalog({ onQuery, loading }: { onQuery: (query: string, dimensionV
   </main>;
 }
 
-function Header({ openMenu }: { openMenu: () => void }) {
-  return <header className="topbar">
-    <button className="menu-button" onClick={openMenu} aria-label="메뉴 열기"><Icon name="menu"/></button>
-    <div className="mobile-brand"><span className="brand-mark"><Icon name="logo" size={19}/></span><strong>StatBridge</strong></div>
-    <div className="top-search"><Icon name="search" size={19}/><span>통계나 주제를 검색하세요</span><kbd>Ctrl K</kbd></div>
-    <div className="top-actions"><button aria-label="알림"><Icon name="bell" size={19}/><span className="notification-dot"/></button><span className="api-status"><i/> MCP BRIDGE</span></div>
+function Header({ open, toggleMenu, closeMenu, view, goHome, selectView }: {
+  open: boolean; toggleMenu: () => void; closeMenu: () => void;
+  view: "home" | "lineage"; goHome: () => void; selectView: (view: "home" | "lineage") => void;
+}) {
+  const menuToggle = useRef<HTMLButtonElement>(null);
+  const focusQuery = () => {
+    selectView("home"); closeMenu();
+    requestAnimationFrame(() => {
+      document.getElementById("statistics-query")?.focus();
+      document.getElementById("statistics-query")?.scrollIntoView({ block: "center", behavior: "smooth" });
+    });
+  };
+  const showGuide = () => {
+    selectView("home"); closeMenu();
+    requestAnimationFrame(() => {
+      document.getElementById("usage-guide")?.focus({ preventScroll: true });
+      document.getElementById("usage-guide")?.scrollIntoView({ behavior: "smooth" });
+    });
+  };
+  return <header className="institution-header" onKeyDown={(event) => { if (event.key === "Escape" && open) { closeMenu(); menuToggle.current?.focus(); } }}>
+    <a className="skip-link" href={view === "lineage" ? "#data-catalog" : "#main-content"}>본문 바로가기</a>
+    <div className="utility-bar"><div className="utility-inner">
+      <span>경제통계 분석 워크스페이스</span>
+      <div><a href="https://www.bok.or.kr/portal/main/main.do" target="_blank" rel="noreferrer">한국은행 <span className="sr-only">(새 창)</span><span aria-hidden="true">↗</span></a><a href="https://kosis.kr" target="_blank" rel="noreferrer">KOSIS <span className="sr-only">(새 창)</span><span aria-hidden="true">↗</span></a><span className="workspace-label">STATBRIDGE LOCAL</span></div>
+    </div></div>
+    <div className="institution-nav">
+      <button type="button" className="institution-brand" onClick={() => { goHome(); closeMenu(); }} aria-label="StatBridge 홈으로 이동"><span className="institution-mark"><Icon name="logo" size={28}/></span><span><strong>StatBridge</strong><small>ECONOMIC DATA & INSIGHT</small></span></button>
+      <nav id="primary-navigation" className={`institution-links ${open ? "is-open" : ""}`} aria-label="주 메뉴">
+        <button type="button" aria-current={view === "home" ? "page" : undefined} onClick={() => { goHome(); closeMenu(); }}>분석 홈</button>
+        <button type="button" onClick={focusQuery}>자연어 질의</button>
+        <button type="button" aria-current={view === "lineage" ? "page" : undefined} onClick={() => { selectView("lineage"); closeMenu(); }}>통계 탐색 · 계보</button>
+        <button type="button" onClick={showGuide}>이용 안내</button>
+      </nav>
+      <div className="institution-actions"><button type="button" className="institution-search" onClick={focusQuery} aria-label="통계 질문 입력으로 이동"><Icon name="search" size={24}/></button><button ref={menuToggle} type="button" className="institution-menu" aria-label={open ? "메뉴 닫기" : "전체 메뉴 열기"} aria-expanded={open} aria-controls="primary-navigation" onClick={toggleMenu}><Icon name={open ? "close" : "menu"} size={26}/></button></div>
+    </div>
   </header>;
 }
 
 function Hero({ query, setQuery, submit, loading }: { query: string; setQuery: (v: string) => void; submit: (e: FormEvent) => void; loading: boolean }) {
   const suggestions = ["최근 대출금리 추이", "대출금리와 생산자물가 비교", "월별 생산자물가지수"];
-  return <section className="hero">
-    <div className="hero-glow one"/><div className="hero-glow two"/>
+  return <section className="hero" aria-labelledby="hero-title">
     <div className="hero-content">
-      <span className="hero-label"><Icon name="sparkle" size={15}/> STATBRIDGE INTELLIGENCE</span>
-      <h1>통계를 찾는 것을 넘어,<br/><em>연결하고 검증합니다.</em></h1>
-      <p>자연어 질문을 한국은행의 실제 통계 구조로 변환하고,<br className="desktop-break"/> 선택 근거까지 추적 가능한 분석 결과를 제공합니다.</p>
+      <span className="hero-label"><span/> ECONOMIC STATISTICS WORKSPACE</span>
+      <h1 id="hero-title">경제를 읽는 데이터,<br/><em>근거를 잇는 분석.</em></h1>
+      <p>한국은행 통계를 자연어로 탐색하고 비교하세요.<br className="desktop-break"/> 통계표 선택부터 시각화까지, 수치와 출처를 함께 확인합니다.</p>
       <form className="ask-box" onSubmit={submit}>
         <Icon name="search" size={21}/>
-        <input aria-label="통계 질문" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="예: 대출금리와 생산자물가를 비교해줘" />
+        <input id="statistics-query" aria-label="통계 질문" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="예: 대출금리와 생산자물가를 비교해줘" />
         <button type="submit" disabled={loading || !query.trim()}>{loading ? <span className="spinner"/> : <Icon name="send" size={18}/>}<span>분석하기</span></button>
       </form>
       <div className="suggestions"><span>추천 질문</span>{suggestions.map((s) => <button key={s} onClick={() => setQuery(s)}>{s}</button>)}</div>
     </div>
-    <div className="hero-visual" aria-hidden="true">
-      <div className="orbit orbit-one"/><div className="orbit orbit-two"/>
-      <div className="data-card card-a"><span>대출금리</span><strong>실데이터</strong><small>한국은행</small></div>
-      <div className="bridge-line"><i/><i/><i/><i/><i/></div>
-      <div className="data-card card-b"><span>생산자물가</span><strong>실데이터</strong><small>KOSIS</small></div>
-      <div className="verified"><Icon name="check" size={15}/> SOURCE VERIFIED</div>
+    <div className="economic-visual" aria-hidden="true">
+      <svg viewBox="0 0 520 440" fill="none"><defs><linearGradient id="column-light" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#73c2e7" stopOpacity=".4"/><stop offset="1" stopColor="#73c2e7" stopOpacity=".02"/></linearGradient></defs>
+        <circle cx="300" cy="220" r="182" stroke="#a4ccdf" strokeOpacity=".15"/><circle cx="300" cy="220" r="146" stroke="#a4ccdf" strokeOpacity=".12"/>
+        <path d="M65 354H492M65 286H492M65 218H492M65 150H492" stroke="#a4ccdf" strokeOpacity=".12" strokeDasharray="3 8"/>
+        {[112,185,258,331,404].map((x,index)=><g key={x}><path d={`M${x} ${260-index*30}h46v${94+index*30}h-46z`} fill="url(#column-light)" stroke="#8dd0ed" strokeOpacity=".22"/><path d={`M${x+9} ${273-index*30}v${67+index*30}m14 ${-67-index*30}v${67+index*30}m14 ${-67-index*30}v${67+index*30}`} stroke="#a4ccdf" strokeOpacity=".12"/></g>)}
+        <path d="m90 278 72-38 72 17 73-83 72 21 75-83" stroke="#72c8ea" strokeWidth="2.5"/>
+        {[[90,278],[162,240],[234,257],[307,174],[379,195],[454,112]].map(([x,y])=><circle key={x} cx={x} cy={y} r="4" fill="#b5e7fa"/>)}
+        <path d="M88 374H476M109 390H457" stroke="#a4ccdf" strokeOpacity=".25"/>
+      </svg>
+      <div className="visual-caption"><span>FROM DATA TO EVIDENCE</span><strong>숫자 너머의 맥락을 연결합니다.</strong></div>
     </div>
+    <div className="hero-bottom"><span>EXPLORE · COMPARE · TRACE</span><span>한국은행 통계 / KOSIS 자료 조회</span></div>
   </section>;
 }
 
 function FeatureStrip() {
   const items: { icon: IconName; title: string; text: string }[] = [
-    { icon: "chat", title: "자연어 분석", text: "질문을 통계 구조로 변환" },
-    { icon: "compare", title: "출력 에이전트", text: "그래프 종류·배치·편집 명세 생성" },
-    { icon: "lineage", title: "Query Planner", text: "표·항목 선택 근거를 확인" },
-    { icon: "database", title: "Data Lineage", text: "수치 출처와 변환을 추적" },
+    { icon: "chat", title: "자연어 질의", text: "질문으로 시작하는 통계 탐색" },
+    { icon: "compare", title: "지표 비교 · 시각화", text: "기간과 계열을 선택해 분석" },
+    { icon: "chart", title: "그래프 편집", text: "자연어로 다듬는 분석 결과" },
+    { icon: "database", title: "출처 · 데이터 계보", text: "통계표와 선택 근거를 확인" },
   ];
-  return <section className="feature-strip">{items.map((x) => <article key={x.title}><span className="feature-icon"><Icon name={x.icon}/></span><div><strong>{x.title}</strong><p>{x.text}</p></div></article>)}</section>;
+  return <section className="feature-strip" aria-label="주요 기능">{items.map((x,index) => <article key={x.title}><span className="feature-number">0{index+1}</span><div><strong>{x.title}</strong><p>{x.text}</p></div><span className="feature-icon"><Icon name={x.icon}/></span></article>)}</section>;
+}
+
+function UsageGuide() {
+  return <section className="usage-guide" id="usage-guide" tabIndex={-1} aria-labelledby="guide-title"><div className="guide-heading"><span className="eyebrow">RESEARCH WORKFLOW</span><h2 id="guide-title">질문에서 분석까지</h2><p>필요한 통계를 찾고, 조건을 확인하고, 근거를 남깁니다.</p></div><ol>
+    <li><span>01</span><h3>통계 질문하기</h3><p>알고 싶은 지표와 기간을 입력하거나 통계 탐색에서 표를 선택하세요.</p></li>
+    <li><span>02</span><h3>조회 조건 확인하기</h3><p>통계표, 항목, 주기와 기간을 확인해 분석 범위를 정하세요.</p></li>
+    <li><span>03</span><h3>결과와 출처 살펴보기</h3><p>그래프와 관측값을 비교하고, 출처를 확인한 뒤 그래프를 편집하세요.</p></li>
+  </ol></section>;
 }
 
 function ChartRenderer({ series, chartType = "line", xAxisLabel, yAxisLabel }: { series: ChartSeries[]; chartType?: ChartType; xAxisLabel?:string|null; yAxisLabel?:string|null }) {
@@ -233,24 +238,50 @@ function ChartRenderer({ series, chartType = "line", xAxisLabel, yAxisLabel }: {
   </div>;
 }
 
-function PlotlyRenderer({ figure }: { figure: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> } }) {
+function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> };heading?:{title:string;subtitle:string} }) {
   const host = useRef<HTMLDivElement>(null);
+  const queue=useRef<Promise<unknown>>(Promise.resolve());
   const [renderError,setRenderError] = useState("");
   useEffect(() => {
     if (!host.current) return;
     const element = host.current;
     let active=true;
     let rendered=false;
+    let unbind=()=>{};
     setRenderError("");
     const copy=structuredClone(figure);
-    void Plotly.react(element, copy.data, copy.layout, { responsive: true, displaylogo: false }).then(()=>{rendered=true;}).catch(()=>{
+    delete copy.layout.width;delete copy.layout.height;copy.layout.autosize=true;
+    if(heading){
+      copy.layout.title={text:''};copy.layout.showlegend=false;
+      copy.layout.margin={...(copy.layout.margin as Record<string,number>),t:35,b:90};
+    }
+    const select=(kind:string,label?:string,id?:string)=>element.dispatchEvent(new CustomEvent('statbridge:graph-select',{bubbles:true,detail:{kind,label,id}}));
+    const selectText=(event:MouseEvent)=>{const node=event.target as Element;if(node.closest('.gtitle'))select('title');else if(node.closest('.xtick,.xtitle'))select('x');else if(node.closest('.ytick,.ytitle'))select('y');else if(node.closest('.annotation')){const index=Number(node.closest('.annotation')?.getAttribute('data-index'));const annotation=(copy.layout.annotations as Array<{name?:string}>|undefined)?.[index];if(annotation?.name)select('note',undefined,annotation.name);}};
+    element.addEventListener('click',selectText);
+    queue.current=queue.current.catch(()=>{}).then(async()=>{if(!active)return;await Plotly.react(element, copy.data, copy.layout, { responsive: true, displaylogo: false });if(!active)return;
+      rendered=true;
+      const events=element as unknown as HTMLElement & {on:(name:string,fn:(event:any)=>unknown)=>void;removeListener:(name:string,fn:(event:any)=>unknown)=>void};
+      const click=(event:any)=>{const trace=event.points?.[0]?.data;const label=trace?.meta?.seriesLabel||trace?.customdata?.[0]?.[0]||trace?.name;if(label)select('series',label);};
+      const annotation=(event:any)=>{if(event.annotation?.name)select('note',undefined,event.annotation.name);};
+      const legend=(event:any)=>{const trace=copy.data[event.curveNumber];select('series',String((trace.meta as {seriesLabel?:string})?.seriesLabel||trace.name||''));return false;};
+      events.on('plotly_click',click);events.on('plotly_clickannotation',annotation);events.on('plotly_legendclick',legend);
+      unbind=()=>{events.removeListener('plotly_click',click);events.removeListener('plotly_clickannotation',annotation);events.removeListener('plotly_legendclick',legend);};
+    }).catch(()=>{
       if(active)setRenderError("그래프 화면을 그리지 못했습니다. 새로고침 후 다시 확인해 주세요.");
     });
-    const observer=new ResizeObserver(()=>{if(active&&rendered)void Plotly.Plots.resize(element).catch(()=>{});});
+    const observer=new ResizeObserver(()=>{if(active&&rendered)queue.current=queue.current.catch(()=>{}).then(()=>active?Plotly.Plots.resize(element):undefined);});
     observer.observe(element);
-    return () => {active=false;observer.disconnect();Plotly.purge(element);};
-  }, [figure]);
-  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}<div ref={host} className="plotly-chart" style={{height:typeof figure.layout.height==="number"?figure.layout.height:580}} aria-label="통계 그래프" /></>;
+    return () => {active=false;observer.disconnect();unbind();element.removeEventListener('click',selectText);};
+  }, [figure,heading?.title,heading?.subtitle]);
+  useEffect(()=>{const element=host.current;return()=>{void queue.current.finally(()=>{if(element&&!element.isConnected)Plotly.purge(element);});};},[]);
+  const pick=(kind:string,label?:string)=>host.current?.dispatchEvent(new CustomEvent('statbridge:graph-select',{bubbles:true,detail:{kind,label}}));
+  const names=new Set<string>();
+  const legends=figure.layout.showlegend===false?[]:figure.data.filter(t=>{const name=String(t.name||'');if(t.showlegend===false||!name||names.has(name))return false;names.add(name);return true;});
+  const plain=(value:string)=>new DOMParser().parseFromString(value,'text/html').body.textContent||'';
+  const titleStyle=figure.layout.title as {font?:{size?:number;color?:string;family?:string};x?:number}|undefined;
+  const plot=<div ref={host} className="plotly-chart" style={heading?undefined:{height:typeof figure.layout.height==='number'?figure.layout.height:580}} aria-label="통계 그래프"/>;
+  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}{heading?<div className="workspace-plot-frame"><header className="workspace-plot-heading" onClick={()=>pick('title')}><h4 style={{fontSize:titleStyle?.font?.size??18,color:titleStyle?.font?.color,fontFamily:titleStyle?.font?.family,textAlign:(titleStyle?.x??.5)<.25?'left':(titleStyle?.x??.5)>.75?'right':'center'}}>{heading.title}</h4>{heading.subtitle&&<p>{heading.subtitle}</p>}</header><div className="workspace-plot-legend">{legends.map((trace,i)=><button type="button" key={i} onClick={()=>pick('series',String((trace.meta as {seriesLabel?:string})?.seriesLabel||plain(String(trace.name))))}><i style={{background:typeof (trace.line as {color?:string})?.color==='string'?(trace.line as {color:string}).color:'#4568ff'}}/>{plain(String(trace.name))}</button>)}</div><div className="workspace-plot-body">{plot}</div></div>:plot}</>;
+
 }
 
 function LayoutChoice({ mode, setMode, reason }: { mode: "combined"|"separate"; setMode: (v:"combined"|"separate")=>void; reason?:string }) {
@@ -429,17 +460,17 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
     window.setTimeout(()=>URL.revokeObjectURL(pngUrl),1000);
   };
   const noMatch=result.status==="no_match" || result.status==="data_unavailable";
-  return <section className="results" id="analysis-result">
+  return <section className={`results ${result.editSessionId?'has-workspace':''}`} id="analysis-result">
     <div className="section-heading"><div><span className="eyebrow">ANALYSIS RESULT</span><h2>질문에서 근거까지, 한눈에</h2></div>{noMatch?<span className="unavailable-badge">지원 데이터 없음</span>:<span className="verified-badge"><Icon name="check" size={15}/> 검증된 데이터</span>}</div>
     <div className="result-grid">
       <article className="panel chart-panel">
         <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length>0&&<button onClick={exportPng}><Icon name="chart" size={17}/> PNG</button>}<button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button><button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
-        <div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div>
+        <details className="workspace-analysis-summary"><summary>분석 요약 보기</summary><div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div></details>
         <PeriodConfirmation result={result}/>
         {result.outputSpec?.editChanges?.length ? <div className="setup-block" role="status"><strong>수정이 적용되었습니다</strong><ul>{result.outputSpec.editChanges.map((change,index)=><li key={index}>{change}</li>)}</ul></div> : null}
-        {result.warnings?.map((warning, index) => <div className="error-banner" role="status" key={index}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi, "$1[redacted]")}</div>)}
-        <div className="chart-header"><div><h3>{editOptions?.title||(result.chart.length ? `${chartLabels[result.chartType||'line']} 분석 결과` : "MCP 통계표 탐색 결과")}</h3>{result.chart.length > 0 && editOptions?.showLegend!==false && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>
-        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
+        {!result.editSessionId&&result.warnings?.map((warning, index) => <div className="error-banner" role="status" key={index}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi, "$1[redacted]")}</div>)}
+        {!result.editSessionId&&<div className="chart-header"><div><h3>{editOptions?.title||(result.chart.length ? `${chartLabels[result.chartType||'line']} 분석 결과` : "MCP 통계표 탐색 결과")}</h3>{result.chart.length > 0 && editOptions?.showLegend!==false && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>}
+        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
         {result.insights.length>0&&<div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{result.insights.map((x,index) => <li key={`${index}-${x}`}>{x}</li>)}</ul></div>}
         {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><div><h3>{allDataOpen?"전체 데이터":"주요 데이터 예시"}</h3><p>{allDataOpen?"조회된 모든 관측치를 표시합니다.":"각 계열의 시작과 최근 값을 간략히 보여줍니다."}</p></div><span>전체 {allRows.length}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{visibleRows.map(({series,point}) => <tr key={`${series.id}-${point.date}`}><td>{series.label}</td><td>{point.date}</td><td>{point.value.toLocaleString()} {series.unit}</td></tr>)}</tbody></table>{allRows.length>previewRows.length&&<div className="data-more"><span>{allDataOpen?`전체 ${allRows.length}개를 표시 중입니다.`:`${previewRows.length}개 예시만 표시 중입니다.`}</span><button type="button" aria-expanded={allDataOpen} onClick={()=>setAllDataOpen((current)=>!current)}>{allDataOpen?"간략히 보기":`전체 데이터 더 보기 (${allRows.length}개)`}<Icon name="chevron" size={14}/></button></div>}</div>}
       </article>
@@ -454,38 +485,49 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [view, setView] = useState<"home" | "lineage">("home");
-  const [query, setQuery] = useState("대출 얼마나 늘었어?");
+  const [query, setQuery] = useState("최근 5년 경제심리지수 추이");
   const [result, setResult] = useState<QueryResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const liveResult=useRef<QueryResponse|null>(null);
+  const editQueue=useRef<Promise<unknown>>(Promise.resolve());
   const [error, setError] = useState("");
   const [multiIntents,setMultiIntents]=useState<Array<{id:string;title:string;initial:QueryResponse}>|null>(null);
-  const examples = useMemo(() => ["대출 얼마나 늘었어?", "요즘 물가 어때?", "경기 분위기 어때?", "최근 5년 경제심리지수 추이"], []);
+  const examples = useMemo(() => ["최근 5년 경제심리지수 추이", "월별 생산자물가지수", "최근 대출금리 추이", "경상수지와 구성 항목 비교"], []);
 
   useEffect(()=>{
     const restore=(state:Record<string,unknown>|null)=>{
       if(!state?.statbridge)return;
+      if(!ownsHistory(state,accountKey('history'))){liveResult.current=null;setResult(null);setMultiIntents(null);setQuery('최근 5년 경제심리지수 추이');setView('home');history.replaceState(null,'',location.pathname);return;}
       setView(state.view==="lineage"?"lineage":"home");
-      setQuery(typeof state.query==="string"?state.query:"대출 얼마나 늘었어?");
-      setResult((state.result as QueryResponse|null)||null);setMultiIntents(null);setError("");
+      setQuery(typeof state.query==="string"?state.query:"최근 5년 경제심리지수 추이");
+      liveResult.current=(state.result as QueryResponse|null)||null;setResult(liveResult.current);setMultiIntents(null);setError("");
+      const saved=state.result as QueryResponse|null;
+      if(saved?.editSessionId)void fetchWorkspace(saved.editSessionId).then(data=>{liveResult.current=data;setResult(data);}).catch(e=>setError(e.message));
       window.setTimeout(()=>window.scrollTo({top:state.result?document.body.scrollHeight:0,behavior:"smooth"}),20);
     };
     if(history.state?.statbridge)restore(history.state);
-    else history.replaceState({statbridge:true,view:"home",query,result:null},"",location.pathname);
+    else {
+      let saved:Record<string,unknown>|null=null;
+      try{saved=JSON.parse(localStorage.getItem(accountKey('statbridge.workspace.current'))||'null');}catch{/* Optional local recovery. */}
+      if(saved?.statbridge)restore(saved);
+      else history.replaceState({statbridge:true,account:accountKey('history'),view:"home",query,result:null},"",location.pathname);
+    }
     const onPopState=(event:PopStateEvent)=>restore(event.state);
     window.addEventListener("popstate",onPopState);return()=>window.removeEventListener("popstate",onPopState);
   },[]);
 
   const historyUrl=(nextView:"home"|"lineage",nextQuery=query)=>nextView==="lineage"?`${location.pathname}?view=lineage`:`${location.pathname}${nextQuery?`?q=${encodeURIComponent(nextQuery)}`:""}`;
-  const pushUiState=(nextView:"home"|"lineage",nextResult:QueryResponse|null,nextQuery=query)=>history.pushState({statbridge:true,view:nextView,query:nextQuery,result:nextResult},"",historyUrl(nextView,nextQuery));
+  const pushUiState=(nextView:"home"|"lineage",nextResult:QueryResponse|null,nextQuery=query)=>history.pushState({statbridge:true,account:accountKey('history'),view:nextView,query:nextQuery,result:nextResult},"",historyUrl(nextView,nextQuery));
 
-  const showResult = (data: QueryResponse) => {
-    setResult(data);
-    pushUiState("home",data,data.query||query);
-    window.setTimeout(() => document.getElementById("analysis-result")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+  const showResult = (data: QueryResponse, editing=false) => {
+    liveResult.current=data;setResult(data);
+    if(data.editSessionId)try{localStorage.setItem(accountKey('statbridge.workspace.current'),JSON.stringify({statbridge:true,account:accountKey('history'),view:'home',query:data.query,result:data}));}catch{/* Saved JSON files remain available. */}
+    if(editing)history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:data.query||query,result:data},'',historyUrl('home',data.query||query));
+    else {pushUiState("home",data,data.query||query);window.setTimeout(() => document.getElementById("analysis-result")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);}
   };
 
   const goHome=()=>{
-    setView("home");setResult(null);setMultiIntents(null);setError("");
+    setView("home");liveResult.current=null;setResult(null);setMultiIntents(null);setError("");
     pushUiState("home",null,query);window.scrollTo({top:0,behavior:"smooth"});
   };
 
@@ -575,16 +617,35 @@ export default function App() {
     finally { setLoading(false); }
   };
 
-  const editSelectedOutput = async (input: ChartEditInput): Promise<boolean> => {
-    if(!result?.editSessionId)return false;
-    setLoading(true);setError("");
-    try { showResult(await submitOutputEdit({edit_session_id:result.editSessionId,revision:result.outputSpec?.editVersion,...input})); return true; }
-    catch(err){setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");throw err;}
-    finally{setLoading(false);}
+  const editSelectedOutput = (input: ChartEditInput): Promise<boolean> => {
+    const job=editQueue.current.then(async()=>{
+      const current=liveResult.current||result;if(!current?.editSessionId)return false;
+      setLoading(true);setError("");
+      try { const updated=await submitOutputEdit({edit_session_id:current.editSessionId,revision:current.outputSpec?.editVersion,...input});if(liveResult.current?.editSessionId!==current.editSessionId)return false;showResult(updated,true); return true; }
+      catch(err){setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");throw err;}
+      finally{setLoading(false);}
+    });
+    editQueue.current=job.then(()=>{},()=>{});return job;
   };
 
+  useEffect(()=>{const open=(event:Event)=>{const id=(event as CustomEvent<string>).detail;setLoading(true);fetchWorkspace(id).then(updated=>showResult(updated)).catch(e=>setError(e.message)).finally(()=>setLoading(false));};window.addEventListener('statbridge:open-saved',open);return()=>window.removeEventListener('statbridge:open-saved',open);},[]);
+
   return <div className="app-shell">
-    <Sidebar open={menuOpen} close={() => setMenuOpen(false)} view={view} selectView={navigateView} goHome={goHome}/>
-    <div className="main-shell"><Header openMenu={() => setMenuOpen(true)}/>{view === "lineage" ? <DataCatalog onQuery={queryCatalogTable} loading={loading}/> : <main><Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/><FeatureStrip/>{error && <div className="error-banner">{error}</div>}{multiIntents&&<MultiIntentPanel query={query} intents={multiIntents} loading={loading} execute={executeMultiIntents}/>} {result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification}/>} {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>} {result?.status === "need_output_config" && <OutputConfigPanel result={result} loading={loading} submit={renderSelectedOutput}/>} {result && !["need_clarification","need_period","need_output_config"].includes(result.status || "") && <Results result={result} onEdit={editSelectedOutput} loading={loading}/>}<section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x} onClick={() => { setQuery(x); setResult(null); setMultiIntents(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x}</button>)}</section></main>}<footer><span>© 2026 StatBridge</span><span>입력 UI → LangGraph → MCP/KOSIS → 출력 선택 → 출력 Agent → Renderer</span></footer></div>
+    <div className="main-shell">
+      <Header open={menuOpen} toggleMenu={() => setMenuOpen((current) => !current)} closeMenu={() => setMenuOpen(false)} view={view} goHome={goHome} selectView={navigateView}/>
+      {view === "lineage" ? <DataCatalog onQuery={queryCatalogTable} loading={loading}/> : <main id="main-content" tabIndex={-1}>
+        <Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/>
+        <FeatureStrip/>
+        {error && <div className="error-banner" role="alert">{error}</div>}
+        {multiIntents && <MultiIntentPanel query={query} intents={multiIntents} loading={loading} execute={executeMultiIntents}/>}
+        {result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification}/>}
+        {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>}
+        {result?.status === "need_output_config" && <OutputConfigPanel result={result} loading={loading} submit={renderSelectedOutput}/>}
+        {result && !["need_clarification","need_period","need_output_config"].includes(result.status || "") && <Results result={result} onEdit={editSelectedOutput} loading={loading}/>}
+        <section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x} onClick={() => { setQuery(x); setResult(null); setMultiIntents(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x}</button>)}</section>
+        <UsageGuide/>
+      </main>}
+      <footer><span>© 2026 StatBridge</span><span>경제통계 탐색 · 시각화 · 출처 확인</span></footer>
+    </div>
   </div>;
 }

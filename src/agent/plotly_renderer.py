@@ -45,7 +45,7 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
 
     dual_axis = layout_mode == "combined" and bool(spec.secondary_axis_series)
     panels = layout_mode in {"separate", "horizontal", "grid"} and len(series) > 1 and chart_type not in {'scatter','bubble','heatmap'}
-    columns = len(series) if layout_mode == "horizontal" else (2 if layout_mode == "grid" else 1)
+    columns = len(series) if layout_mode == "horizontal" else (min(len(series),spec.presentation.panel_columns) if layout_mode == "grid" else 1)
     if panels:
         fig = make_subplots(rows=math.ceil(len(series)/columns), cols=columns, shared_xaxes=layout_mode == "separate" and chart_type not in {'histogram','box'},
                             shared_yaxes=spec.presentation.shared_y,
@@ -179,7 +179,7 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     if chart_type in {"line", "bar", "stacked_bar", "area"}:
         for highlight in spec.highlights:
             fig.add_vrect(x0=highlight.start, x1=highlight.end, fillcolor=highlight.color, opacity=highlight.opacity,
-                          line_width=0, annotation_text=escape(highlight.label))
+                          line_width=0, annotation_text=escape(highlight.label),name=highlight.id)
         for value in spec.reference_lines:
             fig.add_hline(y=value, line_dash="dash", line_color="gray")
         for annotation in spec.annotations:
@@ -253,8 +253,8 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
             updater=fig.update_xaxes if axis_name=='x' else fig.update_yaxes
             updater(tickmode='auto',nticks=10)
     title_lines=fig.layout.title.text.count('<br>')+1 if fig.layout.title.text else 0
-    legend_space=65 if spec.show_legend and spec.legend_position=='top' and chart_type not in {'scatter','bubble'} else 0
-    fig.update_layout(margin=dict(t=max(100,spec.presentation.margin_top, title_lines*spec.presentation.title_size+legend_space+90),
+    legend_space=max(20,spec.presentation.legend_size+8) if spec.show_legend and spec.legend_position=='top' and chart_type not in {'scatter','bubble'} else 0
+    fig.update_layout(margin=dict(t=max(fig.layout.margin.t or 0,100,spec.presentation.margin_top, title_lines*(spec.presentation.title_size+4)+legend_space+28),
         b=max(spec.presentation.margin_bottom,150 if spec.legend_position=='bottom' else 110)),hoverlabel=dict(namelength=-1),
         hovermode='closest' if chart_type in {'scatter','bubble','pie','donut','treemap','heatmap','box','histogram'} else 'x unified')
     if chart_type in {'pie','donut','treemap'}:

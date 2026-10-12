@@ -16,6 +16,14 @@ SUPPORTED_LAYOUTS = {"combined", "separate", "horizontal", "grid"}
 
 
 def edit_change_description(command: ChartEditCommand) -> str:
+    if command.operation=='set_report':
+        from advanced_chart_spec import TEMPLATES
+        if command.params.get('clear'):return '일반 그래프 설정으로 복원했습니다.'
+        patch=command.params.get('patch',{})
+        template=TEMPLATES.get(patch.get('template'),{}).get('name','현재 보고서')
+        return f'보고서 설정 적용: {template}. 기존 관측값을 유지했습니다.'
+    if command.operation == "set_stickers":
+        return f"그래프 이모티콘 배치·크기·회전 적용: {len(command.params.get('items', []))}개"
     names = {"set_title":"제목", "set_subtitle":"부제목", "set_axis_labels":"축 이름",
         "set_axis_style":"축 표시", "set_legend":"범례", "set_presentation":"글꼴·배치",
         "set_segment_style":"선택 구간 스타일", "set_point_style":"선택 관측점 스타일",
@@ -264,14 +272,12 @@ class OutputAgent:
                 points = [{"date": points[-1]["date"], "value": sum(x["value"] for x in points) / len(points)}]
             elif spec.transform in {"growth_rate", "year_over_year"}:
                 if spec.transform == "year_over_year":
-                    if all(len(p["date"]) == 6 and p["date"].isdigit() for p in points): lag = 12
-                    elif all("Q" in p["date"].upper() for p in points): lag = 4
-                    elif all(len(p["date"]) == 4 and p["date"].isdigit() for p in points): lag = 1
-                    else: raise ValueError("이 시점 형식의 전년 대비 계산은 지원하지 않습니다.")
+                    from chart_data_transforms import year_over_year
+                    points=year_over_year(points,item.get('frequency'))
                 else:
                     lag = 1
-                points = [{"date": points[i]["date"], "value": (points[i]["value"] / points[i-lag]["value"] - 1) * 100}
-                          for i in range(lag, len(points)) if points[i-lag]["value"] != 0]
+                    points = [{"date": points[i]["date"], "value": (points[i]["value"] / points[i-lag]["value"] - 1) * 100}
+                              for i in range(lag, len(points)) if points[i-lag]["value"] != 0]
             unit = "%" if spec.transform in {"growth_rate", "year_over_year"} else item["unit"]
             shaped.append({**item, "points": points, "unit": unit})
         if spec.top_n:
@@ -295,6 +301,14 @@ class OutputAgent:
         source_series = self._series((result.get("execution") or {}).get("rows") or [])
         series = self._apply_data_edits(source_series, spec)
         series = [{**s, "color": spec.series_colors.get(s["label"], s["color"])} for s in series]
+        from chart_designs import palette, materialize
+        design_colors=palette(spec)
+        if design_colors:series=[{**s,'color':spec.series_colors.get(s['label'],design_colors[i%len(design_colors)])} for i,s in enumerate(series)]
+        if spec.report:
+            from advanced_chart_spec import PALETTE
+            colors=design_colors or PALETTE
+            series=[{**s,'color':spec.series_colors.get(s['label'],colors[i%len(colors)])} for i,s in enumerate(series)]
+        series=[{**s,'color':(spec.series_styles.get(s['label']).color if spec.series_styles.get(s['label']) and spec.series_styles[s['label']].color else s['color'])} for s in series]
         labels = {s["label"] for s in source_series}
         if any(label not in labels for label in [*spec.series_chart_types, *spec.secondary_axis_series, *spec.series_colors, *spec.series_dashes, *spec.series_styles, *spec.display_names, *(r.label for r in spec.range_styles)]):
             raise ValueError("그래프 명세에 조회되지 않은 계열이 포함되어 있습니다.")
@@ -304,10 +318,27 @@ class OutputAgent:
             raise ValueError("보조축은 선·막대·영역 그래프에서만 사용할 수 있습니다.")
         mixed_units = len({s["unit"] for s in series}) > 1
         mixed_frequency = len({s["frequency"] for s in series if s["frequency"]}) > 1
-        if (mixed_frequency or (mixed_units and not spec.secondary_axis_series)) and spec.layout == "combined" and spec.chart_type not in {"scatter", "bubble"}:
+        if not spec.report and (mixed_frequency or (mixed_units and not spec.secondary_axis_series)) and spec.layout == "combined" and spec.chart_type not in {"scatter", "bubble"}:
             raise ValueError(combined_layout_reason(series))
         summary = self._summary(series)
-        figure = render_plotly(series, spec)
+        renderer_info={}
+        if spec.report:
+            from advanced_chart_render import plotly_report, echarts_report, report_warnings
+            from report_export import document
+            figure=plotly_report(series,materialize(spec,[s['label'] for s in series]),result)
+            try:
+                renderer_info['echartsOption']=echarts_report(series,materialize(spec,[s['label'] for s in series]),result)
+            except ValueError as error:
+                renderer_info['echartsUnavailable']=str(error)
+            renderer_info['reportDocument']=document(result,spec)
+            renderer_info['warnings']=report_warnings(series,spec)
+            if spec.report.kind=='regression':
+                from advanced_chart_render import regression
+                renderer_info['regression']=regression(series)
+        else:
+            figure = render_plotly(series, materialize(spec,[s['label'] for s in series]))
+            from advanced_chart_render import report_warnings
+            renderer_info['warnings']=report_warnings(series,spec)
         explanation = self._explain(series, spec, summary) if generate_explanation else {"text": summary, "source": "rules", "method": "기존 조회 자료로 편집 상태 복원"}
         return {
             "status": "ready" if any(s["points"] for s in series) else "empty",
@@ -318,6 +349,7 @@ class OutputAgent:
             "evidence": self._evidence(result),
             "chartState": spec.model_dump(),
             "plotlyFigure": figure,
+            **renderer_info,
             "visualization": {
                 "chartType": spec.chart_type, "layout": spec.layout, "series": series, "editable": True,
                 "editOptions": {
@@ -396,6 +428,7 @@ class OutputAgent:
             class InjectedModel:
                 model_name = "injected-test-model"
                 supports_images = False
+                requires_legacy_explanation = True
                 def interpret(self, system: str, context: dict[str, Any]) -> dict[str, Any]:
                     if not client or not client.configured:
                         raise ValueError("자연어 그래프 수정에는 NCP_CLOVA_API_KEY가 필요합니다.")
@@ -404,7 +437,7 @@ class OutputAgent:
             model = InjectedModel()
         return ChartEditAgent(model, self).edit(result, current_output, instruction)
 
-    def apply_edits(self, result: dict[str, Any], current_output: dict[str, Any], commands: list[ChartEditCommand]) -> dict[str, Any]:
+    def apply_edits(self, result: dict[str, Any], current_output: dict[str, Any], commands: list[ChartEditCommand], *, generate_explanation: bool = True) -> dict[str, Any]:
         """Apply a validated batch atomically, then render exactly once."""
         labels = [s["label"] for s in self._series((result.get("execution") or {}).get("rows") or [])]
         spec = ChartSpec.model_validate(current_output["chartState"])
@@ -417,10 +450,12 @@ class OutputAgent:
             spec = changed
         if spec.model_dump() == before:
             raise ValueError("요청한 설정이 이미 적용되어 있어 변경된 내용이 없습니다. 다른 수정 내용을 입력해 주세요.")
-        edited = self._build(result, spec)
-        if edited.get("plotlyFigure") == current_output.get("plotlyFigure"):
-            raise ValueError("표시되는 그래프가 바뀌지 않았습니다. 수정할 요소와 설정을 구체적으로 입력해 주세요.")
+        edited = self._build(result, spec, generate_explanation=generate_explanation)
+        state_only=edited.get('plotlyFigure')==current_output.get('plotlyFigure')
         edited["editChanges"] = [edit_change_description(c) for c in effective]
+        if state_only:
+            edited['stateOnlyChange']=True
+            edited['editChanges'].append('설정을 저장했습니다. 현재 모양은 같으며 이후 디자인 변경이나 파일 출력에 반영됩니다.')
         if any(c.operation == 'set_chart_type' for c in effective) and (
                 before['range_styles'] or before['series_styles'] or before['series_chart_types'] or before['guides']):
             edited['editChanges'].append('그래프 종류를 변경해 이전 그래프 전용 부분 스타일·혼합 종류를 정리했습니다. 원자료와 표시 기간은 유지됩니다.')
@@ -452,6 +487,9 @@ class OutputAgent:
             updates.update(x_axis_label=current.x_axis_label if command.x_axis_label is None else command.x_axis_label,
                            y_axis_label=current.y_axis_label if command.y_axis_label is None else command.y_axis_label)
         elif command.operation == "set_chart_type":
+            # An explicit legacy type selection takes precedence over a report
+            # renderer's kind; do not leave a hidden report kind drawing lines.
+            updates['report']=None
             # A global kind change must not retain per-series overrides from
             # the previous mixed chart, otherwise "bar" can still draw lines.
             updates.update(chart_type=value, series_chart_types={})
@@ -466,7 +504,10 @@ class OutputAgent:
                     updates.update(guides=[], notes=[note for note in current.notes if not note.label])
             if value not in {"line", "bar", "stacked_bar", "area"}:
                 updates["secondary_axis_series"] = []
-        elif command.operation == "set_layout": updates["layout"] = value
+        elif command.operation == "set_layout":
+            updates['layout']=value
+            if current.report and value!='combined':
+                updates['report']=current.report.model_copy(update={'kind':'panels','columns':len(labels) if value=='horizontal' else 2 if value=='grid' else 1})
         elif command.operation == "set_legend":
             if isinstance(value, bool): updates["show_legend"] = value
             else: updates["legend_position"] = value
@@ -495,6 +536,9 @@ class OutputAgent:
                 raise ValueError("수정할 계열이 조회 결과에 없습니다.")
             field = "series_colors" if command.operation == "set_series_color" else "series_dashes"
             updates[field] = {**getattr(current, field), command.label: value}
+            if command.label in current.series_styles:
+                key='color' if command.operation=='set_series_color' else 'dash'
+                updates['series_styles']={**current.series_styles,command.label:current.series_styles[command.label].model_copy(update={key:None})}
         edited_spec = current.model_copy(update=updates)
         return ChartSpec.model_validate(edited_spec.model_dump())
 

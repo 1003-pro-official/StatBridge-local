@@ -122,7 +122,7 @@ def test_image_adapter_can_be_replaced_without_orchestration_changes():
 
 
 def test_http_sketch_request_and_failed_session_rollback(monkeypatch):
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     import bridge_api as api
     source = fixture_result()
     output_agent = OutputAgent()

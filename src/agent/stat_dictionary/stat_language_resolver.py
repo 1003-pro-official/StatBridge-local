@@ -1,7 +1,7 @@
 import copy, json, os, re, unicodedata
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from request_match_guard import table_evidence, catalog_mentions, scoped_metric_query, residual_catalog_query, structure_request, unsupported_quantity_terms
+from request_match_guard import table_evidence, catalog_mentions, scoped_metric_query, residual_catalog_query, structure_request, unsupported_quantity_terms, measured_intent_matches, active_measure_text
 
 @dataclass
 class QueryState:
@@ -46,7 +46,7 @@ class StatLanguageResolver:
 
     def parse_query_state(self, query):
         """Extract conservative typed state without inventing catalog identifiers."""
-        text=self.norm(query); compact=text.replace(' ','')
+        text=self.norm(active_measure_text(query)); compact=text.replace(' ','')
         state=QueryState()
         metric_terms=('예금금리','수신금리','대출금리','기준금리','주택담보대출','가계대출','채권','통화량','소비자물가','생산자물가','국내공급물가','수출물량','수입물량','신용카드','지급수단','전자지급결제대행','기업경기','소비자심리','경제심리','금융거래','금융자산부채잔액')
         state.metrics=[term for term in metric_terms if term in compact]
@@ -54,7 +54,7 @@ class StatLanguageResolver:
         state.regions=[term for term in ('전국','서울','부산','제주','지역별') if term in compact]
         state.institutions=[term for term in ('예금은행','비은행금융기관','금융기관') if term in compact]
         state.company_sizes=[term for term in ('대기업','중소기업','중견기업','기업규모별') if term in compact]
-        state.measure_basis=next((term for term in ('신규취급액','잔액','비중','금액','물량') if term in compact),None)
+        state.measure_basis='비중' if any(term in compact for term in ('비중','구성비','비율')) else next((term for term in ('신규취급액','잔액','금액','물량') if term in compact),None)
         state.valuation_basis=next((term for term in ('명목','시가','실질') if term in compact),None)
         state.frequency=next((value for term,value in (('시간별','H'),('일별','D'),('월별','M'),('분기별','Q'),('연간','A')) if term in compact),None)
         years=re.findall(r'(?<!\d)((?:19|20)?\d{2})년',text)
@@ -158,6 +158,9 @@ class StatLanguageResolver:
 
     def _matches_metric_intent(self, query, table):
         """Reject look-alike tables that share broad aliases but measure another concept."""
+        query = active_measure_text(query)
+        if not measured_intent_matches(query, table):
+            return False
         q=self.norm(query); tn=self.norm(table.get('table_name',''))
         qc=q.replace(' ',''); tc=tn.replace(' ','')
         # Detailed 2018+ accounts are a distinct family, not the aggregate
@@ -202,6 +205,7 @@ class StatLanguageResolver:
         return True
 
     def _score(self, query, confirmed=None, top_k=12):
+        query = active_measure_text(query)
         cache_key=(self.norm(query),tuple(sorted((confirmed or {}).items())),int(top_k))
         cached=self._score_cache.get(cache_key)
         if cached is not None:
@@ -850,6 +854,7 @@ class StatLanguageResolver:
         return [choice]
 
     def resolve(self, query, confirmed=None, asked_clarifications=None, top_k=8):
+        query = active_measure_text(query)
         confirmed=confirmed or {}
         asked_clarifications=asked_clarifications or []
         explicit_ids=[tid for tid in self.tables_by_id if self.norm(tid) in self.norm(query)]

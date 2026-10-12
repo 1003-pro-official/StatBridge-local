@@ -202,6 +202,7 @@ def test_incomplete_request_accounting_is_corrected_as_a_whole():
 # Each public operation reaches the actual output renderer, rather than only
 # checking whether its name appears in the model prompt.
 OPERATION_CASES={
+ "set_report":{"params":{"patch":{"template":"economic_outlook","kind":"forecast"}}},
  "set_title":{"value":"새 제목"}, "set_subtitle":{"value":"새 부제"},
  "set_axis_labels":{"x_axis_label":"기간","y_axis_label":"값"},
  "set_chart_type":{"value":"bar"}, "set_layout":{"value":"separate"},
@@ -228,7 +229,8 @@ OPERATION_CASES={
  "update_highlight":{"value":"highlight1","params":{"color":"#ff0000"}}, "remove_highlight":{"value":"highlight1"},
  "add_shape":{"params":{"type":"circle","x0":.4,"x1":.5,"y0":.4,"y1":.5}},
  "update_shape":{"value":"shape1","params":{"color":"#ff0000"}}, "remove_shape":{"value":"shape1"},
- "reset_styles":{}
+ "reset_styles":{},
+ "set_stickers":{"params":{"items":[{"id":"sticker1","asset_id":"report-arrow-up","x":.5,"y":.5,"size":.3,"angle":45}]}}
 }
 
 

@@ -260,7 +260,8 @@ class StatBridgeAgent:
         common_terms = " ".join(str(x) for x in (classification.get("qualifiers") or []) if str(x).strip())
         for item in series:
             ranked = self.hybrid.rank(f"{item['label']} {item['query']} {common_terms}".strip(), top_k=8)
-            ranked = [candidate for candidate in ranked if table_evidence(item['query'], self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]]
+            ranked = [candidate for candidate in ranked if table_evidence(item['query'], self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]
+                      and self.resolver._matches_metric_intent(item['query'], self.tables_by_id.get(str(candidate.get('table_id')), {}))]
             if not ranked:
                 missing.append(item["label"])
                 continue
@@ -479,15 +480,30 @@ class StatBridgeAgent:
                         }
                 else:
                     dictionary_query, classification = self._classify(effective_query)
-                comparison = self._resolve_comparison(classification, dictionary_query)
+                comparison = self._resolve_comparison(classification, dictionary_query) if structure_request(effective_query)['comparison'] else None
                 if comparison:
                     result = comparison
                 else:
                     hybrid_candidates = self.hybrid.rank(dictionary_query, top_k=12)
-                    hybrid_candidates = [candidate for candidate in hybrid_candidates if table_evidence(request_query, self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]]
+                    mentions = catalog_mentions(effective_query, self.resolver.tables)
+                    eligible = []
+                    for candidate in hybrid_candidates:
+                        table = self.tables_by_id.get(str(candidate.get('table_id')), {})
+                        if not table:
+                            continue
+                        scoped = scoped_metric_query(effective_query, table, mentions)
+                        if table_evidence(scoped, table)[0] and self.resolver._matches_metric_intent(scoped, table):
+                            eligible.append(candidate)
+                    hybrid_candidates = eligible
                     # Keep deterministic ambiguity gates. Replace its ranking only after
                     # the resolver has decided whether a clarification is required.
-                    result = self.resolver.resolve(dictionary_query, top_k=8)
+                    # A model's search expansion must not rewrite an already
+                    # grounded quantity or suppress its clarification gate.
+                    result = preflight if preflight.get("status") == "resolved" else self.resolver.resolve(dictionary_query, top_k=8)
+                    if preflight.get("status") == "resolved":
+                        # Search hints are not user-selected dates, dimensions
+                        # or measures when constructing the actual API plan.
+                        dictionary_query = effective_query
                     if result.get("status") == "resolved" and hybrid_candidates:
                         result["candidates"] = hybrid_candidates[:8]
                         result["selected_table"] = hybrid_candidates[0]
@@ -497,7 +513,7 @@ class StatBridgeAgent:
         # Explicit UI choices are hard constraints. HCX may suggest speculative
         # comparison series for the original broad question, but those must not
         # replace the table selected by the user's clarification buttons.
-        if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans"):
+        if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans") and structure_request(request_query)['comparison']:
             comparison = self._resolve_comparison(classification, dictionary_query)
             if comparison:
                 result = comparison

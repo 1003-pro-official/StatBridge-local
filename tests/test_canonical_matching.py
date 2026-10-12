@@ -105,7 +105,7 @@ def test_unknown_second_quantity_is_not_silently_dropped(resolver):
 
 def test_output_endpoint_renders_both_tables_and_rejects_changed_title(monkeypatch,resolver):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     from test_output_agent_migration import fixture_result
     monkeypatch.setattr(api.agent.output_agent,'ncp_client',None)
     monkeypatch.setattr(api,'_table_card',lambda tid:{'tableId':tid})
@@ -141,7 +141,7 @@ def test_output_endpoint_renders_both_tables_and_rejects_changed_title(monkeypat
 def test_output_session_accepts_confirmed_period_without_accepting_changed_item(monkeypatch):
     import copy
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     from output_agent import OutputAgent
     query='「차주당 주택담보대출 신규취급액」 자료를 한 계열로 찾아줘'
     result=copy.deepcopy(api.agent.resolve(query))

@@ -1,3 +1,4 @@
+import {apiFetch,accountKey} from './accountApi';
 import { PointerEvent, ReactNode, useEffect, useRef, useState } from "react";
 import Plotly from "plotly.js-dist-min";
 import type { ChartEditInput, ChartSeries, SketchMark, EditSelection } from "./api/types";
@@ -8,9 +9,20 @@ import type { EditableMark,Corner } from "./sketchTransform";
 import { bindMarks, changeMarkTarget, elementTargets, inferMarkTarget } from "./sketchRequest";
 import { Sujeongi } from "./Sujeongi";
 import editHelp from "./chartEditHelp.json";
+import StickerEditor from "./StickerEditor";
+import ReportPanel from "./ReportPanel";
+import {reportExportIntent} from './reportExportIntent';
+import {exportReportFile} from './api/client';
+import type { ChartSticker } from "./api/types";
+import WorkspaceProperties from './WorkspaceProperties';
+import type {GraphSelection} from './WorkspaceProperties';
+import WorkspaceData from './WorkspaceData';
+import {historyIntent} from './historyIntent';
+import './ChartWorkspace.css';
 
 type Props = {
   children: ReactNode;
+  warnings?:string[];
   series: ChartSeries[];
   sessionId: string;
   revision: object;
@@ -41,7 +53,18 @@ async function readImage(src: string): Promise<HTMLImageElement> {
   return image;
 }
 
-export default function ChartSketchEditor({ children, series, sessionId, revision, loading, onEdit, model, canUndo, canRedo }: Props) {
+export default function ChartSketchEditor({ children, series, sessionId, revision, loading, onEdit, model, canUndo, canRedo, warnings=[] }: Props) {
+  const state=(revision as {chartState?:Record<string,unknown>}).chartState||{};
+  const [selection,setSelection]=useState<GraphSelection>({kind:'chart'});
+  const [dataOpen,setDataOpen]=useState(true),[propertiesOpen,setPropertiesOpen]=useState(true);
+  const [searchQuery,setSearchQuery]=useState('');
+  const [fileBusy,setFileBusy]=useState(false);
+  const stickerDraft=useRef<{revision:object;items:ChartSticker[]}|null>(null);
+  const editWithDraft=(input:ChartEditInput)=>{
+    const pending=stickerDraft.current?.revision===revision?stickerDraft.current.items:null;
+    const saved=(revision as {chartState?:{stickers?:ChartSticker[]}}).chartState?.stickers||[];
+    return onEdit({...input,...(!input.document&&(!input.action||input.action==='edit')&&input.stickers===undefined&&pending&&JSON.stringify(pending)!==JSON.stringify(saved)?{stickers:pending}:{})});
+  };
   const [enabled,setEnabled] = useState(false);
   const [tool,setTool] = useState<SketchMark["tool"]>("pen");
   const [marks,setMarks] = useState<EditableMark[]>([]);
@@ -140,6 +163,21 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
     applying.current=true;
     setBusy(true);setError("");
     try {
+      const action=historyIntent(requestedInstruction);
+      if(action)return await onEdit({instruction:'',action});
+      const exportFormat=reportExportIntent(requestedInstruction);
+      if(exportFormat&&!marks.some(mark=>mark.text.trim())){
+        let version=(revision as {editVersion?:number}).editVersion;
+        const pending=stickerDraft.current?.revision===revision?stickerDraft.current.items:null;
+        const saved=(revision as {chartState?:{stickers?:ChartSticker[]}}).chartState?.stickers||[];
+        if(pending&&JSON.stringify(pending)!==JSON.stringify(saved)){
+          if(!await onEdit({instruction:'',stickers:pending}))return false;
+          if(version!==undefined)version+=1;
+        }
+        const blob=await exportReportFile(sessionId,version,exportFormat),url=URL.createObjectURL(blob),link=document.createElement('a');
+        link.href=url;link.download=`statbridge-report.${exportFormat}`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+        return true;
+      }
       const plotForRegion=stage.current?.querySelector<HTMLElement>(".plotly-chart");
       const boundMarks=bindMarks(marks,manual).map(mark=>({...mark,region:plotForRegion&&stage.current?resolveMarkRegion(mark,plotForRegion,stage.current):undefined}));
       const visual = { marks:boundMarks, selected_target:target, selection:manual, graph_image:undefined as string|undefined, marked_image:undefined as string|undefined };
@@ -162,7 +200,10 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
           if(src.length<=2_000_000 && marked.length<=2_000_000){visual.graph_image=src;visual.marked_image=marked;}
         }
       }
-      const success=await onEdit({instruction:requestedInstruction.trim(),visual,conversation});
+      const savedStickers=(revision as {chartState?:{stickers?:ChartSticker[]}}).chartState?.stickers||[];
+      const stickers=stickerDraft.current?.revision===revision?stickerDraft.current.items:null;
+      const success=await onEdit({instruction:requestedInstruction.trim(),visual,conversation,
+        ...(stickers&&JSON.stringify(stickers)!==JSON.stringify(savedStickers)?{stickers}:{} )});
       if(success){setMarks([]);setInstruction("");setNote("");}
       return success;
     } catch(err){setError(err instanceof Error?err.message:"수정 요청을 준비하지 못했습니다.");throw err;}
@@ -172,7 +213,40 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
     try { await onEdit({instruction:"",action}); }
     catch(err) { setError(err instanceof Error?err.message:"편집을 되돌리지 못했습니다."); }
   };
+  useEffect(()=>{
+    const node=stage.current;if(!node)return;
+    const select=(event:Event)=>setSelection((event as CustomEvent<GraphSelection>).detail);
+    const hitShape=(event:MouseEvent)=>{
+      if(enabled||(event.target as Element).closest('.gtitle,.xtick,.ytick,.xtitle,.ytitle,.annotation,.legend,.workspace-plot-heading,.workspace-plot-legend'))return;
+      const plot=node.querySelector<HTMLElement>('.plotly-chart');if(!plot)return;
+      const bounds=node.getBoundingClientRect(),x=event.clientX-bounds.left,y=event.clientY-bounds.top;
+      try{const hit=resolveMarkSelection({id:'click',tool:'arrow',target:'chart',text:'',points:[{x:x/bounds.width,y:y/bounds.height}]},graphHitPoints(plot,node),bounds.width,bounds.height,'segment');setSelection({kind:'series',label:hit.label});return;}catch{/* Empty chart space may select a highlighted time region. */}
+      const graph=plot as unknown as {_fullLayout?:Record<string,any>},axis=graph._fullLayout?.xaxis,frame=graph._fullLayout?._size;
+      if(!axis?.l2p||!Array.isArray(axis._categories)||!frame)return;
+      const pb=plot.getBoundingClientRect(),px=event.clientX-pb.left,py=event.clientY-pb.top;
+      if(py<frame.t||py>frame.t+frame.h)return;
+      const category=(date:string)=>axis._categories.findIndex((v:string)=>String(v).replace(/^period:/,'')===date);
+      const selected=(state.highlights as Array<{id:string;start:string;end:string}>||[]).find(h=>{const a=category(h.start),b=category(h.end);return a>=0&&b>=0&&px>=axis.l2p(a)+axis._offset&&px<=axis.l2p(b)+axis._offset;});
+      if(selected)setSelection({kind:'highlight',id:selected.id});
+    };
+    node.addEventListener('statbridge:graph-select',select);node.addEventListener('click',hitShape);return()=>{node.removeEventListener('statbridge:graph-select',select);node.removeEventListener('click',hitShape);};
+  },[revision,enabled]);
+  useEffect(()=>{if(selection.kind==='series'&&selection.label)setTarget(selection.label);else if(selection.kind==='title')setTarget('title');else if(selection.kind==='x')setTarget('x_axis');else if(selection.kind==='y')setTarget('y_axis');},[selection,revision]);
+  const file=async(format:string)=>{
+    setFileBusy(true);setError('');try{
+      let version=(revision as {editVersion?:number}).editVersion;
+      const pending=stickerDraft.current?.revision===revision?stickerDraft.current.items:null;
+      if(pending&&JSON.stringify(pending)!==JSON.stringify(state.stickers||[])){if(!await onEdit({instruction:'',stickers:pending}))return;if(version!==undefined)version+=1;}
+      if(format==='json'){const response=await apiFetch(`${import.meta.env.VITE_API_BASE_URL??'http://127.0.0.1:8000/api'}/workspace/${encodeURIComponent(sessionId)}/save`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({edit_session_id:sessionId,revision:version,format:'json'})});if(!response.ok){const reason=await response.json();throw new Error(reason.detail||'서버 저장에 실패했습니다.');}window.dispatchEvent(new Event('statbridge:graph-saved'));}
+      const csvValue=(value:unknown)=>JSON.stringify(String(value));
+      const blob=format==='csv'?new Blob(['\ufeff'+[['데이터','시점','값','단위'].join(','),...series.flatMap(s=>s.points.map(p=>[s.label,p.date,p.value,s.unit].map(csvValue).join(',')))].join('\r\n')],{type:'text/csv;charset=utf-8'}):await exportReportFile(sessionId,version,format);
+      if(format==='json')try{localStorage.setItem(accountKey('statbridge.workspace.saved'),await blob.text());}catch{setError('브라우저 저장 공간이 부족합니다. 다운로드한 파일로 복원하세요.');}
+      const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`statbridge-chart.${format}`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }catch(e){setError(e instanceof Error?e.message:String(e));}finally{setFileBusy(false);}
+  };
+  const restoreFile=async(file?:File)=>{if(!file)return;try{if(file.size>8_000_000)throw new Error('설정 파일은 최대 8MB입니다.');await onEdit({instruction:'',document:JSON.parse(await file.text())});}catch(e){setError(e instanceof Error?e.message:String(e));}};
   const controls = <>
+    <StickerEditor stage={stage} items={(revision as {chartState?:{stickers?:ChartSticker[]}}).chartState?.stickers||[]} initialDraft={()=>stickerDraft.current?.revision===revision?stickerDraft.current.items:undefined} revision={revision} disabled={loading||busy} drawing={enabled} onActivate={()=>setEnabled(false)} onDraftChange={items=>{stickerDraft.current={revision,items};}} onEdit={onEdit}/>
     <div className="sketch-toolbar">
       <button type="button" disabled={!canUndo||loading||busy} onClick={()=>void historyAction("undo")}>편집 취소</button>
       <button type="button" disabled={!canRedo||loading||busy} onClick={()=>void historyAction("redo")}>편집 다시 적용</button>
@@ -204,9 +278,13 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
     <details className="chart-edit-help"><summary>편집 가능한 항목과 예시</summary><p>그림을 그리지 않고 아래 입력칸에 여러 변경을 한 번에 적어도 됩니다. 여러 계열은 계열 이름을, 부분 수정은 실제 날짜나 분기를 함께 적어 주세요. 기존 메모·도형은 내용이나 위치로 지정해 주세요.</p>{editHelp.map(group=><section key={group.title}><strong>{group.title}</strong><ul>{group.examples.map(example=><li key={example}>{example}</li>)}</ul></section>)}</details>
     {error&&<p role="alert" className="error-banner">{error}</p>}
   </>;
-  return <div className="sketch-editor">
-    <div className="sujeongi-guide"><img src="/sujeongi/guide.png" alt="그래프 수정 도우미 캐릭터"/><strong>그래프 수정은 수정이에게 맡겨 보세요</strong></div>
-    <div className="sketch-stage" ref={stage}>
+  return <div className="sketch-editor chart-workspace" data-workspace-session={sessionId} aria-label="그래프 편집 워크스페이스">
+    <header className="workspace-top"><div><small>STATBRIDGE 분석 작업{(revision as {cachedSnapshot?:boolean}).cachedSnapshot?' · 저장 당시 자료':''}</small><strong>{String(state.title||'통계 그래프 편집')}</strong></div><label className="workspace-search"><span className="sr-only">편집 항목 찾기</span><input aria-label="편집 항목 찾기" placeholder="제목, 축, 데이터 항목 찾기" value={searchQuery} onChange={e=>{const text=e.target.value;setSearchQuery(text);const found=series.find(s=>s.label.includes(text));if(text.includes('제목'))setSelection({kind:'title'});else if(text.includes('축'))setSelection({kind:'y'});else if(found)setSelection({kind:'series',label:found.label});}}/></label><div className="workspace-actions"><button type="button" disabled={!canUndo||loading} onClick={()=>void historyAction('undo')} title="마지막 편집 되돌리기">↶ 되돌리기</button><button type="button" disabled={!canRedo||loading} onClick={()=>void historyAction('redo')} title="취소한 편집 다시 실행">↷ 다시 실행</button><button type="button" disabled={loading||fileBusy} onClick={()=>void file('json')}>설정 저장</button><details><summary>다운로드 · 열기</summary><div>{['png','svg','pdf','csv'].map(format=><button key={format} type="button" disabled={loading||fileBusy} onClick={()=>void file(format)}>{format.toUpperCase()} 다운로드</button>)}<label>저장한 그래프 열기<input aria-label="저장한 그래프 열기" type="file" accept=".json" onChange={e=>void restoreFile(e.target.files?.[0])}/></label><button type="button" disabled={loading} onClick={async()=>{try{const saved=localStorage.getItem(accountKey('statbridge.workspace.saved'));if(!saved)throw new Error('저장한 그래프 설정이 없습니다.');await onEdit({instruction:'',document:JSON.parse(saved)});}catch(e){setError(e instanceof Error?e.message:String(e));}}}>최근 저장 설정 열기</button><button type="button" disabled={loading} onClick={()=>{if(window.confirm('처음 그래프로 되돌릴까요? 되돌리기로 취소할 수 있습니다.'))void onEdit({instruction:'',restore_initial:true});}}>처음 상태로 되돌리기</button></div></details></div></header>
+    {warnings.length>0&&<details className="workspace-warnings"><summary>자료·축 범위 안내 ({warnings.length})</summary>{warnings.map((warning,i)=><p key={i}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi,'$1[redacted]')}</p>)}</details>}
+    <div className="workspace-panel-toggles"><button type="button" aria-expanded={dataOpen} onClick={()=>setDataOpen(!dataOpen)}>데이터 {dataOpen?'접기':'열기'}</button><button type="button" aria-expanded={propertiesOpen} onClick={()=>setPropertiesOpen(!propertiesOpen)}>속성 {propertiesOpen?'접기':'열기'}</button></div>
+    <div className={`workspace-grid ${!dataOpen?'data-collapsed':''} ${!propertiesOpen?'properties-collapsed':''}`}>
+    {dataOpen&&<aside className="workspace-left"><WorkspaceData series={series} hidden={state.hidden_series as string[]||[]} onEdit={editWithDraft} disabled={loading||busy} onSelect={label=>setSelection({kind:'series',label})}/></aside>}
+    <section className="workspace-center" aria-label="중앙 그래프"><div className="workspace-graph-status" role="status">{loading||busy?'변경 내용 적용 중…':`현재 그래프 · 편집 ${Number((revision as {editVersion?:number}).editVersion||0)}회`}<span>선을 클릭하면 해당 데이터의 속성을 편집합니다</span></div><div className="sketch-stage" ref={stage}>
       {children}
       <svg ref={overlay} className={`sketch-overlay ${enabled?"drawing":""}`} viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-label="그래프 수정 표시 영역"
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{if(transform.current){const original=transform.current.mark;setMarks(current=>current.map(m=>m.id===original.id?original:m));transform.current=null;}active.current=null;setDraft(null);}}>
@@ -220,7 +298,10 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
           </g>;
         })}
       </svg>
+    </div></section>
+    {propertiesOpen&&<aside className="workspace-right"><WorkspaceProperties series={series} state={state} selection={selection} onSelect={setSelection} onEdit={editWithDraft} disabled={loading||busy}/><details><summary>고급 차트 · 인쇄 · 출처</summary><ReportPanel series={series} sessionId={sessionId} revision={revision} disabled={loading||busy} onEdit={editWithDraft}/></details><details><summary>그림판 · 보고서 주석 · 편집 도움말</summary>{controls}</details></aside>}
     </div>
-    <Sujeongi revision={revision} sessionId={sessionId} loading={loading||busy} markCount={marks.length} model={model} onEdit={apply} canSubmitMarks={marks.some(m=>m.text.trim())||!!(model?.supportsImages&&marks.length)} markInstructions={marks.map(m=>m.text.trim()).filter(Boolean).join(" / ")}>{controls}</Sujeongi>
+    {error&&<p role="alert" className="workspace-error">{error}</p>}
+    <Sujeongi inline revision={revision} sessionId={sessionId} loading={loading||busy} markCount={marks.length} model={model} onEdit={apply} canSubmitMarks={marks.some(m=>m.text.trim())||!!(model?.supportsImages&&marks.length)} markInstructions={marks.map(m=>m.text.trim()).filter(Boolean).join(" / ")}>{null}</Sujeongi>
   </div>;
 }

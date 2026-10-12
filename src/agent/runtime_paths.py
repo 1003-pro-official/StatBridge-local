@@ -6,7 +6,7 @@ def layout(agent_dir: Path | None = None) -> dict[str, Path]:
     agent_dir = (agent_dir or Path(__file__).resolve().parent).resolve()
     project = agent_dir.parents[1]
     portable = project.parent / "statbridge_mcp_server"
-    if portable.is_dir() and project.name == "StatBridge-official":
+    if portable.is_dir() and project.name == "StatBridge-official" and not (project / 'src/backend/statbridge_mcp').is_dir():
         return {"root": project.parent, "backend": portable,
                 "data": project.parent / "runtime_data" / "processed",
                 "tables": project.parent / "runtime_data" / "tables",
