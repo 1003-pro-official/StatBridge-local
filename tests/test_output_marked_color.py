@@ -28,7 +28,7 @@ def test_marked_color_changes_only_verified_segment_without_highlight_or_model()
     rule = edited['chartState']['range_styles'][0]
     assert (rule['start'],rule['end'],rule['style']['color']) == ('202502','202503','#e53935')
     red = [trace for trace in edited['plotlyFigure']['data'] if trace.get('line',{}).get('color') == '#e53935']
-    assert len(red) == 1 and red[0]['x'] == ['2025-02-01','2025-03-01']
+    assert len(red) == 1 and red[0]['x'] == ['202502','202503']
     assert result == saved
     with pytest.raises(ValueError,match='표시'):
         editor.edit(result,original,"이 부분 그래프 색을 빨간색으로 바꿔줘")

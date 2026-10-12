@@ -4,6 +4,7 @@ from typing import Literal
 from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from advanced_chart_spec import ReportOptions
 
 
 ChartType = Literal[
@@ -22,7 +23,7 @@ class SeriesStyle(StrictStyle):
     color: str | None = Field(default=None, pattern=r"^#[0-9a-fA-F]{6}$")
     dash: Literal["solid", "dot", "dash", "longdash", "dashdot"] | None = None
     width: float | None = Field(default=None, ge=1, le=12)
-    opacity: float | None = Field(default=None, ge=0.05, le=1)
+    opacity: float | None = Field(default=None, ge=0, le=1)
     marker_size: float | None = Field(default=None, ge=2, le=24)
     marker_symbol: Literal["circle", "square", "diamond", "cross", "triangle-up", "triangle-down"] | None = None
     markers: bool | None = None
@@ -71,6 +72,8 @@ class AxisStyle(StrictStyle):
 
 
 class PresentationStyle(StrictStyle):
+    design_template: Literal['report','stability','outlook','slides','academic','explore'] | None = None
+    panel_columns: int = Field(default=2,ge=1,le=4)
     font_family: str = Field(default="Arial, sans-serif", max_length=100)
     font_size: int = Field(default=12, ge=8, le=32)
     title_size: int = Field(default=18, ge=10, le=42)
@@ -80,7 +83,7 @@ class PresentationStyle(StrictStyle):
     grid_color: str = Field(default="#e5e7eb", pattern=r"^#[0-9a-fA-F]{6}$")
     height: int | None = Field(default=None, ge=280, le=2400)
     width: int | None = Field(default=None, ge=400, le=2000)
-    title_x: float = Field(default=0, ge=0, le=1)
+    title_x: float = Field(default=0.5, ge=0, le=1)
     title_y: float | None = Field(default=None, ge=0, le=1)
     margin_left: int = Field(default=65, ge=20, le=220)
     margin_right: int = Field(default=65, ge=20, le=220)
@@ -107,6 +110,9 @@ class PositionedNote(StrictStyle):
     ax: float = Field(default=0, ge=-400, le=400)
     ay: float = Field(default=-45, ge=-400, le=400)
     arrow: bool = False
+    arrow_width: float = Field(default=2, ge=1, le=12)
+    arrow_size: float = Field(default=1, ge=0.3, le=3)
+    opacity: float = Field(default=1, ge=0, le=1)
     color: str = Field(default="#263247", pattern=r"^#[0-9a-fA-F]{6}$")
     font_size: int = Field(default=12, ge=8, le=30)
 
@@ -122,7 +128,26 @@ class Guide(StrictStyle):
     width: float = Field(default=1, ge=1, le=8)
 
 
+class ShapeAnchor(StrictStyle):
+    label: str
+    start: str
+    end: str
+    start_offset: float = Field(default=0, ge=-1, le=1)
+    end_offset: float = Field(default=0, ge=-1, le=1)
+    y0: float
+    y1: float
+
+
+class SketchRegion(StrictStyle):
+    x0: float = Field(ge=0, le=1)
+    x1: float = Field(ge=0, le=1)
+    y0: float = Field(ge=0, le=1)
+    y1: float = Field(ge=0, le=1)
+    data_anchor: ShapeAnchor | None = None
+
+
 class PaperShape(StrictStyle):
+    data_anchor: ShapeAnchor | None = None
     id: str = Field(default_factory=lambda: uuid4().hex)
     type: Literal["rect", "circle", "line"] = "rect"
     x0: float = Field(ge=0, le=1)
@@ -131,7 +156,7 @@ class PaperShape(StrictStyle):
     y1: float = Field(ge=0, le=1)
     color: str = Field(default="#ef4444", pattern=r"^#[0-9a-fA-F]{6}$")
     fill: str = Field(default="#ffffff", pattern=r"^#[0-9a-fA-F]{6}$")
-    opacity: float = Field(default=0.25, ge=0.05, le=1)
+    opacity: float = Field(default=0.25, ge=0, le=1)
     width: float = Field(default=2, ge=1, le=8)
     dash: Literal["solid", "dot", "dash", "longdash", "dashdot"] = "solid"
 
@@ -142,7 +167,7 @@ class Highlight(BaseModel):
     end: str
     label: str = ""
     color: str = Field(default="#ffd700", pattern=r"^#[0-9a-fA-F]{6}$")
-    opacity: float = Field(default=0.15, ge=0.05, le=1)
+    opacity: float = Field(default=0.15, ge=0, le=1)
 
     @model_validator(mode="after")
     def check_range(self) -> "Highlight":
@@ -156,8 +181,34 @@ class Annotation(BaseModel):
     text: str = Field(min_length=1, max_length=200)
 
 
+class ChartSticker(StrictStyle):
+    id: str = Field(min_length=1, max_length=80, pattern=r"^[a-zA-Z0-9_-]+$")
+    asset_id: str = Field(min_length=1, max_length=80)
+    x: float = Field(default=.5, ge=0, le=1)
+    y: float = Field(default=.5, ge=0, le=1)
+    size: float = Field(default=.25, ge=.02, le=1)
+    angle: float = Field(default=0, ge=-360, le=360)
+    opacity: float = Field(default=1, ge=0, le=1)
+
+    @model_validator(mode="after")
+    def check_asset(self) -> "ChartSticker":
+        from chart_stickers import sticker_asset
+        sticker_asset(self.asset_id)
+        return self
+
+
 class ChartSpec(BaseModel):
+    @model_validator(mode='before')
+    @classmethod
+    def remove_retired_stickers(cls, value):
+        if isinstance(value,dict) and isinstance(value.get('stickers'),list):
+            import json
+            from pathlib import Path
+            retired=set(json.loads((Path(__file__).with_name('retired_sticker_ids.json')).read_text(encoding='utf-8')))
+            value={**value,'stickers':[s for s in value['stickers'] if not isinstance(s,dict) or s.get('asset_id') not in retired]}
+        return value
     model_config = ConfigDict(allow_inf_nan=False)
+    report: ReportOptions | None = None
     chart_type: ChartType = "auto"
     layout: Layout = "combined"
     title: str = Field(default="", max_length=150)
@@ -189,17 +240,22 @@ class ChartSpec(BaseModel):
     notes: list[PositionedNote] = Field(default_factory=list, max_length=40)
     guides: list[Guide] = Field(default_factory=list, max_length=30)
     paper_shapes: list[PaperShape] = Field(default_factory=list, max_length=30)
+    stickers: list[ChartSticker] = Field(default_factory=list, max_length=40)
 
     @model_validator(mode="after")
     def check_period(self) -> "ChartSpec":
+        if len({s.id for s in self.stickers}) != len(self.stickers):
+            raise ValueError("이모티콘 ID는 중복될 수 없습니다.")
         if self.period_start and self.period_end and self.period_start > self.period_end:
             raise ValueError("조회 시작 시점은 종료 시점보다 늦을 수 없습니다.")
         return self
 
 
 class ChartEditCommand(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    mark_id: str | None = None
     operation: Literal[
-        "set_title", "set_subtitle", "set_axis_labels", "set_chart_type", "set_layout",
+        "remove_annotation", "set_title", "set_subtitle", "set_axis_labels", "set_chart_type", "set_layout",
         "set_legend", "set_line_width", "highlight_period", "highlight_series",
         "add_annotation", "add_reference_line", "hide_series", "filter_period",
         "set_top_n", "set_transform", "set_series_chart_type", "set_secondary_axis",
@@ -208,7 +264,7 @@ class ChartEditCommand(BaseModel):
         "set_series_style", "rename_series", "reorder_series", "show_series", "clear_highlight",
         "set_axis_style", "set_presentation", "remove_secondary_axis",
         "add_note", "update_note", "remove_note", "add_guide", "update_guide", "remove_guide",
-        "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles",
+        "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles", "set_stickers", "set_report",
     ]
     kind: Literal["STYLE_EDIT", "DATA_EDIT"]
     value: str | float | int | bool | dict | list[str] | None = None
@@ -236,11 +292,12 @@ class SketchPoint(BaseModel):
 class SketchMark(BaseModel):
     """Normalized viewport coordinates, not fabricated statistical observations."""
     id: str = Field(min_length=1, max_length=80)
-    tool: Literal["pen", "arrow", "rectangle", "text"]
+    tool: Literal["pen", "arrow", "rectangle", "ellipse", "text"]
     points: list[SketchPoint] = Field(min_length=1, max_length=300)
     text: str = Field(default="", max_length=300)
     target: str = Field(default="", max_length=300)
     selection: "EditSelection | None" = None
+    region: SketchRegion | None = None
 
 
 class EditSelection(StrictStyle):

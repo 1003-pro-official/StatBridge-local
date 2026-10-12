@@ -9,9 +9,58 @@ def compact(value):
     return re.sub(r"[^0-9a-z가-힣]", "", unicodedata.normalize("NFKC", str(value or "")).lower())
 
 
+def active_measure_text(query):
+    """Remove explicitly rejected measures before checking the requested measure."""
+    text = str(query)
+    return re.sub(r"(?:비중|구성비|비율|금리|이자율|잔액|금액|물량)\s*(?:말고|대신|(?:이|가|은|는)?\s*(?:아닌|아니고|아니라))", " ", text)
+
+
+def measured_intent_matches(query, table):
+    """Aliases identify subjects, never evidence of the measured quantity.
+
+    신규취급액 is a rate's basis as well as an amount. Read the outer
+    quantity first; a share request can still specify a flow/stock basis.
+    Callers must scope independent comparison clauses before this check.
+    """
+    q = compact(active_measure_text(query)).replace('신규대출', '신규취급액')
+    measured = compact(table.get('table_name', '')) + ' ' + ' '.join(
+        compact(item) for item in table.get('item_names', []))
+    share = any(term in measured for term in ('비중', '구성비', '비율'))
+    rate = any(term in measured for term in ('금리', '이자율'))
+    want_share = any(term in q for term in ('비중', '구성비', '비율'))
+    want_rate = any(term in q for term in ('금리', '이자율'))
+    amount = any(term in q for term in ('신규취급액', '잔액', '금액', '대출액', '대출규모'))
+    if '신규취급액' in q and '잔액' not in q and '신규취급액' not in measured:
+        return False
+    if want_share and not share:
+        return False
+    if want_rate and (not rate or share) and not want_share:
+        return False
+    if amount and not want_share and not want_rate and (share or rate):
+        return False
+    # Stock and new lending are different observations, including share tables.
+    if '잔액' in q and '신규취급액' not in q and '신규취급액' in measured and '잔액' not in measured:
+        return False
+    for requested, opposite in (('명목', '실질'), ('실질', '명목'), ('말잔', '평잔'), ('평잔', '말잔'), ('실적', '전망'), ('전망', '실적')):
+        if requested in q and opposite not in q and opposite in measured and requested not in measured:
+            return False
+    if '원계열' in q and '계절조정' not in q and '계절조정' in measured:
+        return False
+    if '계절조정' in q and '원계열' not in q and '원계열' in measured:
+        return False
+    if any(term in q for term in ('총액', '전체금액', '전체대출액')) and '차주당' not in q and '차주당' in measured:
+        return False
+    # Trade value/volume/price tables share the same export/import aliases.
+    for subject in ('수출', '수입'):
+        for requested, alternatives in (('금액', ('물량', '물가')), ('물량', ('금액', '물가')), ('물가', ('금액', '물량'))):
+            if subject + requested in q and subject + requested not in measured and any(subject + other in measured for other in alternatives):
+                return False
+    return True
+
+
 def catalog_mentions(query, tables):
     """Longest canonical-name spans. A suffix-free name retains ALL basis variants."""
-    q = compact(query)
+    q = compact(active_measure_text(query))
     spans = {}
     for table in tables:
         title = str(table.get("table_name") or "")
@@ -39,7 +88,7 @@ def scoped_catalog_query(query, table_id, mentions):
     """Other named tables own their embedded qualifiers; do not apply them here."""
     if not mentions:
         return str(query)
-    q = compact(query)
+    q = compact(active_measure_text(query))
     for mention in reversed(mentions):
         if str(table_id) not in mention["table_ids"]:
             q = q[:mention["start"]] + " " + q[mention["end"]:]
@@ -48,7 +97,7 @@ def scoped_catalog_query(query, table_id, mentions):
 
 
 def residual_catalog_query(query, mentions):
-    q = compact(query)
+    q = compact(active_measure_text(query))
     for mention in reversed(mentions):
         q = q[:mention["start"]] + " " + q[mention["end"]:]
     return q
@@ -58,7 +107,8 @@ def scoped_metric_query(query, table, mentions):
     """Split only grounded clauses; protect conjunctions INSIDE catalog titles."""
     if structure_request(query)['explicit_ids']:
         return scoped_catalog_query(query,table['table_id'],mentions)
-    masked=compact(query)
+    # Date conjunctions do not introduce independent measured quantities.
+    masked=compact(re.sub(r'(\d{4}년)\s*과\s*(\d{4}년)', r'\1부터\2', active_measure_text(query))) if not mentions else compact(active_measure_text(query))
     for index in range(len(mentions)-1,-1,-1):
         m=mentions[index]
         masked=masked[:m['start']]+f'@{index}@'+masked[m['end']:]
@@ -71,7 +121,7 @@ def scoped_metric_query(query, table, mentions):
     # Do not discard unknown requested clauses or guess a split inside a noun.
     if len(restored)>1 and all(structure_request(p)['metrics'] or any(m['text'] in p for m in mentions) for p in restored):
         own_names=[m['text'] for m in mentions if str(table['table_id']) in m['table_ids']]
-        own=[p for p in restored if any(name in p for name in own_names)] if own_names else [p for p in restored if table_evidence(p,table)[0]]
+        own=[p for p in restored if any(name in p for name in own_names)] if own_names else [p for p in restored if table_evidence(p,table)[0] and measured_intent_matches(p,table)]
         if own:
             return ' '.join(own)
     return scoped_catalog_query(query,table['table_id'],mentions)

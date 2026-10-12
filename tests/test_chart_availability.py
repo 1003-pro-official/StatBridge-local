@@ -69,7 +69,7 @@ def test_non_finite_values_are_not_plottable_numeric_data():
 
 def test_options_endpoint_checks_combined_session_rows(monkeypatch):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     all_data=source(3)
     for index in range(3):
         data=copy.deepcopy(all_data)

@@ -50,7 +50,7 @@ def test_rate_choice_does_not_remove_compared_new_mortgage(api,rate):
 
 @pytest.mark.parametrize('kind',['line','pie','donut'])
 def test_mortgage_and_credit_request_keeps_both_products_and_renders(api,monkeypatch,kind):
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     query='2020년과 2025년까지의 주택담보대출과 신용대출을 비교하는 그래프 그려줘'
     result=api.agent.resolve(query)
     for _ in range(12):
@@ -78,7 +78,7 @@ def test_mortgage_and_credit_request_keeps_both_products_and_renders(api,monkeyp
 
 
 def test_reported_request_through_actual_ui_selections_and_output(api,monkeypatch):
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     calls=[]
     def data(**kwargs):
         calls.append(kwargs)

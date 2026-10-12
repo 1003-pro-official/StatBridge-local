@@ -95,3 +95,29 @@ def test_composition_has_visible_name_value_unit_date_without_hover(kind,show_le
     assert fig['data'][0]['labels'][0]=='계열0'
     assert '기준 시점: 202405' in fig['data'][0]['hovertemplate']
     assert fig['layout']['margin']['b']>=150
+
+
+@pytest.mark.parametrize("kind", ["line", "area", "bar", "waterfall", "heatmap"])
+def test_period_codes_have_ordered_categorical_axis_by_default(kind):
+    items=series(2 if kind=="heatmap" else 1)
+    fig=render_plotly(items, ChartSpec(chart_type=kind))
+    assert fig["layout"]["xaxis"]["type"]=="category"
+    assert fig["layout"]["xaxis"]["categoryarray"]==["202401","202402","202403","202404","202405"]
+    assert list(fig["data"][0]["x"])==[p["date"] for p in items[0]["points"]]
+
+
+def test_horizontal_bars_use_period_axis_without_categorizing_values():
+    fig=render_plotly(series(1), ChartSpec(chart_type="bar", presentation={"bar_orientation":"horizontal"}))
+    assert fig["layout"]["yaxis"]["type"]=="category"
+    assert fig["layout"]["xaxis"].get("type")!="category"
+
+
+def test_numeric_period_highlights_and_notes_use_category_positions():
+    fig=render_plotly(series(1), ChartSpec(chart_type="line", highlights=[{"start":"202402","end":"202405"}],
+        annotations=[{"period":"202403","text":"확인"}],
+        notes=[{"label":"계열0","period":"202404","text":"관측값"}],
+        guides=[{"orientation":"vertical","value":"202403"}]))
+    highlight=fig["layout"]["shapes"][0]
+    assert (highlight["x0"],highlight["x1"])==(1,4)
+    assert fig["layout"]["shapes"][1]["x0"]==2
+    assert {a["x"] for a in fig["layout"]["annotations"] if a.get("xref","x")=="x"}=={2,3,4}

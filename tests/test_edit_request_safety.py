@@ -124,7 +124,7 @@ def test_missing_mark_with_global_instruction_also_rejected():
 
 
 def test_http_incomplete_multi_mark_preserves_session(monkeypatch):
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     import bridge_api as api
     data=source();output=OutputAgent();initial=output.prepare(data,{"chart_type":"line"})
     record={"result":data,"output":initial,"sessions":[]}

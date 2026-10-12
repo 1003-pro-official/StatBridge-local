@@ -1,4 +1,4 @@
-import type { EditSelection, SketchMark } from "./api/types";
+import type { EditSelection, SketchMark, SketchRegion } from "./api/types";
 
 export type HitPoint = {label:string; period:string; x:number; y:number; trace:number; connected:boolean};
 
@@ -32,8 +32,8 @@ export function resolveMarkSelection(mark:SketchMark, hits:HitPoint[], width:num
   const points=hits.filter(p=>mark.target==="chart"||p.label===mark.target);
   const first=mark.points[0],last=mark.points.at(-1)!;
   let candidates:Array<{distance:number;selection:EditSelection}> = [];
-  if(mark.tool==="rectangle"){
-    const inside=points.filter(p=>p.x>=Math.min(first.x,last.x)*width&&p.x<=Math.max(first.x,last.x)*width&&p.y>=Math.min(first.y,last.y)*height&&p.y<=Math.max(first.y,last.y)*height);
+  if((mark.tool==="rectangle"||mark.tool==="ellipse")){
+    const inside=points.filter(p=> (mark.tool!=="ellipse"||Math.pow((p.x/width-(first.x+last.x)/2)/Math.max(.001,Math.abs(last.x-first.x)/2),2)+Math.pow((p.y/height-(first.y+last.y)/2)/Math.max(.001,Math.abs(last.y-first.y)/2),2)<=1)&&p.x>=Math.min(first.x,last.x)*width&&p.x<=Math.max(first.x,last.x)*width&&p.y>=Math.min(first.y,last.y)*height&&p.y<=Math.max(first.y,last.y)*height);
     const labels=[...new Set(inside.map(p=>p.label))];
     if(labels.length!==1)throw new Error("사각형 안의 계열이 없거나 여러 개입니다. 수정 대상을 선택하거나 시점을 직접 지정해 주세요.");
     const periods=[...new Set(inside.map(p=>p.period))].sort();
@@ -51,4 +51,34 @@ export function resolveMarkSelection(mark:SketchMark, hits:HitPoint[], width:num
   if(!candidates.length||candidates[0].distance>24)throw new Error("표시 끝을 실제 선분/점 가까이에 그리거나 시점을 직접 지정해 주세요.");
   if(candidates.some(c=>c.selection.label!==candidates[0].selection.label&&c.distance<candidates[0].distance+4))throw new Error("겹친 계열을 구분할 수 없습니다. 수정 대상을 선택해 주세요.");
   return candidates[0].selection;
+}
+
+
+// Capture the entire box in plot coordinates, not just points inside it.
+// Data anchors retain its original periods/value bounds after a date re-query.
+export function resolveMarkRegion(mark:SketchMark, plot:HTMLElement, stage:HTMLElement):SketchRegion|undefined {
+  if(!["rectangle","ellipse"].includes(mark.tool)||!mark.selection||mark.points.length<2)return;
+  const graph=plot as unknown as {data?:Array<Record<string,any>>;_fullLayout?:Record<string,any>};
+  const layout=graph._fullLayout,frame=layout?._size;
+  const trace=graph.data?.find(t=>Array.isArray(t.customdata)&&t.customdata.some((d:any)=>Array.isArray(d)&&d[0]===mark.selection!.label));
+  if(!frame||!trace)return;
+  const xa=layout![String(trace.xaxis||"x").replace("x","xaxis")],ya=layout![String(trace.yaxis||"y").replace("y","yaxis")];
+  if(xa?.type!=="category"||!Array.isArray(xa._categories)||typeof xa.l2p!=="function"||typeof ya?.p2d!=="function")return;
+  const sb=stage.getBoundingClientRect(),pb=plot.getBoundingClientRect();
+  const a=mark.points[0],b=mark.points.at(-1)!;
+  const clamp=(v:number)=>Math.max(0,Math.min(1,v));
+  const left=pb.left-sb.left+frame.l,top=pb.top-sb.top+frame.t;
+  const x0=clamp((Math.min(a.x,b.x)*sb.width-left)/frame.w),x1=clamp((Math.max(a.x,b.x)*sb.width-left)/frame.w);
+  const y0=clamp(1-(Math.max(a.y,b.y)*sb.height-top)/frame.h),y1=clamp(1-(Math.min(a.y,b.y)*sb.height-top)/frame.h);
+  const step=xa.l2p(1)-xa.l2p(0);
+  if(!Number.isFinite(step)||!step||x0===x1||y0===y1)return;
+  const bind=(paper:number)=>{
+    const fraction=(frame.l+paper*frame.w-xa._offset-xa.l2p(0))/step;
+    const index=Math.max(0,Math.min(xa._categories.length-1,Math.round(fraction)));
+    return {period:String(xa._categories[index]),offset:fraction-index};
+  };
+  const first=bind(x0),last=bind(x1);
+  const lower=Number(ya.p2d(frame.t+(1-y0)*frame.h-ya._offset)),upper=Number(ya.p2d(frame.t+(1-y1)*frame.h-ya._offset));
+  if(!Number.isFinite(lower)||!Number.isFinite(upper)||Math.abs(first.offset)>1||Math.abs(last.offset)>1)return;
+  return {x0,x1,y0,y1,data_anchor:{label:mark.selection.label,start:first.period,end:last.period,start_offset:first.offset,end_offset:last.offset,y0:lower,y1:upper}};
 }

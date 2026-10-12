@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Any
 
 from ncp_retrieval_client import NcpRetrievalClient
+from runtime_paths import layout
+from request_match_guard import catalog_mentions, scoped_metric_query
 
 
 class HybridStatRetriever:
@@ -19,7 +21,7 @@ class HybridStatRetriever:
         self.client = client or NcpRetrievalClient()
         # Use the verified 349-table store; the obsolete legacy store was
         # removed during cleanup after fresh-process retrieval checks passed.
-        default_path = Path(__file__).resolve().parents[2] / ".venv" / "cache" / "vector_store_349"
+        default_path = layout()["vector"]
         self.path = Path(os.getenv("STATBRIDGE_VECTOR_PATH", str(default_path)))
         self.vector_top_k = int(os.getenv("STATBRIDGE_VECTOR_TOP_K", "24"))
         self.rerank_top_k = int(os.getenv("STATBRIDGE_RERANK_TOP_K", "12"))
@@ -89,8 +91,15 @@ class HybridStatRetriever:
             return rule[:top_k]
 
         candidates: list[dict[str, Any]] = []
+        mentions = catalog_mentions(query, self.resolver.tables)
         for table_id in set(rule_by_id) | set(vector_scores):
             if table_id not in self.resolver.tables_by_id:
+                continue
+            # Vector recall may reintroduce tables rejected by the rule ranker.
+            table = self.resolver.tables_by_id[table_id]
+            scoped = scoped_metric_query(query, table, mentions)
+            if (not self.resolver._matches_metric_intent(scoped, table)
+                    or not self.resolver._matches_confirmed_filters(table, confirmed or {})):
                 continue
             base = dict(rule_by_id.get(table_id) or self.resolver.candidate_shell(table_id))
             rule_score = float(base.get("score") or 0.0)

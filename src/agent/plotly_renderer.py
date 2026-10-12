@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from bisect import bisect_left
 from typing import Any
 
 import plotly.graph_objects as go
@@ -44,7 +45,7 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
 
     dual_axis = layout_mode == "combined" and bool(spec.secondary_axis_series)
     panels = layout_mode in {"separate", "horizontal", "grid"} and len(series) > 1 and chart_type not in {'scatter','bubble','heatmap'}
-    columns = len(series) if layout_mode == "horizontal" else (2 if layout_mode == "grid" else 1)
+    columns = len(series) if layout_mode == "horizontal" else (min(len(series),spec.presentation.panel_columns) if layout_mode == "grid" else 1)
     if panels:
         fig = make_subplots(rows=math.ceil(len(series)/columns), cols=columns, shared_xaxes=layout_mode == "separate" and chart_type not in {'histogram','box'},
                             shared_yaxes=spec.presentation.shared_y,
@@ -139,8 +140,12 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
                 add(trace, index)
     if chart_type == "stacked_bar":
         fig.update_layout(barmode="stack")
+    import re
+    title_key=re.sub(r"[\s():：·]", "", spec.title)
+    subtitle_key=re.sub(r"[\s():：·]", "", spec.subtitle)
+    visible_subtitle=spec.subtitle if subtitle_key and subtitle_key not in title_key else ""
     fig.update_layout(
-        title={"text": wrapped(spec.title) + (f"<br><sup>{wrapped(spec.subtitle,32)}</sup>" if spec.subtitle else ""),"y":.96,"yanchor":"top","yref":"container"},
+        title={"text": wrapped(spec.title) + (f"<br><sup>{wrapped(visible_subtitle,32)}</sup>" if visible_subtitle else ""),"y":.96,"yanchor":"top","yref":"container"},
         showlegend=spec.show_legend,
         legend={"orientation": "h" if spec.legend_position in {"top", "bottom"} else "v",
                 "x": -.2 if spec.legend_position == "left" else (1.02 if spec.legend_position == "right" else 0), "y": -0.25 if spec.legend_position == "bottom" else 1.08,
@@ -174,12 +179,37 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     if chart_type in {"line", "bar", "stacked_bar", "area"}:
         for highlight in spec.highlights:
             fig.add_vrect(x0=highlight.start, x1=highlight.end, fillcolor=highlight.color, opacity=highlight.opacity,
-                          line_width=0, annotation_text=escape(highlight.label))
+                          line_width=0, annotation_text=escape(highlight.label),name=highlight.id)
         for value in spec.reference_lines:
             fig.add_hline(y=value, line_dash="dash", line_color="gray")
         for annotation in spec.annotations:
             fig.add_annotation(x=annotation.period, y=1, yref="paper", text=escape(annotation.text), showarrow=False)
+    # Statistical period codes are categorical, never numeric coordinates.
+    if chart_type in {"line", "bar", "stacked_bar", "area", "waterfall", "heatmap"}:
+        periods = sorted({p["date"] for s in series for p in s["points"]})
+        horizontal = chart_type in {"bar", "stacked_bar"} and spec.presentation.bar_orientation == "horizontal"
+        updater = fig.update_yaxes if horizontal else fig.update_xaxes
+        updater(type="category", categoryorder="array", categoryarray=periods)
     decorate(fig, series, spec, dual_axis)
+    # Plotly treats numeric-looking category shape coordinates as serial indices.
+    # Keep trace/customdata period codes intact, but bind decorations to indices.
+    if chart_type in {"line", "bar", "stacked_bar", "area", "waterfall", "heatmap"}:
+        def period_coordinate(value):
+            if isinstance(value, str):
+                return min(len(periods)-1, max(0, bisect_left(periods, value)))
+            return value
+        for shape in fig.layout.shapes or []:
+            ref = shape.yref if horizontal else shape.xref
+            if ref and ref.startswith("y" if horizontal else "x") and "domain" not in ref:
+                for field in ("y0", "y1") if horizontal else ("x0", "x1"):
+                    setattr(shape, field, period_coordinate(getattr(shape, field)))
+        for annotation in fig.layout.annotations or []:
+            ref = (annotation.yref or "y") if horizontal else (annotation.xref or "x")
+            if ref and ref.startswith("y" if horizontal else "x") and "domain" not in ref:
+                field = "y" if horizontal else "x"
+                setattr(annotation, field, period_coordinate(getattr(annotation, field)))
+    from research_plotly_styles import arrange_top_captions
+    arrange_top_captions(fig, len({p["date"] for s in series for p in s["points"]}))
     # Keep legend labels short, with full source labels retained in hover/meta.
     for trace in fig.data:
         meta=trace.meta if isinstance(trace.meta,dict) else {}
@@ -223,61 +253,12 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
             updater=fig.update_xaxes if axis_name=='x' else fig.update_yaxes
             updater(tickmode='auto',nticks=10)
     title_lines=fig.layout.title.text.count('<br>')+1 if fig.layout.title.text else 0
-    legend_space=65 if spec.show_legend and spec.legend_position=='top' and chart_type not in {'scatter','bubble'} else 0
-    fig.update_layout(margin=dict(t=max(100,spec.presentation.margin_top, title_lines*spec.presentation.title_size+legend_space+90),
+    legend_space=max(20,spec.presentation.legend_size+8) if spec.show_legend and spec.legend_position=='top' and chart_type not in {'scatter','bubble'} else 0
+    fig.update_layout(margin=dict(t=max(fig.layout.margin.t or 0,100,spec.presentation.margin_top, title_lines*(spec.presentation.title_size+4)+legend_space+28),
         b=max(spec.presentation.margin_bottom,150 if spec.legend_position=='bottom' else 110)),hoverlabel=dict(namelength=-1),
         hovermode='closest' if chart_type in {'scatter','bubble','pie','donut','treemap','heatmap','box','histogram'} else 'x unified')
     if chart_type in {'pie','donut','treemap'}:
         bottom=max(fig.layout.margin.b, (category_info.count('<br>')+1)*18+(160 if spec.show_legend and spec.legend_position=='bottom' else 60))
         fig.update_layout(margin=dict(b=bottom),height=max(fig.layout.height,400+fig.layout.margin.t+bottom),
             legend=dict(font=dict(color=spec.presentation.font_color)))
-    _apply_monthly_coordinates(fig, series, spec, chart_type)
     return json.loads(pio.to_json(fig, validate=True))
-
-
-def _apply_monthly_coordinates(fig: Any, series: list[dict[str, Any]], spec: ChartSpec, chart_type: str) -> None:
-    """Use ISO dates for monthly coordinates, retaining original IDs in customdata.
-
-    Run after style decoration so period ticks, partial segments, notes and guides
-    agree with the displayed axis. Numeric scatter axes must never be converted.
-    """
-    if chart_type not in {"line", "bar", "stacked_bar", "area", "waterfall", "heatmap"}:
-        return
-    if any(item.get("frequency") and item["frequency"] != "M" for item in series):
-        return
-    periods = sorted({str(point["date"]) for item in series for point in item["points"]})
-    if not periods or not all(len(p) == 6 and p.isdigit() and 1 <= int(p[4:]) <= 12 for p in periods):
-        return
-    def coordinate(value: Any) -> Any:
-        value = str(value)
-        return f"{value[:4]}-{value[4:]}-01" if value in periods else value
-    horizontal = spec.presentation.bar_orientation == "horizontal" and chart_type in {"bar", "stacked_bar"}
-    axis = "y" if horizontal else "x"
-    for trace in fig.data:
-        values = getattr(trace, axis, None)
-        if values is not None:
-            setattr(trace, axis, [coordinate(value) for value in values])
-    axis_spec = spec.axes.get("y" if horizontal else "x")
-    step = (max(1, int(axis_spec.tick_step)) if axis_spec and axis_spec.tick_step else
-            max(1, math.ceil((len(periods)-1)/5)))
-    ticks = periods[::step]
-    if ticks[-1] != periods[-1]:
-        ticks.append(periods[-1])
-    updater = fig.update_yaxes if horizontal else fig.update_xaxes
-    updater(type="date", tickmode="array", tickvals=[coordinate(p) for p in ticks],
-            ticktext=[f"{p[:4]}-{p[4:]}" for p in ticks],
-            categoryarray=None, automargin=True)
-    # Paper coordinates are normalized positions, not observation periods.
-    for annotation in fig.layout.annotations or ():
-        ref = getattr(annotation, f"{axis}ref", None) or axis
-        if ref != "paper" and "domain" not in ref:
-            value = getattr(annotation, axis, None)
-            if str(value) in periods:
-                setattr(annotation, axis, coordinate(value))
-    for shape in fig.layout.shapes or ():
-        ref = getattr(shape, f"{axis}ref", None) or axis
-        if ref != "paper" and "domain" not in ref:
-            for endpoint in (f"{axis}0", f"{axis}1"):
-                value = getattr(shape, endpoint, None)
-                if str(value) in periods:
-                    setattr(shape, endpoint, coordinate(value))

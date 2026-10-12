@@ -91,3 +91,20 @@ def test_revalidation_blocks_incomplete_or_tampered_grounded_plans(agent, mutati
     assert checked['status'] == 'no_match'
     assert checked['api_plans'] == []
     assert checked['request_validation']['valid'] is False
+
+
+def test_confirmed_period_changes_only_date_fields_and_remains_fail_closed(agent):
+    query = '「차주당 주택담보대출 신규취급액」 자료를 한 계열로 찾아줘'
+    result = copy.deepcopy(agent.resolve(query))
+    assert result['status'] == 'resolved'
+    plan = result['api_plans'][0]
+    plan.update(start_period='202001', end_period='202602')
+    plan['exact_params'].update(startPrdDe='202001', endPrdDe='202602')
+    periods = {plan['table_id']: ('202001', '202602')}
+    assert agent.validate_resolution(query, result)['status'] == 'no_match'
+    assert agent.validate_resolution(query, result, confirmed_periods=periods)['status'] == 'resolved'
+    for field, value in [('itmId', 'invented'), ('prdSe', 'M'), ('objL1', 'invented'), ('orgId', '999')]:
+        tampered = copy.deepcopy(result)
+        tampered['api_plans'][0]['exact_params'][field] = value
+        assert agent.validate_resolution(query, tampered, confirmed_periods=periods)['status'] == 'no_match'
+    assert result['api_plans'][0]['exact_params']['itmId'] != 'invented'

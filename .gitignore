@@ -52,3 +52,6 @@ research/그림표-분석/원본스냅샷/
 
 # SDD/subagent scratch
 .superpowers/
+
+# Generated report chart examples and print artifacts
+output/

@@ -260,7 +260,8 @@ class StatBridgeAgent:
         common_terms = " ".join(str(x) for x in (classification.get("qualifiers") or []) if str(x).strip())
         for item in series:
             ranked = self.hybrid.rank(f"{item['label']} {item['query']} {common_terms}".strip(), top_k=8)
-            ranked = [candidate for candidate in ranked if table_evidence(item['query'], self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]]
+            ranked = [candidate for candidate in ranked if table_evidence(item['query'], self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]
+                      and self.resolver._matches_metric_intent(item['query'], self.tables_by_id.get(str(candidate.get('table_id')), {}))]
             if not ranked:
                 missing.append(item["label"])
                 continue
@@ -479,15 +480,30 @@ class StatBridgeAgent:
                         }
                 else:
                     dictionary_query, classification = self._classify(effective_query)
-                comparison = self._resolve_comparison(classification, dictionary_query)
+                comparison = self._resolve_comparison(classification, dictionary_query) if structure_request(effective_query)['comparison'] else None
                 if comparison:
                     result = comparison
                 else:
                     hybrid_candidates = self.hybrid.rank(dictionary_query, top_k=12)
-                    hybrid_candidates = [candidate for candidate in hybrid_candidates if table_evidence(request_query, self.tables_by_id.get(str(candidate.get('table_id')), {}))[0]]
+                    mentions = catalog_mentions(effective_query, self.resolver.tables)
+                    eligible = []
+                    for candidate in hybrid_candidates:
+                        table = self.tables_by_id.get(str(candidate.get('table_id')), {})
+                        if not table:
+                            continue
+                        scoped = scoped_metric_query(effective_query, table, mentions)
+                        if table_evidence(scoped, table)[0] and self.resolver._matches_metric_intent(scoped, table):
+                            eligible.append(candidate)
+                    hybrid_candidates = eligible
                     # Keep deterministic ambiguity gates. Replace its ranking only after
                     # the resolver has decided whether a clarification is required.
-                    result = self.resolver.resolve(dictionary_query, top_k=8)
+                    # A model's search expansion must not rewrite an already
+                    # grounded quantity or suppress its clarification gate.
+                    result = preflight if preflight.get("status") == "resolved" else self.resolver.resolve(dictionary_query, top_k=8)
+                    if preflight.get("status") == "resolved":
+                        # Search hints are not user-selected dates, dimensions
+                        # or measures when constructing the actual API plan.
+                        dictionary_query = effective_query
                     if result.get("status") == "resolved" and hybrid_candidates:
                         result["candidates"] = hybrid_candidates[:8]
                         result["selected_table"] = hybrid_candidates[0]
@@ -497,7 +513,7 @@ class StatBridgeAgent:
         # Explicit UI choices are hard constraints. HCX may suggest speculative
         # comparison series for the original broad question, but those must not
         # replace the table selected by the user's clarification buttons.
-        if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans"):
+        if not confirmed_choices and result.get("status") == "resolved" and not result.get("api_plans") and structure_request(request_query)['comparison']:
             comparison = self._resolve_comparison(classification, dictionary_query)
             if comparison:
                 result = comparison
@@ -564,10 +580,18 @@ class StatBridgeAgent:
             result["api_plans"] = component_plans
         return self.validate_resolution(request_query, result)
 
-    def validate_resolution(self, query: str, resolution: dict[str, Any]) -> dict[str, Any]:
+    def validate_resolution(self, query: str, resolution: dict[str, Any], *,
+                            confirmed_periods: dict[str, tuple[str, str]] | None = None) -> dict[str, Any]:
         """Check original intent and canonical IDs again after model/vector ranking."""
         grounded = catalog_selections(query, self.resolver.tables)
         grounded_plans = [self.build_api_plan(query, item).as_dict() for item in grounded]
+        # Only a server-owned output session supplies these boundaries. All
+        # table, item, classification and non-period parameters stay canonical.
+        for plan in grounded_plans:
+            period = (confirmed_periods or {}).get(str(plan["table_id"]))
+            if period:
+                plan.update(start_period=period[0], end_period=period[1])
+                plan["exact_params"].update(startPrdDe=period[0], endPrdDe=period[1])
         observed = resolution.get('api_plans') or ([resolution['api_plan']] if resolution.get('api_plan') else [])
         confirmed = (resolution.get('state') or {}).get('confirmed') or {}
 
@@ -692,9 +716,10 @@ class StatBridgeAgent:
         end_period: str | None = None,
         period_overrides: dict[str, tuple[str, str]] | None = None,
         generate_answer: bool = True,
+        confirmed_periods: dict[str, tuple[str, str]] | None = None,
     ) -> dict[str, Any]:
         """Execute an already resolved plan without repeating HCX/vector retrieval."""
-        resolution = self.validate_resolution(query, resolution)
+        resolution = self.validate_resolution(query, resolution, confirmed_periods=confirmed_periods)
         if resolution.get("status") != "resolved":
             return {**resolution,"execution":{"status":"request_mismatch","rows":[],"row_count":0},"answer":""}
         plans = resolution.get("api_plans") or [resolution["api_plan"]]

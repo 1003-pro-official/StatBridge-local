@@ -76,7 +76,7 @@ def test_switch_from_partially_styled_line_does_not_keep_incompatible_style(kind
 
 
 def test_http_donut_to_bar_blocked_bubble_and_undo(monkeypatch):
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     import bridge_api as api
     data=source(2);agent=OutputAgent();current=agent.prepare(data,{'chart_type':'donut'})
     record={'result':data,'output':current,'sessions':[{'query':'모의 비교','table_name':'모의 표','frequency':'M','period':{'start':'202401','end':'202405'}}]}

@@ -30,7 +30,7 @@ def test_only_selected_edges_change_no_solid_under_dash():
     initial=agent.prepare(data,{"chart_type":"line"})
     result=edit(agent,data,initial,"set_segment_style",label="계열0",start="202402",end="202404",params={"color":"#ff0000","dash":"dash"})
     lines=[t for t in result["plotlyFigure"]["data"] if t["mode"]=="lines"]
-    assert [t["x"] for t in lines]==[["2024-01-01","2024-02-01"],["2024-02-01","2024-03-01","2024-04-01"],["2024-04-01","2024-05-01"]]
+    assert [t["x"] for t in lines]==[["202401","202402"],["202402","202403","202404"],["202404","202405"]]
     assert [t["line"]["dash"] for t in lines]==["solid","dash","solid"]
     assert lines[0]["line"]["color"]==lines[2]["line"]["color"]!="#ff0000"
     assert result["table"]==initial["table"] and data==original
@@ -217,7 +217,7 @@ def test_hide_show_preserves_style_and_secondary_axis():
 
 def test_edit_api_undo_redo_and_stale_revision(monkeypatch):
     import bridge_api as api
-    from fastapi.testclient import TestClient
+    from authenticated_client import TestClient
     agent=OutputAgent();data=source();initial=agent.prepare(data,{"chart_type":"line"})
     monkeypatch.setattr(api.agent,"output_agent",agent)
     monkeypatch.setattr(api,"edit_agent",ChartEditAgent(FakeEditModel({"commands":[{"operation":"set_title","value":"수정"}]}),agent))

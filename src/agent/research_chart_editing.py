@@ -11,6 +11,28 @@ from output_schema import (AxisStyle, ChartEditCommand, ChartSpec, Guide, Highli
 
 
 EDIT_HELP = {
+    "set_report": "params={patch:{template,kind,forecast_start,intervals,events,right_axis,columns,source_note,footnotes,width,height,dpi}}. 기존 보고서 설정에 합친다. template은 /api/report/templates 등록 ID. kind=forecast/dual_axis/contribution/panels/events/fan/waterfall/regression/heatmap/violin/stacked_area/scenario/bubble. 기여도는 contribution_confirmed=true를 명시. 신뢰구간·정책 날짜·출처를 만들지 말고 사용자 제공 정보만 사용. params={clear:true}는 기존 일반 그래프 복원",
+    "set_stickers": "params={items:[{id,asset_id,x,y,size,angle,opacity},...]}. 목록의 asset_id만 사용. paper 좌표0~1, size0.02~1, angle-360~360. 원자료 보존",
+    "set_title": "value=제목 텍스트, 빈 문자열은 제목 삭제",
+    "set_subtitle": "value=부제 텍스트, 빈 문자열은 부제 삭제",
+    "set_axis_labels": "x_axis_label/y_axis_label=새 축 제목. 빈 문자열은 축 제목 삭제",
+    "set_chart_type": "value=auto/line/bar/stacked_bar/area/scatter/bubble/pie/donut/histogram/box/heatmap/treemap/waterfall. 데이터가 충족하는 종류만",
+    "set_layout": "value=combined/separate/horizontal/grid",
+    "set_legend": "value=true/false 또는 top/bottom/left/right/top-left/top-right/bottom-left/bottom-right",
+    "set_line_width": "value=선 두께 1~12. 전체 선 또는 확정된 표시 범위",
+    "highlight_period": "start/end=실제 관측 시점, label=강조 설명 또는 계열, params={color:#RRGGBB,opacity:0.05~1}",
+    "highlight_series": "value=강조할 정본 계열 이름",
+    "add_annotation": "start=실제 관측 시점,value=주석 텍스트",
+    "add_reference_line": "value=수평 기준선의 실제 수치",
+    "hide_series": "value=숨길 정본 계열 이름",
+    "filter_period": "start/end=원자료에서 표시할 실제 기간. 추가 데이터 생성 아님",
+    "set_top_n": "value=표시할 상위 계열 수 정수 또는 null로 해제",
+    "set_transform": "value=raw/growth_rate/year_over_year/average/cumulative. 원자료를 보존한 표시 변환",
+    "set_series_chart_type": "label=정본 계열,value=line/bar/area",
+    "set_secondary_axis": "value=보조축에 표시할 정본 계열 이름",
+    "set_series_color": "label=정본 계열,value=#RRGGBB",
+    "set_series_dash": "label=정본 계열,value=solid/dot/dash/longdash/dashdot",
+    "remove_annotation": "value=삭제할 정확한 주석 텍스트. annotations.text, notes.text, highlights.label에서 해당 텍스트만 제거",
     "set_segment_style": "label,start,end,params={color,dash,width,opacity,marker_size,marker_symbol,markers,show_values,line_shape:linear/spline/hv/vh/hvh/vhv}. 선분 구간만 수정",
     "set_point_style": "label,start=end,params={color,marker_size,marker_symbol,markers,show_values,opacity}. 점/막대만 수정",
     "remove_range_style": "value=range_styles의 id", "clear_range_styles": "label=계열 또는 생략하여 모든 부분 스타일 제거",
@@ -20,7 +42,7 @@ EDIT_HELP = {
     "show_series": "value=숨긴 계열의 정본 이름", "clear_highlight": "강조 계열 해제",
     "remove_secondary_axis": "value=계열 이름, 보조축 해제",
     "set_axis_style": "label=x/y/y2,params={minimum,maximum,scale:linear/log,reverse,show_grid,zero_line,tick_angle,tick_step,decimals,title}. x의 수치 범위는 산점도에서만",
-    "set_presentation": "params={font_family,font_size,title_size,legend_size,font_color,background,grid_color,height,width,title_x,margin_left,margin_right,margin_top,margin_bottom,bar_mode:group/stack/relative,bar_gap,bar_orientation:vertical/horizontal,number_decimals,shared_y,notes,color_scale:Viridis/Blues/Reds/RdBu/YlOrRd/Greens,reverse_colors,show_colorbar}",
+    "set_presentation": "params={design_template:report/stability/outlook/slides/academic/explore,font_family,font_size,title_size,legend_size,font_color,background,grid_color,height,width,title_x,title_y,margin_left,margin_right,margin_top,margin_bottom,bar_mode:group/stack/relative,bar_gap,bar_orientation:vertical/horizontal,number_decimals,shared_y,notes,color_scale:Viridis/Blues/Reds/RdBu/YlOrRd/Greens,reverse_colors,show_colorbar}",
     "add_note": "params={text,label?,period?,x?,y?,ax?,ay?,arrow?,color?,font_size?}. 계열과 시점이 있으면 실제 관측점에 연결, 없으면 paper x/y=0~1(아래0 위1)",
     "update_note": "value=notes의 id,params=변경 필드", "remove_note": "value=notes의 id",
     "add_guide": "params={orientation:horizontal/vertical,value,label?,text?,color?,dash?,width?}. 수평 실제 y값/수직 실제 시점",
@@ -38,9 +60,25 @@ def _patch(model: Any, params: dict) -> Any:
 
 def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list[str]) -> ChartSpec | None:
     """Return None for legacy commands handled by OutputAgent."""
-    op, value, params = command.operation, command.value, command.params
-    if op not in EDIT_HELP:
+    op, value, params = command.operation, command.value, dict(command.params)
+    if op=='set_report':
+        from advanced_chart_spec import ReportOptions
+        if value is not None or set(params)-{'patch','clear'} or not params:
+            raise ValueError('보고서 변경은 params.patch 또는 params.clear로 지정해 주세요.')
+        if params.get('clear'):
+            if 'patch' in params: raise ValueError('보고서 삭제와 변경을 함께 요청할 수 없습니다.')
+            return spec.model_copy(update={'report':None})
+        options=ReportOptions.model_validate({**(spec.report.model_dump() if spec.report else {}),**params.get('patch',{})})
+        presentation=spec.presentation
+        if spec.report is None and presentation==PresentationStyle():
+            presentation=PresentationStyle.model_validate({**presentation.model_dump(),'font_family':'Malgun Gothic, Noto Sans CJK KR, sans-serif','font_size':13,'title_size':20})
+        return spec.model_copy(update={'report':options,'presentation':presentation})
+    if op == "update_shape" and set(params) & {"x0","x1","y0","y1"} and "data_anchor" not in params:
+        params["data_anchor"] = None
+    if op not in {"set_segment_style", "set_point_style", "remove_range_style", "clear_range_styles", "set_series_style", "rename_series", "reorder_series", "show_series", "clear_highlight", "set_axis_style", "set_presentation", "remove_secondary_axis", "add_note", "update_note", "remove_note", "add_guide", "update_guide", "remove_guide", "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles", "set_stickers"}:
         return None
+    if op in {"set_segment_style", "set_point_style", "set_series_style", "set_axis_style", "set_presentation", "add_note", "add_guide", "add_shape", "set_stickers"} and value is not None:
+        raise ValueError(f"{op}의 설정은 value가 아닌 params에 지정해야 합니다.")
     updates: dict[str, Any] = {}
     if op in {"set_segment_style", "set_point_style", "set_series_style", "rename_series"} and command.label not in labels:
         raise ValueError("수정할 계열이 조회 결과에 없습니다.")
@@ -79,12 +117,19 @@ def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list
             raise ValueError("축은 x, y, y2 중 하나를 선택해 주세요.")
         updates["axes"] = {**spec.axes, command.label: _patch(spec.axes.get(command.label, AxisStyle()), params)}
     elif op == "set_presentation":
+        if params.get('design_template'):
+            from chart_designs import apply_design
+            spec=apply_design(spec,params['design_template'])
         updates["presentation"] = _patch(spec.presentation, params)
+    elif op == "set_stickers":
+        if set(params) != {"items"} or not isinstance(params["items"], list):
+            raise ValueError("이모티콘 목록은 params.items 배열로 지정해 주세요.")
+        updates["stickers"] = params["items"]
     elif op == "reset_styles":
         updates = {"series_colors": {}, "series_dashes": {}, "series_styles": {}, "range_styles": [],
                    "display_names": {}, "series_order": [], "axes": {}, "presentation": PresentationStyle(),
                    "highlights": [], "annotations": [], "reference_lines": [], "notes": [], "guides": [],
-                   "paper_shapes": [], "highlighted_series": None, "line_width": 3, "legend_position": "top", "show_legend": True}
+                   "paper_shapes": [], "stickers": [], "highlighted_series": None, "line_width": 3, "legend_position": "top", "show_legend": True}
     else:
         field, cls = next((field, cls) for suffix, field, cls in [
             ("range_style", "range_styles", RangeStyle), ("note", "notes", PositionedNote),
@@ -128,6 +173,14 @@ def validate_research_spec(series: list[dict[str, Any]], spec: ChartSpec) -> Non
             raise ValueError("막대는 색상·투명도·테두리·값 표시를 사용해 주세요.")
         if kind in {"scatter", "bubble"} and (props & {"dash", "width", "line_shape"} or label != series[0]["label"]):
             raise ValueError("산점도 스타일 대상은 첫 번째 좌표 계열입니다. 점 스타일을 사용해 주세요.")
+    for shape in spec.paper_shapes:
+        anchor=shape.data_anchor
+        if anchor:
+            item=by_label.get(anchor.label)
+            if not item: continue
+            periods=[p["date"] for p in item["points"]]
+            if anchor.start not in periods or anchor.end not in periods or anchor.start>anchor.end:
+                raise ValueError("박스 강조의 원래 시점 범위를 현재 데이터에서 찾지 못했습니다.")
     for style in spec.range_styles:
         item = by_label.get(style.label)
         if not item:

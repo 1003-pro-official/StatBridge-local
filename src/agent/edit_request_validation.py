@@ -26,7 +26,7 @@ def validate_visual(visual: VisualEditContext, instruction: str) -> None:
     if len(ids) != len(set(ids)):
         raise ValueError("표시 ID가 중복되었습니다. 표시를 다시 만들어 주세요.")
     for mark in visual.marks:
-        if mark.tool in {"arrow", "rectangle"} and len(mark.points) < 2:
+        if mark.tool in {"arrow", "rectangle", "ellipse"} and len(mark.points) < 2:
             raise ValueError("화살표와 사각형은 시작·종료 위치가 필요합니다.")
         if mark.selection and mark.target not in {"", "chart", mark.selection.label}:
             raise ValueError("표시의 수정 대상과 선택 계열이 다릅니다. 대상을 다시 확인해 주세요.")
