@@ -73,5 +73,6 @@ jobs:
           npm ci
           node ../../../scripts/windows/check_frontend.cjs . record
           node ../../../scripts/windows/check_frontend.cjs .
-          node --test test-*.mjs
+          $testFiles = Get-ChildItem test-*.mjs | ForEach-Object { $_.FullName }
+          node --test $testFiles
           npm run build
