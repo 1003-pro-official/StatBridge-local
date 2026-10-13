@@ -58,17 +58,37 @@ def rename(value: dict, name: str) -> dict:
 
 
 def repair(catalog: dict, reference: dict[str, dict[str, str]]) -> dict:
+    """이름을 교정하고, 교정으로 생긴 같은 이름 중복은 뒤쪽 항목을 덜어낸다.
+
+    이 사전과 제품 코드는 차원 안에서 이름이 유일하다고 가정해 왔다(예: 요청 계획기가 같은 분류를
+    두 번 요청). 소스 메타데이터에는 같은 이름의 값이 여러 코드로 존재하므로, 정답 근거가 되는
+    첫 항목만 남긴다. 교정 전부터 있던 중복은 건드리지 않는다.
+    """
     summary = Counter()
     detail = []
     for table in catalog["tables"]:
         table_id = table["table_id"]
         for dimension in table.get("dimensions") or []:
             changed = 0
-            for index, value in enumerate(dimension.get("values") or []):
+            renamed = 0
+            kept: list[dict] = []
+            names_seen: set[str] = set()
+            for value in dimension.get("values") or []:
                 name = reference.get(table_id, {}).get(value["value_id"])
-                if name and name != value["value_name"]:
-                    dimension["values"][index] = rename(value, name)
+                was_renamed = bool(name and name != value["value_name"])
+                if was_renamed:
+                    value = rename(value, name)
                     changed += 1
+                    renamed += 1
+                # 이름을 바꾼 값이 이미 있는 이름과 겹치면 그 값은 덜어낸다.
+                if was_renamed and value["value_name"] in names_seen:
+                    summary["deduped"] += 1
+                    continue
+                names_seen.add(value["value_name"])
+                kept.append(value)
+            if changed:
+                dimension["values"] = kept
+                detail.append(f"{table_id}.{dimension['api_param']}: {changed}개 (중복 제거 {renamed + changed - len(kept)})")
             if changed:
                 summary["dimensions"] += 1
                 summary["values"] += changed
@@ -94,6 +114,7 @@ def main() -> int:
     report = repair(catalog, reference)
     summary = report["summary"]
     print(f"영향 차원 {summary.get('dimensions', 0)} | 이름 교정 값 {summary.get('values', 0)} "
+          f"| 같은 이름 중복 제거 {summary.get('deduped', 0)} "
           f"| 파생 목록이 남은 값 {summary.get('clear_derived', 0)}")
     for line in report["detail"][:10]:
         print("  ", line)
@@ -105,6 +126,9 @@ def main() -> int:
     if not args.apply:
         print("\n(dry run) 적용하려면 --apply")
         return 0 if not report["remaining"] else 1
+    catalog.setdefault("metadata", {})["dimension_value_count"] = sum(
+        len(dimension.get("values") or [])
+        for table in catalog["tables"] for dimension in table.get("dimensions") or [])
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
     backup = BACKUP_DIR / f"stat_language_dictionary_before_value_repair_{datetime.now():%Y%m%d_%H%M%S}.json"
     shutil.copy2(DICTIONARY, backup)
