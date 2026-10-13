@@ -77,8 +77,12 @@ jobs:
         working-directory: src/agent/frontend
         run: |
           npm ci
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           node ../../../scripts/windows/check_frontend.cjs . record
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           node ../../../scripts/windows/check_frontend.cjs .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $testFiles = Get-ChildItem test-*.mjs | ForEach-Object { $_.FullName }
           node --test $testFiles
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           npm run build
