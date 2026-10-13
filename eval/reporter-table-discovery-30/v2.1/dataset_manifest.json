@@ -8,39 +8,56 @@
     "ai_assisted": true
   },
   "counts": {
-    "cases": 55,
-    "new_cases": 25,
+    "cases": 200,
+    "new_cases": 170,
     "by_schema": {
-      "reporter200-discovery-2.1": 25,
+      "reporter200-discovery-2.1": 170,
       "reporter30-discovery-2": 30
     },
     "statuses": {
-      "need_clarification": 2,
-      "no_match": 14,
-      "resolved": 39
+      "need_clarification": 7,
+      "no_match": 53,
+      "resolved": 140
     },
-    "series": 71,
-    "tables": 25,
-    "research_artifacts": 25
+    "series": 293,
+    "tables": 96,
+    "research_artifacts": 166
   },
-  "dataset_sha256": "4092eaf072f344c187df72d927a932e4c52bea6d4e7cf3a931385f2dfbbc7211",
+  "dataset_sha256": "9ea2be3b22326b234f4bba39996646c01c06774acdd58d743de935457e1fa77d",
   "catalog_path": "src/agent/stat_dictionary/stat_language_dictionary.json",
   "catalog_sha256": "1811e26fdf91205c6917631c2c84427cc011b141af790fdb1d98656bd478c461",
   "source_dataset": "eval/reporter-table-discovery-30/v2/statbridge-reporter30.jsonl",
   "source_dataset_sha256": "2d99ffb4c5c08cc74501d17e4ec72eb3802a1575202234a5171cfb1191f0aea2",
   "research_sources": [
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2023년 12월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2024년 3월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2024년 9월.md",
     "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2025년 9월.md",
     "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2026년 3월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2026년 9월.md",
     "research/그림표-분석/02-금융안정보고서/금융안정보고서 2023년 12월.md",
     "research/그림표-분석/02-금융안정보고서/금융안정보고서 2024년 12월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2024년 6월.md",
     "research/그림표-분석/02-금융안정보고서/금융안정보고서 2025년 12월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2025년 6월.md",
     "research/그림표-분석/02-금융안정보고서/금융안정보고서 2026년 6월.md",
     "research/그림표-분석/03-경제전망보고서/경제전망보고서 2023년 11월.md",
     "research/그림표-분석/03-경제전망보고서/경제전망보고서 2024년 11월.md",
     "research/그림표-분석/03-경제전망보고서/경제전망보고서 2024년 2월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2024년 8월.md",
     "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 11월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 2월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 5월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 8월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2026년 2월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2026년 5월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2026년 8월.md",
+    "research/그림표-분석/04-지급결제보고서/지급결제보고서 2023년도.md",
     "research/그림표-분석/04-지급결제보고서/지급결제보고서 2024년도.md",
-    "research/그림표-분석/05-연차보고서/연차보고서 2023년도.md"
+    "research/그림표-분석/04-지급결제보고서/지급결제보고서 2025년도.md",
+    "research/그림표-분석/05-연차보고서/연차보고서 2023년도.md",
+    "research/그림표-분석/05-연차보고서/연차보고서 2024년도.md",
+    "research/그림표-분석/05-연차보고서/연차보고서 2025년도.md"
   ],
   "benchmark_scope": "query_interpretation_table_item_classification_api_plan_and_resolution",
   "numeric_gold": "not_created",
