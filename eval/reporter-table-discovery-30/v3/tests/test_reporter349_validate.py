@@ -30,6 +30,7 @@ def data():
     return cases, catalog, manifest, base
 
 
+@pytest.mark.xfail(strict=True, reason=('카탈로그 코드-이름 교정(2026-10-13) 이후 이 데이터셋의 v2 원본 2문항 라벨이 낡았다. 이 계보는 사용하지 않기로 했고 재생성하지 않는다(결정: docs/evaluation/2026-10-13-reporter-v2.1-offline-verification.md). 재생성하면 이 표시를 제거해야 한다.'))
 def test_every_case_and_all_table_lanes_are_audited(data):
     result = validator.audit(*data)
     assert result['valid'], result['errors']
@@ -96,6 +97,7 @@ def test_original_v2_gold_cannot_silently_change(data):
     assert any('Original v2' in x['error'] for x in result['errors'])
 
 
+@pytest.mark.xfail(strict=True, reason=('카탈로그 코드-이름 교정(2026-10-13) 이후 이 데이터셋의 v2 원본 2문항 라벨이 낡았다. 이 계보는 사용하지 않기로 했고 재생성하지 않는다(결정: docs/evaluation/2026-10-13-reporter-v2.1-offline-verification.md). 재생성하면 이 표시를 제거해야 한다.'))
 def test_build_is_reproducible_and_does_not_use_predictions(data, tmp_path, monkeypatch):
     monkeypatch.setattr(builder, 'DATASET', tmp_path)
     builder.build()

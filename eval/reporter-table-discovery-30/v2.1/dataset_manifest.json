@@ -1,0 +1,103 @@
+{
+  "dataset": "reporter-table-discovery-200",
+  "version": "v2.1",
+  "schema_version": "reporter200-discovery-2.1",
+  "created_at": "2026-10-13",
+  "review": {
+    "human_approved": false,
+    "ai_assisted": true
+  },
+  "counts": {
+    "cases": 200,
+    "new_cases": 170,
+    "by_schema": {
+      "reporter200-discovery-2.1": 170,
+      "reporter30-discovery-2": 30
+    },
+    "statuses": {
+      "need_clarification": 7,
+      "no_match": 53,
+      "resolved": 140
+    },
+    "series": 294,
+    "tables": 96,
+    "research_artifacts": 165
+  },
+  "dataset_sha256": "446e99374b7c7152f9dc0988c89c31c92fefdebfa587e9199ffcbe7dcbd8bca0",
+  "catalog_path": "src/agent/stat_dictionary/stat_language_dictionary.json",
+  "catalog_sha256": "9271386b2e04179e87253048f5d9f1aef5dd3da50ea0482249f914b326dee71f",
+  "source_dataset": "eval/reporter-table-discovery-30/v2/statbridge-reporter30.jsonl",
+  "source_dataset_sha256": "2d99ffb4c5c08cc74501d17e4ec72eb3802a1575202234a5171cfb1191f0aea2",
+  "research_sources": [
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2023년 12월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2024년 3월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2024년 9월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2025년 9월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2026년 3월.md",
+    "research/그림표-분석/01-통화신용정책보고서/통화신용정책보고서 2026년 9월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2023년 12월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2024년 12월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2024년 6월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2025년 12월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2025년 6월.md",
+    "research/그림표-분석/02-금융안정보고서/금융안정보고서 2026년 6월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2023년 11월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2024년 11월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2024년 2월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2024년 8월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 11월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 2월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 5월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2025년 8월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2026년 2월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2026년 5월.md",
+    "research/그림표-분석/03-경제전망보고서/경제전망보고서 2026년 8월.md",
+    "research/그림표-분석/04-지급결제보고서/지급결제보고서 2023년도.md",
+    "research/그림표-분석/04-지급결제보고서/지급결제보고서 2024년도.md",
+    "research/그림표-분석/04-지급결제보고서/지급결제보고서 2025년도.md",
+    "research/그림표-분석/05-연차보고서/연차보고서 2023년도.md",
+    "research/그림표-분석/05-연차보고서/연차보고서 2024년도.md",
+    "research/그림표-분석/05-연차보고서/연차보고서 2025년도.md"
+  ],
+  "legacy_catalog_sha256": "1811e26fdf91205c6917631c2c84427cc011b141af790fdb1d98656bd478c461",
+  "legacy_value_repair": {
+    "count": 4,
+    "entries": [
+      {
+        "table_id": "DT_200Y125",
+        "param": "objL1",
+        "label": "내수",
+        "from": "13102136303ACC_ITEM.10501",
+        "to": "13102136303ACC_ITEM.1060140"
+      },
+      {
+        "table_id": "DT_200Y125",
+        "param": "objL1",
+        "label": "순수출",
+        "from": "13102136303ACC_ITEM.10601",
+        "to": "13102136303ACC_ITEM.1060150"
+      },
+      {
+        "table_id": "DT_403Y002",
+        "param": "objL1",
+        "label": "반도체",
+        "from": "13102134523ACC_CD.307214AA",
+        "to": "13102134523ACC_CD.30911AA"
+      },
+      {
+        "table_id": "DT_403Y002",
+        "param": "objL1",
+        "label": "자동차",
+        "from": "13102134523ACC_CD.31015AA",
+        "to": "13102134523ACC_CD.31211AA"
+      }
+    ],
+    "reason": "v2 원본이 카탈로그 코드-이름 결함 시절의 코드를 담고 있어 이름(의도)은 두고 코드만 교정했다."
+  },
+  "benchmark_scope": "query_interpretation_table_item_classification_api_plan_and_resolution",
+  "numeric_gold": "not_created",
+  "source_boundary": "KOSIS Korea Bank of Korea only",
+  "sha256_normalization": "LF",
+  "scoring_policy_sha256": "439fbe781ed1c12f9b165bb3b234cf24749f2c46b9988019a0fc7221a468ba65",
+  "period_policy": "Explicit periods are converted to inclusive KOSIS periods; missing periods retain the runtime plan but expect the API need_period follow-up."
+}

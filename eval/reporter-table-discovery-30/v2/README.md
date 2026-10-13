@@ -49,3 +49,5 @@
 python3 eval/reporter-table-discovery-30/v2/scripts/validate.py
 python3 -m pytest -q eval/reporter-table-discovery-30/v2/tests
 ```
+
+> 카탈로그 코드-이름 교정(2026-10-13): `stat_language_dictionary.json`의 분류값 이름 2,538건을 소스 메타데이터 기준으로 교정했다. 이 데이터셋의 v2 원본 2문항 라벨은 교정 전 이름이라 해당 테스트를 `xfail(strict=True)`로 표시했고, 데이터는 재생성하지 않았다. 자세한 내용: `docs/evaluation/2026-10-13-reporter-v2.1-offline-verification.md`
