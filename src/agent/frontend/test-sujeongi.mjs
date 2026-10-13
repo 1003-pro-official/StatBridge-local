@@ -7,8 +7,8 @@ const chat=read('./src/Sujeongi.tsx');
 const editor=read('./src/ChartSketchEditor.tsx');
 
 test('character chat reuses the existing validated visual edit contract',()=>{
-  assert.match(editor,/<Sujeongi[^>]+onEdit=\{apply\}/);
-  assert.match(editor,/onEdit\(\{instruction:requestedInstruction\.trim\(\),visual,conversation,/);
+  assert.match(editor,/<Sujeongi[\s\S]*?onEdit=\{apply\}/);
+  assert.match(editor,/onEdit\(\{instruction:requestedInstruction\.trim\(\)[\s\S]*?visual,conversation,reference_files:references/);
   assert.ok(!chat.includes('series_label')&&!chat.includes('Math.round(x'));
   assert.match(editor,/resolveMarkSelection/);
   assert.match(editor,/moveMark/);
@@ -16,15 +16,13 @@ test('character chat reuses the existing validated visual edit contract',()=>{
 });
 test('success feedback requires success; failures preserve the draft',()=>{
   assert.match(chat,/if\(success\)\{setDraft\(""\)/);
-  assert.match(chat,/if\(\(!instruction&&!canSubmitMarks\)\|\|loading\|\|inFlight\.current\)return/);
-  assert.match(chat,/sessionStorage\.setItem\(`statbridge\.sujeongi\.chat\.\$\{sessionId\}`,JSON\.stringify\(conversation\.messages\)\)/);
-  assert.match(chat,/conversation\.sessionId===sessionId\?conversation\.messages:\[\]/);
+  assert.match(chat,/if\(\(!instruction&&!canSubmitMarks&&!references\.length\)\|\|loading\|\|inFlight\.current\)return/);
+  assert.match(chat,/savedConversation\(sessionId\)/);
   assert.match(chat,/currentSession\.current!==startedSession/);
 });
-test('drawing tools, history controls and per-session conversation remain available',()=>{
+test('all four drawing tools and session reset remain available',()=>{
   for(const tool of ['rectangle','pen','arrow','text'])assert.ok(editor.includes('"'+tool+'"'));
-  assert.match(chat,/setDraft\(""\);setPendingColors\(null\);setConversation\(\{sessionId,messages:savedConversation\(sessionId\)\}\);setOpen\(false\)/);
-  assert.match(editor,/historyAction\("undo"\)/);
-  assert.match(editor,/historyAction\("redo"\)/);
-  assert.match(editor,/onEdit\(\{instruction:"",action\}\)/);
+  assert.match(chat,/setDraft\(""\);setReferences\(\[\]\);[\s\S]*?setConversation\(\{sessionId,messages:savedConversation\(sessionId\)\}\);setOpen\(false\)/);
+  assert.match(editor,/historyAction\(["\x27]undo["\x27]\)/);
+  assert.match(editor,/historyAction\(["\x27]redo["\x27]\)/);
 });

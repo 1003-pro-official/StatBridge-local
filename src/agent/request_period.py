@@ -20,7 +20,7 @@ def explicit_period(query, latest=None):
     if len(matches)==2:
         between=text[matches[0].end():matches[1].start()]
         connected=re.search(r'부터|에서|~|～|–|—|-|\bto\b',between,re.I)
-        through=re.fullmatch(r'\s*(?:과|와)\s*',between) and re.match(r'\s*까지',text[matches[1].end():])
+        through=re.fullmatch(r'\s*(?:과|와)\s*',between) and re.match(r'\s*(?:까지|사이)',text[matches[1].end():])
         if not connected and not through:return None
         start,end=_boundary(matches[0]),_boundary(matches[1],True)
     elif re.search(r'현재|지금|최신|오늘',text) and re.search(r'부터|이후',text):

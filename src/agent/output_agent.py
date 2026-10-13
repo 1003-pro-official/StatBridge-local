@@ -138,24 +138,8 @@ class OutputAgent:
 
     @staticmethod
     def _summary(series: list[dict[str, Any]]) -> str:
-        if not series:
-            return "선택한 기간에 그래프로 표시할 수치 데이터가 없습니다."
-        item = series[0]
-        points = item.get("points") or []
-        if not points:
-            return "그래프를 생성했습니다."
-        first, last = points[0], points[-1]
-        delta = last["value"] - first["value"]
-        direction = "증가" if delta > 0 else "감소" if delta < 0 else "같은 수준을 유지"
-        extra = f" 함께 표시된 계열은 총 {len(series)}개입니다." if len(series) > 1 else ""
-        label = str(item.get("label") or "통계값")
-        last_char = label[-1]
-        has_batchim = "가" <= last_char <= "힣" and (ord(last_char) - ord("가")) % 28 != 0
-        subject = label + ("은" if has_batchim else "는")
-        return (
-            f"{subject} {first['date']} {first['value']:,.1f}에서 "
-            f"{last['date']} {last['value']:,.1f}{item.get('unit') or ''}로 {direction}했습니다.{extra}"
-        )
+        from report_summary import explain
+        return explain(series)["text"]
 
     @staticmethod
     def _table(series: list[dict[str, Any]]) -> dict[str, Any]:
@@ -212,24 +196,8 @@ class OutputAgent:
         } for s in series]
 
     def _explain(self, series: list[dict[str, Any]], spec: ChartSpec, fallback: str) -> dict[str, Any]:
-        if not series or not self.ncp_client or not self.ncp_client.configured:
-            return {"text": fallback, "source": "rules", "method": "첫 번째 계열의 시작값과 끝값 비교"}
-        system = (
-            "너는 통계 그래프 설명자다. 제공된 숫자와 시점만 근거로 한국어 2~3문장으로 설명한다. "
-            "원인, 예측, 정책 효과를 추측하지 마라. 다른 단위를 직접 크기 비교하지 마라. "
-            "frequency=Q의 YYYY01~YYYY04는 1~4분기이며 월이 아니다. frequency=M일 때만 YYYYMM을 월로 설명한다. "
-            "원자료의 모든 점을 받은 것은 아니므로 중간 구간의 세부 추세를 단정하지 마라."
-        )
-        user = json.dumps({"chart_type": spec.chart_type, "title": spec.title,
-                           "series": self._model_data(series)}, ensure_ascii=False)
-        try:
-            text, _ = self.ncp_client.chat_main(system, user, max_tokens=320, thinking_effort="none")
-            if text.strip():
-                return {"text": text.strip(), "source": self.ncp_client.settings.main_model,
-                        "method": "그래프 계열의 시작·끝·최솟값·최댓값을 근거로 생성"}
-        except Exception:
-            pass
-        return {"text": fallback, "source": "rules", "method": "첫 번째 계열의 시작값과 끝값 비교"}
+        from report_summary import explain
+        return explain(series, self.ncp_client)
 
     def _propose_spec(self, series: list[dict[str, Any]], request: dict[str, Any]) -> dict[str, Any]:
         if not self.ncp_client or not self.ncp_client.configured:
@@ -299,6 +267,17 @@ class OutputAgent:
             if planned_ids and source and str(source) not in planned_ids:
                 raise ValueError("출력 자료의 출처가 요청한 통계표와 다릅니다.")
         source_series = self._series((result.get("execution") or {}).get("rows") or [])
+        for item in source_series:
+            matching = [p for p in plans if str(p.get('table_id')) == item.get('sourceId')]
+            if not matching and len(plans) == 1:
+                matching = plans
+            if not item.get('frequency') and matching:
+                item['frequency'] = str(matching[0].get('frequency') or '')
+        # Summaries read original observations in the displayed period, never
+        # cumulative/average/growth-rate values generated for chart display.
+        summary_series = [{**item, 'points': [p for p in item['points']
+            if (not spec.period_start or p['date'] >= spec.period_start)
+            and (not spec.period_end or p['date'] <= spec.period_end)]} for item in source_series]
         series = self._apply_data_edits(source_series, spec)
         series = [{**s, "color": spec.series_colors.get(s["label"], s["color"])} for s in series]
         from chart_designs import palette, materialize
@@ -320,7 +299,7 @@ class OutputAgent:
         mixed_frequency = len({s["frequency"] for s in series if s["frequency"]}) > 1
         if not spec.report and (mixed_frequency or (mixed_units and not spec.secondary_axis_series)) and spec.layout == "combined" and spec.chart_type not in {"scatter", "bubble"}:
             raise ValueError(combined_layout_reason(series))
-        summary = self._summary(series)
+        summary = self._summary(summary_series)
         renderer_info={}
         if spec.report:
             from advanced_chart_render import plotly_report, echarts_report, report_warnings
@@ -339,7 +318,8 @@ class OutputAgent:
             figure = render_plotly(series, materialize(spec,[s['label'] for s in series]))
             from advanced_chart_render import report_warnings
             renderer_info['warnings']=report_warnings(series,spec)
-        explanation = self._explain(series, spec, summary) if generate_explanation else {"text": summary, "source": "rules", "method": "기존 조회 자료로 편집 상태 복원"}
+        from report_summary import explain
+        explanation = self._explain(summary_series, spec, summary) if generate_explanation else explain(summary_series)
         return {
             "status": "ready" if any(s["points"] for s in series) else "empty",
             "agent": "output-agent-chartspec-v2",
@@ -451,6 +431,10 @@ class OutputAgent:
         if spec.model_dump() == before:
             raise ValueError("요청한 설정이 이미 적용되어 있어 변경된 내용이 없습니다. 다른 수정 내용을 입력해 주세요.")
         edited = self._build(result, spec, generate_explanation=generate_explanation)
+        if (edited.get('explanation', {}).get('facts') == current_output.get('explanation', {}).get('facts')
+                and current_output.get('explanation', {}).get('facts')):
+            edited['explanation'] = current_output['explanation']
+            edited['summary'] = current_output['summary']
         state_only=edited.get('plotlyFigure')==current_output.get('plotlyFigure')
         edited["editChanges"] = [edit_change_description(c) for c in effective]
         if state_only:

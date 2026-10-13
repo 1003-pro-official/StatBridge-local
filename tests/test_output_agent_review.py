@@ -110,7 +110,10 @@ def test_edit_reuses_cached_rows_without_query(monkeypatch):
 
 
 def test_launcher_checks_new_output_dependencies():
+    import json
+    from test_launcher_bootstrap import bootstrap
     launcher = (ROOT / "scripts/windows/START_STATBRIDGE.cmd").read_text(encoding="utf-8")
-    assert "langgraph,plotly" in launcher
-    assert "require.resolve('plotly.js-dist-min')" in launcher
-    assert "if defined FRONT_INSTALL" in launcher
+    assert 'bootstrap.py' in launcher
+    assert {'langgraph', 'plotly', 'matplotlib', 'pypdf'} <= set(bootstrap.IMPORTS)
+    package = json.loads((ROOT / 'src/agent/frontend/package.json').read_text(encoding='utf-8'))
+    assert {'plotly.js-dist-min', 'echarts'} <= set(package['dependencies'])

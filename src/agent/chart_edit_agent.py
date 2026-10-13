@@ -164,7 +164,7 @@ class ChartEditAgent:
 
     def _interpret(self, state: EditState) -> dict[str, Any]:
         kind = explicit_chart_change(state["instruction"])
-        if kind and not (state.get("visual") or {}).get("marks"):
+        if kind and not (state.get("visual") or {}).get("marks") and not (state.get('visual') or {}).get('reference_files'):
             series = self.output_agent._series((state["result"].get("execution") or {}).get("rows") or [])
             displayed = self.output_agent._apply_data_edits(series, ChartSpec.model_validate(state["current"]["chartState"]))
             blockers = data_requirements(displayed, kind)
@@ -187,7 +187,7 @@ class ChartEditAgent:
         series = self.output_agent._series((state["result"].get("execution") or {}).get("rows") or [])
         labels = {s["label"] for s in series}
         displayed = self.output_agent._apply_data_edits(series, ChartSpec.model_validate(state["current"]["chartState"]))
-        if isinstance(self.model,Hcx007EditModel) and not visual.marks:
+        if self.model.__class__.__name__ in {'Hcx007EditModel','OpenAIEditModel'} and not visual.marks and not visual.reference_files:
             from workspace_text_edits import simple_workspace_commands
             simple=simple_workspace_commands(state['instruction'],ChartSpec.model_validate(state['current']['chartState']),displayed,visual.selected_target)
             if simple:return {'commands':simple,'interpretation':'validated_text'}
@@ -195,17 +195,17 @@ class ChartEditAgent:
         required_display=display_commands(state["instruction"],ChartSpec.model_validate(state["current"]["chartState"]),displayed)
         from chart_edit_intents import arrow_note
         arrow_marks=[m for m in visual.marks if m.tool=="arrow"]
-        if len(arrow_marks)==1 and not re.search(r"박스|사각형|제목|범례|원 부분|펜",state["instruction"]):
+        if len(arrow_marks)==1 and not visual.reference_files and not re.search(r"박스|사각형|제목|범례|원 부분|펜",state["instruction"]):
             arrow_command=arrow_note(state["instruction"],arrow_marks[0])
             if arrow_command:return {"commands":[arrow_command,*required_display]}
-        if required_display and not visual.marks and not re.search(r"색|제목|범례|배경|도형|화살표|박스|사각형",state["instruction"]):
+        if required_display and not visual.marks and not visual.reference_files and not re.search(r"색|제목|범례|배경|도형|화살표|박스|사각형",state["instruction"]):
             return {"commands":required_display}
         from chart_edit_intents import symbol_note
-        if not visual.marks and not re.search(r'제목|격자|박스|범례|기간|날짜',state['instruction']):
+        if not visual.marks and not visual.reference_files and not re.search(r'제목|격자|박스|범례|기간|날짜',state['instruction']):
             symbol_command=symbol_note(state['instruction'])
             if symbol_command:return {'commands':[symbol_command]}
         from highlight_followup import expand_highlight
-        if not visual.marks:
+        if not visual.marks and not visual.reference_files:
             expansion=expand_highlight(state["instruction"],ChartSpec.model_validate(state["current"]["chartState"]),displayed,state["current"].get("editHistory",[]))
             if expansion:
                 return {"commands":[expansion]}
@@ -236,8 +236,8 @@ class ChartEditAgent:
         for mark in visual.marks:
             if mark.target and mark.target not in targets:
                 raise ValueError("그림 표시의 수정 대상이 현재 그래프에 없습니다.")
-        if not state["instruction"].strip() and not any(m.text.strip() for m in visual.marks) and not (self.model.supports_images and visual.marks):
-            raise ValueError("표시에 대한 수정 설명을 입력해 주세요. 현재 HCX-007은 손글씨·이미지를 읽지 않습니다.")
+        if not state["instruction"].strip() and not any(m.text.strip() for m in visual.marks) and not (self.model.supports_images and (visual.marks or visual.reference_files)):
+            raise ValueError("어떤 요소를 변경할까요? 제목·색상·기간 또는 참고할 파일과 변경 내용을 알려 주세요." if self.model.supports_images else "손글씨만으로는 수정 내용을 확정할 수 없습니다. 어떤 요소를 변경할까요? 제목·색상·기간을 텍스트로 알려 주세요.")
         if visual.marks and not self.model.supports_images:
             if any(not m.text.strip() for m in visual.marks) and not state["instruction"].strip():
                 raise ValueError("각 표시의 설명 또는 전체 수정 지시를 입력해 주세요.")
@@ -295,7 +295,7 @@ class ChartEditAgent:
         system += " 격자 삭제는 모든 축의 show_grid:false,zero_line:false이다. '기간/날짜를 일관적으로'는 조회 기간을 바꾸는 요청이 아니라 기간축 눈금을 같은 간격과 형식으로 표시하는 요청이다. 분기 자료는 tick_step:4, 월 자료는 tick_step:12로 설정하고 날짜를 다시 묻지 마라. 사용자가 최종 선택한 불투명도는 0~1의 opacity로 해당 구간/도형에 적용한다. "
         system += " 그림이 없어도 텍스트로 실제 날짜/분기/월을 명시하면 부분 편집을 한다. frequency=Q의 YYYY01~YYYY04는 1~4분기, frequency=M의 YYYYMM은 월이다. 빈 selection은 텍스트의 확정 날짜를 무효화하지 않는다. 선/점/막대 색상·두께·점선 변경은 set_segment_style 또는 set_point_style(label=정확한 계열,start,end,params={color,width,dash})이다. 기간의 배경 음영/강조만 highlight_period(start,end,params={color,opacity})이다. highlight_period에는 width/dash를 넣지 않는다. 부분 선 두께를 전체 set_series_style로 확대하지 마라. "
         system += " selection은 화면에서 실제 관측값에 연결한 확정 범위이다. segment는 set_segment_style, point는 set_point_style만 적용하고 전체 계열 스타일로 확대하지 마라. 시점별 명령은 실제 periods에서 선택한다. 편집 요소 이동/삭제는 chartState의 id를 사용한다."
-        color = explicit_color_change(state["instruction"])
+        color = None if visual.reference_files else explicit_color_change(state["instruction"])
         if color:
             if re.search(r"이\s*부분|표시한\s*부분|선택한\s*부분", state["instruction"]) and not selections:
                 raise ValueError("표시한 부분의 계열과 실제 시점을 먼저 확인해 주세요.")

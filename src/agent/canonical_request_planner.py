@@ -29,7 +29,7 @@ def instruction_text(query, tables):
     return re.sub(r'[「《“\"](.*?)[」》”\"]',lambda m:' ' if m.group(1) in values else m.group(0),text)
 
 
-def selections(query,tables):
+def selections(query,tables, *, allow_combined_values=False):
     hits=references(query,tables)
     # Explicitly named catalog objects establish a boundary. Short product words
     # inside semantic questions remain owned by the measured-concept planner.
@@ -63,6 +63,7 @@ def selections(query,tables):
     result=[]
     for table in chosen:
         groups=[]
+        missing=[]
         for dimension in table.get('dimensions',[]):
             level=dimension.get('level',1)
             scoped=re.search(rf'{level}\s*번째\s*분류(?:의|는|에서)?(.*?)(?=\d+\s*번째\s*분류|조회\s*기간|$)',residual,re.S)
@@ -78,11 +79,19 @@ def selections(query,tables):
                     q=compact(text)
                     found=[v for v in values if len(compact(v['value_name']))>=2 and compact(v['value_name']) in q]
                     found=[v for v in found if not any(compact(v['value_name'])!=compact(w['value_name']) and compact(v['value_name']) in compact(w['value_name']) for w in found)]
+            if not found and allow_combined_values:
+                q=compact(text)
+                found=[v for v in values if compact(v['value_name']) in q or ((m:=re.fullmatch(r'(.+?)\s*\((.+)\)',v['value_name'])) and all(compact(part) in q for part in m.groups()))]
+                found=[v for v in found if not any(compact(v['value_name'])!=compact(w['value_name']) and compact(v['value_name']) in compact(w['value_name']) for w in found)]
             if not found:
                 representative=dimension.get('representative_value_id')
+                if not representative and len(values)>1 and values[0]['value_name'] not in {'총지수','합계','총계','전체','전국','계'}:
+                    label=dimension.get('object_name') or f"{level}번째 분류"
+                    examples=' / '.join(v['value_name'] for v in values[:3])
+                    missing.append(f"{table['table_name']} · {label} ({examples} 등 {len(values)}개)")
                 found=[next((v for v in values if v['value_id']==representative),values[0])] if values else [None]
             groups.append(found)
         for combo in product(*groups):
             hits=[{'api_param':d['api_param'],'value_id':v['value_id'],'value_name':v['value_name']} for d,v in zip(table.get('dimensions',[]),combo) if v]
-            result.append({'table_id':table['table_id'],'table_name':table['table_name'],'dimension_hits':hits,'score':300,'reasons':['explicit_catalog_scope']})
+            result.append({'table_id':table['table_id'],'table_name':table['table_name'],'dimension_hits':hits,'score':300,'reasons':['explicit_catalog_scope'],'_missing_dimensions':missing})
     return result

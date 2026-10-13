@@ -1,4 +1,10 @@
-import {accountKey} from './accountApi';
+import QueryRefinementCard from './QueryRefinementCard';
+import exploreExamples from './exploreExamples.json';
+import ExecutionEvidence from './ExecutionEvidence';
+import {panelGeometry,splitPlotAnnotations} from './plotPanelLayout';
+import {appendChat,readChat,writeChat,deleteChat,saveChat,savedChats,removeSavedChat,editDescription,type SavedChat} from './graphChat';
+import RecoveryPanel from './RecoveryPanel';
+import {accountKey,accountRequest} from './accountApi';
 import {ownsHistory} from './accountScope';
 import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import Plotly from "plotly.js-dist-min";
@@ -6,7 +12,7 @@ import ChartSketchEditor from "./ChartSketchEditor";
 import { fetchCatalog, fetchWorkspace, inspectOutputOptions, submitOutput, submitOutputEdit, submitQuery } from "./api/client";
 import {allowedCharts,blockedCharts,chartLabels,chartDescriptions} from "./chartChoices";
 import {initialQueryRequest} from "./querySubmission";
-import type { CatalogResponse, CatalogTable, ChartEditInput, ChartSeries, ChartType, QueryResponse } from "./api/types";
+import type { CatalogResponse, CatalogTable, ChartEditInput, ChartSeries, ChartType, QueryRequest, QueryResponse } from "./api/types";
 
 type IconName =
   | "logo" | "home" | "chat" | "chart" | "compare" | "lineage" | "search"
@@ -130,46 +136,42 @@ function DataCatalog({ onQuery, loading }: { onQuery: (query: string, dimensionV
   </main>;
 }
 
-function Header({ open, toggleMenu, closeMenu, view, goHome, selectView }: {
-  open: boolean; toggleMenu: () => void; closeMenu: () => void;
-  view: "home" | "lineage"; goHome: () => void; selectView: (view: "home" | "lineage") => void;
+function Header({ view, goHome, selectView, busy }: {
+  view: "home" | "lineage"; goHome: () => void; selectView: (view: "home" | "lineage") => void; busy?: boolean;
 }) {
-  const menuToggle = useRef<HTMLButtonElement>(null);
   const focusQuery = () => {
-    selectView("home"); closeMenu();
+    selectView("home");
     requestAnimationFrame(() => {
       document.getElementById("statistics-query")?.focus();
       document.getElementById("statistics-query")?.scrollIntoView({ block: "center", behavior: "smooth" });
     });
   };
   const showGuide = () => {
-    selectView("home"); closeMenu();
+    selectView("home");
     requestAnimationFrame(() => {
       document.getElementById("usage-guide")?.focus({ preventScroll: true });
       document.getElementById("usage-guide")?.scrollIntoView({ behavior: "smooth" });
     });
   };
-  return <header className="institution-header" onKeyDown={(event) => { if (event.key === "Escape" && open) { closeMenu(); menuToggle.current?.focus(); } }}>
+  return <header className="institution-header">
     <a className="skip-link" href={view === "lineage" ? "#data-catalog" : "#main-content"}>본문 바로가기</a>
     <div className="utility-bar"><div className="utility-inner">
       <span>경제통계 분석 워크스페이스</span>
       <div><a href="https://www.bok.or.kr/portal/main/main.do" target="_blank" rel="noreferrer">한국은행 <span className="sr-only">(새 창)</span><span aria-hidden="true">↗</span></a><a href="https://kosis.kr" target="_blank" rel="noreferrer">KOSIS <span className="sr-only">(새 창)</span><span aria-hidden="true">↗</span></a><span className="workspace-label">STATBRIDGE LOCAL</span></div>
     </div></div>
     <div className="institution-nav">
-      <button type="button" className="institution-brand" onClick={() => { goHome(); closeMenu(); }} aria-label="StatBridge 홈으로 이동"><span className="institution-mark"><Icon name="logo" size={28}/></span><span><strong>StatBridge</strong><small>ECONOMIC DATA & INSIGHT</small></span></button>
-      <nav id="primary-navigation" className={`institution-links ${open ? "is-open" : ""}`} aria-label="주 메뉴">
-        <button type="button" aria-current={view === "home" ? "page" : undefined} onClick={() => { goHome(); closeMenu(); }}>분석 홈</button>
-        <button type="button" onClick={focusQuery}>자연어 질의</button>
-        <button type="button" aria-current={view === "lineage" ? "page" : undefined} onClick={() => { selectView("lineage"); closeMenu(); }}>통계 탐색 · 계보</button>
+      <button type="button" className="institution-brand" onClick={() => { goHome(); }} aria-label="StatBridge 홈으로 이동"><span className="institution-mark"><Icon name="logo" size={28}/></span><span><strong>StatBridge</strong><small>ECONOMIC DATA & INSIGHT</small></span></button>
+      <nav id="primary-navigation" className="institution-links" aria-label="주 메뉴">
+        <button type="button" aria-current={view === "home" ? "page" : undefined} onClick={() => { goHome(); }}>분석 홈</button>
+        <button type="button" aria-current={view === "lineage" ? "page" : undefined} onClick={() => { selectView("lineage"); }}>통계 탐색 · 계보</button>
         <button type="button" onClick={showGuide}>이용 안내</button>
       </nav>
-      <div className="institution-actions"><button type="button" className="institution-search" onClick={focusQuery} aria-label="통계 질문 입력으로 이동"><Icon name="search" size={24}/></button><button ref={menuToggle} type="button" className="institution-menu" aria-label={open ? "메뉴 닫기" : "전체 메뉴 열기"} aria-expanded={open} aria-controls="primary-navigation" onClick={toggleMenu}><Icon name={open ? "close" : "menu"} size={26}/></button></div>
+      <div className="institution-actions"><nav className="institution-chat-actions" aria-label="그래프 대화 관리"><button type="button" disabled={busy} aria-label="새 채팅 시작" onClick={()=>window.dispatchEvent(new Event('statbridge:new-chat'))}><Icon name="chat" size={16}/><span>새 채팅</span></button><button type="button" disabled={busy} aria-label="저장한 그래프 대화" onClick={()=>window.dispatchEvent(new Event('statbridge:show-chats'))}><Icon name="history" size={16}/><span>저장한 대화</span></button></nav><button type="button" className="institution-search" onClick={focusQuery} aria-label="통계 질문 입력으로 이동"><Icon name="search" size={24}/></button></div>
     </div>
   </header>;
 }
 
 function Hero({ query, setQuery, submit, loading }: { query: string; setQuery: (v: string) => void; submit: (e: FormEvent) => void; loading: boolean }) {
-  const suggestions = ["최근 대출금리 추이", "대출금리와 생산자물가 비교", "월별 생산자물가지수"];
   return <section className="hero" aria-labelledby="hero-title">
     <div className="hero-content">
       <span className="hero-label"><span/> ECONOMIC STATISTICS WORKSPACE</span>
@@ -180,7 +182,6 @@ function Hero({ query, setQuery, submit, loading }: { query: string; setQuery: (
         <input id="statistics-query" aria-label="통계 질문" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="예: 대출금리와 생산자물가를 비교해줘" />
         <button type="submit" disabled={loading || !query.trim()}>{loading ? <span className="spinner"/> : <Icon name="send" size={18}/>}<span>분석하기</span></button>
       </form>
-      <div className="suggestions"><span>추천 질문</span>{suggestions.map((s) => <button key={s} onClick={() => setQuery(s)}>{s}</button>)}</div>
     </div>
     <div className="economic-visual" aria-hidden="true">
       <svg viewBox="0 0 520 440" fill="none"><defs><linearGradient id="column-light" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#73c2e7" stopOpacity=".4"/><stop offset="1" stopColor="#73c2e7" stopOpacity=".02"/></linearGradient></defs>
@@ -195,16 +196,6 @@ function Hero({ query, setQuery, submit, loading }: { query: string; setQuery: (
     </div>
     <div className="hero-bottom"><span>EXPLORE · COMPARE · TRACE</span><span>한국은행 통계 / KOSIS 자료 조회</span></div>
   </section>;
-}
-
-function FeatureStrip() {
-  const items: { icon: IconName; title: string; text: string }[] = [
-    { icon: "chat", title: "자연어 질의", text: "질문으로 시작하는 통계 탐색" },
-    { icon: "compare", title: "지표 비교 · 시각화", text: "기간과 계열을 선택해 분석" },
-    { icon: "chart", title: "그래프 편집", text: "자연어로 다듬는 분석 결과" },
-    { icon: "database", title: "출처 · 데이터 계보", text: "통계표와 선택 근거를 확인" },
-  ];
-  return <section className="feature-strip" aria-label="주요 기능">{items.map((x,index) => <article key={x.title}><span className="feature-number">0{index+1}</span><div><strong>{x.title}</strong><p>{x.text}</p></div><span className="feature-icon"><Icon name={x.icon}/></span></article>)}</section>;
 }
 
 function UsageGuide() {
@@ -238,13 +229,18 @@ function ChartRenderer({ series, chartType = "line", xAxisLabel, yAxisLabel }: {
   </div>;
 }
 
-function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> };heading?:{title:string;subtitle:string} }) {
+export function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> };heading?:{title:string;subtitle:string} }) {
+  const geometry=panelGeometry(figure);
+  const captions=splitPlotAnnotations(figure);
   const host = useRef<HTMLDivElement>(null);
+  const renderRevision=useRef(0);
   const queue=useRef<Promise<unknown>>(Promise.resolve());
   const [renderError,setRenderError] = useState("");
   useEffect(() => {
     if (!host.current) return;
     const element = host.current;
+    const version=++renderRevision.current;
+    element.dataset.plotReady='false';
     let active=true;
     let rendered=false;
     let unbind=()=>{};
@@ -252,14 +248,17 @@ function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Record<strin
     const copy=structuredClone(figure);
     delete copy.layout.width;delete copy.layout.height;copy.layout.autosize=true;
     if(heading){
+      copy.layout.annotations=captions.plot;
       copy.layout.title={text:''};copy.layout.showlegend=false;
-      copy.layout.margin={...(copy.layout.margin as Record<string,number>),t:35,b:90};
+      if(geometry.domainChart)copy.layout.uniformtext={minsize:10,mode:'hide'};
+      copy.layout.margin={...(copy.layout.margin as Record<string,number>),t:geometry.titleSpace,b:geometry.domainChart?90:120};
     }
     const select=(kind:string,label?:string,id?:string)=>element.dispatchEvent(new CustomEvent('statbridge:graph-select',{bubbles:true,detail:{kind,label,id}}));
     const selectText=(event:MouseEvent)=>{const node=event.target as Element;if(node.closest('.gtitle'))select('title');else if(node.closest('.xtick,.xtitle'))select('x');else if(node.closest('.ytick,.ytitle'))select('y');else if(node.closest('.annotation')){const index=Number(node.closest('.annotation')?.getAttribute('data-index'));const annotation=(copy.layout.annotations as Array<{name?:string}>|undefined)?.[index];if(annotation?.name)select('note',undefined,annotation.name);}};
     element.addEventListener('click',selectText);
-    queue.current=queue.current.catch(()=>{}).then(async()=>{if(!active)return;await Plotly.react(element, copy.data, copy.layout, { responsive: true, displaylogo: false });if(!active)return;
+    queue.current=queue.current.catch(()=>{}).then(async()=>{if(!active)return;await Plotly.react(element, copy.data, copy.layout, { responsive: true, displaylogo: false });if(!active)return;await Plotly.Plots.resize(element);if(!active)return;
       rendered=true;
+      element.dataset.plotVersion=String(version);element.dataset.plotReady='true';
       const events=element as unknown as HTMLElement & {on:(name:string,fn:(event:any)=>unknown)=>void;removeListener:(name:string,fn:(event:any)=>unknown)=>void};
       const click=(event:any)=>{const trace=event.points?.[0]?.data;const label=trace?.meta?.seriesLabel||trace?.customdata?.[0]?.[0]||trace?.name;if(label)select('series',label);};
       const annotation=(event:any)=>{if(event.annotation?.name)select('note',undefined,event.annotation.name);};
@@ -276,11 +275,12 @@ function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Record<strin
   useEffect(()=>{const element=host.current;return()=>{void queue.current.finally(()=>{if(element&&!element.isConnected)Plotly.purge(element);});};},[]);
   const pick=(kind:string,label?:string)=>host.current?.dispatchEvent(new CustomEvent('statbridge:graph-select',{bubbles:true,detail:{kind,label}}));
   const names=new Set<string>();
-  const legends=figure.layout.showlegend===false?[]:figure.data.filter(t=>{const name=String(t.name||'');if(t.showlegend===false||!name||names.has(name))return false;names.add(name);return true;});
+  const legendData:Array<Record<string,unknown>>=geometry.domainChart?figure.data.flatMap(t=>((t.labels||[]) as unknown[]).map((label,i)=>({name:String(label),line:{color:((t.marker as {colors?:string[]}|undefined)?.colors||[])[i]},meta:{seriesLabel:String(((t.customdata||[]) as unknown[])[i]||label)}}))):figure.data;
+  const legends=figure.layout.showlegend===false?[]:legendData.filter(t=>{const name=String(t.name||'');if(t.showlegend===false||!name||names.has(name))return false;names.add(name);return true;});
   const plain=(value:string)=>new DOMParser().parseFromString(value,'text/html').body.textContent||'';
   const titleStyle=figure.layout.title as {font?:{size?:number;color?:string;family?:string};x?:number}|undefined;
-  const plot=<div ref={host} className="plotly-chart" style={heading?undefined:{height:typeof figure.layout.height==='number'?figure.layout.height:580}} aria-label="통계 그래프"/>;
-  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}{heading?<div className="workspace-plot-frame"><header className="workspace-plot-heading" onClick={()=>pick('title')}><h4 style={{fontSize:titleStyle?.font?.size??18,color:titleStyle?.font?.color,fontFamily:titleStyle?.font?.family,textAlign:(titleStyle?.x??.5)<.25?'left':(titleStyle?.x??.5)>.75?'right':'center'}}>{heading.title}</h4>{heading.subtitle&&<p>{heading.subtitle}</p>}</header><div className="workspace-plot-legend">{legends.map((trace,i)=><button type="button" key={i} onClick={()=>pick('series',String((trace.meta as {seriesLabel?:string})?.seriesLabel||plain(String(trace.name))))}><i style={{background:typeof (trace.line as {color?:string})?.color==='string'?(trace.line as {color:string}).color:'#4568ff'}}/>{plain(String(trace.name))}</button>)}</div><div className="workspace-plot-body">{plot}</div></div>:plot}</>;
+  const plot=<div ref={host} className="plotly-chart" style={heading?undefined:{height:Math.max(typeof figure.layout.height==='number'?figure.layout.height:580,geometry.minHeight)}} aria-label="통계 그래프"/>;
+  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}{heading?<div className="workspace-plot-frame" style={geometry.minWidth?{minWidth:geometry.minWidth}:undefined}><header className="workspace-plot-heading" onClick={()=>pick('title')}><h4 style={{fontSize:titleStyle?.font?.size??18,color:titleStyle?.font?.color,fontFamily:titleStyle?.font?.family,textAlign:(titleStyle?.x??.5)<.25?'left':(titleStyle?.x??.5)>.75?'right':'center'}}>{heading.title}</h4>{heading.subtitle&&<p>{heading.subtitle}</p>}</header><div className="workspace-plot-legend">{legends.map((trace,i)=><button type="button" key={i} onClick={()=>pick('series',String((trace.meta as {seriesLabel?:string})?.seriesLabel||plain(String(trace.name))))}><i style={{background:typeof (trace.line as {color?:string})?.color==='string'?(trace.line as {color:string}).color:'#4568ff'}}/>{plain(String(trace.name))}</button>)}</div><div className={`workspace-plot-body ${geometry.multi?'multi-panel':geometry.expanded?'expanded-plot':''}`} style={geometry.multi||geometry.expanded?{height:geometry.minHeight,minHeight:geometry.minHeight,flex:'none'}:undefined}>{plot}</div>{captions.footer.length>0&&<footer className="workspace-plot-footer" aria-label="그래프 출처와 설명">{captions.footer.map((a,i)=><p key={i}>{plain(String(a.text||'').replace(/<br\s*\/?\s*>/gi,'\n'))}</p>)}</footer>}</div>:plot}</>;
 
 }
 
@@ -358,7 +358,7 @@ function ClarificationPanel({ result, loading, choose }: { result: QueryResponse
     setSelected(nextSelected); setStepLoading(true); setStepError("");
     try{
       const next=await submitQuery({query:result.query,state:stepResult.state,clarification:{clarification_id:activeGroup.id,value:option.value},execute:false});
-      if(next.status==="no_match")throw new Error("이 선택과 연결된 지원 통계표가 없습니다.");
+      if(["no_match","request_failed","data_unavailable"].includes(next.status||""))throw new Error("이 선택과 연결된 지원 통계표가 없습니다.");
       setCompleted((items)=>[...items,{id:activeGroup.id,question:activeGroup.question,label:option.label}]);
       setStepResult(next); setStart(next.periodSelection?.applied?.start||""); setEnd(next.periodSelection?.applied?.end||"");
     }catch(error){
@@ -372,7 +372,7 @@ function ClarificationPanel({ result, loading, choose }: { result: QueryResponse
       <div className="clarification-title"><span><Icon name="chat" size={19}/></span><div><h2>질문에 맞는 조건을 순서대로 선택해 주세요.</h2><p>앞 단계의 선택에 연결되는 항목과 지원 기간만 다음 단계에 표시합니다.</p></div></div>
       <div className="clarification-progress">{completed.map((step,index)=><div className="completed-step" key={step.id}><span>{index+1}</span><div><small>{step.question}</small><strong>{step.label}</strong></div></div>)}{completed.length>0&&<button type="button" onClick={resetSteps}>처음부터 다시 선택</button>}</div>
       {activeGroup&&<div className="clarification-groups"><fieldset><legend><span className="step-number">{completed.length+1}</span>{activeGroup.question}</legend><div className="clarification-options">{activeGroup.options.map((option)=>{const active=(selected[activeGroup.id]||[]).includes(option.value);return <button type="button" aria-pressed={active} className={active?"selected":""} key={option.value} disabled={loading||stepLoading} onClick={()=>selectStep(option)}><span className="multi-check">{active&&<Icon name="check" size={13}/>}</span>{option.label}</button>})}</div>{stepLoading&&<p className="step-loading"><span className="spinner"/> 관련 통계표와 다음 질문을 확인하고 있습니다.</p>}</fieldset></div>}
-      {stepError&&<div className="error-banner">{stepError}</div>}
+      {stepError&&<div className="error-banner">{stepError}<p>현재 선택은 유지됩니다. 다른 선택지를 고르거나 같은 선택을 다시 눌러 이어서 진행하세요.</p></div>}
       {periodReady&&<div className="setup-block date-step"><strong><span className="step-number">{completed.length+1}</span>조회 날짜</strong><p>선택한 통계표가 실제 제공하는 기간 안에서 조회합니다.</p>{stepResult.periodSelection?.applied?<PeriodConfirmation result={stepResult}/>:<div className="period-form"><label>시작일<DateSelector label="시작일" value={start} min={minDate} max={end&&(!maxDate||end<maxDate)?end:maxDate} onChange={setStart}/></label><span>→</span><label>종료일<DateSelector label="종료일" value={end} min={start&&(!minDate||start>minDate)?start:minDate} max={maxDate} onChange={setEnd}/></label></div>}{minDate&&maxDate&&<p className="period-availability"><Icon name="check" size={14}/> 선택 가능 기간: {minDate} ~ {maxDate}</p>}</div>}
       {periodReady&&<div className="clarification-submit"><span>{invalid?"선택한 통계표의 제공 기간 안에서 날짜를 선택해 주세요.":!datesComplete?"시작일과 종료일을 먼저 선택해 주세요.":"조건이 준비되었습니다. 먼저 MCP 데이터를 조회합니다."}</span><button disabled={loading||stepLoading||!datesComplete||invalid} onClick={()=>choose(Object.entries(selected).map(([clarification_id,values])=>({clarification_id,values})),start,end)}>선택 완료 후 데이터 조회 <Icon name="arrow" size={15}/></button></div>}
       <div className="clarification-trace"><Icon name="lineage" size={15}/><span>UI → Agent → 통계언어 사전 → 역질문 → 선택값 확정 → 사전 재검색</span></div>
@@ -398,7 +398,7 @@ function IntentSetupCard({ index, title, initial, onReady }: { index:number; tit
   const chooseOption=async(option:{label:string;value:string})=>{
     if(!group||busy)return; setBusy(true); setError("");
     const nextSelected={...selected,[group.id]:[option.value]}; setSelected(nextSelected);
-    try{const next=await submitQuery({query:initial.query,state:stepResult.state,clarification:{clarification_id:group.id,value:option.value},execute:false}); if(next.status==="no_match")throw new Error("이 선택에 연결된 통계표가 없습니다."); setCompleted((items)=>[...items,{question:group.question,label:option.label}]);setStepResult(next);setStart(next.periodSelection?.applied?.start||"");setEnd(next.periodSelection?.applied?.end||"");}
+    try{const next=await submitQuery({query:initial.query,state:stepResult.state,clarification:{clarification_id:group.id,value:option.value},execute:false}); if(["no_match","request_failed","data_unavailable"].includes(next.status||""))throw new Error("이 선택에 연결된 통계표가 없습니다."); setCompleted((items)=>[...items,{question:group.question,label:option.label}]);setStepResult(next);setStart(next.periodSelection?.applied?.start||"");setEnd(next.periodSelection?.applied?.end||"");}
     catch(e){setSelected(selected);setError(e instanceof Error?e.message:"다음 조건을 불러오지 못했습니다.")}finally{setBusy(false)}
   };
   return <article className="intent-setup-card">
@@ -422,6 +422,7 @@ function MultiIntentPanel({ query, intents, loading, execute }: { query:string; 
 
 function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (input: ChartEditInput) => Promise<boolean>; loading: boolean }) {
   const [lineageOpen, setLineageOpen] = useState(true);
+  const [evidenceOpen,setEvidenceOpen]=useState(false);
   const [allDataOpen,setAllDataOpen]=useState(false);
   const allRows=result.chart.flatMap((series)=>series.points.map((point)=>({series,point})));
   const previewRows=result.chart.flatMap((series)=>{
@@ -465,53 +466,67 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
     <div className="result-grid">
       <article className="panel chart-panel">
         <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length>0&&<button onClick={exportPng}><Icon name="chart" size={17}/> PNG</button>}<button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button><button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
-        <details className="workspace-analysis-summary"><summary>분석 요약 보기</summary><div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div></details>
+        <details className="workspace-analysis-summary" open><summary>보고서 요약</summary><div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div></details>
         <PeriodConfirmation result={result}/>
         {result.outputSpec?.editChanges?.length ? <div className="setup-block" role="status"><strong>수정이 적용되었습니다</strong><ul>{result.outputSpec.editChanges.map((change,index)=><li key={index}>{change}</li>)}</ul></div> : null}
         {!result.editSessionId&&result.warnings?.map((warning, index) => <div className="error-banner" role="status" key={index}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi, "$1[redacted]")}</div>)}
         {!result.editSessionId&&<div className="chart-header"><div><h3>{editOptions?.title||(result.chart.length ? `${chartLabels[result.chartType||'line']} 분석 결과` : "MCP 통계표 탐색 결과")}</h3>{result.chart.length > 0 && editOptions?.showLegend!==false && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>}
-        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
+        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor onEvidence={()=>setEvidenceOpen(true)} warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
         {result.insights.length>0&&<div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{result.insights.map((x,index) => <li key={`${index}-${x}`}>{x}</li>)}</ul></div>}
         {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><div><h3>{allDataOpen?"전체 데이터":"주요 데이터 예시"}</h3><p>{allDataOpen?"조회된 모든 관측치를 표시합니다.":"각 계열의 시작과 최근 값을 간략히 보여줍니다."}</p></div><span>전체 {allRows.length}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{visibleRows.map(({series,point}) => <tr key={`${series.id}-${point.date}`}><td>{series.label}</td><td>{point.date}</td><td>{point.value.toLocaleString()} {series.unit}</td></tr>)}</tbody></table>{allRows.length>previewRows.length&&<div className="data-more"><span>{allDataOpen?`전체 ${allRows.length}개를 표시 중입니다.`:`${previewRows.length}개 예시만 표시 중입니다.`}</span><button type="button" aria-expanded={allDataOpen} onClick={()=>setAllDataOpen((current)=>!current)}>{allDataOpen?"간략히 보기":`전체 데이터 더 보기 (${allRows.length}개)`}<Icon name="chevron" size={14}/></button></div>}</div>}
       </article>
       <aside className="evidence-column">
         <article className="panel evidence-panel"><div className="aside-title"><span><Icon name="database" size={18}/></span><div><span className="eyebrow">DATA SOURCES</span><h3>사용한 통계</h3></div></div>{result.tables.map((t) => <div className="source-card" key={t.tableId}><div><span className="table-id">{t.tableId}</span><span className="source-check"><Icon name="check" size={12}/></span></div><strong>{t.name}</strong><p>{t.item} · {t.unit}</p><small>{t.source}</small></div>)}</article>
-        <article className="panel lineage-panel"><button className="lineage-toggle" onClick={() => setLineageOpen(!lineageOpen)} aria-expanded={lineageOpen}><div className="aside-title"><span><Icon name="lineage" size={18}/></span><div><span className="eyebrow">DATA LINEAGE</span><h3>데이터 선택 과정</h3></div></div><Icon name="chevron" size={17}/></button>{lineageOpen && <div className="timeline">{result.lineage.map((step, i) => <div className="timeline-row" key={step.id}><div className="timeline-marker"><span><Icon name="check" size={12}/></span>{i < result.lineage.length - 1 && <i/>}</div><div><strong>{step.title}</strong><p>{step.description}</p></div></div>)}</div>}<button className="detail-link">전체 실행 근거 보기 <Icon name="arrow" size={16}/></button></article>
+        <article className="panel lineage-panel"><button className="lineage-toggle" onClick={() => setLineageOpen(!lineageOpen)} aria-expanded={lineageOpen}><div className="aside-title"><span><Icon name="lineage" size={18}/></span><div><span className="eyebrow">DATA LINEAGE</span><h3>데이터 선택 과정</h3></div></div><Icon name="chevron" size={17}/></button>{lineageOpen && <div className="timeline">{result.lineage.map((step, i) => <div className="timeline-row" key={step.id}><div className="timeline-marker"><span><Icon name="check" size={12}/></span>{i < result.lineage.length - 1 && <i/>}</div><div><strong>{step.title}</strong><p>{step.description}</p></div></div>)}</div>}<button className="detail-link" onClick={()=>setEvidenceOpen(true)}>전체 실행 근거 보기 <Icon name="arrow" size={16}/></button></article>
       </aside>
     </div>
-  </section>;
+  <ExecutionEvidence result={result} open={evidenceOpen} onClose={()=>setEvidenceOpen(false)}/></section>;
 }
 
 export default function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [view, setView] = useState<"home" | "lineage">("home");
-  const [query, setQuery] = useState("최근 5년 경제심리지수 추이");
+  const [query, setQuery] = useState("");
   const [result, setResult] = useState<QueryResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const [chatTransition,setChatTransition]=useState<{data:QueryResponse|null}|null>(null);
+  const [chatArchive,setChatArchive]=useState<SavedChat[]|null>(null);
+  const [chatNotice,setChatNotice]=useState('');
+  const [chatBusy,setChatBusy]=useState(false);
+  const chatSaving=useRef(false);
+
   const liveResult=useRef<QueryResponse|null>(null);
   const editQueue=useRef<Promise<unknown>>(Promise.resolve());
   const [error, setError] = useState("");
+  const [failedQuery,setFailedQuery]=useState<QueryResponse|null>(null);
+  const lastQueryRequest=useRef<QueryRequest|null>(null);
+  const retryAction=useRef<(()=>void)|null>(null);
+  const trackedQuery=async(payload:QueryRequest)=>{lastQueryRequest.current=payload;retryAction.current=()=>void runQuery(payload);return submitQuery(payload);};
+  const runQuery=async(payload:QueryRequest)=>{setLoading(true);setError('');try{showResult(await trackedQuery(payload));}catch(e){setError(e instanceof Error?e.message:String(e));}finally{setLoading(false);}};
+
   const [multiIntents,setMultiIntents]=useState<Array<{id:string;title:string;initial:QueryResponse}>|null>(null);
-  const examples = useMemo(() => ["최근 5년 경제심리지수 추이", "월별 생산자물가지수", "최근 대출금리 추이", "경상수지와 구성 항목 비교"], []);
+  const examples = exploreExamples;
 
   useEffect(()=>{
     const restore=(state:Record<string,unknown>|null)=>{
       if(!state?.statbridge)return;
-      if(!ownsHistory(state,accountKey('history'))){liveResult.current=null;setResult(null);setMultiIntents(null);setQuery('최근 5년 경제심리지수 추이');setView('home');history.replaceState(null,'',location.pathname);return;}
+      if(!ownsHistory(state,accountKey('history'))){liveResult.current=null;setResult(null);setMultiIntents(null);setQuery(exploreExamples[0].query);setView('home');history.replaceState(null,'',location.pathname);return;}
       setView(state.view==="lineage"?"lineage":"home");
-      setQuery(typeof state.query==="string"?state.query:"최근 5년 경제심리지수 추이");
+      setQuery(typeof state.query==="string"?state.query:exploreExamples[0].query);
       liveResult.current=(state.result as QueryResponse|null)||null;setResult(liveResult.current);setMultiIntents(null);setError("");
       const saved=state.result as QueryResponse|null;
-      if(saved?.editSessionId)void fetchWorkspace(saved.editSessionId).then(data=>{liveResult.current=data;setResult(data);}).catch(e=>setError(e.message));
+      if(saved?.editSessionId)void fetchWorkspace(saved.editSessionId).then(data=>{if(liveResult.current?.editSessionId!==saved.editSessionId)return;liveResult.current=data;setResult(data);}).catch(e=>{if(liveResult.current?.editSessionId===saved.editSessionId)setError(e.message);});
       window.setTimeout(()=>window.scrollTo({top:state.result?document.body.scrollHeight:0,behavior:"smooth"}),20);
     };
-    if(history.state?.statbridge)restore(history.state);
-    else {
-      let saved:Record<string,unknown>|null=null;
-      try{saved=JSON.parse(localStorage.getItem(accountKey('statbridge.workspace.current'))||'null');}catch{/* Optional local recovery. */}
-      if(saved?.statbridge)restore(saved);
-      else history.replaceState({statbridge:true,account:accountKey('history'),view:"home",query,result:null},"",location.pathname);
-    }
+    // A page load starts a new analysis. Keep the previous conversation in the
+    // archive, but never restore a graph automatically on reload.
+    try{
+      const saved=JSON.parse(localStorage.getItem(accountKey('statbridge.workspace.current'))||'null');
+      if(saved?.account===accountKey('history')&&saved?.result?.editSessionId)saveChat(saved.result);
+      localStorage.removeItem(accountKey('statbridge.workspace.current'));
+    }catch{setChatNotice('이전 대화의 자동 보관을 완료하지 못했습니다. 저장한 대화 목록을 확인해 주세요.');}
+    history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:'',result:null},'',location.pathname);
+    history.scrollRestoration='manual';
+    window.scrollTo({top:0,behavior:'instant'});
     const onPopState=(event:PopStateEvent)=>restore(event.state);
     window.addEventListener("popstate",onPopState);return()=>window.removeEventListener("popstate",onPopState);
   },[]);
@@ -519,16 +534,24 @@ export default function App() {
   const historyUrl=(nextView:"home"|"lineage",nextQuery=query)=>nextView==="lineage"?`${location.pathname}?view=lineage`:`${location.pathname}${nextQuery?`?q=${encodeURIComponent(nextQuery)}`:""}`;
   const pushUiState=(nextView:"home"|"lineage",nextResult:QueryResponse|null,nextQuery=query)=>history.pushState({statbridge:true,account:accountKey('history'),view:nextView,query:nextQuery,result:nextResult},"",historyUrl(nextView,nextQuery));
 
-  const showResult = (data: QueryResponse, editing=false) => {
-    liveResult.current=data;setResult(data);
+  const showResult = (data: QueryResponse, editing=false, approved=false) => {
+    const previous=liveResult.current;
+    if(!editing&&!approved&&previous?.editSessionId&&previous.editSessionId!==data.editSessionId&&!['need_details','no_match','data_unavailable','request_failed'].includes(data.status||'')){
+      setChatTransition({data});return;
+    }
+    if(['need_details','no_match','data_unavailable','request_failed'].includes(data.status||'')){setFailedQuery(data);return;}
+    setFailedQuery(null);setError("");liveResult.current=data;setResult(data);
+    if(data.editSessionId&&!readChat(data.editSessionId).length)appendChat(data.editSessionId,{role:'assistant',kind:'edit',text:`그래프를 조회했습니다.\n${data.query}\n조회 기간: ${data.period.start} ~ ${data.period.end}`});
     if(data.editSessionId)try{localStorage.setItem(accountKey('statbridge.workspace.current'),JSON.stringify({statbridge:true,account:accountKey('history'),view:'home',query:data.query,result:data}));}catch{/* Saved JSON files remain available. */}
     if(editing)history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:data.query||query,result:data},'',historyUrl('home',data.query||query));
-    else {pushUiState("home",data,data.query||query);window.setTimeout(() => document.getElementById("analysis-result")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);}
+    else {pushUiState("home",data,data.query||query);window.setTimeout(() => (document.querySelector(".chart-workspace")||document.getElementById("analysis-result"))?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);}
   };
 
   const goHome=()=>{
-    setView("home");liveResult.current=null;setResult(null);setMultiIntents(null);setError("");
-    pushUiState("home",null,query);window.scrollTo({top:0,behavior:"smooth"});
+    try{if(liveResult.current?.editSessionId)saveChat(liveResult.current);localStorage.removeItem(accountKey('statbridge.workspace.current'));}catch{setChatNotice('이전 대화의 자동 보관을 완료하지 못했습니다.');}
+    liveResult.current=null;setResult(null);setQuery('');setView('home');setMultiIntents(null);setError('');setFailedQuery(null);setChatTransition(null);setChatArchive(null);lastQueryRequest.current=null;retryAction.current=null;
+    history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:'',result:null},'',location.pathname);
+    window.scrollTo({top:0,behavior:'smooth'});
   };
 
   const navigateView=(nextView:"home"|"lineage")=>{
@@ -536,9 +559,9 @@ export default function App() {
   };
 
   const queryCatalogTable = async (tableQuery: string, dimensionValues: Record<string, string>) => {
-    setView("home"); setQuery(tableQuery); setResult(null); setMultiIntents(null);
+    setView("home"); setQuery(tableQuery); setMultiIntents(null);
     setLoading(true); setError("");
-    try { showResult(await submitQuery({query: tableQuery, dimension_values: dimensionValues, execute: true})); }
+    try { showResult(await trackedQuery({query: tableQuery, dimension_values: dimensionValues, execute: true})); }
     catch (err) { setError(err instanceof Error ? err.message : "통계표 조회 중 오류가 발생했습니다."); }
     finally { setLoading(false); }
   };
@@ -546,9 +569,9 @@ export default function App() {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
-    setLoading(true); setError(""); setResult(null); setMultiIntents(null);
+    setLoading(true); setError(""); setMultiIntents(null);
     try {
-      const data = await submitQuery(initialQueryRequest(query));
+      const data = await trackedQuery(initialQueryRequest(query));
       showResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.");
@@ -582,7 +605,7 @@ export default function App() {
     if (!result || !selections.length) return;
     setLoading(true); setError("");
     try {
-      const data = await submitQuery({
+      const data = await trackedQuery({
         query: result.query,
         state: result.state,
         selections,
@@ -599,7 +622,7 @@ export default function App() {
     if (!result) return;
     setLoading(true); setError("");
     try {
-      const data = await submitQuery({ query: result.query, state: result.state, execute: true, period_start: start, period_end: end });
+      const data = await trackedQuery({ query: result.query, state: result.state, execute: true, period_start: start, period_end: end });
       showResult(data);
     } catch (err) { setError(err instanceof Error ? err.message : "기간 처리 중 오류가 발생했습니다."); }
     finally { setLoading(false); }
@@ -607,6 +630,7 @@ export default function App() {
 
   const renderSelectedOutput = async (value:{chartType:"auto"|ChartType;mode:"combined"|"separate";title:string;showLegend:boolean;xAxisLabel:string;yAxisLabel:string;naturalLanguage:string}) => {
     if (!result) return;
+    retryAction.current=()=>void renderSelectedOutput(value);
     const sessionIds=result.outputSessionIds||[result.outputSessionId||""].filter(Boolean);
     if(!sessionIds.length)return;
     setLoading(true); setError("");
@@ -618,10 +642,12 @@ export default function App() {
   };
 
   const editSelectedOutput = (input: ChartEditInput): Promise<boolean> => {
+    retryAction.current=()=>void editSelectedOutput(input).catch(()=>{});
     const job=editQueue.current.then(async()=>{
       const current=liveResult.current||result;if(!current?.editSessionId)return false;
+      if(current.outputSpec?.chatReadOnly)throw new Error('서버 세션이 만료된 저장 그래프입니다. 새 채팅에서 통계를 다시 조회해 주세요.');
       setLoading(true);setError("");
-      try { const updated=await submitOutputEdit({edit_session_id:current.editSessionId,revision:current.outputSpec?.editVersion,...input});if(liveResult.current?.editSessionId!==current.editSessionId)return false;showResult(updated,true); return true; }
+      try { const updated=await submitOutputEdit({edit_session_id:current.editSessionId,revision:current.outputSpec?.editVersion,...input});if(liveResult.current?.editSessionId!==current.editSessionId)return false;appendChat(current.editSessionId,{role:'assistant',kind:'edit',text:editDescription(current,updated,input.action)});showResult(updated,true); return true; }
       catch(err){setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");throw err;}
       finally{setLoading(false);}
     });
@@ -630,19 +656,71 @@ export default function App() {
 
   useEffect(()=>{const open=(event:Event)=>{const id=(event as CustomEvent<string>).detail;setLoading(true);fetchWorkspace(id).then(updated=>showResult(updated)).catch(e=>setError(e.message)).finally(()=>setLoading(false));};window.addEventListener('statbridge:open-saved',open);return()=>window.removeEventListener('statbridge:open-saved',open);},[]);
 
+  const persistChat=async(current:QueryResponse)=>{
+    saveChat(current);
+    if(current.outputSpec?.chatReadOnly)return;
+    try{await accountRequest(`/workspace/${encodeURIComponent(current.editSessionId!)}/save`,{edit_session_id:current.editSessionId,revision:current.outputSpec?.editVersion,format:'json'});window.dispatchEvent(new Event('statbridge:graph-saved'));}
+    catch{setChatNotice('대화와 그래프는 이 브라우저에 저장했습니다. 서버 그래프 저장은 완료되지 않아 서버 재시작 후에는 다시 조회해야 할 수 있습니다. 내 저장 그래프는 최대 5개입니다.');}
+  };
+  const finishChatTransition=async(save:boolean)=>{
+    if(chatSaving.current)return;chatSaving.current=true;setChatBusy(true);
+    const previous=liveResult.current;
+    try{
+      if(previous?.editSessionId){if(save)await persistChat(previous);else removeSavedChat(previous.editSessionId);}
+      const next=chatTransition?.data;setChatTransition(null);
+      localStorage.removeItem(accountKey('statbridge.workspace.current'));
+      liveResult.current=null;setResult(null);setMultiIntents(null);setFailedQuery(null);setError('');
+      if(next)showResult(next,false,true);
+      else{setQuery('');setView('home');history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:'',result:null},'',location.pathname);requestAnimationFrame(()=>document.getElementById('statistics-query')?.focus());window.scrollTo({top:0,behavior:'smooth'});}
+    }catch{setChatNotice('저장 공간이 부족하거나 사용할 수 없습니다. 대화를 유지했습니다. 브라우저 저장 공간을 확인해 주세요.');}finally{chatSaving.current=false;setChatBusy(false);}
+  };
+  useEffect(()=>{
+    const save=async()=>{const current=liveResult.current;if(!current?.editSessionId)return;try{setChatNotice('대화와 현재 그래프를 이 브라우저의 내 계정에 저장했습니다.');await persistChat(current);}catch{setChatNotice('대화를 저장하지 못했습니다. 브라우저 저장 공간을 확인해 주세요.');}};
+    const fresh=()=>{if(liveResult.current?.editSessionId)setChatTransition({data:null});else{setQuery('');setView('home');document.getElementById('statistics-query')?.focus();}};
+    const list=()=>setChatArchive(savedChats());
+    const failure=()=>setChatNotice('대화는 화면에 유지되지만 브라우저에 저장하지 못했습니다.');
+    window.addEventListener('statbridge:save-chat',save);window.addEventListener('statbridge:new-chat',fresh);window.addEventListener('statbridge:show-chats',list);window.addEventListener('statbridge:chat-storage-error',failure);
+    return()=>{window.removeEventListener('statbridge:save-chat',save);window.removeEventListener('statbridge:new-chat',fresh);window.removeEventListener('statbridge:show-chats',list);window.removeEventListener('statbridge:chat-storage-error',failure);};
+  },[]);
+  useEffect(()=>{
+    if(!chatTransition&&!chatArchive)return;
+    const previous=document.activeElement as HTMLElement|null;
+    const dialog=document.querySelector<HTMLElement>('.chat-modal');
+    dialog?.querySelector<HTMLButtonElement>('button')?.focus();
+    const keys=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'&&!chatBusy){setChatTransition(null);setChatArchive(null);return;}
+      if(event.key!=='Tab')return;
+      const controls=Array.from(dialog?.querySelectorAll<HTMLElement>('button:not(:disabled),input,textarea,select')||[]);
+      const first=controls[0],last=controls.at(-1);if(!first)return;
+      if(event.shiftKey&&(document.activeElement===first||!dialog?.contains(document.activeElement))){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey&&(document.activeElement===last||!dialog?.contains(document.activeElement))){event.preventDefault();first.focus();}
+    };
+    document.addEventListener('keydown',keys);return()=>{document.removeEventListener('keydown',keys);if(previous?.isConnected)previous.focus();};
+  },[chatTransition,chatArchive,chatBusy]);
+  const reopenChat=async(chat:SavedChat)=>{
+    setLoading(true);try{
+      const current=liveResult.current;if(current?.editSessionId&&current.editSessionId!==chat.id)await persistChat(current);
+      let data:QueryResponse;try{data=await fetchWorkspace(chat.id);}catch{data={...chat.result,outputSpec:chat.result.outputSpec?{...chat.result.outputSpec,cachedSnapshot:true,chatReadOnly:true}:undefined};setChatNotice('저장 당시 그래프와 대화를 열었습니다. 서버 세션이 만료되어 편집하려면 그래프를 다시 조회해 주세요.');}
+      const existing=readChat(chat.id);writeChat(chat.id,existing.length>=chat.messages.length?existing:chat.messages);showResult(data,true,true);setQuery(data.query);setView('home');setChatArchive(null);
+      requestAnimationFrame(()=>document.getElementById('analysis-result')?.scrollIntoView({block:'start'}));
+    }catch{setChatNotice('현재 대화를 저장하지 못해 이전 대화를 열지 않았습니다.');}finally{setLoading(false);}
+  };
+
   return <div className="app-shell">
     <div className="main-shell">
-      <Header open={menuOpen} toggleMenu={() => setMenuOpen((current) => !current)} closeMenu={() => setMenuOpen(false)} view={view} goHome={goHome} selectView={navigateView}/>
+      {chatNotice&&<p className="chat-notice" role="status">{chatNotice}<button onClick={()=>setChatNotice('')}>알림 닫기</button></p>}
+      {chatTransition&&<div className="chat-modal-backdrop"><section role="dialog" aria-modal="true" aria-label="이전 그래프 대화 처리" className="chat-modal"><h2>새 그래프 대화를 시작할까요?</h2><p>현재 그래프의 대화와 편집 기록을 저장하거나 삭제한 뒤 새 대화를 시작합니다. 저장한 대화는 이 브라우저의 내 계정에서 다시 볼 수 있습니다.</p><button disabled={chatBusy} onClick={()=>void finishChatTransition(true)}>이전 대화 저장 후 시작</button><button disabled={chatBusy} onClick={()=>void finishChatTransition(false)}>이전 대화 삭제 후 시작</button><button disabled={chatBusy} onClick={()=>setChatTransition(null)}>취소 · 현재 대화 유지</button></section></div>}
+      {chatArchive&&<div className="chat-modal-backdrop"><section role="dialog" aria-modal="true" aria-label="저장한 그래프 대화" className="chat-modal"><h2>저장한 그래프 대화</h2><p>이 브라우저의 계정별 저장 목록입니다. 다른 PC와 자동 동기화되지 않습니다.</p>{!chatArchive.length&&<p>저장한 대화가 없습니다.</p>}{chatArchive.map(chat=><article key={chat.id}><strong>{chat.title}</strong><small>{new Date(chat.savedAt).toLocaleString('ko-KR')} · 기록 {chat.messages.length}개</small><button disabled={loading} onClick={()=>void reopenChat(chat)}>대화 열기</button><button onClick={()=>{if(!window.confirm('저장한 대화와 편집 기록을 삭제할까요? 서버에 따로 저장한 그래프는 유지됩니다.'))return;try{removeSavedChat(chat.id);setChatArchive(savedChats());}catch{setChatNotice('저장 대화를 삭제하지 못했습니다.');}}}>저장 대화 삭제</button></article>)}<button onClick={()=>setChatArchive(null)}>닫기</button></section></div>}
+      <Header view={view} goHome={goHome} selectView={navigateView} busy={loading}/>
       {view === "lineage" ? <DataCatalog onQuery={queryCatalogTable} loading={loading}/> : <main id="main-content" tabIndex={-1}>
         <Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/>
-        <FeatureStrip/>
-        {error && <div className="error-banner" role="alert">{error}</div>}
+        {(error||failedQuery)&& (failedQuery?.requiresQueryRefinement?<QueryRefinementCard result={failedQuery} busy={loading} onSubmit={text=>{setQuery(text);void runQuery(initialQueryRequest(text));}}/>:<RecoveryPanel message={error||failedQuery?.summary||''} result={failedQuery||result} busy={loading} retry={()=>{if(retryAction.current)retryAction.current();else void runQuery(initialQueryRequest(result?.query||query));}} onRevise={()=>document.getElementById('statistics-query')?.focus()} selectPeriod={(start,end)=>{const last=lastQueryRequest.current;void runQuery({...last||initialQueryRequest(result?.query||query),period_start:start,period_end:end,execute:true});}} selectTable={table=>{const last=lastQueryRequest.current;const next={query:`${table.tableId} ${table.name}`,execute:true,...(/^\d{4}-\d{2}-\d{2}$/.test(last?.period_start||failedQuery?.period?.start||'')?{period_start:last?.period_start||failedQuery?.period?.start,period_end:last?.period_end||failedQuery?.period?.end}:{})};setQuery(next.query);void runQuery(next);}}/>)}
         {multiIntents && <MultiIntentPanel query={query} intents={multiIntents} loading={loading} execute={executeMultiIntents}/>}
         {result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification}/>}
         {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>}
         {result?.status === "need_output_config" && <OutputConfigPanel result={result} loading={loading} submit={renderSelectedOutput}/>}
         {result && !["need_clarification","need_period","need_output_config"].includes(result.status || "") && <Results result={result} onEdit={editSelectedOutput} loading={loading}/>}
-        <section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x} onClick={() => { setQuery(x); setResult(null); setMultiIntents(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x}</button>)}</section>
+        <section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x.label} title={x.query} onClick={() => { setQuery(x.query); setMultiIntents(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x.label}</button>)}</section>
         <UsageGuide/>
       </main>}
       <footer><span>© 2026 StatBridge</span><span>경제통계 탐색 · 시각화 · 출처 확인</span></footer>

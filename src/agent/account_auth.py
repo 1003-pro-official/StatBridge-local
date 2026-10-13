@@ -8,6 +8,7 @@ import secrets
 import sqlite3
 import time
 from contextvars import ContextVar
+from contextlib import contextmanager
 from pathlib import Path
 from threading import RLock
 
@@ -18,7 +19,16 @@ from starlette.responses import JSONResponse
 TTL = 12 * 60 * 60
 COOKIE = os.environ.get('STATBRIDGE_COOKIE_NAME','statbridge_session')
 USER = ContextVar('statbridge_account', default=None)
-ALLOWED_ORIGINS = {f'http://{host}:{port}' for host in ('localhost','127.0.0.1') for port in (5173,5174,5175,8000,8005)}
+def allowed_origins():
+    ports = {5173, 5174, 5175, 8000, 8001, 8005}
+    for name in ('STATBRIDGE_UI_PORT', 'STATBRIDGE_API_PORT'):
+        value = os.getenv(name, '')
+        if value.isdigit() and 1 <= int(value) <= 65535:
+            ports.add(int(value))
+    return {f'http://{host}:{port}' for host in ('localhost', '127.0.0.1') for port in ports}
+
+
+ALLOWED_ORIGINS = allowed_origins()
 
 def digest(password, salt):
     return hashlib.scrypt(password.encode(), salt=bytes.fromhex(salt), n=16384, r=8, p=1).hex()
@@ -39,8 +49,17 @@ class AccountStore:
                     salt=secrets.token_hex(16)
                     db.execute('INSERT INTO users(username,name,email,salt,password_hash) VALUES(?,?,?,?,?)',(username,username,username+'@example.invalid',salt,digest('1234',salt)))
         self.dummy_salt=secrets.token_hex(16); self.dummy_hash=digest('invalid-password',self.dummy_salt)
+    @contextmanager
     def connect(self):
-        db=sqlite3.connect(self.path,timeout=30); db.row_factory=sqlite3.Row; return db
+        db=sqlite3.connect(self.path,timeout=30)
+        db.row_factory=sqlite3.Row
+        try:
+            with db:
+                yield db
+        finally:
+            # sqlite's transaction context commits/rolls back but does not close.
+            # Close explicitly so Windows can release the database file handle.
+            db.close()
     def signup(self, username, name, email, password):
         username=username.strip().lower(); name=name.strip(); email=email.strip().lower()
         if not re.fullmatch(r'[a-z0-9][a-z0-9_.-]{2,31}',username):raise HTTPException(422,'아이디는 영문 소문자·숫자 등 3~32자로 입력하세요.')

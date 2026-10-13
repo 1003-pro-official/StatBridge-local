@@ -337,6 +337,9 @@ class StatBridgeAgent:
             return query, {"status": "error", "model": self.ncp.settings.classifier_model, "error": str(exc)}
 
     def _scoped_comparison(self, query, state, clarification):
+        # Uncertainty describes alternatives, rather than independent requested series.
+        if any(word in query for word in ['모르겠','어느 쪽','어느쪽']):return None
+        if '보유' in query and '예금취급기관' in query:return None
         # A choice for one compared metric must not filter the other metric.
         text=re.sub(r'(20\d{2})년\s*(?:과|와|부터)\s*(20\d{2})년까지(?:의)?', ' ', query)
         parts=[p.strip() for p in re.split(r'그리고|\s+및\s+|와\s+|과\s+',text) if p.strip()]
@@ -392,10 +395,20 @@ class StatBridgeAgent:
             and state.get('_user_query') == query and not state.get('confirmed')
         )
         if not clarification and (not state or repeat_grounded_request):
+            unknown = unsupported_quantity_terms(query, self.resolver.tables)
+            if unknown:
+                return {'status': 'no_match', 'missing_series': unknown,
+                        'state': {'original_query': query}}
             missing = unavailable_catalog_quantity(query, self.resolver.tables)
             if missing:
                 return {'status': 'no_match', 'missing_series': [missing],
                         'state': {'original_query': query}}
+            if re.search(r'(?:^|까지(?:의)?\s+|(?:최근|현재)\s+)금리(?:와|과)\s',query):
+                scoped=self._scoped_comparison(query,state,clarification)
+                if scoped is not None:return scoped
+            if '금리' in query and not any(word in query for word in ['신규','잔액','비중','구성비']):
+                preflight=self.resolver.resolve(query,top_k=8)
+                if preflight.get('status')=='need_clarification':return preflight
             selected = catalog_selections(query, self.resolver.tables)
             if selected:
                 plans = [self.build_api_plan(query, item).as_dict() for item in selected]

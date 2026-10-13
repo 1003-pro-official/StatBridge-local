@@ -27,6 +27,9 @@ class FakeModel:
         self.command = command
 
     def chat_main(self, system, user, **kwargs):
+        if '근거 선택자' in system:
+            from report_summary import default_ids
+            return json.dumps({'fact_ids': default_ids(json.loads(user)['facts'])}), {}
         if "명령 분류기" in system:
             return json.dumps(self.command, ensure_ascii=False), {}
         if "명세 생성기" in system:
@@ -193,6 +196,7 @@ def test_target_runtime_contract_is_not_replaced():
     app = (frontend / "App.tsx").read_text(encoding="utf-8")
     assert '?? "http://127.0.0.1:8000/api"' in client
     assert "isLoanRateComparison" not in app
-    assert "submitQuery(initialQueryRequest(query))" in app
+    assert "trackedQuery(initialQueryRequest(query))" in app
+    assert "return submitQuery(payload);" in app
     assert "outputSpec?.visualization?.editOptions" in app
     assert "$1[redacted]" in app
