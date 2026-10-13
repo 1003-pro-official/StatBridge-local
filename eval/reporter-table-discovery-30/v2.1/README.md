@@ -59,7 +59,7 @@ v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, 
 | `table_set` | 표 ID **집합** 정확 일치 |
 | `series_identity_set` | `(표 ID, 항목 ID, 분류코드)` **중복 포함** 일치 |
 | `exact_api_params` | 계열별 KOSIS 파라미터(기간·주기·`objL*`) 완전 일치 |
-| `clarification_group` / `clarification_options` | 역질문 그룹 ID 일치 / 런타임 선택지가 골드(카탈로그) 선택지의 **부분집합**(카탈로그에 없는 선택지는 요구하지 않음) |
+| `clarification_group` / `clarification_options` | 역질문 **그룹 이름** 일치(런타임이 `comparison:0:` 같은 동적 접두어를 붙여도 허용) / 런타임 선택지가 골드(카탈로그) 선택지의 **부분집합**(카탈로그에 없는 선택지는 요구하지 않음) |
 | `period_followup` | `need_period` + 기간 텍스트 선택 여부가 골드와 일치 |
 | `numeric_not_executed` / `chart_not_generated` | 수치 조회 0회 / 차트 없음 |
 
@@ -126,6 +126,7 @@ python3 eval/reporter-table-discovery-30/v2.1/scripts/score_execution_values.py 
 
 - 값이 일치한 계열에서는 값이 정확히 같다(같은 KOSIS 원천). 미조회 58계열은 **다른 표를 조회했거나 일부 계열만 조회**한 경우로, 조회 계약의 `tables_match`에서 별도로 잡는다.
 - 값 채점은 **조회한 계열만** 검증한다. 대체 조회·누락은 계약 계층(`tables_match`, `not_executed`)이 담당한다.
+- 탐색 계층 첫 측정: **84 / 200** (정책 `v2.1-scoring-3`, v2 원본 30/30). 남은 실패의 원인은 골드가 아니라 런타임이며, 코드에서 고칠 항목을 [런타임 결함 목록](../../../docs/evaluation/2026-10-13-reporter-v2.1-runtime-findings.md)에 정리했다.
 
 ## 범위와 한계
 

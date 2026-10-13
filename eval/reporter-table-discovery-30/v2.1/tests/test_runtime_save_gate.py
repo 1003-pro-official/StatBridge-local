@@ -155,6 +155,23 @@ def test_gate_blocks_low_kind_rate_legacy_and_gold_suspect():
     assert runner.decide(broken(http_failures=1), [])["saved"] is False
 
 
+def test_dynamic_clarification_prefix_is_accepted():
+    """런타임은 comparison:0:rate_type 처럼 동적 접두어를 붙인다. 그룹 이름만 비교한다."""
+    case = next(item for item in GOLD if item["workflow_gold"]["resolution"]["agent_status"] == "need_clarification")
+    expected_id = case["workflow_gold"]["resolution"]["clarification"]["id"]
+    prefixed = perfect_prediction(case)
+    observed = prefixed["boundary_response"]["clarifications"][0]
+    observed["id"] = f"comparison:0:{expected_id}"
+    observed.pop("clarification_id", None)
+    row = runner.score_case(case, prefixed)
+    assert row["checks"]["clarification_group"] is True
+    assert row["checks"]["clarification_options"] is True
+
+    other = perfect_prediction(case)
+    other["boundary_response"]["clarifications"][0]["id"] = "canonical_table:무언가"
+    assert runner.score_case(case, other)["checks"]["clarification_group"] is False
+
+
 def test_clarification_options_accept_a_runtime_subset_but_reject_extras():
     case = next(item for item in GOLD if item["workflow_gold"]["resolution"]["agent_status"] == "need_clarification")
     options = case["workflow_gold"]["resolution"]["clarification"]["options"]

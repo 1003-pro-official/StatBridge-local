@@ -24,8 +24,9 @@ RESUME_KEYS = ("policy_sha256", "dataset_sha256", "catalog_sha256", "source_sha2
 
 # Frozen before the first run. Editing a value changes POLICY_SHA256 and invalidates older runs.
 POLICY = {
-    "version": "v2.1-scoring-2",
+    "version": "v2.1-scoring-3",
     "clarification_options": "runtime_options_must_be_a_subset_of_gold_options",
+    "clarification_group": "compare_group_name_only; runtime may prefix dynamic ids such as comparison:0:",
     "legacy_requires_all": True,
     "resolved_min_rate": 0.95,
     "no_match_min_rate": 0.90,
@@ -50,6 +51,11 @@ FAILURE_CLASS = {
     "clarification_options": "clarification_options",
     "period_followup": "period_followup",
 }
+
+
+def group_id(value: str | None) -> str:
+    """런타임은 동적 역질문에 `comparison:0:` 같은 접두어를 붙인다. 골드는 카탈로그 그룹 이름만 쓴다."""
+    return str(value or "").split(":")[-1]
 
 
 def policy_sha256(policy: dict | None = None) -> str:
@@ -126,7 +132,8 @@ def score_case(gold: dict, pred: dict) -> dict:
         expected = workflow["resolution"]["clarification"]
         groups = body.get("clarifications") or []
         observed = next((group for group in groups
-                         if expected.get("id") in (group.get("id"), group.get("clarification_id"))), None)
+                         if group_id(group.get("id") or group.get("clarification_id"))
+                         == group_id(expected.get("id"))), None)
         checks["clarification_group"] = observed is not None
         # 런타임은 카탈로그에 없는 선택지(예: 소비자물가)를 제공하지 않으므로 부분집합을 정답으로 본다.
         checks["clarification_options"] = observed is not None and (
