@@ -155,3 +155,5 @@ cd src/agent/frontend && pnpm build
 ## 2026-10-12 업데이트
 
 통합 그래프 워크스페이스, 12시간 로그인·계정별 최대 5개 저장, 반복 편집 렌더링 안정화와 CMD 동기화는 [오늘 작업 정리](docs/implementation/2026-10-12-workspace-auth-render-sync.md)를 참고하세요. 자연어 편집은 그래프 하단 상시 입력창으로 연결하며 별도 채팅 창을 기본 편집 동선으로 사용하지 않습니다. 이전 148종 이미지 대신 보고서 표기를 참고해 만든 화살표 2종을 제공합니다.
+
+Windows 첫 설치와 기존 설치의 의존성 검사 보완 및 새 환경 검증은 [의존성 검증 기록](docs/implementation/2026-10-12-dependency-clean-install-validation.md)을 참고하세요.

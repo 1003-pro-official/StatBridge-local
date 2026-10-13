@@ -15,10 +15,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r src/backend/requirements.txt pytest
+          python scripts/windows/check_dependencies.py
 
       - name: Run tests
         env:
@@ -52,3 +57,22 @@ jobs:
 
       # CI에는 API 키와 data/tables CSV가 없습니다. 외부 KOSIS·NCP 호출과
       # 347개 CSV 조회는 키와 데이터가 있는 환경에서 별도로 확인합니다.
+
+  windows-npm-install:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: src/agent/frontend/package-lock.json
+      - name: Verify CMD frontend installation path
+        working-directory: src/agent/frontend
+        run: |
+          npm ci
+          node ../../../scripts/windows/check_frontend.cjs . record
+          node ../../../scripts/windows/check_frontend.cjs .
+          $testFiles = Get-ChildItem test-*.mjs | ForEach-Object { $_.FullName }
+          node --test $testFiles
+          npm run build
