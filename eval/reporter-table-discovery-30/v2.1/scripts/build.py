@@ -203,6 +203,29 @@ def build_case(spec: dict, tables: dict[str, dict], index: dict[str, dict]) -> d
 CATALOG_GROUPS: list[dict] = []
 
 
+def repair_legacy_case(case: dict, tables: dict[str, dict]) -> list[dict]:
+    """v2 원본은 카탈로그 결함 시절의 코드를 담고 있다. 이름(의도)은 두고 코드만 교정한다."""
+    repairs = []
+    for plan in case["workflow_gold"]["classification_and_plan"]["series"]:
+        dimensions = {dimension["api_param"]: dimension
+                      for dimension in tables[plan["table_id"]].get("dimensions", [])}
+        for param, label in (plan["classification_labels"] or {}).items():
+            dimension = dimensions.get(param)
+            if dimension is None:
+                continue
+            found = next((value for value in dimension["values"] if value["value_name"] == label), None)
+            if found is None:
+                raise SystemExit(f"{case['id']}: {param} 이름 {label!r}을(를) 카탈로그에서 찾지 못함")
+            if found["value_id"] != plan["classifications"][param]:
+                repairs.append({"table_id": plan["table_id"], "param": param, "label": label,
+                                "from": plan["classifications"][param], "to": found["value_id"]})
+                plan["classifications"][param] = found["value_id"]
+                plan["exact_params"][param] = found["value_id"]
+    if repairs:
+        case["legacy_value_repair"] = repairs
+    return repairs
+
+
 def summarize_markdown(cases: list[dict]) -> str:
     lines = ["# 기자 질의 통계표 탐색 골든셋 v2.1 (200문항)", "",
              "v2의 30문항을 그대로 두고 단계별 정답 형식을 유지하며 증강한 공개 개발용 골든셋입니다.",
@@ -225,6 +248,10 @@ def build() -> dict:
     index = research_index()
     legacy = [json.loads(line) for line in (V2 / "statbridge-reporter30.jsonl")
               .read_text(encoding="utf-8").splitlines() if line]
+    legacy_repairs = [entry for case in legacy for entry in repair_legacy_case(case, tables)]
+    legacy_evidence = {case["evidence"]["catalog_sha256"] for case in legacy}
+    if len(legacy_evidence) != 1:
+        raise SystemExit("legacy cases disagree on their recorded catalog hash")
     cases = legacy + [build_case(spec, tables, index) for spec in SPECS]
     gold_path = DATASET / "statbridge-reporter200.jsonl"
     gold_path.write_text("".join(json.dumps(case, ensure_ascii=False, separators=(",", ":")) + "\n"
@@ -245,6 +272,9 @@ def build() -> dict:
         "source_dataset": "eval/reporter-table-discovery-30/v2/statbridge-reporter30.jsonl",
         "source_dataset_sha256": validate.text_sha256(V2 / "statbridge-reporter30.jsonl"),
         "research_sources": sorted({ref["path"] for case in cases for ref in case.get("research_references") or []}),
+        "legacy_catalog_sha256": legacy_evidence.pop(),
+        "legacy_value_repair": {"count": len(legacy_repairs), "entries": legacy_repairs,
+                                "reason": "v2 원본이 카탈로그 코드-이름 결함 시절의 코드를 담고 있어 이름(의도)은 두고 코드만 교정했다."},
         "benchmark_scope": "query_interpretation_table_item_classification_api_plan_and_resolution",
         "numeric_gold": "not_created",
         "source_boundary": "KOSIS Korea Bank of Korea only",

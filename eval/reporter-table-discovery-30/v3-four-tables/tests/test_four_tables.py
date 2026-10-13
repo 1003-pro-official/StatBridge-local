@@ -8,6 +8,7 @@ v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
 @pytest.fixture
 def data():
  return ([json.loads(l) for l in (HERE/'questions.jsonl').read_text(encoding='utf8').splitlines()],json.loads(v.v3.CATALOG.read_text(encoding='utf8')),json.loads((HERE/'manifest.json').read_text(encoding='utf8')))
+@pytest.mark.xfail(strict=True, reason=('카탈로그 코드-이름 교정(2026-10-13) 이후 이 데이터셋의 v2 원본 2문항 라벨이 낡았다. 이 계보는 사용하지 않기로 했고 재생성하지 않는다(결정: docs/evaluation/2026-10-13-reporter-v2.1-offline-verification.md). 재생성하면 이 표시를 제거해야 한다.'))
 def test_all_four_table_questions_are_valid(data):
  assert v.audit(*data)['error_count']==0
 @pytest.mark.parametrize('mutation',['missing','id','title','params','duplicate'])

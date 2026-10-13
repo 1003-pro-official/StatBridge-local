@@ -1,6 +1,7 @@
 """Validate stagewise public table-discovery gold without calling external APIs."""
 from __future__ import annotations
 
+import copy
 import csv
 import functools
 import hashlib
@@ -121,7 +122,21 @@ def validate_legacy_preservation(cases: list[dict]) -> None:
     for case in carried:
         original = legacy.get(case["id"])
         require(original is not None, f"{case['id']}: unknown legacy id")
-        require({**case, "schema_version": original["schema_version"]} == original,
+        clone = copy.deepcopy(case)
+        originals = original["workflow_gold"]["classification_and_plan"]["series"]
+        for entry in clone.pop("legacy_value_repair", []):
+            # 보정 기록으로 원본 코드를 복원한 뒤 비교한다(의도가 바뀌지 않았음을 증명).
+            require(any(entry["label"] == (plan["classification_labels"] or {}).get(entry["param"])
+                        for plan in originals), f"{case['id']}: repair label not in the v2 original")
+            restored = False
+            for plan in clone["workflow_gold"]["classification_and_plan"]["series"]:
+                if (plan["table_id"] == entry["table_id"]
+                        and (plan["classification_labels"] or {}).get(entry["param"]) == entry["label"]):
+                    plan["classifications"][entry["param"]] = entry["from"]
+                    plan["exact_params"][entry["param"]] = entry["from"]
+                    restored = True
+            require(restored, f"{case['id']}: repair entry does not match a plan")
+        require({**clone, "schema_version": original["schema_version"]} == original,
                 f"{case['id']}: legacy case body changed")
 
 
@@ -293,7 +308,9 @@ def main() -> None:
     require(text_sha256(case_path) == manifest.get("dataset_sha256"), "Dataset SHA256 mismatch")
     require(text_sha256(catalog_path) == manifest.get("catalog_sha256"), "Catalog SHA256 mismatch")
     for case in cases:
-        require(case.get("evidence", {}).get("catalog_sha256") == manifest["catalog_sha256"],
+        # v2 원본 30건은 v2 시절 카탈로그 해시를 그대로 기록하고 있다(카탈로그 이름 교정 전).
+        expected = manifest["catalog_sha256"] if case.get("schema_version") == SCHEMA else manifest["legacy_catalog_sha256"]
+        require(case.get("evidence", {}).get("catalog_sha256") == expected,
                 f"{case['id']}: catalog provenance mismatch")
     print("VALIDATION OK " + json.dumps(summary, ensure_ascii=False))
 

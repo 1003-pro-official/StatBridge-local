@@ -26,6 +26,7 @@ def inputs():
     return copy.deepcopy(cases), catalog
 
 
+@pytest.mark.xfail(strict=True, reason=('카탈로그 코드-이름 교정(2026-10-13) 이후 이 데이터셋의 v2 원본 2문항 라벨이 낡았다. 이 계보는 사용하지 않기로 했고 재생성하지 않는다(결정: docs/evaluation/2026-10-13-reporter-v2.1-offline-verification.md). 재생성하면 이 표시를 제거해야 한다.'))
 def test_stagewise_dataset_has_thirty_complete_cases(inputs):
     cases, catalog = inputs
     summary = validator.validate_cases(cases, catalog)
