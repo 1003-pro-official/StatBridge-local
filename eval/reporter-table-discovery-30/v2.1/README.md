@@ -30,7 +30,12 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 | `scripts/validate.py` | 카탈로그 코드·기간·API 파라미터·v2 원본 보존·research 출처를 확인하는 검증기 |
 | `tests/test_reporter200_validate.py` | 분류 코드 오류, 계열 누락, v2 본문 변조, 출처 해시·행 불일치를 거부하는 회귀 테스트 |
 | `scripts/evaluate_runtime.py` | 실제 `/api/query` 실행기. 채점 정책·합격 판정·진단 산출물 |
+| `scripts/evaluate_offline.py` | 규칙 계층 오프라인 평가: 리졸버 후보 대비 recall@k·MRR·주기·역질문 일치. LLM·키 불필요 |
+| `scripts/self_audit.py` | 골드 자기 감사: 카탈로그 역질문 계약(하드)과 질의↔표·부재 근거(경고). 골드를 고치지 않음 |
 | `tests/test_runtime_save_gate.py` | 채점 계약, 반복 표본, 중복 계열, 실패 분류, 저장 게이트 회귀 테스트 |
+| `tests/test_gold_mutation_coverage.py` | 200문항 각각에 필드 변조를 넣어 검증기가 전부 거부하는지 확인 |
+| `tests/test_self_audit.py` | 자기 감사의 하드·경고 판정 회귀 테스트 |
+| `tests/test_offline_metrics.py` | 오프라인 지표 산식(순위·분모) 회귀 테스트 |
 
 ## 단계별 골드
 
@@ -70,6 +75,20 @@ v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, 
 - 귀책이 불분명한 문항은 `--gold-suspect-file`로 넘기고, 목록이 비어 있지 않으면 `REPORT.md`를 저장하지 않습니다.
 
 산출물은 `evaluation_runs/reporter200_v2.1_<UTC시각>/`에 생성됩니다: `query_only_inputs.jsonl`, `environment.json`, `endpoint_logs.jsonl`, 문항별 `<id>.json`(`<id>.repeat.json`), `scores.json`, `diagnostic.md`, `run_manifest.json`, 합격 시 `REPORT.md`.
+
+## 오프라인 검증 (런타임·키 불필요)
+
+전체 실행 전에 초 단위로 돌려 골드와 규칙 계층의 문제를 먼저 걸러냅니다.
+
+```bash
+python3 eval/reporter-table-discovery-30/v2.1/scripts/self_audit.py       # 골드 자기 감사
+python3 eval/reporter-table-discovery-30/v2.1/scripts/evaluate_offline.py  # 규칙 계층 recall
+python3 -m pytest -q eval/reporter-table-discovery-30/v2.1/tests           # 변조 커버리지 포함
+```
+
+- 자기 감사의 **하드 위반**은 골드가 카탈로그 역질문 계약을 어겼다는 뜻입니다(현재 1건: `REPORTER30-V2.1-153`). 경고는 한국어 어휘 기반 힌트이므로 실패로 처리하지 않습니다.
+- 오프라인 recall은 **판정 기준이 아닙니다.** 규칙 계층만으로는 v2 원본 30문항(실제 런타임 30/30 통과)에서도 rank1 42.9%에 그쳤습니다. 역질문·기간·경계는 엔드포인트 실행으로만 검증됩니다.
+- 변조 커버리지 테스트는 200문항 각각에 스키마·승인·표·항목·기간·파라미터·분류·주기·상태 변조를 넣고 검증기가 전부 거부하는지 확인합니다.
 
 ## 범위와 한계
 

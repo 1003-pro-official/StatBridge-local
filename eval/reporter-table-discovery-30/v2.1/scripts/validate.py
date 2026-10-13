@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import functools
 import hashlib
 import json
 import re
@@ -124,13 +125,19 @@ def validate_legacy_preservation(cases: list[dict]) -> None:
                 f"{case['id']}: legacy case body changed")
 
 
+@functools.lru_cache(maxsize=1)
+def research_figure_ids() -> frozenset[str]:
+    """Cached because repeated validation (for example the mutation coverage test) re-enters this."""
+    rows = csv.DictReader(MASTER_CSV.read_text(encoding="utf-8-sig").splitlines())
+    return frozenset(row["결과물ID"] for row in rows)
+
+
 def validate_cases(cases: list[dict], catalog: dict, expected_count: int) -> dict:
     tables = {str(table["table_id"]): table for table in catalog["tables"]}
     require(len(cases) == expected_count, "Expected exactly the manifest case count")
     require(len({case["id"] for case in cases}) == len(cases), "Duplicate case ID")
     require(len({case["query"] for case in cases}) == len(cases), "Duplicate natural-language query")
-    figure_ids = {row["결과물ID"] for row in
-                  csv.DictReader(MASTER_CSV.read_text(encoding="utf-8-sig").splitlines())}
+    figure_ids = research_figure_ids()
     status_counts = Counter()
     schema_counts = Counter()
     research_ids: set[str] = set()
