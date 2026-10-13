@@ -399,6 +399,10 @@ def run_suite(api, client, cases: list[dict], output_dir: Path, *, policy: dict 
                 record = json.loads(path.read_text(encoding="utf-8"))
             else:
                 record = run_case(client, api, case, calls, policy["case_timeout_seconds"], repeat_of)
+                if record["http_status"] == 401:
+                    raise SystemExit(
+                        f"401 Unauthorized on {case['id']}: 인증 미들웨어가 /api/query를 보호하고 있습니다. "
+                        "tests/authenticated_client.py의 로그인 클라이언트로 실행하세요.")
                 path.write_text(json.dumps(record, ensure_ascii=False, indent=2, default=str) + "\n",
                                 encoding="utf-8")
                 logs.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
@@ -420,9 +424,13 @@ def run_suite(api, client, cases: list[dict], output_dir: Path, *, policy: dict 
 def main() -> int:
     import sys
 
-    sys.path[:0] = [str(ROOT / "src/agent"), str(ROOT / "src/backend")]
-    from fastapi.testclient import TestClient
+    sys.path[:0] = [str(ROOT / "src/agent"), str(ROOT / "src/backend"), str(ROOT / "tests")]
     import bridge_api as api
+    try:
+        # 인증 미들웨어가 /api/query를 보호하므로 리포의 로그인 클라이언트를 씁니다.
+        from authenticated_client import TestClient
+    except ImportError as exc:
+        raise SystemExit(f"tests/authenticated_client.py를 불러오지 못했습니다: {exc}") from exc
 
     parser = argparse.ArgumentParser(description="v2.1 discovery boundary evaluation; REPORT.md needs the frozen policy")
     parser.add_argument("--output-dir", type=Path)
@@ -441,10 +449,15 @@ def main() -> int:
     output_dir = args.output_dir or ROOT / "evaluation_runs" / (
         "reporter200_v2.1_" + datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S"))
 
+    started = time.monotonic()
+
     def report_progress(index: int, total: int, record: dict) -> None:
+        elapsed = time.monotonic() - started
+        remaining = elapsed / index * (total - index) if index else 0.0
         print(f"[{index}/{total}] {record['id']}{' (repeat)' if record['repeat_of'] else ''} "
               f"agent={record['agent_status']} api={record['api_status']} http={record['http_status']} "
-              f"numeric={record['numeric_calls']} seconds={record['duration_s']}", flush=True)
+              f"numeric={record['numeric_calls']} seconds={record['duration_s']} "
+              f"| 경과 {elapsed / 60:.1f}m 예상 잔여 {remaining / 60:.1f}m", flush=True)
 
     with TestClient(api.app) as client:
         result = run_suite(api, client, cases, output_dir, limit=args.limit, resume=args.resume,

@@ -183,21 +183,24 @@ class FakeAgent:
 
 
 class FakeResponse:
-    def __init__(self, body: dict):
+    def __init__(self, body: dict, status_code: int = 200):
         self._body = body
-        self.status_code = 200
+        self.status_code = status_code
 
     def json(self):
         return self._body
 
 
 class FakeClient:
-    def __init__(self, agent):
+    def __init__(self, agent, http_status: int = 200):
         self.agent = agent
         self.posts = 0
+        self.http_status = http_status
 
     def post(self, url, json):  # noqa: A002 - mirrors httpx signature
         self.posts += 1
+        if self.http_status != 200:
+            return FakeResponse({}, self.http_status)
         case = next(item for item in GOLD if item["query"] == json["query"])
         self.agent.current = {"status": case["workflow_gold"]["resolution"]["agent_status"],
                               "api_plans": case["workflow_gold"]["classification_and_plan"]["series"]}
@@ -210,6 +213,13 @@ def build_fake_api():
     agent.service = SimpleNamespace(get_statistics=lambda *a, **k: [])
     agent.output_agent = SimpleNamespace(prepare=lambda *a, **k: {})
     return SimpleNamespace(agent=agent)
+
+
+def test_run_suite_stops_on_401_before_writing_cases(tmp_path):
+    api = build_fake_api()
+    with pytest.raises(SystemExit, match="401 Unauthorized"):
+        runner.run_suite(api, FakeClient(api.agent, http_status=401), GOLD, tmp_path, limit=1)
+    assert not list(tmp_path.glob("REPORTER30-*.json"))
 
 
 def test_run_suite_runs_a_limited_prefix_and_writes_diagnostics(tmp_path):
