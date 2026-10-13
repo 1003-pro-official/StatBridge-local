@@ -31,5 +31,6 @@ test('new character only, guide PNG, capture/cancel and click suppression are co
   for(const text of ['setPointerCapture','onPointerCancel','onLostPointerCapture','skipClick.current','ArrowLeft','localStorage.setItem'])assert.ok(source.includes(text));
   for(const name of ['sujeongi-all-actions.gif','sujeongi-working.gif','guide.png'])assert.ok(existsSync(new URL('./public/sujeongi/'+name,import.meta.url)));
   const editor=readFileSync(new URL('./src/ChartSketchEditor.tsx',import.meta.url),'utf8');
-  assert.ok(editor.includes('수정은 수정이에게 지시하세요'));
+  assert.match(editor, /<Sujeongi inline[^>]+onEdit=\{apply\}/);
+  assert.ok(source.includes('그래프를 어떻게 수정할까요?'));
 });

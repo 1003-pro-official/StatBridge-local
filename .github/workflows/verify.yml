@@ -25,6 +25,12 @@ jobs:
           pip install -r src/backend/requirements.txt pytest
           python scripts/windows/check_dependencies.py
 
+      - name: Install Korean fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          fc-cache -f
+
       - name: Run tests
         env:
           PYTHONPATH: src/backend:src/agent
@@ -71,8 +77,12 @@ jobs:
         working-directory: src/agent/frontend
         run: |
           npm ci
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           node ../../../scripts/windows/check_frontend.cjs . record
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           node ../../../scripts/windows/check_frontend.cjs .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $testFiles = Get-ChildItem test-*.mjs | ForEach-Object { $_.FullName }
           node --test $testFiles
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           npm run build
