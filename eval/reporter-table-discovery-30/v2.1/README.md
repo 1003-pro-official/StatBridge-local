@@ -32,6 +32,7 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 | `scripts/evaluate_runtime.py` | 실제 `/api/query` 실행기. 채점 정책·합격 판정·진단 산출물 |
 | `scripts/evaluate_offline.py` | 규칙 계층 오프라인 평가: 리졸버 후보 대비 recall@k·MRR·주기·역질문 일치. LLM·키 불필요 |
 | `scripts/self_audit.py` | 골드 자기 감사: 카탈로그 역질문 계약(하드)과 질의↔표·부재 근거(경고). 골드를 고치지 않음 |
+| `scripts/verify_kosis.py` | 골드의 KOSIS 파라미터를 **실서버에 그대로 보내** 응답·기간·분류 이름을 확인(키 필요, 표본 기본 20건/`--all`) |
 | `tests/test_runtime_save_gate.py` | 채점 계약, 반복 표본, 중복 계열, 실패 분류, 저장 게이트 회귀 테스트 |
 | `tests/test_gold_mutation_coverage.py` | 200문항 각각에 필드 변조를 넣어 검증기가 전부 거부하는지 확인 |
 | `tests/test_self_audit.py` | 자기 감사의 하드·경고 판정 회귀 테스트 |
@@ -83,12 +84,14 @@ v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, 
 ```bash
 python3 eval/reporter-table-discovery-30/v2.1/scripts/self_audit.py       # 골드 자기 감사
 python3 eval/reporter-table-discovery-30/v2.1/scripts/evaluate_offline.py  # 규칙 계층 recall
+python3 eval/reporter-table-discovery-30/v2.1/scripts/verify_kosis.py --sample 20  # 실서버 파라미터 검증(키 필요)
 python3 -m pytest -q eval/reporter-table-discovery-30/v2.1/tests           # 변조 커버리지 포함
 ```
 
 - 자기 감사의 **하드 위반**은 골드가 카탈로그 역질문 계약을 어겼다는 뜻입니다(현재 1건: `REPORTER30-V2.1-153`). 경고는 한국어 어휘 기반 힌트이므로 실패로 처리하지 않습니다.
 - 오프라인 recall은 **판정 기준이 아닙니다.** 규칙 계층만으로는 v2 원본 30문항(실제 런타임 30/30 통과)에서도 rank1 42.9%에 그쳤습니다. 역질문·기간·경계는 엔드포인트 실행으로만 검증됩니다.
 - 변조 커버리지 테스트는 200문항 각각에 스키마·승인·표·항목·기간·파라미터·분류·주기·상태 변조를 넣고 검증기가 전부 거부하는지 확인합니다.
+- `verify_kosis.py`는 **카탈로그를 벗어나는 유일한 검증**입니다. 전수 실행에서 응답 293/293이었지만, 분류 코드와 이름의 대응이 실서버와 다른 계열이 27/293(14문항) 있었습니다(카탈로그 결함, `docs/evaluation/2026-10-13-reporter-v2.1-offline-verification.md` §10). 골드와 런타임이 같은 카탈로그를 쓰므로 이 결함은 골드 대 골드 채점으로는 발견되지 않습니다.
 
 ## 범위와 한계
 
