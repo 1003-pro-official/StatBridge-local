@@ -730,23 +730,23 @@
  },
  {
   "id": "177",
-  "topic": "통화·통화량",
+  "topic": "통화·예금",
   "status": "need_clarification",
   "period": null,
-  "query": "광의통화(M2) 규모가 최근 몇 년 사이 얼마나 늘었는지 월별로 확인할 통계표를 찾아줘.",
+  "query": "예금취급기관의 구성내역에서 가계와 기업이 보유한 예금 잔액을 월별로 비교할 통계표를 찾아줘.",
   "series": [
    [
-    "M2(광의통화)",
-    "통화량",
-    null,
-    null,
+    "예금취급기관 예금",
+    "예금취급기관 예금",
+    "가계·기업",
+    "잔액",
     null,
     {}
    ]
   ],
   "clarification_group": "balance_basis",
   "research": [
-   "BOK-20260910-cf67277b3bd7-그림-5dbd5324fa3064b8"
+   "BOK-20231228-62758008cadf-그림-f560a319cbca7358"
   ]
  }
 ]

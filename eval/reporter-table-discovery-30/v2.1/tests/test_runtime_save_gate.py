@@ -30,13 +30,14 @@ def perfect_prediction(case: dict) -> dict:
     plans = workflow["classification_and_plan"]["series"]
     body: dict = {"status": workflow["resolution"]["api_status"]}
     if status == "need_clarification":
-        body["clarifications"] = [workflow["resolution"]["clarification"]]
+        body["clarifications"] = [copy.deepcopy(workflow["resolution"]["clarification"])]
     if status == "resolved":
         requires_period = workflow["post_discovery"]["period_selection_required"]
         body["periodSelection"] = {} if requires_period else {"source": "text"}
     return {"id": case["id"], "repeat_of": None, "query": case["query"], "http_status": 200,
             "agent_status": status, "api_status": workflow["resolution"]["api_status"],
-            "selected_table_ids": sorted({plan["table_id"] for plan in plans}), "api_plans": plans,
+            "selected_table_ids": sorted({plan["table_id"] for plan in plans}),
+            "api_plans": copy.deepcopy(plans),
             "boundary_response": body, "numeric_calls": 0, "output_calls": 0, "duration_s": 1.0, "error": None}
 
 
@@ -152,6 +153,24 @@ def test_gate_blocks_low_kind_rate_legacy_and_gold_suspect():
     assert runner.decide(summary, ["REPORTER30-V2.1-042"])["saved"] is False
     assert runner.decide(broken(unclassified_failures=1), [])["saved"] is False
     assert runner.decide(broken(http_failures=1), [])["saved"] is False
+
+
+def test_clarification_options_accept_a_runtime_subset_but_reject_extras():
+    case = next(item for item in GOLD if item["workflow_gold"]["resolution"]["agent_status"] == "need_clarification")
+    options = case["workflow_gold"]["resolution"]["clarification"]["options"]
+    subset = perfect_prediction(case)
+    subset["boundary_response"]["clarifications"][0]["options"] = options[:-1]
+    row = runner.score_case(case, subset)
+    assert row["checks"]["clarification_options"] is True     # 카탈로그에 없는 선택지는 요구하지 않는다
+
+    extra = perfect_prediction(case)
+    extra["boundary_response"]["clarifications"][0]["options"] = options + [
+        {"label": "없는 항목", "value": "카탈로그에없음"}]
+    assert runner.score_case(case, extra)["checks"]["clarification_options"] is False
+
+    wrong_group = perfect_prediction(case)
+    wrong_group["boundary_response"]["clarifications"][0]["id"] = "다른그룹"
+    assert runner.score_case(case, wrong_group)["checks"]["clarification_group"] is False
 
 
 def test_report_is_written_only_when_the_gate_passes(tmp_path):

@@ -30,11 +30,10 @@ def replace_query(case: dict, query: str) -> dict:
     return clone
 
 
-def test_reference_set_has_exactly_one_hard_finding():
+def test_reference_set_has_no_hard_findings_after_the_fixes():
     report = audit_module.audit(GOLD, CATALOG)
-    assert report["hard_count"] == 1, report["hard_findings"]
-    assert "REPORTER30-V2.1-153" in report["hard_findings"][0]
-    assert "[seasonal_adjustment]" in report["hard_findings"][0]
+    assert report["hard_count"] == 0, report["hard_findings"]
+    assert report["warnings"] == []
 
 
 def test_unreachable_clarification_is_a_hard_finding():

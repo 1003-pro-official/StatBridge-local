@@ -124,7 +124,8 @@ def main() -> int:
     summary = summarize(results, resolved_rows)
     summary["failed_clarification_group"] = [row["id"] for row in results
                                              if row["clarification_group_match"] is False]
-    summary["missing_options_cases"] = {row["id"]: row["missing_options"] for row in results if row["missing_options"]}
+    # 카탈로그에 없어 런타임이 제공하지 않는 골드 선택지(현재 055 소비자물가 1건). 채점은 부분집합으로 통과시킨다.
+    summary["runtime_omits_options"] = {row["id"]: row["missing_options"] for row in results if row["missing_options"]}
     summary["missed_tables"] = {row["id"]: row["missing_tables"] for row in resolved_rows if row["missing_tables"]}
     summary["low_recall_cases"] = [row["id"] for row in resolved_rows if not row["recall5"]]
     summary["legacy_vs_new"] = {

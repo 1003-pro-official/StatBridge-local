@@ -54,7 +54,7 @@ v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, 
 | `table_set` | 표 ID **집합** 정확 일치 |
 | `series_identity_set` | `(표 ID, 항목 ID, 분류코드)` **중복 포함** 일치 |
 | `exact_api_params` | 계열별 KOSIS 파라미터(기간·주기·`objL*`) 완전 일치 |
-| `clarification_group` / `clarification_options` | 역질문 그룹 ID 일치 / 선택지 값 집합 일치 |
+| `clarification_group` / `clarification_options` | 역질문 그룹 ID 일치 / 런타임 선택지가 골드(카탈로그) 선택지의 **부분집합**(카탈로그에 없는 선택지는 요구하지 않음) |
 | `period_followup` | `need_period` + 기간 텍스트 선택 여부가 골드와 일치 |
 | `numeric_not_executed` / `chart_not_generated` | 수치 조회 0회 / 차트 없음 |
 

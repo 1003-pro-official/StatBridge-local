@@ -21,9 +21,9 @@
     },
     "series": 293,
     "tables": 96,
-    "research_artifacts": 166
+    "research_artifacts": 165
   },
-  "dataset_sha256": "9ea2be3b22326b234f4bba39996646c01c06774acdd58d743de935457e1fa77d",
+  "dataset_sha256": "51886c652a80b24dce01ee5200e4700b2317f6d7f73e2fc6dd3e736910e7222e",
   "catalog_path": "src/agent/stat_dictionary/stat_language_dictionary.json",
   "catalog_sha256": "1811e26fdf91205c6917631c2c84427cc011b141af790fdb1d98656bd478c461",
   "source_dataset": "eval/reporter-table-discovery-30/v2/statbridge-reporter30.jsonl",
@@ -63,6 +63,6 @@
   "numeric_gold": "not_created",
   "source_boundary": "KOSIS Korea Bank of Korea only",
   "sha256_normalization": "LF",
-  "scoring_policy_sha256": "90d345bbd28e274a0f5c7cf66f6bbc67ec66ca67b4a6516b08e81aa7285d83db",
+  "scoring_policy_sha256": "439fbe781ed1c12f9b165bb3b234cf24749f2c46b9988019a0fc7221a468ba65",
   "period_policy": "Explicit periods are converted to inclusive KOSIS periods; missing periods retain the runtime plan but expect the API need_period follow-up."
 }

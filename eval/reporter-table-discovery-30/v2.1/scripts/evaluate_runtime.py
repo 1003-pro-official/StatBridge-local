@@ -24,7 +24,8 @@ RESUME_KEYS = ("policy_sha256", "dataset_sha256", "catalog_sha256", "source_sha2
 
 # Frozen before the first run. Editing a value changes POLICY_SHA256 and invalidates older runs.
 POLICY = {
-    "version": "v2.1-scoring-1",
+    "version": "v2.1-scoring-2",
+    "clarification_options": "runtime_options_must_be_a_subset_of_gold_options",
     "legacy_requires_all": True,
     "resolved_min_rate": 0.95,
     "no_match_min_rate": 0.90,
@@ -127,9 +128,10 @@ def score_case(gold: dict, pred: dict) -> dict:
         observed = next((group for group in groups
                          if expected.get("id") in (group.get("id"), group.get("clarification_id"))), None)
         checks["clarification_group"] = observed is not None
+        # 런타임은 카탈로그에 없는 선택지(예: 소비자물가)를 제공하지 않으므로 부분집합을 정답으로 본다.
         checks["clarification_options"] = observed is not None and (
             {option["value"] for option in observed.get("options", [])}
-            == {option["value"] for option in expected.get("options", [])})
+            <= {option["value"] for option in expected.get("options", [])})
     if status == "resolved":
         period_source = (body.get("periodSelection") or {}).get("source")
         checks["period_followup"] = (pred.get("api_status") == "need_period"

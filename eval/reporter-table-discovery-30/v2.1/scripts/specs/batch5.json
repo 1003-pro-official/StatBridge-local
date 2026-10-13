@@ -735,23 +735,23 @@
  },
  {
   "id": "153",
-  "topic": "국민계정·성장",
+  "topic": "통화·통화량",
   "status": "need_clarification",
   "period": null,
-  "query": "최근 실질 국내총생산(GDP)이 분기별로 어떻게 움직였는지 보여주는 통계표를 찾아줘.",
+  "query": "2021년 1월부터 2025년 12월까지 광의통화(M2) 잔액 추이를 월별로 보여주는 통계표를 찾아줘.",
   "series": [
    [
-    "실질 GDP",
-    "국내총생산",
-    "실질",
-    "성장률",
+    "M2(광의통화)",
+    "통화량",
+    "M2",
+    "잔액",
     null,
     {}
    ]
   ],
   "clarification_group": "seasonal_adjustment",
   "research": [
-   "BOK-20260910-cf67277b3bd7-그림-d5d537780f455847"
+   "BOK-20260910-cf67277b3bd7-그림-5dbd5324fa3064b8"
   ]
  }
 ]
