@@ -30,6 +30,11 @@ _validate_spec = importlib.util.spec_from_file_location(
 validate = importlib.util.module_from_spec(_validate_spec)
 _validate_spec.loader.exec_module(validate)
 
+_runner_spec = importlib.util.spec_from_file_location(
+    "reporter200_runner", DATASET / "scripts/evaluate_runtime.py")
+runner = importlib.util.module_from_spec(_runner_spec)
+_runner_spec.loader.exec_module(runner)
+
 # (id, topic, status, query, period, series, research figure ids)
 # series: (label, metric, target, measure, table_id, {api_param: catalog value_name})
 SPECS_DIR = Path(__file__).resolve().parent / "specs"
@@ -244,6 +249,7 @@ def build() -> dict:
         "numeric_gold": "not_created",
         "source_boundary": "KOSIS Korea Bank of Korea only",
         "sha256_normalization": "LF",
+        "scoring_policy_sha256": runner.policy_sha256(),
         "period_policy": "Explicit periods are converted to inclusive KOSIS periods; missing periods retain the runtime plan but expect the API need_period follow-up.",
     }
     (DATASET / "dataset_manifest.json").write_text(

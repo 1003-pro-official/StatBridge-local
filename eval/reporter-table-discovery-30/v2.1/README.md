@@ -22,17 +22,52 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 
 | 파일 | 내용 |
 |---|---|
-| `statbridge-reporter200.jsonl` | 55문항(증강분 포함), 질의·해석 슬롯·단계별 정답·출처 |
+| `statbridge-reporter200.jsonl` | 200문항, 질의·해석 슬롯·단계별 정답·출처 |
 | `statbridge-reporter200.md` | 문항별 질문·상태·정답 표 요약 |
 | `dataset_manifest.json` | 버전, 상태·스키마별 집계, dataset·catalog·research SHA256 |
 | `scripts/build.py` | 문항 스펙에서 정답 JSONL·요약·manifest를 생성. 런타임 예측을 읽지 않음 |
 | `scripts/specs/batch*.json` | 작성 배치별 문항 스펙(질문·상태·표·분류값 이름·출처). 생성기의 입력 |
 | `scripts/validate.py` | 카탈로그 코드·기간·API 파라미터·v2 원본 보존·research 출처를 확인하는 검증기 |
-| `tests/test_validate.py` | 분류 코드 오류, 계열 누락, v2 본문 변조, 출처 해시·행 불일치를 거부하는 회귀 테스트 |
+| `tests/test_reporter200_validate.py` | 분류 코드 오류, 계열 누락, v2 본문 변조, 출처 해시·행 불일치를 거부하는 회귀 테스트 |
+| `scripts/evaluate_runtime.py` | 실제 `/api/query` 실행기. 채점 정책·합격 판정·진단 산출물 |
+| `tests/test_runtime_save_gate.py` | 채점 계약, 반복 표본, 중복 계열, 실패 분류, 저장 게이트 회귀 테스트 |
 
 ## 단계별 골드
 
 v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, `classification_and_plan`, `resolution`, `post_discovery`를 기록하고, 증강 문항에는 `research_references`를 추가합니다. 값은 런타임 예측 로그가 아니라 카탈로그 메타데이터로 작성한 규범적 기대 정답입니다.
+
+## 채점 기준 (동결)
+
+실행: `python3 eval/reporter-table-discovery-30/v2.1/scripts/evaluate_runtime.py`
+기준은 실행 전에 `POLICY` 상수와 이 표에 고정하며, 해시(`policy_sha256`)가 manifest·`run_manifest.json`에 기록됩니다. 정책을 바꾸면 기존 실행은 무효입니다.
+
+| 채점 항목 | 판정 |
+|---|---|
+| `http_success` | HTTP 200 |
+| `agent_status` | 골드 `resolution.agent_status` 일치 |
+| `api_boundary_status` | `need_period`·`no_match`·`need_clarification` 일치 |
+| `table_set` | 표 ID **집합** 정확 일치 |
+| `series_identity_set` | `(표 ID, 항목 ID, 분류코드)` **중복 포함** 일치 |
+| `exact_api_params` | 계열별 KOSIS 파라미터(기간·주기·`objL*`) 완전 일치 |
+| `clarification_group` / `clarification_options` | 역질문 그룹 ID 일치 / 선택지 값 집합 일치 |
+| `period_followup` | `need_period` + 기간 텍스트 선택 여부가 골드와 일치 |
+| `numeric_not_executed` / `chart_not_generated` | 수치 조회 0회 / 차트 없음 |
+
+| 합격 조건 | 기준 |
+|---|---|
+| 경계·HTTP·미분류·골드 의심 | 각 0건 |
+| v2 원본 30문항 | 30/30 |
+| 증강 `resolved` 119건 | 114건 이상 (≥95%) |
+| 증강 `no_match` 45건 | 41건 이상 (≥90%) |
+| 증강 역질문 6건 | 5건 이상 |
+
+- 진단 점수(`scores.json`, `diagnostic.md`)는 항상 저장하고, `REPORT.md`는 위 조건을 모두 충족할 때만 저장합니다.
+- 실행은 200문항 + 반복 표본 20건 = 220회입니다. 반복은 상태·구성 층화로 결정적으로 고르고 통과 판정 분모에서 제외하며, 일치율로만 보고합니다. 주기(M/Q/A) 층화는 보장하지 않습니다.
+- 문항당 타임아웃 120초, 초과 시 `http_error`로 기록하고 진행합니다. 재시도는 금지합니다.
+- 모든 실패는 `http_error`·`status_misjudged`·`table_set`·`series_identity`·`params`·`clarification_group`·`clarification_options`·`period_followup`·`boundary_violation` 중 하나로 분류됩니다. 분류되지 않은 실패는 합격을 막습니다.
+- 귀책이 불분명한 문항은 `--gold-suspect-file`로 넘기고, 목록이 비어 있지 않으면 `REPORT.md`를 저장하지 않습니다.
+
+산출물은 `evaluation_runs/reporter200_v2.1_<UTC시각>/`에 생성됩니다: `query_only_inputs.jsonl`, `environment.json`, `endpoint_logs.jsonl`, 문항별 `<id>.json`(`<id>.repeat.json`), `scores.json`, `diagnostic.md`, `run_manifest.json`, 합격 시 `REPORT.md`.
 
 ## 범위와 한계
 
@@ -58,4 +93,6 @@ v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, 
 python3 eval/reporter-table-discovery-30/v2.1/scripts/build.py
 python3 eval/reporter-table-discovery-30/v2.1/scripts/validate.py
 python3 -m pytest -q eval/reporter-table-discovery-30/v2.1/tests
+# 실제 API 실행(키와 런타임 의존성이 있는 환경)
+python3 eval/reporter-table-discovery-30/v2.1/scripts/evaluate_runtime.py
 ```
