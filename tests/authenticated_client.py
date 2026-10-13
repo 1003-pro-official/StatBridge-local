@@ -7,7 +7,8 @@ import account_auth
 class TestClient(BaseClient):
     __test__=False
     def __init__(self,app,*args,**kwargs):
-        self.account_temp=tempfile.TemporaryDirectory()
+        # Windows에서는 sqlite 파일이 열린 채로 남아 종료 시 정리 오류가 난다.
+        self.account_temp=tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         account_auth.STORE=account_auth.AccountStore(Path(self.account_temp.name)/'accounts.sqlite3')
         super().__init__(app,*args,**kwargs)
         response=super().request('POST','/api/auth/login',json={'username':'test1','password':'1234'})

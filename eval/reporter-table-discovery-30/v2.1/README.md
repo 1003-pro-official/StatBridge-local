@@ -109,6 +109,7 @@ python3 -m pytest -q eval/reporter-table-discovery-30/v2.1/tests           # 변
 
 - `src/agent/stat_dictionary/stat_language_dictionary.json`의 분류값 이름 2,538건(41개 표)이 소스 메타데이터 `data/processed/bok_classifications.csv`와 어긋나 있었다. 코드는 실서버에서 다른 분류를 가리켰고(예: `내수` 코드 → `통계상 불일치`), 골드·런타임이 같은 카탈로그를 쓰므로 골드 대 골드 채점으로는 발견되지 않았다.
 - `tools/repair_dictionary_values.py`로 코드는 두고 이름/파생 필드만 교정했다. 실서버 재검증에서 분류 이름 불일치가 **27계열 → 0건**이 되었다(294/294 응답).
+- 교정으로 같은 이름이 여러 코드로 남아 요청 계획기가 중복 계열을 만들던 문제는, 이름이 바뀐 값 중 이미 있는 이름과 겹치는 항목만 덜어내 해결했다(값 21,356 → **20,771**).
 - 이 교정으로 이름이 사라진 3문항(`065`·`066`·`136`)은 실제 존재하는 분류값으로 다시 썼고, v2 원본에서 복사한 2문항(`013`·`020`)의 잘못된 코드 4건은 이름(의도)을 두고 코드만 교정해 `legacy_value_repair`에 기록했다.
 - v2·v3·v3-four-tables는 사용하지 않기로 해 데이터를 재생성하지 않았다. 해당 계보의 영향 테스트는 `xfail(strict=True)`로 표시했다.
 
