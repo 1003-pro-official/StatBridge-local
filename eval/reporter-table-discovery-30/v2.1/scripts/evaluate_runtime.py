@@ -20,6 +20,7 @@ GOLD = DATASET / "statbridge-reporter200.jsonl"
 MANIFEST = DATASET / "dataset_manifest.json"
 LEGACY_SCHEMA = "reporter30-discovery-2"
 PAYLOAD_FIELDS = ("table_id", "item_id", "classifications", "exact_params")
+RESUME_KEYS = ("policy_sha256", "dataset_sha256", "catalog_sha256", "source_sha256")
 
 # Frozen before the first run. Editing a value changes POLICY_SHA256 and invalidates older runs.
 POLICY = {
@@ -259,6 +260,7 @@ def write_results(output_dir: Path, result: dict, decision: dict, policy: dict |
     (output_dir / "diagnostic.md").write_text(report, encoding="utf-8")
     (output_dir / "run_manifest.json").write_text(json.dumps(
         {"policy": policy, "policy_sha256": policy_sha256(policy), "decision": decision,
+         "resumed": result.get("resumed", False),
          "dataset_sha256": result["environment"]["dataset_sha256"], "gold_suspect": result["gold_suspect"]},
         ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if decision["saved"]:
@@ -351,12 +353,68 @@ def run_case(client, api, case: dict, calls: dict, timeout: int, repeat_of: str 
 
 
 def write_run_inputs(output_dir: Path, cases: list[dict], run_environment: dict) -> None:
-    output_dir.mkdir(parents=True, exist_ok=False)
+    output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "query_only_inputs.jsonl").write_text(
         "".join(json.dumps({"id": case["id"], "query": case["query"]}, ensure_ascii=False) + "\n"
                 for case in cases), encoding="utf-8")
     (output_dir / "environment.json").write_text(
         json.dumps(run_environment, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def run_suite(api, client, cases: list[dict], output_dir: Path, *, policy: dict | None = None,
+              limit: int | None = None, resume: bool = False, gold_suspect: list[str] | None = None,
+              progress=None) -> dict:
+    """Run the cases plus the stratified repeats, then score, decide and write the run artifacts.
+
+    The CLI and the review notebook share this function so the run sequence and the artifacts
+    cannot drift apart. `limit` is a wiring-only prefix; `resume` reuses cases already on disk.
+    """
+    policy = policy or POLICY
+    gold_suspect = list(gold_suspect or [])
+    output_dir = Path(output_dir)
+    run_env = run_environment(GOLD)
+    if (output_dir / "environment.json").exists():
+        if not resume:
+            raise SystemExit(f"output dir already holds a run: {output_dir}")
+        saved_env = json.loads((output_dir / "environment.json").read_text(encoding="utf-8"))
+        for key in RESUME_KEYS:
+            if saved_env.get(key) != run_env.get(key):
+                raise SystemExit(f"cannot resume: {key} differs from the existing run")
+        run_env = saved_env
+    else:
+        if output_dir.exists() and any(output_dir.iterdir()):
+            raise SystemExit(f"output dir is not empty and holds no run: {output_dir}")
+        write_run_inputs(output_dir, cases, run_env)
+    calls = install_guards(api)
+    schedule = [(case, None) for case in cases]
+    schedule += [(case, case["id"]) for case in stratified_sample(cases)]
+    if limit:
+        schedule = schedule[:limit]
+    predictions: list[dict] = []
+    repeats: list[dict] = []
+    with (output_dir / "endpoint_logs.jsonl").open("a", encoding="utf-8") as logs:
+        for index, (case, repeat_of) in enumerate(schedule, 1):
+            path = output_dir / (f"{case['id']}.repeat.json" if repeat_of else f"{case['id']}.json")
+            if resume and path.exists():
+                record = json.loads(path.read_text(encoding="utf-8"))
+            else:
+                record = run_case(client, api, case, calls, policy["case_timeout_seconds"], repeat_of)
+                path.write_text(json.dumps(record, ensure_ascii=False, indent=2, default=str) + "\n",
+                                encoding="utf-8")
+                logs.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
+            (repeats if repeat_of else predictions).append(record)
+            if progress:
+                progress(index, len(schedule), record)
+    by_id = {case["id"]: case for case in cases}
+    scored = [score_case(by_id[record["id"]], record) for record in predictions]
+    repeat_scores = [score_case(by_id[record["id"]], record) for record in repeats]
+    boundary = {"numeric_calls": calls["numeric"], "output_calls": calls["output"]}
+    summary = summarize(scored, repeat_scores, cases, boundary)
+    decision = decide(summary, gold_suspect, policy)
+    write_results(output_dir, {"environment": run_env, "summary": summary, "cases": scored,
+                               "gold_suspect": gold_suspect, "resumed": resume}, decision, policy)
+    return {"output_dir": output_dir, "environment": run_env, "summary": summary, "decision": decision,
+            "cases": scored, "repeats": repeat_scores, "gold_suspect": gold_suspect, "resumed": resume}
 
 
 def main() -> int:
@@ -368,6 +426,8 @@ def main() -> int:
 
     parser = argparse.ArgumentParser(description="v2.1 discovery boundary evaluation; REPORT.md needs the frozen policy")
     parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--limit", type=int, default=None, help="wiring-only prefix of the schedule; never a score")
+    parser.add_argument("--resume", action="store_true", help="reuse case files already written in --output-dir")
     parser.add_argument("--gold-suspect-file", type=Path, default=None,
                         help="JSON list of case ids a reviewer judged suspect; any entry blocks the report")
     args = parser.parse_args()
@@ -380,36 +440,19 @@ def main() -> int:
     gold_suspect = json.loads(args.gold_suspect_file.read_text(encoding="utf-8")) if args.gold_suspect_file else []
     output_dir = args.output_dir or ROOT / "evaluation_runs" / (
         "reporter200_v2.1_" + datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S"))
-    run_env = run_environment(GOLD)
-    write_run_inputs(output_dir, cases, run_env)
-    calls = install_guards(api)
-    schedule = [(case, None) for case in cases]
-    schedule += [(case, case["id"]) for case in stratified_sample(cases)]
-    predictions: list[dict] = []
-    repeats: list[dict] = []
-    with TestClient(api.app) as client, (output_dir / "endpoint_logs.jsonl").open("a", encoding="utf-8") as logs:
-        for index, (case, repeat_of) in enumerate(schedule, 1):
-            record = run_case(client, api, case, calls, POLICY["case_timeout_seconds"], repeat_of)
-            (repeats if repeat_of else predictions).append(record)
-            logs.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
-            name = f"{case['id']}.repeat.json" if repeat_of else f"{case['id']}.json"
-            (output_dir / name).write_text(json.dumps(record, ensure_ascii=False, indent=2, default=str) + "\n",
-                                           encoding="utf-8")
-            print(f"[{index}/{len(schedule)}] {case['id']}{' (repeat)' if repeat_of else ''} "
-                  f"agent={record['agent_status']} api={record['api_status']} http={record['http_status']} "
-                  f"numeric={record['numeric_calls']} seconds={record['duration_s']}", flush=True)
-    by_id = {case["id"]: case for case in cases}
-    scored = [score_case(by_id[record["id"]], record) for record in predictions]
-    repeat_scores = [score_case(by_id[record["id"]], record) for record in repeats]
-    boundary = {"numeric_calls": calls["numeric"], "output_calls": calls["output"]}
-    summary = summarize(scored, repeat_scores, cases, boundary)
-    decision = decide(summary, gold_suspect)
-    write_results(output_dir, {"environment": run_env, "summary": summary, "cases": scored,
-                               "gold_suspect": gold_suspect}, decision)
-    print("SCORES", json.dumps(summary, ensure_ascii=False), flush=True)
-    if not decision["saved"]:
-        print("NOT_SAVED: " + ", ".join(decision["reasons"]), flush=True)
-    return 0 if decision["saved"] else 1
+
+    def report_progress(index: int, total: int, record: dict) -> None:
+        print(f"[{index}/{total}] {record['id']}{' (repeat)' if record['repeat_of'] else ''} "
+              f"agent={record['agent_status']} api={record['api_status']} http={record['http_status']} "
+              f"numeric={record['numeric_calls']} seconds={record['duration_s']}", flush=True)
+
+    with TestClient(api.app) as client:
+        result = run_suite(api, client, cases, output_dir, limit=args.limit, resume=args.resume,
+                           gold_suspect=gold_suspect, progress=report_progress)
+    print("SCORES", json.dumps(result["summary"], ensure_ascii=False), flush=True)
+    if not result["decision"]["saved"]:
+        print("NOT_SAVED: " + ", ".join(result["decision"]["reasons"]), flush=True)
+    return 0 if result["decision"]["saved"] else 1
 
 
 if __name__ == "__main__":

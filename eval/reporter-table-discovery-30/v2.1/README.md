@@ -62,6 +62,7 @@ v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, 
 | 증강 역질문 6건 | 5건 이상 |
 
 - 진단 점수(`scores.json`, `diagnostic.md`)는 항상 저장하고, `REPORT.md`는 위 조건을 모두 충족할 때만 저장합니다.
+- 부분 실행은 `--limit`(배선 확인용, 점수가 아님), 중단 후 재개는 `--resume`을 씁니다. 재개는 기존 실행과 정책·데이터셋·소스 해시가 다르면 섞지 않고 중단합니다.
 - 실행은 200문항 + 반복 표본 20건 = 220회입니다. 반복은 상태·구성 층화로 결정적으로 고르고 통과 판정 분모에서 제외하며, 일치율로만 보고합니다. 주기(M/Q/A) 층화는 보장하지 않습니다.
 - 문항당 타임아웃 120초, 초과 시 `http_error`로 기록하고 진행합니다. 재시도는 금지합니다.
 - 모든 실패는 `http_error`·`status_misjudged`·`table_set`·`series_identity`·`params`·`clarification_group`·`clarification_options`·`period_followup`·`boundary_violation` 중 하나로 분류됩니다. 분류되지 않은 실패는 합격을 막습니다.

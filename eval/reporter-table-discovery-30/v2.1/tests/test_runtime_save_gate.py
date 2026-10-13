@@ -167,9 +167,103 @@ def test_report_is_written_only_when_the_gate_passes(tmp_path):
     assert (tmp_path / "REPORT.md").read_text(encoding="utf-8").startswith("# 기자 질의 골든셋 v2.1 평가 결과")
 
 
+class FakeAgent:
+    """Stands in for the runtime agent so run_suite can be exercised without the real stack."""
+
+    def __init__(self):
+        self.current: dict = {}
+        self.service = None
+        self.output_agent = None
+
+    def run(self, *args, **kwargs):
+        return self.current
+
+    def validate_resolution(self, *args, **kwargs):
+        return self.current
+
+
+class FakeResponse:
+    def __init__(self, body: dict):
+        self._body = body
+        self.status_code = 200
+
+    def json(self):
+        return self._body
+
+
+class FakeClient:
+    def __init__(self, agent):
+        self.agent = agent
+        self.posts = 0
+
+    def post(self, url, json):  # noqa: A002 - mirrors httpx signature
+        self.posts += 1
+        case = next(item for item in GOLD if item["query"] == json["query"])
+        self.agent.current = {"status": case["workflow_gold"]["resolution"]["agent_status"],
+                              "api_plans": case["workflow_gold"]["classification_and_plan"]["series"]}
+        return FakeResponse(perfect_prediction(case)["boundary_response"])
+
+
+def build_fake_api():
+    from types import SimpleNamespace
+    agent = FakeAgent()
+    agent.service = SimpleNamespace(get_statistics=lambda *a, **k: [])
+    agent.output_agent = SimpleNamespace(prepare=lambda *a, **k: {})
+    return SimpleNamespace(agent=agent)
+
+
+def test_run_suite_runs_a_limited_prefix_and_writes_diagnostics(tmp_path):
+    api = build_fake_api()
+    client = FakeClient(api.agent)
+    result = runner.run_suite(api, client, GOLD, tmp_path, limit=4)
+    assert client.posts == 4
+    assert result["summary"]["cases"] == 4
+    assert result["decision"]["saved"] is False  # a prefix can never be a score
+    assert result["summary"]["boundary_violations"] == 0
+    for name in ("query_only_inputs.jsonl", "environment.json", "endpoint_logs.jsonl",
+                 "scores.json", "diagnostic.md", "run_manifest.json"):
+        assert (tmp_path / name).exists(), name
+    assert not (tmp_path / "REPORT.md").exists()
+    assert len((tmp_path / "query_only_inputs.jsonl").read_text(encoding="utf-8").splitlines()) == 200
+
+
+def test_run_suite_resume_reuses_written_cases(tmp_path):
+    api = build_fake_api()
+    client = FakeClient(api.agent)
+    runner.run_suite(api, client, GOLD, tmp_path, limit=3)
+    assert client.posts == 3
+    resumed = runner.run_suite(api, client, GOLD, tmp_path, limit=3, resume=True)
+    assert client.posts == 3 and resumed["resumed"] is True
+    assert json.loads((tmp_path / "run_manifest.json").read_text(encoding="utf-8"))["resumed"] is True
+
+
+def test_run_suite_refuses_to_overwrite_or_mix_an_existing_run(tmp_path):
+    api = build_fake_api()
+    runner.run_suite(api, FakeClient(api.agent), GOLD, tmp_path, limit=1)
+    with pytest.raises(SystemExit, match="already holds a run"):
+        runner.run_suite(api, FakeClient(api.agent), GOLD, tmp_path, limit=1)
+    environment = json.loads((tmp_path / "environment.json").read_text(encoding="utf-8"))
+    environment["policy_sha256"] = "stale"
+    (tmp_path / "environment.json").write_text(json.dumps(environment), encoding="utf-8")
+    with pytest.raises(SystemExit, match="cannot resume"):
+        runner.run_suite(api, FakeClient(api.agent), GOLD, tmp_path, limit=1, resume=True)
+
+
+def test_run_suite_refuses_a_non_empty_dir_without_a_run(tmp_path):
+    (tmp_path / "junk.txt").write_text("x", encoding="utf-8")
+    api = build_fake_api()
+    with pytest.raises(SystemExit, match="holds no run"):
+        runner.run_suite(api, FakeClient(api.agent), GOLD, tmp_path, limit=1)
+
+
+def test_guards_fail_loudly_when_a_target_is_missing():
+    from types import SimpleNamespace
+    broken = SimpleNamespace(agent=SimpleNamespace(service=SimpleNamespace(), output_agent=SimpleNamespace()))
+    with pytest.raises(RuntimeError, match="guard target missing"):
+        runner.install_guards(broken)
+
+
 def test_threshold_rounding_accepts_the_documented_boundary():
-    assert runner.decide(runner.summarize(
-        score_all(), [], GOLD, {"numeric_calls": 0, "output_calls": 0}), [])["saved"] is True
     summary = runner.summarize(score_all(), [], GOLD, {"numeric_calls": 0, "output_calls": 0})
     summary["by_kind"]["resolved"] = {"cases": 119, "passed": 114}
     assert runner.decide(summary, [])["saved"] is True
