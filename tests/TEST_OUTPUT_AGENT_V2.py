@@ -22,6 +22,10 @@ class FakeHCX:
         self.responses = iter(responses)
 
     def chat_main(self, *_args: object, **_kwargs: object) -> tuple[str, dict]:
+        if '근거 선택자' in str(_args[0]):
+            from report_summary import default_ids
+            next(self.responses)
+            return json.dumps({'fact_ids': default_ids(json.loads(_args[1])['facts'])}), {}
         return next(self.responses), {}
 
     @staticmethod

@@ -32,7 +32,7 @@ export async function recommendReport(edit_session_id:string,revision:number|und
 function localFallback(query: string, reason: string): QueryResponse {
   return {
     ...mockResponse,
-    status: "no_match",
+    status: "request_failed",
     query,
     interpretedQuery: query,
     summary: `Agent API에 연결하지 못해 UI 안전 응답으로 전환했습니다. (${reason})`,
@@ -72,7 +72,7 @@ export async function submitQuery(payload: QueryRequest): Promise<QueryResponse>
     if (!response.ok) {
       const data = await response.json().catch(() => ({}));
       const detail = typeof data.detail === "string" ? data.detail : `HTTP ${response.status}`;
-      return {...localFallback(payload.query, detail), summary:detail, warnings:[detail]};
+      return {...localFallback(payload.query, detail), summary:detail, warnings:[detail], recovery:data.recovery ?? {issue:'input',question:'안내된 오류에 해당하는 입력을 수정해 주세요.',choices:[{id:'revise',label:'질문 수정'}],preserveState:true}};
     }
 
     return (await response.json()) as QueryResponse;

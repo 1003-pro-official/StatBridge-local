@@ -10,7 +10,7 @@ from plotly.subplots import make_subplots
 
 from output_schema import ChartSpec
 from research_plotly_styles import cartesian_traces, decorate, style_for, rgba
-from html import escape
+from html import escape, unescape
 import math
 import textwrap
 from chart_availability import data_requirements, combined_layout_reason
@@ -50,7 +50,7 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
         fig = make_subplots(rows=math.ceil(len(series)/columns), cols=columns, shared_xaxes=layout_mode == "separate" and chart_type not in {'histogram','box'},
                             shared_yaxes=spec.presentation.shared_y,
                             subplot_titles=[wrapped(spec.display_names.get(s["label"], s["label"]),26) for s in series],
-                            vertical_spacing=min(.18, .8/max(1, math.ceil(len(series)/columns))))
+                            vertical_spacing=.18 if math.ceil(len(series)/columns)<=2 else min(.18, 160/(math.ceil(len(series)/columns)*420+200)))
     elif dual_axis:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
     else:
@@ -261,4 +261,32 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
         bottom=max(fig.layout.margin.b, (category_info.count('<br>')+1)*18+(160 if spec.show_legend and spec.legend_position=='bottom' else 60))
         fig.update_layout(margin=dict(b=bottom),height=max(fig.layout.height,400+fig.layout.margin.t+bottom),
             legend=dict(font=dict(color=spec.presentation.font_color)))
+    arrange_bottom_captions(fig, series, spec, math.ceil(len(series)/columns) if panels else 1)
     return json.loads(pio.to_json(fig, validate=True))
+
+
+def arrange_bottom_captions(fig, series, spec, rows=1):
+    """Reserve pixel lanes for ticks, axis titles, legend and automatic captions."""
+    captions=[a for a in fig.layout.annotations or [] if (not a.name or str(a.name).startswith('statbridge-footer:')) and a.yref=='paper' and a.y is not None and (a.y<0 or a.y==0 and (a.yshift or 0)<0)]
+    if not captions:
+        return
+    font=fig.layout.font.size or 12
+    longest=max((len(str(p['date'])) for s in series for p in s['points']),default=6)
+    title_lines=max((str(fig.layout[k].title.text or '').count('<br>')+1 for k in fig.layout if k.startswith('xaxis')),default=1)
+    tick_room=30 if spec.chart_type in {'pie','donut','treemap'} else max(120,longest*font*.8+title_lines*font*1.5+24)
+    legend_room=0
+    if spec.show_legend and spec.legend_position=='bottom':
+        labels=[str(v) for t in fig.data for v in (t.labels if t.type in {'pie','treemap'} else [t.name or '']) if str(v)]
+        legend_room=len(set(labels))*max((text.count('<br>')+1 for text in labels),default=1)*(spec.presentation.legend_size+8)+16
+    offset=tick_room+legend_room+16
+    for index,a in enumerate(captions):
+        a.text='<br>'.join(wrapped(unescape(line),40) for line in str(a.text or '').split('<br>'))
+        a.update(name=f'statbridge-footer:{index}',x=0,y=0,yref='paper',yanchor='top',xanchor='left',yshift=-offset)
+        offset+=(str(a.text or '').count('<br>')+1)*(a.font.size or 12)*1.5+16
+    bottom=max(fig.layout.margin.b or 0,offset+16)
+    top=fig.layout.margin.t or 100
+    minimum_plot=260 if rows==1 and spec.presentation.height else rows*320
+    height=max(fig.layout.height or 580,top+bottom+minimum_plot)
+    fig.update_layout(margin=dict(b=bottom),height=height)
+    if legend_room:
+        fig.update_layout(legend=dict(y=-tick_room/(height-top-bottom),yanchor='top'))

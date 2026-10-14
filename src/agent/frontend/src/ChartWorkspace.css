@@ -30,3 +30,60 @@
 @media(min-width:851px){.workspace-center .plotly-chart{position:absolute;inset:0;height:100%!important;max-height:100%;overflow:hidden}.workspace-grid{overflow:hidden}.workspace-natural .sujeongi-color-picker{max-height:190px}.chart-workspace:has(.workspace-conversation[open]){min-height:680px}.workspace-natural .sujeongi-messages{max-height:140px;overflow:auto}}
 .workspace-center .sketch-stage{overflow:auto;contain:layout}.workspace-plot-frame{min-height:420px;height:100%;display:flex;flex-direction:column}.workspace-plot-heading{flex:none;padding:12px 18px 6px;text-align:center;cursor:pointer}.workspace-plot-heading h4{font-size:18px;font-weight:500;line-height:1.5;margin:0;overflow-wrap:anywhere}.workspace-plot-heading p{font-size:12px;line-height:1.5;margin:4px 0;color:#536b7e;overflow-wrap:anywhere}.workspace-plot-legend{flex:none;display:flex;flex-wrap:wrap;justify-content:center;gap:5px 14px;padding:6px 15px}.workspace-plot-legend button{border:0;background:transparent;padding:3px;max-width:100%;overflow-wrap:anywhere;text-align:left}.workspace-plot-legend i{display:inline-block;width:22px;height:3px;margin-right:6px;vertical-align:middle}.workspace-plot-body{position:relative;min-height:260px;flex:1}.workspace-plot-body .plotly-chart{position:absolute!important;inset:0;height:100%!important;min-height:0}
 @media(min-width:851px){.chart-workspace{height:auto;min-height:0;max-height:none}.chart-workspace:has(.workspace-conversation[open]){min-height:0}.workspace-grid{height:clamp(520px,calc(100dvh - 280px),680px);min-height:520px;flex:none}.workspace-plot-frame{min-height:0}.workspace-center .sketch-stage{overflow:auto}.workspace-plot-body{min-height:260px}}
+
+.agent-recovery{margin:12px 0;padding:16px;border:1px solid #bfd2e4;border-radius:8px;background:#f6f9fc;color:#163952}.agent-recovery h3{margin:0 0 8px}.recovery-actions,.recovery-table{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.recovery-table select{max-width:100%;flex:1;min-width:200px}.reference-upload{padding:10px 16px;border-top:1px solid #e1e8ef}.reference-upload small{display:block;color:#60758a}.reference-upload>div{display:flex;align-items:center;gap:8px;padding:6px 0}.reference-upload img{width:56px;height:40px;object-fit:contain}.agent-recovery button{padding:7px 12px;border:1px solid #afc6dc;background:white;border-radius:5px;color:#13476e;cursor:pointer}
+
+.has-workspace .workspace-analysis-summary{display:block;margin:12px 0}.workspace-analysis-summary .answer-summary{padding:12px 16px}.workspace-analysis-summary .answer-summary p{font-size:13px;line-height:1.65;margin:0}
+
+/* Data and every edit control share the left panel; chat occupies the right. */
+.chart-workspace .workspace-grid,.chart-workspace .workspace-grid.data-collapsed,.chart-workspace .workspace-grid.properties-collapsed{grid-template-columns:minmax(230px,25fr) minmax(0,48fr) minmax(280px,27fr)}
+.chart-workspace .workspace-grid.data-collapsed.properties-collapsed{grid-template-columns:minmax(0,1fr) minmax(280px,30fr)}
+.workspace-edit-controls{border-top:1px solid #dce5ec;margin-top:20px;padding-top:18px}.workspace-edit-controls>details{margin:14px 0;padding-top:10px;border-top:1px solid #dce5ec}
+.chart-workspace .workspace-chat{padding:0;display:flex;overflow:hidden;background:white;scrollbar-gutter:auto}
+.chart-workspace .workspace-chat .workspace-natural.sujeongi-panel{display:flex;flex:1;flex-direction:column;min-width:0;min-height:0;width:100%;height:100%;position:static!important;border:0;border-radius:0;box-shadow:none}
+.workspace-chat .chat-actions{display:flex;flex-wrap:wrap;gap:5px;padding:9px;border-bottom:1px solid #dce5ec}
+.chart-workspace .workspace-chat .sujeongi-body{display:flex;flex:1;min-height:120px;overflow:hidden}
+.chart-workspace .workspace-chat .sujeongi-messages{flex:1;min-height:0;max-height:none;overflow:auto;padding:14px;gap:12px}
+.chat-message{max-width:95%;display:flex;flex-direction:column;gap:4px;align-self:flex-start}.chat-message.user{align-self:flex-end}.chat-message small{font-size:10px;color:#718397}.chat-message.user small{text-align:right}
+.chart-workspace .chat-message p{margin:0;max-width:100%;white-space:pre-wrap;font-size:12px;line-height:1.65;border-radius:10px;background:#eef3f8;color:#173c59;padding:10px 12px}
+.chart-workspace .chat-message.user p{background:#005b96;color:white}.chart-workspace .chat-message.edit p{background:#f2f8f5;border-left:3px solid #54a17c}
+.workspace-chat .reference-upload{flex:none;padding:8px 12px}.workspace-chat .reference-upload small{font-size:10px}.workspace-chat .reference-upload input{font-size:10px}
+.chart-workspace .workspace-chat .sujeongi-composer{flex:none;padding:10px;align-items:flex-end}.chart-workspace .workspace-chat .sujeongi-composer textarea{min-height:75px;height:75px;resize:vertical;min-width:0}.chart-workspace .workspace-chat .sujeongi-composer button{min-width:48px}
+.workspace-chat .sujeongi-color-picker,.workspace-chat .agent-recovery{flex:none;max-height:210px;overflow:auto}.workspace-chat .sujeongi-symbols{display:block;flex:none}
+.graph-chat-global{display:flex;justify-content:flex-end;gap:8px;padding:8px 0}.graph-chat-global button,.chat-modal button,.chat-notice button{padding:8px 12px;border:1px solid #bfd0df;border-radius:5px;background:#fff;color:#174868;cursor:pointer}.chat-notice{padding:12px;background:#edf5fa;color:#23475f}.chat-notice button{margin-left:10px}
+.chat-modal-backdrop{position:fixed;inset:0;z-index:200;background:#102b4666;display:flex;align-items:center;justify-content:center;padding:20px}.chat-modal{background:white;border-radius:12px;padding:24px;width:560px;max-width:100%;max-height:80dvh;overflow:auto;color:#193d58;box-shadow:0 20px 80px #1235}.chat-modal h2{font-size:19px}.chat-modal p{font-size:13px;line-height:1.7}.chat-modal button{margin:6px 6px 6px 0}.chat-modal article{padding:12px 0;border-top:1px solid #dce5ec}.chat-modal article strong,.chat-modal article small{display:block;overflow-wrap:anywhere}.chat-modal article small{margin:6px 0;color:#667b8d}
+@media(min-width:851px){.chart-workspace .workspace-grid{height:clamp(620px,calc(100dvh - 210px),820px);min-height:620px}.workspace-chat{height:100%;max-height:none}.workspace-chat .workspace-natural{flex:1}}
+@media(max-width:1100px) and (min-width:851px){.chart-workspace .workspace-grid,.chart-workspace .workspace-grid.data-collapsed,.chart-workspace .workspace-grid.properties-collapsed{grid-template-columns:230px minmax(0,1fr) 280px}}
+@media(max-width:850px){.chart-workspace{padding-bottom:0}.chart-workspace .workspace-grid{height:auto;display:flex;flex-direction:column}.chart-workspace .workspace-chat{width:100%;height:660px;max-height:none;border-top:1px solid #dce5ec}.chart-workspace .workspace-chat .workspace-natural.sujeongi-panel{position:static!important;inset:auto!important;width:100%!important;box-shadow:none;border:0}.chart-workspace .workspace-left{max-height:520px}.chart-workspace .workspace-center{order:-1}.graph-chat-global{flex-wrap:wrap}}
+
+/* Keep the composer visible; multiple chart panels scroll at their real height. */
+.account-bar{position:sticky;top:0;z-index:90}
+.chart-workspace .workspace-chat .sujeongi-body{min-height:0;flex:1 1 auto}.chart-workspace .workspace-chat .sujeongi-messages{min-height:0;padding:10px 12px;scrollbar-gutter:stable}.workspace-chat .reference-upload{margin:0;max-height:150px;overflow:auto;padding:10px 12px}.workspace-chat .reference-upload summary{font-weight:500;font-size:11px;color:#497187}.workspace-chat .reference-upload label{margin:9px 0}.workspace-chat .sujeongi-color-picker,.workspace-chat .agent-recovery{flex:0 1 auto;min-height:0;max-height:150px;overflow:auto}.chart-workspace .workspace-chat .sujeongi-composer{padding:10px;gap:6px;border-top:1px solid #e1eaf1;box-sizing:border-box}.chart-workspace .workspace-chat .sujeongi-composer textarea{height:70px;min-height:70px;max-height:100px;resize:none;box-sizing:border-box}.chart-workspace .workspace-chat .sujeongi-composer button{align-self:stretch;border-radius:7px;min-width:46px}.workspace-chat .chat-message{max-width:100%}.workspace-chat .chat-message p{max-width:100%;box-sizing:border-box}.workspace-chat .sujeongi-body .sujeongi-messages>p{max-width:100%;font-size:11px}.workspace-plot-body.multi-panel{flex:none}.workspace-center .workspace-plot-frame:has(.multi-panel){height:auto;min-height:100%}.chart-workspace{scroll-margin-top:125px}.workspace-plot-legend button{max-width:100%;font-size:10px;line-height:1.5}
+@media(min-width:851px){.chart-workspace{height:calc(100dvh - 135px);min-height:480px;max-height:1000px;display:flex;flex-direction:column}.chart-workspace .workspace-grid,.chart-workspace .workspace-grid.data-collapsed,.chart-workspace .workspace-grid.properties-collapsed{height:auto;min-height:0;flex:1 1 auto}.chart-workspace .workspace-center .sketch-stage{min-height:0;overflow:auto}.chart-workspace .workspace-plot-body:not(.multi-panel){min-height:260px}.chart-workspace .workspace-left,.chart-workspace .workspace-chat{min-height:0;height:100%;max-height:none}}
+@media(max-width:850px){.chart-workspace{height:auto;min-height:0}.chart-workspace .workspace-center:has(.multi-panel) .sketch-stage{height:520px}.chart-workspace .workspace-center .multi-panel .plotly-chart{height:100%!important}.chart-workspace .workspace-chat{height:560px}}
+
+.workspace-center .sketch-scroll{flex:1;min-height:0;overflow:auto;position:relative}.chart-workspace .workspace-center .sketch-scroll .sketch-stage{height:100%;min-height:100%;overflow:visible;position:relative;contain:layout;display:flex;flex-direction:column}.chart-workspace .workspace-center .sketch-scroll .sketch-stage:has(.multi-panel){height:auto!important}.sketch-scroll .workspace-plot-frame{flex:1}.sketch-scroll .sketch-overlay{height:100%;width:100%}
+@media(max-width:850px){.workspace-center .sketch-scroll{height:500px;flex:none}.chart-workspace .workspace-center .sketch-scroll .sketch-stage{height:100%!important}.chart-workspace .workspace-center .sketch-scroll .sketch-stage:has(.multi-panel){height:auto!important}}
+
+.sketch-scroll:focus-visible{outline:2px solid #5e9ebf;outline-offset:-2px}@media(max-width:850px){.chart-workspace{scroll-margin-top:245px}}
+
+/* Keep a real plotting area as combined series grow; scrolling is outside the annotation canvas. */
+.sketch-scroll .workspace-plot-frame:has(.expanded-plot){flex:none;height:auto;min-height:100%}
+.chart-workspace .workspace-center .sketch-scroll .sketch-stage:has(.expanded-plot){height:auto!important;min-height:100%}
+.workspace-plot-body.expanded-plot{flex:none;box-sizing:border-box}
+.workspace-plot-body.expanded-plot .plotly-chart{height:100%!important}
+
+@media(min-width:851px){
+ .chart-workspace:has(.expanded-plot){height:auto;min-height:0;max-height:none;overflow:visible}
+ .chart-workspace:has(.expanded-plot) .workspace-grid{flex:none;min-height:720px;grid-template-rows:auto;align-items:start;overflow:visible}
+ .chart-workspace:has(.expanded-plot) .workspace-center{height:auto;align-self:stretch}
+ .chart-workspace:has(.expanded-plot) .sketch-scroll{flex:none;height:auto;overflow:visible}
+ .chart-workspace:has(.expanded-plot) .sketch-scroll .sketch-stage{min-height:0}
+ .chart-workspace:has(.expanded-plot) .workspace-plot-frame{min-height:0}
+ .chart-workspace:has(.expanded-plot) :is(.workspace-left,.workspace-chat){position:sticky;top:125px;align-self:start;height:clamp(350px,calc(100dvh - 250px),750px)}
+}
+
+.workspace-plot-footer{flex:none;padding:16px 22px;border-top:1px solid #e4edf3;background:#fbfdfe;color:#54718a;font-size:11px;line-height:1.7;box-sizing:border-box}
+.workspace-plot-footer p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.workspace-plot-footer p+p{margin-top:12px}
+
+.workspace-download-status{margin:0;padding:12px 18px;background:#edf7fa;color:#064769;font-size:13px}.workspace-download-status a{font-weight:600;text-decoration:underline;margin-left:8px}

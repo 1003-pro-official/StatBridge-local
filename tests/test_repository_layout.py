@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_no_duplicate_runtime_tree_or_root_entrypoints():
     for relative in ("data/runtime_data", "data/statbridge_mcp_server"):
         assert not (ROOT / relative).exists(), relative
-    aliases = {"START_STATBRIDGE.cmd", "STOP_STATBRIDGE.cmd"}
+    aliases = {"START_STATBRIDGE.cmd", "STOP_STATBRIDGE.cmd", "CHECK_STATBRIDGE.cmd"}
     for entry in ROOT.glob("*.cmd"):
         assert entry.name in aliases, entry.name
         content = entry.read_text(encoding="utf-8").lower()

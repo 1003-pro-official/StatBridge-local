@@ -151,6 +151,8 @@ def plotly_report(series, spec, result):
                 if shape.xref==ref:shape.x0=keys.get(shape.x0,shape.x0);shape.x1=keys.get(shape.x1,shape.x1)
             for annotation in fig.layout.annotations or ():
                 if annotation.xref==ref:annotation.x=keys.get(annotation.x,annotation.x)
+    from plotly_renderer import arrange_bottom_captions
+    arrange_bottom_captions(fig, colored, base, math.ceil(len(series)/options.columns) if options.kind=='panels' else 1)
     from plotly.io import to_json
     import json
     return json.loads(to_json(fig))

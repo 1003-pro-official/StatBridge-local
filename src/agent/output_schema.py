@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from advanced_chart_spec import ReportOptions
+from chart_reference import ChartReference
 
 
 ChartType = Literal[
@@ -316,6 +317,7 @@ class EditSelection(StrictStyle):
 
 
 class VisualEditContext(BaseModel):
+    reference_files: list[ChartReference] = Field(default_factory=list, max_length=3)
     marks: list[SketchMark] = Field(default_factory=list, max_length=40)
     selected_target: str = Field(default="", max_length=300)
     selection: EditSelection | None = None

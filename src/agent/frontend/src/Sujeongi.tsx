@@ -1,3 +1,6 @@
+import {appendChat,readChat} from './graphChat';
+import {readReference} from './referenceFiles';
+import type {ChartReference} from './api/types';
 import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import {clampPosition, initialPosition, isDrag} from "./sujeongiPosition.mjs";
 import "./Sujeongi.css";
@@ -9,6 +12,7 @@ function SujeongiAvatar({busy=false, floating=false}: {busy?:boolean;floating?:b
 }
 
 type Props = {
+  targets?:string[];
   inline?: boolean;
   sessionId: string;
   revision: object;
@@ -16,31 +20,31 @@ type Props = {
   markCount: number;
   model?: {model:string;supportsImages:boolean};
   children: ReactNode;
-  onEdit: (instruction: string, conversation: Array<{role:"user"|"assistant";text:string}>) => Promise<boolean>;
+  onEdit: (instruction: string, conversation: Array<{role:"user"|"assistant";text:string}>,references?:ChartReference[]) => Promise<boolean>;
   canSubmitMarks: boolean;
   markInstructions: string;
 };
 
 type Message = {role:"user"|"assistant";text:string};
-function savedConversation(sessionId:string): Message[] {
-  try {
-    const value=JSON.parse(sessionStorage.getItem(`statbridge.sujeongi.chat.${sessionId}`)||"[]");
-    return Array.isArray(value)?value.filter((m)=>m&&(m.role==="user"||m.role==="assistant")&&typeof m.text==="string"):[];
-  } catch { return []; }
-}
+function savedConversation(sessionId:string): Message[] {return readChat(sessionId);}
 
-export function Sujeongi({sessionId,revision,loading,markCount,model,onEdit,canSubmitMarks,markInstructions,children,inline=false}: Props) {
+export function Sujeongi({sessionId,revision,loading,markCount,model,onEdit,canSubmitMarks,markInstructions,children,inline=false,targets=[]}: Props) {
   const [open,setOpen]=useState(false);
   useEffect(()=>{setOpen(false);},[revision]);
   const [draft,setDraft]=useState("");
+  const [references,setReferences]=useState<ChartReference[]>([]),[fileError,setFileError]=useState('');
+  const [recovery,setRecovery]=useState('');
+  const [recoverTarget,setRecoverTarget]=useState(''),[extraInfo,setExtraInfo]=useState('');
+  const attach=async(files:FileList|null)=>{if(!files)return;setFileError('');try{if(references.length+files.length>3)throw new Error('참고 파일은 최대 3개입니다.');const next=await Promise.all(Array.from(files).map(readReference));setReferences(current=>[...current,...next]);}catch(e){setFileError(e instanceof Error?e.message:String(e));}};
   const [toolsOpen,setToolsOpen]=useState(true);
   const [pendingColors,setPendingColors]=useState<{instruction:string;requests:ColorRequest[]}|null>(null);
   const [conversation,setConversation]=useState(()=>({sessionId,messages:savedConversation(sessionId)}));
   const messages=conversation.sessionId===sessionId?conversation.messages:[];
   useEffect(()=>{
-    if(conversation.sessionId!==sessionId)return;
-    try {sessionStorage.setItem(`statbridge.sujeongi.chat.${sessionId}`,JSON.stringify(conversation.messages));} catch {/* Reopening still retains in-memory history. */}
-  },[conversation,sessionId]);
+    const refresh=(event:Event)=>{if((event as CustomEvent<string>).detail===sessionId)setConversation({sessionId,messages:readChat(sessionId)});};
+    window.addEventListener('statbridge:chat-updated',refresh);
+    return()=>window.removeEventListener('statbridge:chat-updated',refresh);
+  },[sessionId]);
   const [sending,setSending]=useState(false);
   const inFlight=useRef(false);
   const currentSession=useRef(sessionId);
@@ -64,35 +68,35 @@ export function Sujeongi({sessionId,revision,loading,markCount,model,onEdit,canS
   useEffect(()=>{try{localStorage.setItem("statbridge.sujeongi.position",JSON.stringify(position));}catch{/* Optional preference only. */}},[position]);
   useEffect(()=>{
     currentSession.current=sessionId;
-    setDraft("");setPendingColors(null);setConversation({sessionId,messages:savedConversation(sessionId)});setOpen(false);
+    setDraft("");setReferences([]);setRecovery("");setPendingColors(null);setConversation({sessionId,messages:savedConversation(sessionId)});setOpen(false);
   },[sessionId]);
   useEffect(()=>{if(log.current)log.current.scrollTop=log.current.scrollHeight;},[messages,open]);
   useEffect(()=>{
     if(markCount>previousMarkCount.current)setOpen(true);
     previousMarkCount.current=markCount;
   },[markCount]);
-  const append=(role:"user"|"assistant",text:string)=>setConversation(current=>({sessionId,messages:[...(current.sessionId===sessionId?current.messages:savedConversation(sessionId)),{role,text}]}));
+  const append=(role:"user"|"assistant",text:string)=>{appendChat(sessionId,{role,text});setConversation({sessionId,messages:readChat(sessionId)});};
   const execute=async(instruction:string, recorded=false)=>{
-    if((!instruction&&!canSubmitMarks)||loading||inFlight.current)return;
-    inFlight.current=true;setSending(true);
+    if((!instruction&&!canSubmitMarks&&!references.length)||loading||inFlight.current)return;
+    inFlight.current=true;setSending(true);setRecovery("");
     const startedSession=sessionId;
     if(!recorded)append("user",instruction||markInstructions||"그래프에 표시한 부분을 수정해줘");
     try{
-      const success=await onEdit(instruction,messages);
+      const success=await onEdit(instruction,readChat(sessionId).slice(-40).map(({role,text})=>({role,text:text.slice(0,2000)})),references);
       if(currentSession.current!==startedSession)return;
-      if(success){setDraft("");setPendingColors(null);append("assistant","요청한 그래프 수정을 적용했어요. 이어서 수정할 수 있습니다.");setOpen(false);}
+      if(success){setDraft("");setReferences([]);setPendingColors(null);append("assistant","요청한 그래프 수정을 적용했어요. 이어서 수정할 수 있습니다.");setOpen(false);}
       else append("assistant","수정을 적용하지 못했어요. 화면의 오류 안내를 확인해 주세요. 입력한 요청과 기존 그래프는 유지했어요.");
     }catch(error){
-      if(currentSession.current===startedSession)append("assistant",error instanceof Error?error.message:"수정에 실패했어요. 기존 그래프는 유지됩니다.");
+      if(currentSession.current===startedSession){const message=error instanceof Error?error.message:"수정에 필요한 내용을 알려 주세요. 기존 그래프는 유지됩니다.";append("assistant",message);setRecovery(message);}
     }finally{inFlight.current=false;setSending(false);}
   };
   const submit=async(event:FormEvent)=>{
     event.preventDefault();
     if(loading||inFlight.current||pendingColors)return;
     const instruction=draft.trim();
-    if(!instruction&&!canSubmitMarks)return;
+    if(!instruction&&!canSubmitMarks&&!references.length)return;
     const requests=colorRequests([instruction,markInstructions].filter(Boolean).join('\n'));
-    if(requests.length){
+    if(requests.length&&!references.length){
       append('user',instruction||markInstructions);
       append('assistant','어떤 색으로 수정할까요? 대상별 RGB 색상을 골라 주세요. 다른 변경 내용도 함께 적용합니다.');
       setToolsOpen(false);setPendingColors({instruction,requests});return;
@@ -102,20 +106,20 @@ export function Sujeongi({sessionId,revision,loading,markCount,model,onEdit,canS
   const busy=loading||sending;
   return <>
     {(open||inline)&&<section className={`sujeongi-panel ${inline?'workspace-natural':''}`} aria-label="자연어 그래프 편집">
-      <header>{!inline&&<SujeongiAvatar busy={busy}/>}<div><strong>그래프를 어떻게 수정할까요?</strong><small>현재 그래프를 이어서 수정합니다</small></div>{!inline&&<button type="button" aria-label="수정이 닫기" onClick={()=>setOpen(false)}>×</button>}</header>
+      <header>{!inline&&<SujeongiAvatar busy={busy}/>}<div><strong>그래프를 어떻게 수정할까요?</strong><small>대화 맥락과 그래프 편집 기록을 이어갑니다</small></div>{!inline&&<button type="button" aria-label="수정이 닫기" onClick={()=>setOpen(false)}>×</button>}</header>
+      {inline&&<nav className="chat-actions"><button type="button" disabled={busy} onClick={()=>window.dispatchEvent(new Event('statbridge:save-chat'))}>대화 저장</button><button type="button" disabled={busy} onClick={()=>window.dispatchEvent(new Event('statbridge:new-chat'))}>새 채팅</button><button type="button" disabled={busy} onClick={()=>window.dispatchEvent(new Event('statbridge:show-chats'))}>저장한 대화</button></nav>}
       {!inline&&<div className="sujeongi-editor"><button className="sujeongi-editor-toggle" type="button" aria-expanded={toolsOpen} aria-controls="sujeongi-edit-controls" onClick={()=>setToolsOpen(value=>!value)}>그림판 편집 <span>{toolsOpen?"접기 ▴":"펼치기 ▾"}</span></button><div id="sujeongi-edit-controls" className="sujeongi-edit-controls" hidden={!toolsOpen}>{children}</div></div>}
       <div className="sujeongi-body">
-      {inline&&<details className="workspace-conversation"><summary>편집 대화 기록 ({messages.length})</summary>
-      <div ref={log} className="sujeongi-messages" role="log" aria-live="polite">{messages.map((message,index)=><p key={index} className={message.role}>{message.text}</p>)}</div></details>}
-      {!inline&&
-      <div ref={log} className="sujeongi-messages" role="log" aria-live="polite">
-        <p className="assistant">원하는 변경을 한 번에 적어 주세요. 부분 수정은 날짜나 분기를 적거나 그래프에 표시해 주세요.</p>
-        {messages.map((message,index)=><p key={index} className={message.role}>{message.text}</p>)}
-      </div>}
+      <div ref={log} className="sujeongi-messages" role="log" aria-label="그래프 대화 및 편집 기록" aria-live="polite">
+        <p className="assistant">원하는 변경을 말씀해 주세요. 왼쪽에서 직접 바꾼 설정도 여기에 기록됩니다.</p>
+        {messages.map((message,index)=><article key={index} className={`chat-message ${message.role} ${(message as {kind?:string}).kind||''}`}><small>{(message as {kind?:string}).kind==='edit'?'그래프 편집 기록':message.role==='user'?'나':'StatBridge'}</small><p>{message.text}</p></article>)}
+        {busy&&<p className="assistant" role="status">변경 내용을 확인하고 있습니다…</p>}
+      </div>
       </div>
       {pendingColors&&<section className="sujeongi-color-picker" aria-label="수정 색상 선택"><strong>어떤 색으로 수정할까요?</strong><p>색상표에서 선택하거나 RGB HEX 값을 입력하세요.</p><div className="sujeongi-color-options">{pendingColors.requests.map((request,index)=><div className="sujeongi-color-row" key={request.target}><label>{request.target}<input type="color" aria-label={`${request.target} RGB 색상`} value={request.color} onChange={e=>setPendingColors(current=>current?{...current,requests:current.requests.map((r,i)=>i===index?{...r,color:e.target.value}:r)}:null)}/></label><input aria-label={`${request.target} HEX 값`} value={request.color} maxLength={7} onChange={e=>setPendingColors(current=>current?{...current,requests:current.requests.map((r,i)=>i===index?{...r,color:e.target.value}:r)}:null)}/><label className="sujeongi-opacity">투명도 {Math.round((1-request.opacity)*100)}%<input type="range" min={0} max={100} step={1} aria-label={`${request.target} 투명도`} value={Math.round((1-request.opacity)*100)} onChange={e=>setPendingColors(current=>current?{...current,requests:current.requests.map((r,i)=>i===index?{...r,opacity:1-Number(e.target.value)/100}:r)}:null)}/></label><div className="sujeongi-color-preview" aria-label={`${request.target} 색과 투명도 미리보기`}><span style={{background:colorPreview(request.color,request.opacity)}}/></div><div className="sujeongi-swatches">{['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#111827'].map(color=><button type="button" key={color} aria-label={`${request.target} ${color}`} style={{background:color}} aria-pressed={request.color===color} onClick={()=>setPendingColors(current=>current?{...current,requests:current.requests.map((r,i)=>i===index?{...r,color}:r)}:null)}/>)}</div></div>)}</div><div className="sujeongi-color-actions"><button type="button" disabled={busy} onClick={()=>setPendingColors(null)}>요청 다시 작성</button><button type="button" disabled={busy||pendingColors.requests.some(r=>!/^#[\da-f]{6}$/i.test(r.color))} onClick={()=>{const instruction=selectedColorInstruction(pendingColors.instruction,pendingColors.requests);append('user',pendingColors.requests.map(r=>`${r.target}: ${r.color}, 투명도 ${Math.round((1-r.opacity)*100)}%`).join(', '));void execute(instruction,true);}}>선택한 색으로 적용</button></div></section>}
-      <details className="sujeongi-symbols" hidden={!!pendingColors}><summary>그래프에 넣을 수 있는 기호</summary><p>기호를 선택하면 요청 예시가 입력됩니다. 위치와 색을 함께 적어 주세요.</p><div className="sujeongi-symbol-grid">{[['→','오른쪽 화살표'],['↗','상승 화살표'],['↘','하락 화살표'],['↔','양쪽 화살표'],['★','별'],['●','원'],['■','사각형'],['▲','삼각형'],['✓','체크'],['!','느낌표'],['♥','하트'],['◆','다이아몬드']].map(([symbol,name])=><button key={symbol} type="button" disabled={busy||!!pendingColors} aria-label={`${name} 기호 요청 예시`} onClick={event=>{setDraft(`그래프 가운데에 ${symbol} ${name} 기호를 크게 넣어줘`);event.currentTarget.closest("details")?.removeAttribute("open");}}><b aria-hidden="true">{symbol}</b>{name}</button>)}</div></details>
-      <form className="sujeongi-composer" onSubmit={submit}><textarea rows={2} aria-label={inline?"자연어 그래프 수정":"수정이에게 수정 요청"} value={draft} maxLength={1000} onChange={event=>setDraft(event.target.value)} disabled={busy||!!pendingColors} placeholder="예: 막대 그래프로 변경해줘"/><button type="submit" disabled={busy||!!pendingColors||(!draft.trim()&&!canSubmitMarks)}>{busy?"수정 중…":"전송"}</button></form>
+      {recovery&&<section className="agent-recovery" aria-label="수정 역질문"><strong>어떤 정보를 보완해 수정할까요?</strong><p>{recovery}</p><label>보완할 수정 요소<select aria-label="보완할 수정 요소" value={recoverTarget} onChange={e=>setRecoverTarget(e.target.value)}><option value="">요소를 선택하세요</option>{['제목','범례','가로축','세로축','기간 강조',...targets].map(target=><option key={target}>{target}</option>)}</select></label><label>추가 설명<input aria-label="수정 보완 설명" value={extraInfo} maxLength={500} onChange={e=>setExtraInfo(e.target.value)} placeholder="원하는 제목·색상·시점 등을 적어 주세요"/></label><button disabled={busy||!recoverTarget||!extraInfo.trim()} onClick={()=>{const combined=[draft,`수정 대상: ${recoverTarget}`,`추가 설명: ${extraInfo.trim()}`].join('\n');if(combined.length>1000){setRecovery('수정 요청과 추가 설명을 합쳐 1000자 이내로 줄여 주세요.');return;}setDraft(combined);void execute(combined);}}>선택과 설명으로 이어서 수정</button><button disabled={busy} onClick={()=>void execute(draft.trim(),true)}>같은 요청 다시 시도</button><button onClick={()=>document.querySelector<HTMLTextAreaElement>('.sujeongi-composer textarea')?.focus()}>변경 내용 보완</button></section>}
+      <details className="reference-upload"><summary>참고 그래프 첨부</summary><label>참고 그래프 업로드<input aria-label="참고 그래프 업로드" type="file" accept="image/png,image/jpeg,image/webp,application/pdf" multiple disabled={busy} onChange={e=>{void attach(e.target.files);e.target.value='';}}/></label><small>PNG·JPG·WebP·PDF · 최대 3개, 각각 4MB · PDF 5쪽 이하. 전송하면 참고 파일을 OpenAI로 보내 형식을 분석합니다.</small>{references.map((file,index)=><div key={index}>{file.mime.startsWith('image/')&&<img src={file.data_url} alt={`${file.name} 참고 미리보기`}/>}<span>{file.name}</span><button type="button" disabled={busy} onClick={()=>setReferences(current=>current.filter((_,i)=>i!==index))}>첨부 제거</button></div>)}{fileError&&<p role="alert">{fileError}</p>}</details>
+      <form className="sujeongi-composer" onSubmit={submit}><textarea rows={2} aria-label={inline?"자연어 그래프 수정":"수정이에게 수정 요청"} value={draft} maxLength={1000} onChange={event=>setDraft(event.target.value)} disabled={busy||!!pendingColors} placeholder="예: 막대 그래프로 변경해줘"/><button type="submit" disabled={busy||!!pendingColors||(!draft.trim()&&!canSubmitMarks&&!references.length)}>{busy?"수정 중…":"전송"}</button></form>
     </section>}
     {!inline&&<button type="button" className={`sujeongi-fab ${dragging?"dragging":""}`} style={{left:position.x,top:position.y}}
       aria-label="그래프 수정 채팅 열기. 캐릭터를 끌어서 이동할 수 있습니다" aria-expanded={open} title="클릭하면 수정 채팅 · 끌어서 위치 이동"

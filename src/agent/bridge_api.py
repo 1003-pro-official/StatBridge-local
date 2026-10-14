@@ -1,4 +1,5 @@
 from __future__ import annotations
+from execution_trace import initial_traces, edit_trace
 
 import os
 import copy
@@ -49,6 +50,18 @@ class _NoKeyClient:
         raise RuntimeError("KOSIS_API_KEY가 설정되지 않았습니다.")
 
 app = FastAPI(title="StatBridge Agent API", version="0.6.0")
+from fastapi import Request
+from fastapi.responses import JSONResponse
+from fastapi.exception_handlers import http_exception_handler
+from recovery import recovery_question
+
+
+@app.exception_handler(HTTPException)
+async def actionable_error(request: Request, exc: HTTPException):
+    if exc.status_code in (400, 409, 422, 429, 500, 502, 503, 504) and request.url.path.startswith('/api/'):
+        stage = 'edit' if request.url.path.endswith('/edit') else 'output' if '/output' in request.url.path else 'query'
+        return JSONResponse(status_code=exc.status_code, content={'detail':exc.detail,'recovery':recovery_question(exc.detail,stage,issue='connection' if exc.status_code in (429,500,502,503,504) else None)},headers=exc.headers)
+    return await http_exception_handler(request,exc)
 # The agent is the only UI-facing orchestration layer. It calls the same service exposed as MCP tools.
 try:
     service = StatisticsService()
@@ -58,7 +71,14 @@ except RuntimeError as exc:
     service = StatisticsService(client=_NoKeyClient())
 mcp_gateway = McpToolGateway(service)
 agent = StatBridgeAgent(service=mcp_gateway)
-edit_agent = ChartEditAgent(Hcx007EditModel(agent.ncp), agent.output_agent)
+from openai_chart_client import OpenAIChartClient, OpenAIEditModel
+from chart_reference import ChartReference
+if os.getenv('STATBRIDGE_OUTPUT_PROVIDER', 'openai') == 'ncp':
+    edit_agent = ChartEditAgent(Hcx007EditModel(agent.ncp), agent.output_agent)
+else:
+    chart_client = OpenAIChartClient()
+    agent.output_agent.ncp_client = chart_client
+    edit_agent = ChartEditAgent(OpenAIEditModel(chart_client), agent.output_agent)
 
 
 class ClarificationSelection(BaseModel):
@@ -101,6 +121,7 @@ class EditConversationMessage(BaseModel):
 
 
 class OutputEditRequest(BaseModel):
+    reference_files: list[ChartReference] = Field(default_factory=list, max_length=3)
     edit_session_id: str
     instruction: str = Field(default="", max_length=1000)
     visual: VisualEditContext | None = None
@@ -231,10 +252,7 @@ import account_auth
 account_auth.install(app,ROOT,OUTPUT_SESSIONS,EDIT_SESSIONS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5173", "http://localhost:5173",
-        "http://127.0.0.1:5174", "http://localhost:5174",
-    ],
+    allow_origins=sorted(account_auth.ALLOWED_ORIGINS),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -307,15 +325,14 @@ def _catalog_card(table: dict[str, Any], metadata: Any | None = None) -> dict[st
         values = dimension.get("values") or []
         dimension_values = [str(v.get("normalized") or v.get("value_name") or "") for v in values]
         meta_dimension = metadata_dimensions[index - 1] if index <= len(metadata_dimensions) else {}
-        meta_values = meta_dimension.get("values") or []
-        if meta_values:
-            dimension_values = [str(v.get("class_name") or "") for v in meta_values]
+        # Only selectable dictionary codes are presented as query choices.
+        # Metadata also contains hierarchy nodes without local series.
         dimension_values = [value for value in dimension_values if value]
         raw_name = str(meta_dimension.get("obj_name") or dimension.get("dimension_name") or "")
         public_dimensions.append({
             "name": _friendly_dimension_name(raw_name, dimension_values, index),
-            "count": len(meta_values) if meta_values else len(values),
-            "values": dimension_values,
+            "count": len(values),
+            "values": [str(v.get("value_name") or v["value_id"]) for v in values],
             "apiParam": str(dimension.get("api_param") or ""),
             "valueOptions": [{"id": str(v["value_id"]), "name": str(v.get("value_name") or v["value_id"])} for v in values],
             "defaultValueId": str(dimension.get("representative_value_id") or (values[0]["value_id"] if values else "")),
@@ -591,12 +608,20 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     if result.get("status") != "resolved":
         missing = [str(x) for x in result.get("missing_series") or []]
         missing_text = f" 지원 데이터에서 찾지 못한 지표: {', '.join(missing)}." if missing else ""
+        try:
+            requested_period = explicit_period(q) or {}
+        except ValueError:
+            requested_period = {}
         return {
             "status": "no_match",
             "query": q,
             "interpretedQuery": result.get("dictionary_query") or q,
             "summary": "요청한 모든 지표에 대응하는 통계표를 찾지 못했습니다." + missing_text,
-            "period": {"start": "-", "end": "-"},
+            "requiresQueryRefinement": True,
+            "refinementQuestion": ("지원 목록에서 「" + ', '.join(missing) + "」에 대응하는 표를 확인하지 못했습니다. 정확한 지표명이나 통계표 이름을 알려 주시겠어요?") if missing else "요청과 일치하는 표를 확정하지 못했습니다. 조회할 지표와 기준을 구체적으로 알려 주시겠어요?",
+            "period": {"start": payload.period_start or requested_period.get('start',''), "end": payload.period_end or requested_period.get('end','')},
+            "state": result.get('state') or payload.state,
+            "recovery": recovery_question('지원 목록에서 확인되지 않은 지표: ' + ', '.join(missing) if missing else '요청 조건에 대응하는 통계표를 확인하지 못했습니다.', issue='no_match'),
             "frequency": "-",
             "chart": [], "tables": [], "insights": [],
             "lineage": [
@@ -627,6 +652,16 @@ def query(payload: QueryRequest) -> dict[str, Any]:
         result["api_plan"] = agent.build_api_plan(q, selected).as_dict()
         result["api_plans"] = [result["api_plan"]]
         result.setdefault("state", {})["_dimension_values"] = dimension_selection
+    missing_dimensions = list(dict.fromkeys(label for item in result.get('selected_tables', []) for label in item.get('_missing_dimensions', [])))
+    if missing_dimensions:
+        plans = result.get('api_plans') or [result['api_plan']]
+        requested_period = explicit_period(q) or {}
+        detail = f"요청한 통계표 {len(plans)}개와 조회 기간을 확인했습니다. 조회할 분류가 지정되지 않아 데이터 호출을 기다리고 있습니다."
+        return {'status': 'need_details', 'query': q, 'interpretedQuery': q,
+                'summary': detail, 'period': {'start': payload.period_start or requested_period.get('start', ''), 'end': payload.period_end or requested_period.get('end', '')},
+                'frequency': '/'.join(dict.fromkeys(p['frequency'] for p in plans)), 'chart': [], 'tables': [_table_card(p['table_id']) for p in plans],
+                'insights': [], 'warnings': [], 'state': result.get('state') or {},
+                'recovery': {'issue': 'dimensions', 'requirements': missing_dimensions, 'question': '아래에서 필요한 분류를 확인해 질문에 넣어 주세요. 입력하신 통계표와 기간은 유지됩니다.', 'choices': [{'id': 'revise', 'label': '조회 조건 입력'}, {'id': 'table', 'label': '통계표 분류 확인'}], 'preserveState': True}}
     plan = result["api_plan"]
     plans = result.get("api_plans") or [plan]
     table_name = " · ".join(str(x.get("series_label") or x["table_name"]) for x in plans)
@@ -704,9 +739,11 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     execute_ms = round((time.perf_counter() - execution_started) * 1000)
 
     if result.get("status") == "no_match":
-        return {"status":"no_match", "query":q, "summary":"입력한 통계와 조회 대상이 일치하지 않아 출력을 중단했습니다.",
+        return {"status":"no_match", "query":q, "interpretedQuery":q, "summary":"입력한 통계와 조회 대상이 일치하지 않아 출력을 중단했습니다.",
+                "period":{"start":selected_start,"end":selected_end}, "frequency":frequency_label,
+                "recovery":recovery_question("조회 조건과 실제 조회 계획이 일치하지 않습니다.",issue='no_match'),
                 "state":result.get("state"), "warnings":result.get("request_validation",{}).get("errors",[]),
-                "requestValidation":result.get("request_validation"), "chart":[], "rows":[]}
+                "requestValidation":result.get("request_validation"), "tables":[], "insights":[], "chart":[], "rows":[]}
 
     plan = result["api_plan"]
     plans = result.get("api_plans") or [plan]
@@ -763,10 +800,14 @@ def query(payload: QueryRequest) -> dict[str, Any]:
         warnings = []
     else:
         summary = f"Agent가 '{plan['table_name']}'과 실제 사전의 API ID를 확정했습니다. KOSIS 실행 단계에서 오류가 발생했지만 생성된 요청 파라미터는 확인할 수 있습니다."
+        if 'KOSIS_API_KEY가 설정되지 않았습니다.' in str(execution.get('error') or ''):
+            summary = (f"{plan['table_name']}의 조회 조건은 확인했습니다. 실제 수치 조회를 위해 "
+                       "이 프로젝트 .env에 KOSIS_API_KEY를 입력하고 START_STATBRIDGE.cmd로 다시 실행해 주세요.")
         warnings = [str(execution.get("error") or "KOSIS API 실행 오류")]
 
     return {
         "status": "resolved" if execution_status in {"success", "planned_only"} else "data_unavailable",
+        **({"recovery": recovery_question(execution.get("error") or "통계 조회 결과를 확인하지 못했습니다.")} if execution_status not in {"success", "planned_only"} else {}),
         "periodSelection": period_selection,
         "query": q,
         "interpretedQuery": table_name,
@@ -882,7 +923,8 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     if len(EDIT_SESSIONS) >= MAX_EDIT_SESSIONS:
         EDIT_SESSIONS.pop(next(iter(EDIT_SESSIONS)))
     output.update(editVersion=0, canUndo=False, canRedo=False)
-    EDIT_SESSIONS[edit_session_id] = {"account_id":(account_auth.USER.get() or {}).get("id"), "result": merged, "output": output, "sessions": sessions, "undo": [], "redo": [],'initial':copy.deepcopy({'result':merged,'sessions':sessions,'chartState':output['chartState']})}
+    execution_runs=initial_traces(results,rendered,merged)
+    EDIT_SESSIONS[edit_session_id] = {"account_id":(account_auth.USER.get() or {}).get("id"), "result": merged, "output": output, "sessions": sessions, "undo": [], "redo": [],"executionRuns":execution_runs,'initial':copy.deepcopy({'result':merged,'sessions':sessions,'chartState':output['chartState']})}
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     plans = rendered.get("api_plans") or [rendered.get("api_plan")]
@@ -908,6 +950,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
         "chartType": visualization.get("chartType") or payload.chart_type,
         "outputSpec": output,
         "editSessionId": edit_session_id,
+        "executionRuns":execution_runs,
         "seriesCount": len(chart),
         "tables": [_table_card(str(plan["table_id"])) for plan in plans],
         "insights": [
@@ -940,8 +983,19 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
     revision = previous.get("editVersion", 0)
     if payload.revision is not None and payload.revision != revision:
         raise HTTPException(status_code=409, detail="그래프가 변경되었습니다. 최신 그래프에서 다시 수정해 주세요.")
+    used_edit_graph=False
     candidate_result=session["result"]
     candidate_sessions=session["sessions"]
+    if payload.visual and payload.visual.reference_files:
+        if payload.reference_files:
+            raise HTTPException(status_code=422, detail='참고 파일은 한 곳에만 첨부해 주세요.')
+        payload.reference_files = payload.visual.reference_files
+    if payload.reference_files:
+        if not edit_agent.model.supports_images:
+            raise HTTPException(status_code=422, detail='현재 모델은 참고 파일을 읽을 수 없습니다. 이미지 입력 모델을 설정해 주세요.')
+        if payload.action != 'edit' or payload.commands or payload.document or payload.restore_initial or payload.append_session_ids or payload.replace_session_ids:
+            raise HTTPException(status_code=422, detail='참고 파일은 자연어 수정 내용과 함께 별도로 적용해 주세요.')
+        payload.visual = (payload.visual or VisualEditContext()).model_copy(update={'reference_files':payload.reference_files})
     period_update=None
     try:
         data_change=bool(payload.append_session_ids or payload.replace_session_ids)
@@ -1027,14 +1081,16 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
                     [ChartEditCommand(operation="set_stickers", kind="STYLE_EDIT",
                         params={"items": [s.model_dump() for s in payload.stickers]})], generate_explanation=False)
                 baseline["editCapabilities"] = previous.get("editCapabilities", {})
-            if period_update and period_update["only_period"] and not (payload.visual and any(m.text.strip() for m in payload.visual.marks)):
+            if period_update and period_update["only_period"] and not payload.reference_files and not (payload.visual and any(m.text.strip() for m in payload.visual.marks)):
                 output=baseline
             else:
                 try:
+                    used_edit_graph=True
                     output = edit_agent.edit(candidate_result, {**baseline, "editConversation": [m.model_dump() for m in payload.conversation[-40:]]}, payload.instruction,
                                          payload.visual.model_dump() if payload.visual else None)
                 except ValueError as error:
-                    if period_update and "변경된 내용이 없습니다" in str(error): output=baseline
+                    if period_update and "변경된 내용이 없습니다" in str(error):
+                        output=baseline;used_edit_graph=False
                     else: raise
         else:
             history = session.get(payload.action, [])
@@ -1063,11 +1119,14 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         session["output"] = output
         session["result"] = candidate_result
         session["sessions"] = candidate_sessions
+        session["executionRuns"]=[*session.get("executionRuns",[]),edit_trace(payload,output,used_edit_graph=used_edit_graph,period_update=bool(period_update))][-200:]
     return workspace_response(session,payload,period_update)
 
 
 def workspace_response(session,payload,period_update=None):
-    output=session["output"]
+    output={**session["output"], 'editCapabilities':{
+        'model':getattr(getattr(edit_agent,'model',None),'model_name','configured-editor'),
+        'supportsImages':getattr(getattr(edit_agent,'model',None),'supports_images',False)}}
     visualization = output.get("visualization") or {}
     chart = visualization.get("series") or []
     sessions = session["sessions"]
@@ -1088,6 +1147,7 @@ def workspace_response(session,payload,period_update=None):
         "chartType": visualization.get("chartType"),
         "outputSpec": output,
         "editSessionId": payload.edit_session_id,
+        "executionRuns":session.get("executionRuns",[]),
         "seriesCount": len(chart),
         "tables": [_table_card(str(plan["table_id"])) for plan in plans],
         "insights": output.get("editChanges") or ["편집 취소" if payload.action == "undo" else "편집 다시 적용"],

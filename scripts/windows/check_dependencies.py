@@ -4,7 +4,10 @@ from pathlib import Path
 import subprocess
 import sys
 
-from pip._vendor.packaging.requirements import Requirement
+try:
+    from packaging.requirements import Requirement
+except ImportError:
+    from pip._vendor.packaging.requirements import Requirement
 
 
 def requirement_errors(lines, lookup=version):

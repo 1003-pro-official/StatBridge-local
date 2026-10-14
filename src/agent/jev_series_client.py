@@ -19,7 +19,7 @@ def _env(name: str, default: str = "") -> str:
 
 @dataclass(slots=True)
 class JevSettings:
-    api_key: str = field(default_factory=lambda: _env("TYPESAFE_API_KEY"))
+    api_key: str = field(default_factory=lambda: _env("JEV_API_KEY") or _env("TYPESAFE_API_KEY"))
     endpoint: str = field(default_factory=lambda: _env("TYPESAFE_ENDPOINT", "https://api.typesafe.ai").rstrip("/"))
     model: str = field(default_factory=lambda: _env("STATBRIDGE_JEV_MODEL", "jev-preview") or "jev-preview")
     enabled: bool = field(default_factory=lambda: _env("STATBRIDGE_JEV_ENABLED", "1").lower() not in {"0", "false", "no", "off"})
@@ -86,7 +86,7 @@ class JevSeriesClient:
         if not self.settings.enabled:
             raise JevSeriesError("Jev is disabled")
         if not self.settings.api_key:
-            raise JevSeriesError("TYPESAFE_API_KEY is not configured")
+            raise JevSeriesError("JEV_API_KEY (or TYPESAFE_API_KEY) is not configured")
         started = time.perf_counter()
         try:
             response = self.session.post(

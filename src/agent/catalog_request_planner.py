@@ -16,15 +16,30 @@ def normalize(query):
     if '서비스수지' in q:
         q = re.sub(r'(?<!서비스)수입', '서비스수입', q)
         q = re.sub(r'(?<!서비스)지급', '서비스지급', q)
-    q = q.replace('계절조정된', '계절조정')
+    q = q.replace('계절조정된', '계절조정').replace('계절요인을제거한','계절조정')
     return q
 
 def unavailable(query, tables):
     q = compact(query)
     names = ' '.join((compact(t['table_name']) for t in tables))
-    for term in ('연체율', '전망치'):
+    measured=' '.join(compact(value) for t in tables for value in [t['table_name'],*t.get('item_names',[]),*[v['value_name'] for d in t.get('dimensions',[]) for v in d.get('values',[])]])
+    # A borrower/population qualifier cannot be substituted by a nearby loan or survey series.
+    for subject in ('취약차주','다주택자','자영업자','소상공인','예금자보호','예금보호'):
+        if subject in q:
+            scoped=measured
+            if '대출' in q:
+                scoped=' '.join(compact(value) for t in tables if any(w in compact(t['table_name']) for w in ['대출','가계신용']) for value in [t['table_name'],*[v['value_name'] for d in t.get('dimensions',[]) for v in d.get('values',[])]])
+            if any(w in q for w in ['심리','체감경기']):
+                scoped=' '.join(compact(value) for t in tables if any(w in compact(t['table_name']) for w in ['심리','경기','소비자동향']) for value in [t['table_name'],*[v['value_name'] for d in t.get('dimensions',[]) for v in d.get('values',[])]])
+            if subject not in scoped:return subject
+    if '가계부채' in q and 'gdp' in q and any(w in q for w in ['비율','대비']) and not any('가계부채' in compact(t['table_name']) and 'gdp' in compact(t['table_name']) for t in tables):return 'GDP 대비 가계부채 비율'
+    if '주택시장' in q and '심리' in q and not any('주택시장' in compact(t['table_name']) and '심리' in compact(t['table_name']) for t in tables):return '주택시장 심리 지표'
+    for term in ('연체율','고정이하여신비율','전망치','총부채원리금상환비율'):
         if term in q and term not in names:
             return term
+    if any(word in q for word in ['미국','미시간','유로지역','글로벌']) and any(word in q for word in ['경제심리','소비심리','기대인플레이션']):
+        matched=[t for t in tables if any('sentiment' in d for d in t.get('domains',[])) and any(word in compact(t['table_name']) for word in ['국가별','지역별']) and any(word in ' '.join(compact(v['value_name']) for dim in t['dimensions'] for v in dim['values']) for word in ['미국','유로지역'])]
+        if not matched:return '요청하신 국가·조사의 심리 지표'
     if '금리' in q and any((t in q for t in ('국고채', '회사채'))) and (not any((t in names for t in ('국고채금리', '회사채금리')))):
         return '채권 금리'
     return None
@@ -32,7 +47,7 @@ def unavailable(query, tables):
 def domains(query):
     q = normalize(query)
     wanted = []
-    for word in ('생산자물가', '수출물가', '수입물가', '수출물량', '수입물량'):
+    for word in ('생산자물가', '수출물가', '수입물가', '수출물량', '수입물량','수출금액','수입금액'):
         if word in q:
             wanted.append((word, word))
     if wanted:
@@ -44,7 +59,8 @@ def domains(query):
     if '대출' in q and any((w in q for w in ('제조업', '부동산업', '산업별', '업종별'))):
         return [('산업대출', '산업별대출금')]
     if '기여' in q and any((w in q for w in ('gdp', '성장', '내수', '순수출'))):
-        return [('성장기여도', '지출항목별성장기여도')]
+        return ([('GDP지출','국내총생산에대한지출')] if '규모' in q else [])+[('성장기여도', '지출항목별성장기여도')]
+    if '계절조정' in q and '실질' in q and '재화' in q and '서비스' in q and ('수출' in q or '수입' in q):return [('GDP지출','국내총생산에대한지출')]
     if '계절조정' in q and '실질' in q and any((w in q for w in ('최종소비지출', '민간소비', '정부소비', '건설투자', '설비투자'))):
         return [('GDP지출', '국내총생산에대한지출')]
     if any((w in q for w in ('상품수지', '서비스수지', '본원소득수지', '여행수지', '운송수지'))):
@@ -62,27 +78,38 @@ def domains(query):
     return []
 
 def dimension_values(query, dimension):
-    q = normalize(query)
-    matches = []
-    for value in dimension.get('values', []):
-        name = compact(value['value_name'])
-        terms = {name}
-        if name.startswith('처리'):
-            terms.add(name[2:])
-        if name in {'민간', '정부'}:
-            terms.update({name + '소비', name + '최종소비지출'})
-        for term in terms:
-            if len(term) < 2:
-                continue
-            for match in re.finditer(re.escape(term), q):
-                if q[match.end():].startswith('에서'):
-                    continue
-                matches.append((match.start(), match.end(), value, term))
-    kept = [m for m in matches if not any((n[0] <= m[0] and n[1] >= m[1] and (n[1] - n[0] > m[1] - m[0]) for n in matches))]
-    bycode = {m[2]['value_id']: m[2] for m in sorted(kept, key=lambda m: m[0])}
-    return list(bycode.values())
+    from semantic_catalog_planner import matches
+    return matches(query,dimension)
 
-def selections(query, tables):
+
+def legacy_selections(query, tables):
+    # Derive shared-name variants from every canonical catalog title.
+    families = {}
+    for table in tables:
+        match = re.fullmatch(r'(.+?)\s*\(([^()]+)\)', table['table_name'])
+        if match:
+            base, suffix = match.groups()
+            families.setdefault(compact(base), {}).setdefault(re.sub(r'\s+', '', suffix).lower(), []).append(table)
+    expanded = query
+    changed = False
+    for base, variants in sorted(families.items(), key=lambda pair: -len(pair[0])):
+        if len(variants) < 2:
+            continue
+        base_pattern = r'[\s·/,.~]*'.join(map(re.escape, base))
+        suffix_pattern = '|'.join(r'\s*'.join(map(re.escape,v)) for v in sorted(variants, key=len, reverse=True))
+        pattern = rf'{base_pattern}\s*((?:{suffix_pattern})(?:\s*(?:,|/|·|및|와|과|그리고)\s*(?:{suffix_pattern}))+)(?![가-힣])'
+        for match in reversed(list(re.finditer(pattern, expanded, re.I))):
+            suffixes = [re.sub(r'\s+', '', v).lower() for v in re.findall(suffix_pattern, match.group(1), re.I)]
+            if any(len(variants[v]) != 1 for v in suffixes):
+                return []
+            names = ['「' + variants[v][0]['table_name'] + '」' for v in dict.fromkeys(suffixes)]
+            expanded = expanded[:match.start()] + ' 그리고 '.join(names) + expanded[match.end():]
+            changed = True
+    if changed:
+        from canonical_request_planner import instruction_text
+        residual = instruction_text(expanded, tables)
+        if not structure_request(residual)['metrics'] and not unsupported_quantity_terms(residual, tables):
+            return canonical_selections(expanded, tables, allow_combined_values=True)
     explicit = canonical_selections(query, tables)
     if explicit:
         return explicit
@@ -99,7 +126,7 @@ def selections(query, tables):
     if structure_request(query)['explicit_ids'] or unavailable(query, tables) or unsupported_quantity_terms(query, tables):
         return []
     covered = set()
-    domain_metrics = {'가계대출': {'대출'}, '가계신용': {'대출'}, '산업대출': {'대출'}, '성장기여도': {'GDP', '수출'}, 'GDP지출': {'GDP'}, '국제수지': {'수출', '수입'}, '경상수지': set(), '지급수단': {'신용카드'}, '결제시스템': set(), '금융망': set(), '외환결제': set()}
+    domain_metrics = {'가계대출': {'대출'}, '가계신용': {'대출'}, '산업대출': {'대출'}, '성장기여도': {'GDP', '수출'}, 'GDP지출': {'GDP','수출','수입'}, '국제수지': {'수출', '수입'}, '경상수지': set(), '지급수단': {'신용카드'}, '결제시스템': set(), '금융망': set(), '외환결제': set()}
     for domain, _ in requested_domains:
         covered.update(domain_metrics.get(domain, {domain}))
     if set(requested['metrics']) - covered:
@@ -142,6 +169,9 @@ def selections(query, tables):
             if not coverage:
                 continue
             score = coverage * 100
+            if any(w in q for w in ['제외','뺀','이외']) and any(any(w in v['value_name'] for w in ['이외','제외']) for vs in groups for v in vs):score+=500
+            if domain=='금융망' and '처리' in q and title=='한은금융망':score+=100
+            if domain=='금융망' and '처리' not in q and '결제통계표' in title:score+=100
             if '지역' in title and '지역' not in q:
                 score -= 200
             if '업권별' in title and domain in {'가계대출', '가계신용'}:
@@ -162,3 +192,28 @@ def selections(query, tables):
             hits = [{'api_param': d['api_param'], 'value_id': v['value_id'], 'value_name': v['value_name']} for d, v in zip(table['dimensions'], combo) if v]
             result.append({'table_id': table['table_id'], 'table_name': table['table_name'], 'dimension_hits': hits, 'score': 300, 'reasons': ['catalog_measured_concept:' + domain]})
     return result
+
+
+def selections(query,tables):
+    # Bare rates coordinated with another measure need independent clarification.
+    if re.search(r'(?:^|까지(?:의)?\s+|(?:최근|현재)\s+)금리(?:와|과)\s',query):return []
+    names={}
+    for table in tables:names.setdefault(table['table_name'],[]).append(table)
+    for name,group in names.items():
+        if len(group)>1 and compact(name.split('(')[0]) in compact(query) and not any(t.get('period_end_observed') for t in group):return []
+    foreign=any(word in query for word in ['미국','미시간','유로지역','글로벌','해외'])
+    if foreign and any(word in query for word in ['심리','체감경기','기대인플레이션']):
+        eligible=[t for t in tables if not any('sentiment' in domain for domain in t.get('domains',[])) or any(word in str(t.get('table_name')) for word in ['지역별','국가별'])]
+        tables=eligible
+    explicit=canonical_selections(query,tables)
+    if explicit:return explicit
+    if structure_request(query)['explicit_ids']:return []
+    if unavailable(query,tables) or unsupported_quantity_terms(query,tables):return []
+    from semantic_catalog_planner import selections as semantic_selections
+    legacy=legacy_selections(query,tables)
+    if legacy and all('explicit_catalog_scope' in item.get('reasons',[]) for item in legacy):return legacy
+    protected={'GDP지출','성장기여도','국제수지','경상수지','생산자물가','수출물가','수입물가','수출물량','수입물량','가계대출','산업대출','금융망'}
+    if legacy and any(domain in protected for domain,_ in domains(query)) and not ('기업대출' in query and '가계대출' in query and '금리' not in query) and not ('여행수지' in query and '운송수지' not in query and not any(w in query for w in ['상품수지','서비스수지','본원소득'])):return legacy
+    selected=semantic_selections(query,tables)
+    if selected:return selected
+    return legacy

@@ -130,11 +130,11 @@ def scoped_metric_query(query, table, mentions):
 def unsupported_quantity_terms(query, tables):
     """Unsupported explicitly named quantities must not disappear in a multi-query."""
     catalog=' '.join(compact(value) for t in tables for value in
-                     [t.get('table_name',''),*t.get('aliases',[]),*t.get('public_query_terms',[])])
+                     [t.get('table_name',''),*t.get('aliases',[]),*t.get('public_query_terms',[]),*[v.get('value_name','') for d in t.get('dimensions',[]) for v in d.get('values',[])]])
     unknown=[]
     for word in re.findall(r'[가-힣a-zA-Z]+',str(query)):
         term=re.sub(r'(?:으로|까지|부터|에서|을|를|은|는|의|와|과)$','',word)
-        if len(term)>=3 and term.endswith(('지수','금리','물가','사용량','발전량','생산량','소비량')) and compact(term) not in catalog:
+        if len(term)>=3 and term.endswith(('지수','금리','물가','사용량','발전량','생산량','소비량','실업률','전세가율','연체율')) and compact(term) not in catalog:
             unknown.append(term)
     return list(dict.fromkeys(unknown))
 

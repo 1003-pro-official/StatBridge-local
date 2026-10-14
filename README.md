@@ -1,6 +1,6 @@
 # StatBridge
 
-현재 작업 저장소는 [Engineer3rd-Class-Kimmin/StatBridge-local1](https://github.com/Engineer3rd-Class-Kimmin/StatBridge-local1)이다. Windows에서는 `scripts/windows/START_STATBRIDGE.cmd`로 실행한다. 통합 HTTP 실행 모듈은 `src/agent/agent_runtime.py`이며 기존 `statbridge_agent/` 패키지도 보존한다.
+이 저장소는 [1003-pro-official/StatBridge-local](https://github.com/1003-pro-official/StatBridge-local)이다. Windows에서는 `scripts/windows/START_STATBRIDGE.cmd`로 실행한다. 통합 HTTP 실행 모듈은 `src/agent/agent_runtime.py`이며 기존 `statbridge_agent/` 패키지도 보존한다.
 
 오늘의 출력 에이전트·Jev 패치·평가 기록은 [통합 작업 요약](docs/운영/2026-10-01-통합-작업-요약.md), 저장소 이전 과정은 [저장소 이전 기록](docs/운영/2026-10-01-저장소-이전.md)에 정리했다.
 
@@ -29,15 +29,21 @@
 
 GitHub의 **Code → Download ZIP**으로 받은 파일을 먼저 압축 해제한 뒤, scripts/windows 폴더의 **`scripts/windows/START_STATBRIDGE.cmd`**를 더블클릭합니다. ZIP 내부에서 직접 실행하지 마세요.
 
-런처가 Python·Node.js·가상환경·패키지를 검사하고 필요한 환경을 준비합니다. API 키가 없으면 `.env`를 만들고 메모장을 열어 KOSIS·CLOVA 키 입력을 안내합니다. 키 자체는 배포하지 않습니다.
+루트의 **`START_STATBRIDGE.cmd`** 또는 `scripts/windows/START_STATBRIDGE.cmd`를 실행합니다. Python 3.11~3.13 64비트와 Node.js 20.19+ 또는 22.12+를 확인하고, 이 PC의 가상환경 및 잠금 파일 기준 패키지를 준비합니다. 지원되는 Python이나 Node.js가 없으면 `winget`으로 설치를 시도하며, 사용할 수 없으면 설치할 항목을 안내합니다. 인터넷과 패키지 설치 권한은 최초 설치에 필요합니다.
 
-첫 실행에는 349개 표의 벡터 인덱스도 생성합니다. 최대 1,047개 문서의 Embedding v2 API 호출과 패키지 다운로드로 시간이 걸리며 API 사용량이 발생합니다. 다음 실행에는 인덱스 내용과 사전의 일치 여부를 확인하고 기존 캐시를 재사용합니다. 인터넷 연결과 해당 API 사용 권한이 필요합니다.
+기존 API·UI 프로세스가 패키지 파일을 잠그지 않도록 이 폴더에서 기록한 서비스부터 종료하고 설치합니다. 복사된 가상환경이 맞지 않으면 보존한 뒤 다시 만들며, 프런트엔드 네이티브 패키지와 실제 Vite 실행도 검사합니다. `RUN_AGENT.cmd`, `RUN_FRONTEND.cmd`, `RUN_MCP.cmd`는 같은 준비·실행 경로로 연결됩니다.
 
-준비가 끝나면 Agent API·MCP·UI를 실행하고 브라우저를 엽니다. 종료는 `scripts/windows/STOP_STATBRIDGE.cmd`로 합니다. 다른 프로그램이 8000/5173 포트를 사용하면 강제로 종료하지 않고 안내합니다. 실행 로그는 Git에 포함하지 않는 `.venv/cache/evaluation_runs/`에 남습니다. Python/Node 자동 설치는 Windows Package Manager(`winget`)가 필요하며 설치 정책·관리자 권한에 막히면 화면의 안내대로 설치한 뒤 다시 실행합니다.
+API 키가 없으면 `.env.example`에서 이 폴더의 `.env`를 준비하고 화면·로그인·카탈로그를 먼저 실행합니다. 실제 KOSIS 수치 조회, NCP 자연어 해석·벡터 검색, OpenAI 그래프 수정은 해당 키가 있어야 사용할 수 있습니다. 키 이름과 설정 여부만 출력하며 값은 출력하지 않습니다. `scripts/windows/EDIT_API_KEYS.cmd`로 이 프로젝트의 설정을 입력할 수 있습니다.
 
-기존 설치에서 업데이트한 경우에도 런처가 Python Plotly와 프런트 `plotly.js-dist-min`을 검사해 빠진 출력 의존성을 설치합니다. 루트의 START_STATBRIDGE.cmd와 STOP_STATBRIDGE.cmd도 같은 정본 스크립트에 위임합니다.
+벡터 인덱스가 없는 첫 실행에는 사전 검색을 사용합니다. NCP 키와 사용 권한을 준비한 후 `START_STATBRIDGE.cmd --build-index` 또는 `scripts/windows/RUN_VECTOR_BUILD.cmd`를 실행하면 임베딩 인덱스를 생성합니다. 인덱스 생성 실패가 일반 화면 실행을 막지 않도록 분리했습니다.
+
+환경만 확인하려면 **`CHECK_STATBRIDGE.cmd`**를 실행합니다. 설치나 서비스를 변경하지 않고 가상환경, Python 패키지·버전·import, Node.js, 프런트 패키지·네이티브 실행, 키 설정 여부를 검사합니다. 종료는 `STOP_STATBRIDGE.cmd`입니다. 런처는 실행 파일과 생성 시각이 일치하는 기록된 프로세스만 종료하며 다른 프로그램이 포트를 사용하면 안내합니다. 로그는 `.venv/cache/evaluation_runs/`에 있습니다.
+
+팀원에게 소스를 전달할 때는 `.venv`, `.venv.invalid.*`, `node_modules`, 실제 `.env`, 계정 DB와 저장 그래프를 포함하지 마세요. 실행 환경과 키는 팀원 PC에서 새로 준비합니다. 지원 버전·최초 설치·두 폴더 검증 기록은 [CMD 실행 환경 점검](docs/implementation/2026-10-13-windows-launcher-reliability.md)에 있습니다.
 
 ### 그래프 출력과 수정
+
+보고서 요약은 현재 조회된 원자료와 표시 기간을 근거로 존댓말로 작성합니다. 최신 수준, 전월·전분기 대비 변화, 전년동기 비교 또는 관측된 상승·하락 전환과 변화폭을 우선하며 최고·최저 값만 나열하지 않습니다. 비교 시점이 없으면 해당 비교를 생략합니다. 서버가 수치와 문장을 계산하고 GPT-5.4는 검증된 문장의 ID만 선택합니다. 모델의 자유 서술·외부 지식·원인·전망은 표시하지 않으며, 응답이 잘못되거나 연결이 실패하면 같은 근거의 기본 요약을 사용합니다. 누적·평균 등 그래프 변환값을 원자료 수치로 설명하지 않습니다. 제목·색상처럼 요약 근거가 같은 수정에서는 기존 요약을 유지합니다.
 
 10월 6일 팀원 작업과 로컬 후속 패치를 [통합 기록](docs/implementation/2026-10-06-chart-editing-integration.md)에 정리했습니다. 정본 경로와 기존 Windows 런처를 유지합니다.
 
@@ -157,3 +163,30 @@ cd src/agent/frontend && pnpm build
 통합 그래프 워크스페이스, 12시간 로그인·계정별 최대 5개 저장, 반복 편집 렌더링 안정화와 CMD 동기화는 [오늘 작업 정리](docs/implementation/2026-10-12-workspace-auth-render-sync.md)를 참고하세요. 자연어 편집은 그래프 하단 상시 입력창으로 연결하며 별도 채팅 창을 기본 편집 동선으로 사용하지 않습니다. 이전 148종 이미지 대신 보고서 표기를 참고해 만든 화살표 2종을 제공합니다.
 
 Windows 첫 설치와 기존 설치의 의존성 검사 보완 및 새 환경 검증은 [의존성 검증 기록](docs/implementation/2026-10-12-dependency-clean-install-validation.md)을 참고하세요.
+
+역질문으로 실패 작업을 이어가는 흐름, 출력·수정 GPT-5.4 설정, 참고 이미지/PDF 업로드는 [구현 및 검증 기록](docs/implementation/2026-10-12-agent-recovery-openai-reference.md)을 참고하세요. 키는 루트 .env의 OPENAI_API_KEY에 설정하고 재시작합니다.
+
+## 그래프 대화와 편집 기록
+
+그래프 워크스페이스의 왼쪽에는 데이터와 편집 설정, 오른쪽에는 그래프별 채팅이 있습니다. 직접 바꾼 설정도 편집 기록에 남습니다. `새 채팅`에서 이전 대화를 저장하거나 삭제한 뒤 시작하고, `저장한 대화`에서 다시 열 수 있습니다. 대화는 이 브라우저의 로그인 계정별로 저장되며 다른 PC와 자동 동기화되지 않습니다. 대화 저장 시 서버 그래프 저장도 시도합니다(계정당 기존 한도 5개). 자세한 동작과 검증은 [그래프 대화 작업 기록](docs/implementation/2026-10-13-graph-chat-workspace.md)을 참고하세요.
+
+로고·분석 홈 또는 새로고침은 입력과 출력 그래프를 비우고 새 분석 화면으로 돌아갑니다. 이전 대화는 저장한 대화에서 명시적으로 다시 열 수 있습니다.
+
+`전체 실행 근거 보기` 또는 워크스페이스의 `실행 흐름`에서 분석·출력·편집의 실제 실행 단계와 데이터 근거를 확인할 수 있습니다. 기록은 새 분석/편집부터 누적되며, 이전 버전의 저장 그래프에는 기록이 없을 수 있습니다. 여러 계열의 개별 그래프는 중앙 영역에서 스크롤해 확인합니다.
+
+349개 표의 공통 이름 검색, 누락 분류 안내와 오류별 복구 화면은 [2026-10-13 변경 기록](docs/implementation/2026-10-13-catalog-recovery-349.md)을 참고하세요. `need_details` 응답은 표·기간을 유지한 채 실제 분류 입력을 기다립니다.
+
+그래프 화면은 계열 수에 따라 확대됩니다. [계열 수별 크기 변경 기록](docs/implementation/2026-10-13-chart-series-size.md)을 참고하세요.
+
+차트 종류 제한과 출처·축 간격 수정은 [차트 배치 변경 기록](docs/implementation/2026-10-13-chart-caption-layout.md)을 참고하세요.
+
+실제 조회 가능한 추천 질문, 메뉴 정리와 PNG 저장 동작은 [추천 질문·PNG 변경 기록](docs/implementation/2026-10-13-examples-menu-png.md)을 참고하세요.
+
+
+### 카탈로그 근거 선택과 지표 보완 질문 (2026-10-13)
+
+자연어 조회는 이 체크아웃의 `stat_language_dictionary.json`에 등록된 표와 분류를 선택합니다. 동명이표의 잔액/신규취급액 구분에는 같은 체크아웃의 `data/processed/bok_table_master.csv` 계보를 사용합니다. 평가 데이터는 실행 코드에서 읽지 않습니다. 공통 수식어를 가진 여러 항목, 금액/물량, 금리의 신규취급액/잔액 기준을 각각 보존하며 지원하지 않는 주기·지역·차주·기관의 지표를 인접한 표로 대체하지 않습니다.
+
+`POST /api/query`의 `no_match` 응답에는 `requiresQueryRefinement: true`와 `refinementQuestion`이 추가됩니다. UI는 해당 지표를 보완할 입력란을 표시합니다. 기존 그래프와 대화는 유지하며, 보완된 질문은 새 요청으로 보내 이전 확정 조건을 잘못 적용하지 않습니다. 호출 장애의 다시 시도 버튼과 지표 보완 질문은 별도로 처리합니다.
+
+공개 reporter200 평가 재현 도구는 `scripts/evaluate_reporter200_local.py`입니다. `--goldset-root`, `--source-catalog`, `--output-dir`를 지정하고 모델 비사용 비교에는 `--offline`을 추가합니다. 통계표 탐색 평가이므로 실제 `/api/query`를 `execute=false`로 호출하고 수치 조회와 출력 실행은 차단합니다. 원본 동결 점수와 local1의 동일 분류명에 맞춘 점수를 모두 보관합니다. 카탈로그와 골드의 원본은 수정하지 않습니다.

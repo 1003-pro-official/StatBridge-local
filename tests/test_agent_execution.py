@@ -3,17 +3,9 @@ from types import SimpleNamespace
 from agent_runtime import StatBridgeAgent
 
 
-def plan():
-    return {
-        "table_id": "DT_513Y001",
-        "table_name": "경제심리지수",
-        "item_id": "13103134473999",
-        "classifications": {},
-        "frequency": "M",
-        "start_period": "202501",
-        "end_period": "202502",
-        "exact_params": {"startPrdDe": "202501", "endPrdDe": "202502"},
-    }
+def resolution(agent):
+    # Exercise execution with a complete server-generated current-catalog plan.
+    return agent.resolve("경제심리지수")
 
 
 def agent_with_response(response):
@@ -38,7 +30,7 @@ def test_agent_uses_external_csv_when_no_kosis_key(monkeypatch):
         "rows": [{"PRD_DE": "202501", "DT": "100.1"}],
     })
 
-    result = agent.execute_resolution("경제심리지수", {"status": "resolved", "api_plan": plan()}, generate_answer=False)
+    result = agent.execute_resolution("경제심리지수", resolution(agent), generate_answer=False)
 
     assert agent.service.calls[0]["prefer_local"] is True
     assert result["execution"]["status"] == "success"
@@ -52,7 +44,7 @@ def test_agent_does_not_report_failed_mcp_lookup_as_success(monkeypatch):
         "errors": [{"error": "KOSIS_API_KEY가 설정되지 않았습니다."}],
     })
 
-    result = agent.execute_resolution("경제심리지수", {"status": "resolved", "api_plan": plan()}, generate_answer=False)
+    result = agent.execute_resolution("경제심리지수", resolution(agent), generate_answer=False)
 
     assert result["execution"]["status"] == "error"
     assert "KOSIS_API_KEY" in result["execution"]["error"]

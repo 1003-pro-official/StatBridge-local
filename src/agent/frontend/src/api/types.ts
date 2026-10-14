@@ -1,3 +1,4 @@
+export type ExecutionRun={id:string;kind:string;engine:string;path:string[];stage:string;revision?:number;time?:string;changes:string[]};
 export type ChartPoint = {
   date: string;
   value: number;
@@ -53,9 +54,13 @@ export type QueryState = {
 };
 
 export type QueryResponse = {
+  requiresQueryRefinement?: boolean;
+  refinementQuestion?: string;
+  recovery?: {issue:string;requirements?:string[];question:string;choices:Array<{id:string;label:string}>;preserveState:boolean};
+  executionRuns?:ExecutionRun[];
   periodSelection?: {source:"text"|"ui";requested?:{start:string;end:string};applied?:{start:string;end:string};start?:string;end?:string};
   requestValidation?: {valid:boolean;request:Record<string,unknown>;errors:string[];table_ids:string[]};
-  status?: "need_clarification" | "need_period" | "need_output_config" | "resolved" | "no_match" | "data_unavailable";
+  status?: "need_details" | "need_clarification" | "need_period" | "need_output_config" | "resolved" | "no_match" | "data_unavailable" | "request_failed";
   query: string;
   interpretedQuery: string;
   summary: string;
@@ -66,6 +71,8 @@ export type QueryResponse = {
   chartMode?: ChartLayout | null;
   chartType?: ChartType;
   outputSpec?: {
+    cachedSnapshot?: boolean;
+    chatReadOnly?: boolean;
     status: "ready" | "empty";
     agent: string;
     summary: string;
@@ -131,6 +138,7 @@ export type QueryResponse = {
   clarifications?: Clarification[];
   state?: QueryState;
   debug?: {
+    orchestration?: {engine:string;stage:string;path:string[]};
     selectedTable?: unknown;
     apiPlan?: Record<string, unknown>;
     executionStatus?: string;
@@ -169,8 +177,9 @@ export type VisualEditContext = {
   marked_image?: string;
 };
 export type ChartSticker = {id:string;asset_id:string;x:number;y:number;size:number;angle:number;opacity:number};
+export type ChartReference = {name:string;mime:string;data_url:string};
 export type StickerAsset = {id:string;name:string;category:string;file:string;width:number;height:number};
-export type ChartEditInput = { undo_property?:'title'|'subtitle'|'legend_position'|'series_color'; property_label?:string; append_session_ids?:string[]; replace_session_ids?:string[]; restore_initial?:boolean; instruction: string; stickers?: ChartSticker[]; report?:Record<string,unknown>; clear_report?:boolean; document?:Record<string,unknown>; commands?:Array<{operation:string;kind:"STYLE_EDIT"|"DATA_EDIT";value?:unknown;params?:Record<string,unknown>;label?:string;start?:string;end?:string}>; conversation?: Array<{role:"user"|"assistant";text:string}>; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
+export type ChartEditInput = { reference_files?:ChartReference[]; undo_property?:'title'|'subtitle'|'legend_position'|'series_color'; property_label?:string; append_session_ids?:string[]; replace_session_ids?:string[]; restore_initial?:boolean; instruction: string; stickers?: ChartSticker[]; report?:Record<string,unknown>; clear_report?:boolean; document?:Record<string,unknown>; commands?:Array<{operation:string;kind:"STYLE_EDIT"|"DATA_EDIT";value?:unknown;params?:Record<string,unknown>;label?:string;start?:string;end?:string}>; conversation?: Array<{role:"user"|"assistant";text:string}>; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
 export type OutputEditRequest = ChartEditInput & { edit_session_id: string };
 
 export type QueryRequest = {

@@ -9,7 +9,9 @@ runtime = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runtime)
 
 
-def test_blank_and_placeholder_keys_are_rejected(tmp_path):
+def test_blank_and_placeholder_keys_are_rejected(tmp_path, monkeypatch):
+    for key in ('KOSIS_API_KEY', 'NCP_CLOVA_API_KEY', 'NCP_API_KEY', 'CLOVA_STUDIO_API_KEY'):
+        monkeypatch.delenv(key, raising=False)
     env = tmp_path / '.env'
     env.parent.mkdir(parents=True, exist_ok=True)
     with patch.object(runtime, 'ROOT', tmp_path):

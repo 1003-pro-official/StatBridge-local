@@ -1,7 +1,7 @@
 import {apiFetch,accountKey} from './accountApi';
 import {useEffect,useRef,useState} from 'react';
 import type {ChartEditInput,ChartSeries,ChartType} from './api/types';
-import {chartLabels} from './chartChoices';
+import {chartLabels,allowedCharts} from './chartChoices';
 
 export type GraphSelection={kind:string;label?:string;id?:string};
 type Design={id:string;name:string;palette:string[];font:number;width:number;markers:boolean;dash:string[]};
@@ -22,9 +22,10 @@ function LiveNumber({value,label,min,max,step=1,onCommit}:{value:number;label:st
  return <label>{label}<input type="number" aria-label={label} min={min} max={max} step={step} value={text} onChange={e=>setText(e.target.value)} onBlur={apply} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();e.currentTarget.blur();}}}/></label>;
 }
 
-export default function WorkspaceProperties({series,state:raw,selection,onSelect,onEdit,disabled}:{series:ChartSeries[];state:Record<string,unknown>;selection:GraphSelection;onSelect:(s:GraphSelection)=>void;onEdit:(v:ChartEditInput)=>Promise<boolean>;disabled:boolean}){
+export default function WorkspaceProperties({series,state:raw,selection,onSelect,onEdit,disabled,supportedChartTypes}:{series:ChartSeries[];state:Record<string,unknown>;selection:GraphSelection;onSelect:(s:GraphSelection)=>void;onEdit:(v:ChartEditInput)=>Promise<boolean>;disabled:boolean;supportedChartTypes?:ChartType[]}){
  const pane=useRef<HTMLDivElement>(null);
  const state=raw as State;
+ const chartTypes=allowedCharts(supportedChartTypes);
  const [designs,setDesigns]=useState<Design[]>([]),[preview,setPreview]=useState<Design|null>(null),[error,setError]=useState('');
  const [start,setStart]=useState(''),[end,setEnd]=useState(''),[color,setColor]=useState('#9bb7d2'),[opacity,setOpacity]=useState(.18);
  const [guide,setGuide]=useState(''),[note,setNote]=useState(''),[min,setMin]=useState(''),[max,setMax]=useState('');
@@ -33,7 +34,7 @@ export default function WorkspaceProperties({series,state:raw,selection,onSelect
  const currentNote=state.notes?.find(h=>h.id===selection.id);
  useEffect(()=>{
   const labels:Record<string,string>={title:'그래프 제목',series:'편집할 데이터',x:'세로축 최솟값',y:'세로축 최솟값',note:'그래프 설명',highlight:'강조 시작 시점'};
-  const target=pane.current?.querySelector(`[aria-label="${labels[selection.kind]}"]`),right=pane.current?.closest('.workspace-right');
+  const target=pane.current?.querySelector(`[aria-label="${labels[selection.kind]}"]`),right=pane.current?.closest('.workspace-left');
   if(target&&right){const top=target.getBoundingClientRect().top-right.getBoundingClientRect().top+right.scrollTop;right.scrollTo({top:Math.max(0,top-60),behavior:'smooth'});}
  },[selection]);
  useEffect(()=>{if(currentHighlight){setStart(currentHighlight.start||'');setEnd(currentHighlight.end||'');setColor(currentHighlight.color||'#9bb7d2');setOpacity(currentHighlight.opacity??.18);}if(currentNote)setNote(currentNote.text||'');},[selection.id]);
@@ -46,7 +47,7 @@ export default function WorkspaceProperties({series,state:raw,selection,onSelect
   <h3>그래프 편집</h3><p className="workspace-selection" role="status">{selection.kind==='series'?`선택한 데이터: ${selected?.label}`:selection.kind==='title'?'제목 선택':selection.kind==='highlight'?'강조 영역 선택':selection.kind==='note'?'설명 선택':selection.kind==='y'?'세로축 선택':selection.kind==='x'?'가로축 선택':'속성을 선택해 편집하세요'}</p>
   <fieldset disabled={disabled}><legend>차트와 디자인</legend>
    {!designs.length&&<div role="status"><p>{error||'디자인 목록을 불러오는 중…'}</p><button type="button" onClick={loadDesigns}>디자인 목록 다시 불러오기</button></div>}
-   <label>차트 종류<select aria-label="워크스페이스 차트 종류" value={state.chart_type||'line'} onChange={e=>void command('set_chart_type',e.target.value)}>{Object.entries(chartLabels).map(([value,name])=><option key={value} value={value}>{name}</option>)}</select></label>
+   <label>차트 종류<select aria-label="워크스페이스 차트 종류" disabled={!chartTypes.length} value={chartTypes.includes(state.chart_type||'line')?state.chart_type||'line':''} onChange={e=>void command('set_chart_type',e.target.value)}>{!chartTypes.length&&<option value="">지원 종류를 확인할 수 없습니다</option>}{chartTypes.map(value=><option key={value} value={value}>{chartLabels[value]}</option>)}</select></label>
    <label>그래프 디자인<select aria-label="그래프 디자인" value={state.presentation?.design_template||''} onChange={e=>void command('set_presentation',undefined,{design_template:e.target.value})}><option value="" disabled>기본 디자인</option>{designs.map(d=><option key={d.id} value={d.id}>{d.name}</option>)}</select></label>
    <div className="workspace-design-list">{designs.map(d=><button type="button" key={d.id} title={`${d.name} 적용 전 미리보기`} onClick={()=>setPreview(d)}><svg viewBox="0 0 70 28" aria-hidden="true"><path d="M1 20L16 14L30 18L45 6L68 10" stroke={d.palette[0]} strokeWidth={d.width} fill="none"/><path d="M1 25L16 23L30 14L45 17L68 3" stroke={d.palette[1]} strokeWidth={d.width} strokeDasharray={d.dash.length>1?'4 3':undefined} fill="none"/></svg><span>{d.name.replace('한국은행 ','')}</span></button>)}</div>
    {preview&&<section className="workspace-design-preview" aria-label="디자인 미리보기"><strong>{preview.name}</strong><svg viewBox="0 0 260 155" role="img" aria-label="현재 데이터 디자인 미리보기" style={{width:'100%',background:'#fff'}}><text x="130" y="17" textAnchor="middle" fontSize={Math.min(14,preview.font)} fill="#173b70">현재 데이터 · 간략 미리보기</text>{[45,75,105,135].map(y=><line key={y} x1="25" x2="245" y1={y} y2={y} stroke={preview.id==='slides'?'#fff':'#e3e8ee'}/>)}{series.slice(0,1).map((s,i)=>{const values=s.points.map(p=>p.value),lo=Math.min(...values),hi=Math.max(...values);const points=values.map((v,j)=>`${25+j*220/Math.max(1,values.length-1)},${135-(v-lo)*95/Math.max(1,hi-lo)}`).join(' ');return <g key={s.label}><polyline points={points} fill="none" stroke={(raw.series_colors as Record<string,string>)?.[s.label]||preview.palette[i]} strokeWidth={state.series_styles?.[s.label]?.width||preview.width} strokeDasharray={preview.dash[i%preview.dash.length]==='solid'?undefined:'4 3'}/><text x="25" y="152" fontSize="8" fill="#5a738a">{s.label} · {s.unit}</text></g>;})}</svg><p>현재 첫 번째 데이터로 보는 간략 예시입니다. 글자 {preview.font}px · 선 {preview.width}px · {preview.markers?'관측점 표시':'선 중심'}. 직접 지정한 색과 편집은 유지됩니다.</p><button type="button" onClick={()=>{void command('set_presentation',undefined,{design_template:preview.id});setPreview(null);}}>이 디자인 적용</button><button type="button" onClick={()=>setPreview(null)}>닫기</button></section>}
