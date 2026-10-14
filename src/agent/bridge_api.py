@@ -53,7 +53,19 @@ app = FastAPI(title="StatBridge Agent API", version="0.6.0")
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.exception_handlers import http_exception_handler
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 from recovery import recovery_question
+
+
+@app.exception_handler(RequestValidationError)
+async def readable_reference_validation(request: Request, exc: RequestValidationError):
+    errors=exc.errors()
+    if any('reference_files' in error.get('loc',()) for error in errors):
+        # An invalid upload must not echo megabytes of base64 into the chat.
+        details=[{key:value for key,value in error.items() if key in {'type','loc','msg'}} for error in errors]
+        return JSONResponse(status_code=422,content={'detail':details})
+    return await request_validation_exception_handler(request,exc)
 
 
 @app.exception_handler(HTTPException)
@@ -101,6 +113,7 @@ class QueryRequest(BaseModel):
 
 
 class OutputRenderRequest(BaseModel):
+    quick_output: bool = False
     session_ids: list[str] = Field(min_length=1)
     chart_type: str
     chart_mode: str = "combined"
@@ -202,6 +215,36 @@ class ReportExportRequest(BaseModel):
     edit_session_id: str
     format: Literal['json','png','svg','pdf']
     revision: int | None = Field(default=None,ge=0)
+
+
+class TableExportRequest(BaseModel):
+    edit_session_id: str
+    format: Literal['csv', 'xlsx', 'png', 'pdf']
+    revision: int = Field(ge=0)
+
+
+@app.post('/api/table/export')
+def export_table(payload: TableExportRequest):
+    from fastapi.responses import Response
+    from report_table import build_table, render_table_file
+    with EDIT_LOCK:
+        session = EDIT_SESSIONS.get(payload.edit_session_id)
+        if not session: raise HTTPException(status_code=404, detail='분석 편집 세션이 없습니다.')
+        if payload.revision != session['output'].get('editVersion', 0):
+            raise HTTPException(status_code=409, detail='최신 분석에서 표를 다시 출력해 주세요.')
+        result = copy.deepcopy(session['result'])
+        state = copy.deepcopy(session['output']['chartState'])
+    try:
+        spec = ChartSpec.model_validate(state)
+        series = agent.output_agent._apply_data_edits(agent.output_agent._series(result.get('execution', {}).get('rows', [])), spec)
+        doc = build_table(series, spec.report_table, title=spec.title, sources=agent.output_agent._evidence(result))
+        content = render_table_file(doc, payload.format)
+    except (ValueError, TypeError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    zipped = payload.format == 'png' and content[:2] == b'PK'
+    extension = 'zip' if zipped else payload.format
+    mime = {'csv': 'text/csv', 'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'png': 'image/png', 'pdf': 'application/pdf', 'zip': 'application/zip'}[extension]
+    return Response(content, media_type=mime, headers={'Content-Disposition': f'attachment; filename="statbridge-table.{extension}"', 'X-Chart-Version': str(payload.revision)})
 
 
 @app.post('/api/report/recommend')
@@ -905,6 +948,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     merged["request_validation"] = {"valid":True,"table_ids":[p["table_id"] for p in merged["api_plans"]],"requests":[s["query"] for s in sessions]}
     merged["candidates"] = [candidate for result in results for candidate in (result.get("candidates") or [])]
     output_request = {
+        "quick_output": payload.quick_output,
         "chart_type": payload.chart_type,
         "layout": payload.chart_mode,
         "title": payload.title,

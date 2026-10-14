@@ -95,9 +95,11 @@ def cartesian_traces(item: dict, spec: ChartSpec, kind: str) -> list[Any]:
             text=text, textposition="auto", **common)]
     segmented = any(r.label == label for r in spec.range_styles)
     if not segmented:
-        return [go.Scatter(x=x, y=y, mode="lines+markers+text" if any(text) else "lines+markers", text=text,
+        mode='lines'+('+markers' if any(s['markers'] for s in local) else '')+('+text' if any(text) else '')
+        return [go.Scatter(x=x, y=y, mode=mode, text=text,
             textposition="top center", marker=marker, line=dict(color=base["color"], dash=base["dash"], width=base["width"],shape=base["line_shape"]),
-            opacity=base["opacity"], fill="tozeroy" if kind == "area" else None, **common)]
+            opacity=base["opacity"], fill="tozeroy" if kind == "area" else None,
+            fillcolor=rgba(base['color'],.15) if kind=='area' and spec.presentation.design_template=='snapshot' else None, **common)]
     traces = []
     # Filled area is a separate transparent boundary, not a solid line under dashes.
     if kind == "area":

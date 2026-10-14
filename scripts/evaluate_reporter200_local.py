@@ -27,6 +27,7 @@ def main():
     parser.add_argument('--source-catalog',type=Path,required=True)
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--offline',action='store_true',help='Disable language-model and hybrid providers; actual API remains in use')
+    parser.add_argument('--local-copy',action='store_true',help='Record file hashes instead of Git provenance for a non-Git backup copy')
     args=parser.parse_args()
     dataset=args.goldset_root.resolve();out=args.output_dir.resolve()
     os.chdir(ROOT)
@@ -37,6 +38,20 @@ def main():
     module_path=dataset/'scripts/evaluate_runtime.py'
     spec=importlib.util.spec_from_file_location('public_reporter_scorer',module_path)
     scorer=importlib.util.module_from_spec(spec);spec.loader.exec_module(scorer);scorer.ROOT=ROOT
+    if args.local_copy:
+        from datetime import datetime,timezone
+        def copy_environment(gold_path):
+            files=['src/agent/agent_runtime.py','src/agent/catalog_request_planner.py','src/agent/bridge_api.py',
+                   'src/agent/stat_dictionary/stat_language_resolver.py','src/agent/langgraph_workflow.py',
+                   'src/agent/output_agent.py','src/agent/mcp_gateway.py']
+            return {'source_sha256':{name:digest(ROOT/name) for name in files},
+                    'catalog_sha256':digest(ROOT/'src/agent/stat_dictionary/stat_language_dictionary.json'),
+                    'dataset_sha256':digest(gold_path),'policy_sha256':scorer.policy_sha256(),
+                    'python':sys.executable,'commit':None,'dirty':None,'checkout_kind':'local-copy',
+                    'endpoint':'POST /api/query (in-process TestClient, actual application)',
+                    'execution':False,'case_timeout_seconds':scorer.POLICY['case_timeout_seconds'],
+                    'started_at':datetime.now(timezone.utc).isoformat()}
+        scorer.run_environment=copy_environment
     manifest=json.loads((dataset/'dataset_manifest.json').read_text(encoding='utf-8'))
     assert digest(scorer.GOLD)==manifest['dataset_sha256']
     assert scorer.policy_sha256()==manifest['scoring_policy_sha256']

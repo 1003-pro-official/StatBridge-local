@@ -46,6 +46,7 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     dual_axis = layout_mode == "combined" and bool(spec.secondary_axis_series)
     panels = layout_mode in {"separate", "horizontal", "grid"} and len(series) > 1 and chart_type not in {'scatter','bubble','heatmap'}
     columns = len(series) if layout_mode == "horizontal" else (min(len(series),spec.presentation.panel_columns) if layout_mode == "grid" else 1)
+    if spec.presentation.design_template=='snapshot' and panels:columns=min(4,columns)
     if panels:
         fig = make_subplots(rows=math.ceil(len(series)/columns), cols=columns, shared_xaxes=layout_mode == "separate" and chart_type not in {'histogram','box'},
                             shared_yaxes=spec.presentation.shared_y,
@@ -214,6 +215,9 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     for trace in fig.data:
         meta=trace.meta if isinstance(trace.meta,dict) else {}
         item=next((s for s in series if s['label']==meta.get('seriesLabel')),None)
+        if item:
+            from snapshot_chart_style import legend_name
+            trace.name=escape(legend_name(item,series,spec))
         if item and not trace.hovertemplate and trace.hoverinfo!='skip':
             label=escape(spec.display_names.get(item['label'],item['label']))
             unit=escape(item.get('unit') or '')
@@ -261,8 +265,34 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
         bottom=max(fig.layout.margin.b, (category_info.count('<br>')+1)*18+(160 if spec.show_legend and spec.legend_position=='bottom' else 60))
         fig.update_layout(margin=dict(b=bottom),height=max(fig.layout.height,400+fig.layout.margin.t+bottom),
             legend=dict(font=dict(color=spec.presentation.font_color)))
+    arrange_heading_lanes(fig, spec, panels)
     arrange_bottom_captions(fig, series, spec, math.ceil(len(series)/columns) if panels else 1)
+    from snapshot_chart_style import finish_snapshot
+    finish_snapshot(fig, series, spec, panels, columns)
     return json.loads(pio.to_json(fig, validate=True))
+
+
+def arrange_heading_lanes(fig, spec, panels=False):
+    """Keep automatic headings and an outside top legend in distinct pixel lanes."""
+    title = fig.layout.title
+    title_room = (str(title.text or '').count('<br>') + 1) * (spec.presentation.title_size + 5)
+    panel_room = 48 if panels else 0
+    legend_room = 0
+    if fig.layout.showlegend and spec.legend_position == 'top':
+        names = {str(t.name) for t in fig.data if getattr(t, 'showlegend', False) is not False and t.name}
+        width = fig.layout.width or spec.presentation.width or 900
+        per_row = max(1, int((width - 120) / 300))
+        legend_room = math.ceil(len(names) / per_row) * (spec.presentation.legend_size + 12)
+    top = max(fig.layout.margin.t or 0, title_room + panel_room + legend_room + 80)
+    bottom = fig.layout.margin.b or 0
+    minimum_plot=260 if spec.presentation.height else 320
+    height = max(fig.layout.height or 560, top + bottom + minimum_plot)
+    fig.update_layout(margin=dict(t=top), height=height)
+    if legend_room:
+        fig.update_layout(legend=dict(y=1 + (panel_room + 12) / (height-top-bottom), yanchor='bottom'))
+    # An explicit title position remains a deliberate user placement.
+    if spec.presentation.title_y is None:
+        fig.update_layout(title=dict(y=.96, yref='container', yanchor='top'))
 
 
 def arrange_bottom_captions(fig, series, spec, rows=1):

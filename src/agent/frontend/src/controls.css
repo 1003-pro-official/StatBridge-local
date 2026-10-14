@@ -15,3 +15,27 @@ button.control-primary:hover:not(:disabled),.agent-recovery button.control-prima
 .recovery-matched-tables{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}.recovery-matched-tables>span{padding:10px 13px;background:white;border:1px solid #d9e8f1;border-radius:10px;font-size:12px}.recovery-matched-tables small{display:block;margin-top:4px;color:#688397;font-size:10px}
 
 .recovery-requirements{margin-top:14px;font-size:12px;color:#506e84}.recovery-requirements summary{cursor:pointer;font-weight:600}.recovery-requirements li{margin:8px 0;line-height:1.7}.recovery-table-preview{margin-top:14px;padding:15px;background:#f7fafc;border-radius:10px;font-size:12px}.recovery-table-preview details{margin-top:10px}.recovery-table-preview summary{cursor:pointer;color:#005e93}.recovery-table-preview details>div{display:flex;flex-wrap:wrap;gap:6px;max-height:170px;overflow:auto;margin-top:10px}.recovery-table-preview span{padding:5px 8px;background:white;border:1px solid #dce6ee;border-radius:6px;font-size:11px}
+/* Consistent compact controls; navigation circles and chart swatches keep their shapes. */
+body button{border-radius:10px;font-weight:600;line-height:1.5}
+body :is(.chart-workspace,.chat-modal,.account-saved,.clarification-card,.agent-recovery,.report-panel) button:not(.sticker-choice){border-radius:10px;transition:background-color .16s,border-color .16s,box-shadow .16s}
+body :is(.workspace-actions,.workspace-panel-toggles,.chat-session-actions,.report-actions,.sketch-toolbar,.sticker-actions,.sujeongi-color-actions) button{padding:8px 12px;min-height:34px;border-color:var(--control-border)}
+body .workspace-actions{gap:7px;align-items:center;margin-left:auto}
+body .workspace-actions>details>summary{display:flex;align-items:center;gap:8px;list-style:none;padding:8px 12px;min-height:34px;box-sizing:border-box;border:1px solid var(--control-border);border-radius:10px;background:white;color:var(--control-ink);font-size:11px}
+body .workspace-actions>details>summary::after{content:'⌄';color:#648297}
+body .workspace-actions>details[open]>summary{border-color:#75accb;background:#edf6fc}
+body .workspace-actions>details>div{padding:10px;border:1px solid #d5e4ee;border-radius:13px;box-shadow:0 12px 32px #143d591c;max-width:calc(100vw - 32px);box-sizing:border-box}
+body .workspace-actions>details>div>button{display:block;width:100%;text-align:left;padding:10px 12px;margin:4px 0}
+body .workspace-actions>details>div>label{margin:12px 0 4px;padding-top:10px;border-top:1px solid #e4edf4}
+body .workspace-panel-toggles{flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px}
+body .workspace-view-tabs{gap:4px;border-radius:12px}
+body .workspace-view-tabs button[aria-pressed=true]{background:var(--control-blue);border-color:var(--control-blue);color:white;box-shadow:0 2px 6px #005e9326}
+body :is(.workspace-chat,.workspace-natural) .sujeongi-composer button{border-radius:10px;background:var(--control-blue);color:white;font-weight:700}
+body :is(.workspace-chat,.chat-modal,.account-saved) button:hover:not(:disabled){border-color:#7db4d4;box-shadow:0 2px 7px #174f7110}
+body .clarification-options button{border-radius:12px;padding:12px 15px;min-height:44px;text-align:left;line-height:1.6}
+body .clarification-options button.selected{background:#edf6fc;border-color:#5d9fc5;box-shadow:inset 0 0 0 1px #5d9fc5}
+body button:disabled{cursor:not-allowed}
+input[type=file]::file-selector-button{font:inherit;color:var(--control-ink);background:#edf6fc;border:1px solid var(--control-border);border-radius:8px;padding:7px 10px;margin-right:10px;cursor:pointer}
+@media(max-width:700px){body .workspace-actions{margin-left:0;width:100%;gap:6px}body .workspace-actions>details>div{right:0;width:220px}body .workspace-top>div:first-child{max-width:100%}}
+@media(max-width:700px){body .workspace-actions{position:relative}body .workspace-actions>details{position:static}body .workspace-actions>details>div{right:0;top:calc(100% + 6px);max-width:100%;width:220px;min-width:0}}
+/* An unavailable action is idle; only an active request shows its loading icon. */
+body .ask-box button:disabled{cursor:default}

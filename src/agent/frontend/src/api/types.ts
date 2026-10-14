@@ -96,6 +96,7 @@ export type QueryResponse = {
     echartsOption?: Record<string, unknown>;
     echartsUnavailable?: string;
     reportDocument?: Record<string, unknown>;
+    tableDocument?: import('../reportTable').TableDocument;
     editAgent?: { model: string; supportsImages: boolean; markCount: number; path: string[] };
     editCapabilities?: { model: string; supportsImages: boolean };
     editVersion?: number;
@@ -148,6 +149,7 @@ export type QueryResponse = {
 };
 
 export type OutputRenderRequest = {
+  quick_output?: boolean;
   session_ids: string[];
   chart_type: "auto" | ChartType;
   chart_mode: "combined" | "separate";

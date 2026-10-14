@@ -60,18 +60,19 @@ def report_style(spec):
         'stacked_area':'area','scenario':'line','bubble':'bubble'}
     presentation=spec.presentation.model_copy(update={'background':'#ffffff',
         'margin_top':spec.presentation.margin_top if spec.presentation.design_template else 100,'margin_bottom':min(240,(spec.presentation.margin_bottom if spec.presentation.design_template else 100)+len(spec.report.footnotes)*16),
-        'height':spec.report.height,'width':None,'panel_columns':spec.report.columns,'bar_mode':'relative' if kind=='contribution' else 'group'})
+        'height':spec.report.height,'width':None,'panel_columns':spec.report.columns,'bar_mode':'relative' if kind=='contribution' else spec.presentation.bar_mode or 'group'})
     return spec.model_copy(update={'chart_type':kinds[kind], 'presentation':presentation,
         'layout':'grid' if kind=='panels' else 'combined',
         'secondary_axis_series':spec.report.right_axis if kind=='dual_axis' else [],
-        'series_chart_types':{s:'bar' for s in spec.report.right_axis} if kind=='dual_axis' else {},
+        'series_chart_types':{**{s:'bar' for s in spec.report.right_axis},**spec.series_chart_types} if kind=='dual_axis' else spec.series_chart_types if kind in {'forecast','panels','events','scenario','fan'} else {},
         'series_colors':spec.series_colors,'legend_position':spec.legend_position})
 
 
 def source_caption(result, options):
     plans=result.get('api_plans') or ([result['api_plan']] if result.get('api_plan') else [])
     ids=list(dict.fromkeys(str(p['table_id']) for p in plans))
-    origins=list(dict.fromkeys(str(s.get('source') or '출처 확인 필요') for s in (result.get('execution') or {}).get('sources',[])))
+    names={'kosis_api':'KOSIS','local_csv':'로컬 통계자료','local_csv_filtered':'로컬 통계자료'}
+    origins=list(dict.fromkeys(names.get(str(s.get('source')),str(s.get('source') or '출처 확인 필요')) for s in (result.get('execution') or {}).get('sources',[])))
     caption='자료: '+(' / '.join(origins) or '제공된 데이터')+(' · '+', '.join(ids) if ids else '')
     return caption + (' | 사용자 표기: '+options.source_note if options.source_note else '')
 
@@ -88,7 +89,7 @@ def plotly_report(series, spec, result):
         for s in colored: fig.add_trace(go.Violin(y=[p['value'] for p in s['points']],name=spec.display_names.get(s['label'],s['label']),box_visible=True,meanline_visible=True,line_color=s['color'],points=False))
     else:
         fig=go.Figure(render_plotly(colored,base))
-    if options.kind not in {'regression','bubble','violin'}:
+    if options.kind not in {'regression','bubble','violin'} and spec.presentation.design_template!='snapshot':
         for i,s in enumerate(series if options.kind=='panels' else series[:1]):
             dates=[p['date'] for p in s['points']] if options.kind=='panels' else periods
             step=max(1,math.ceil(len(dates)/8));ticks=dates[::step]
@@ -190,16 +191,23 @@ def echarts_report(series,spec,result):
     for i,s in enumerate(series):
         x=[p['date'] for p in s['points']];values={p['date']:p['value'] for p in s['points']}
         data=[values.get(d) for d in (x if panels else periods)]
-        trace={'name':spec.display_names.get(s['label'],s['label']),'type':'bar' if o.kind=='contribution' or s['label'] in o.right_axis else 'line',
+        trace={'name':spec.display_names.get(s['label'],s['label']),'type':spec.series_chart_types.get(s['label'],'bar' if o.kind=='contribution' or s['label'] in o.right_axis else 'line'),
             'data':data,'xAxisIndex':i if panels else 0,'yAxisIndex':i if panels else int(s['label'] in o.right_axis),
             'itemStyle':{'color':spec.series_colors.get(s['label'],s.get('color') or PALETTE[i%len(PALETTE)])},'connectNulls':False}
         if o.kind in {'contribution','stacked_area'}: trace['stack']='sum'
         if o.kind=='stacked_area': trace['areaStyle']={}
+        if trace['type']=='area':
+            trace['type']='line';trace['areaStyle']={'opacity':.15}
+        if trace['type']=='bar' and spec.presentation.bar_mode in {'stack','relative'}:
+            trace['stack']='bars'
         style=spec.series_styles.get(s['label'])
         trace['lineStyle']={'width':style.width if style and style.width else spec.line_width,'type':spec.series_dashes.get(s['label'],style.dash if style and style.dash else 'solid')}
         trace['showSymbol']=bool(style and style.markers)
         if style and style.opacity is not None:trace['itemStyle']['opacity']=style.opacity
         if style and style.color:trace['itemStyle']['color']=style.color
+        if spec.presentation.latest_values and trace['type']=='line':
+            trace['endLabel']={'show':True,'formatter':'{@[1]}','color':trace['itemStyle']['color']}
+            trace['labelLayout']={'moveOverlap':'shiftY','hideOverlap':True}
         traces.append(trace)
     if o.kind in {'regression','bubble'}:
         dates,values=aligned(series)

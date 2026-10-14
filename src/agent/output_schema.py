@@ -73,7 +73,8 @@ class AxisStyle(StrictStyle):
 
 
 class PresentationStyle(StrictStyle):
-    design_template: Literal['report','stability','outlook','slides','academic','explore'] | None = None
+    design_template: Literal['snapshot','report','stability','outlook','slides','academic','explore'] | None = None
+    latest_values: bool = False
     panel_columns: int = Field(default=2,ge=1,le=4)
     font_family: str = Field(default="Arial, sans-serif", max_length=100)
     font_size: int = Field(default=12, ge=8, le=32)
@@ -198,6 +199,9 @@ class ChartSticker(StrictStyle):
         return self
 
 
+from report_table import TableOptions
+
+
 class ChartSpec(BaseModel):
     @model_validator(mode='before')
     @classmethod
@@ -210,6 +214,7 @@ class ChartSpec(BaseModel):
         return value
     model_config = ConfigDict(allow_inf_nan=False)
     report: ReportOptions | None = None
+    report_table: TableOptions | None = None
     chart_type: ChartType = "auto"
     layout: Layout = "combined"
     title: str = Field(default="", max_length=150)
@@ -259,13 +264,13 @@ class ChartEditCommand(BaseModel):
         "remove_annotation", "set_title", "set_subtitle", "set_axis_labels", "set_chart_type", "set_layout",
         "set_legend", "set_line_width", "highlight_period", "highlight_series",
         "add_annotation", "add_reference_line", "hide_series", "filter_period",
-        "set_top_n", "set_transform", "set_series_chart_type", "set_secondary_axis",
+        "set_top_n", "set_transform", "set_series_chart_type", "set_series_chart_types", "set_secondary_axis",
         "set_series_color", "set_series_dash",
         "set_segment_style", "set_point_style", "remove_range_style", "clear_range_styles",
         "set_series_style", "rename_series", "reorder_series", "show_series", "clear_highlight",
         "set_axis_style", "set_presentation", "remove_secondary_axis",
         "add_note", "update_note", "remove_note", "add_guide", "update_guide", "remove_guide",
-        "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles", "set_stickers", "set_report",
+        "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles", "set_stickers", "set_report", "set_table",
     ]
     kind: Literal["STYLE_EDIT", "DATA_EDIT"]
     value: str | float | int | bool | dict | list[str] | None = None

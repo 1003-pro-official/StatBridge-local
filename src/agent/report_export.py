@@ -48,11 +48,20 @@ def restore_document(result, payload):
     if set(payload)!=allowed or payload.get('schema_version')!='statbridge.report/1':
         raise ValueError('지원되지 않거나 필드가 누락된 보고서 JSON 버전입니다.')
     payload=copy.deepcopy(payload)
+    for field in ('typography',):
+        payload[field].setdefault('latest_values',False)
+    payload['state'].setdefault('presentation',{}).setdefault('latest_values',False)
     # Additive optional presentation field for documents saved before designs.
     if 'design_template' not in payload.get('typography',{}) and 'design_template' not in payload.get('state',{}).get('presentation',{}):
         payload['typography']['design_template']=None
         payload['state']['presentation']['design_template']=None
+    table_options=payload['state'].get('report_table')
+    if isinstance(table_options,dict):
+        table_options.setdefault('template','default')
+        table_options.setdefault('emphasized_labels',[])
     spec=ChartSpec.model_validate(payload['state'])
+    # Older observation-bound documents predate the optional report table settings.
+    payload['state'].setdefault('report_table', None)
     rebuilt=document(result,spec,payload['chart_id'])
     # Neither imported data nor redundant metadata may silently replace observations.
     if rebuilt!=payload:
@@ -75,7 +84,7 @@ def _font():
     raise ValueError('인쇄 출력용 한글 폰트가 없습니다. 맑은 고딕 또는 Noto Sans CJK를 설치해 주세요.')
 
 
-def render_file(series,spec,result,format):
+def export_preflight(series,spec,result,format):
     from chart_designs import materialize,palette
     spec=materialize(spec,[s['label'] for s in series])
     colors=palette(spec) or PALETTE
@@ -85,10 +94,17 @@ def render_file(series,spec,result,format):
         from advanced_chart_spec import ReportOptions
         kinds={'auto':'forecast','line':'forecast','bar':'forecast','area':'forecast','stacked_bar':'contribution','waterfall':'waterfall','scatter':'regression','bubble':'bubble','heatmap':'heatmap'}
         if legacy not in kinds:raise ValueError('현재 종류의 벡터 인쇄는 아직 지원하지 않습니다. 화면 PNG 저장을 사용하세요.')
-        spec=spec.model_copy(update={'report':ReportOptions(kind='panels' if spec.layout!='combined' else kinds[legacy],contribution_confirmed=legacy=='stacked_bar')})
+        right=spec.secondary_axis_series
+        if right and (spec.layout!='combined' or any(spec.series_chart_types.get(label,spec.chart_type) not in {'line','bar','area'} for label in right)):
+            raise ValueError('복합축 인쇄는 선·막대·영역 배치만 지원합니다.')
+        columns=min(4,len(series)) if spec.layout=='horizontal' else spec.presentation.panel_columns if spec.layout=='grid' else 1
+        rows=math_ceil(len(series)/columns) if spec.layout!='combined' else 1
+        height=spec.presentation.height or min(2000,max(720,rows*320+280))
+        spec=spec.model_copy(update={'report':ReportOptions(kind='dual_axis' if right else 'panels' if spec.layout!='combined' else kinds[legacy],right_axis=right,columns=columns,height=height,contribution_confirmed=legacy=='stacked_bar'),
+            'secondary_axis_series':[], 'series_chart_types':{**spec.series_chart_types,**{label:spec.series_chart_types.get(label,spec.chart_type) for label in right}}})
     o=spec.report;periods=validate_report(series,o)
     period_index={d:i for i,d in enumerate(periods)}
-    if spec.presentation.bar_orientation=='horizontal' or spec.series_chart_types or spec.secondary_axis_series:
+    if spec.presentation.bar_orientation=='horizontal' or any(kind not in {'line','bar','area'} for kind in spec.series_chart_types.values()) or spec.secondary_axis_series:
         raise ValueError('기존 가로 막대·혼합 종류·보조축 설정은 보고서 인쇄와 함께 사용할 수 없습니다. 보고서의 종류·right_axis 설정을 사용하세요.')
     if o.kind in {'regression','bubble','violin'} and (spec.guides or spec.reference_lines or spec.highlights or spec.annotations or spec.notes):
         raise ValueError('비시계열 인쇄 그래프에 기존 시계열 위치 주석을 재해석하지 않습니다. 해당 주석을 해제해 주세요.')
@@ -98,6 +114,28 @@ def render_file(series,spec,result,format):
         raise ValueError('데이터 좌표에 고정된 강조 도형은 현재 인쇄 렌더러가 지원하지 않습니다.')
     if o.width*o.height*(o.dpi/100)**2>32_000_000:
         raise ValueError('PNG 출력 크기가 32메가픽셀 제한을 초과합니다. 해상도를 낮춰 주세요.')
+    _print_layout(series,spec,result)
+    return spec,legacy,periods,colors
+
+
+def render_file(series,spec,result,format):
+    spec,legacy,periods,colors=export_preflight(series,spec,result,format)
+    period_index={d:i for i,d in enumerate(periods)}
+    from advanced_chart_spec import PALETTE
+    return _render_validated(series,spec,result,format,legacy,periods,colors,period_index)
+
+
+def export_formats(series,spec,result):
+    formats=['png','csv']
+    try:
+        export_preflight(series,spec,result,'svg')
+    except (ValueError,TypeError):
+        return formats
+    return [*formats,'svg','pdf']
+
+
+def _render_validated(series,spec,result,format,legacy,periods,colors,period_index):
+    o=spec.report
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -110,25 +148,7 @@ def render_file(series,spec,result,format):
         columns=min(o.columns,count);rows=(count+columns-1)//columns
         fig,axes=plt.subplots(rows,columns,figsize=(o.width/100,o.height/100),squeeze=False)
         primary=axes.flat[0];secondary=primary.twinx() if o.kind=='dual_axis' else None
-        footer=[source_caption(result,o),*o.footnotes]
-        footer.extend(f'{b.label} {b.level:.0%}: {b.method}; {b.source}' for b in o.intervals)
-        lines=[line for text in footer for line in textwrap.wrap(text,max(35,int(o.width/13)-12))]
-        bottom=max(.15,len(lines)*.18/(o.height/100)+.08)
-        if bottom>.42:
-            plt.close(fig);raise ValueError('출처·각주가 출력 높이에 비해 너무 깁니다. 내용을 줄이거나 높이를 늘려 주세요.')
-        title_lines=textwrap.wrap(spec.title,50) or ['']
-        subtitle_lines=textwrap.wrap(spec.subtitle,70)
-        physical_height=o.height/100
-        subtitle_y=.97-len(title_lines)*spec.presentation.title_size*.72/72*1.35/physical_height-.025
-        legend_top=subtitle_y-len(subtitle_lines)*10/72*1.35/physical_height-.03
-        legend_labels=[spec.display_names.get(s['label'],s['label']) for s in series]
-        legend_columns=min(3,len(legend_labels)) if not any(len(label)>18 for label in legend_labels) else min(2,len(legend_labels))
-        legend_rows=math_ceil(len(legend_labels)/legend_columns) if legend_columns else 0
-        max_lines=max((len(textwrap.wrap(label,24)) for label in legend_labels),default=1)
-        legend_height=legend_rows*max_lines*spec.presentation.font_size*.72/72*1.4/physical_height if spec.show_legend else 0
-        top=legend_top-legend_height-.04
-        if top-bottom<.25 or (top-bottom)*o.height/rows<140:
-            plt.close(fig);raise ValueError('제목·범례·패널이 출력 높이에 비해 너무 많습니다. 높이를 늘리거나 제목·범례를 줄여 주세요.')
+        bottom,title_lines,subtitle_lines,subtitle_y,legend_labels,legend_columns,legend_rows,max_lines,legend_height,legend_top,top,lines=_print_layout(series,spec,result)
         fig.subplots_adjust(left=.1,right=.9,top=top,bottom=bottom,wspace=.3,hspace=.5)
         def color(i,s):return (spec.series_styles[s['label']].color if s['label'] in spec.series_styles and spec.series_styles[s['label']].color else spec.series_colors.get(s['label'],colors[i%len(colors)]))
         def target(i,s):return axes.flat[i] if o.kind=='panels' else secondary if secondary and s['label'] in o.right_axis else primary
@@ -161,34 +181,61 @@ def render_file(series,spec,result,format):
                 primary.plot(range(len(vals)),vals,'o',ms=3,color='#263247')
             else:
                 positive=np.zeros(len(periods));negative=positive.copy()
+                bar_bases={};bar_tops={}
                 for i,s in enumerate(series):
-                    ax=target(i,s);x=[period_index[p['date']] for p in s['points']];y=np.asarray([p['value'] for p in s['points']]);name=spec.display_names.get(s['label'],s['label'])
-                    if legacy=='bar':
-                        width=.8/max(1,len(series));offset=0 if o.kind=='panels' else (i-(len(series)-1)/2)*width
-                        ax.bar(np.asarray(x)+offset,y,width=width,label=name,color=color(i,s))
-                    elif o.kind=='contribution':
+                    from snapshot_chart_style import legend_name
+                    ax=target(i,s);x=[period_index[p['date']] for p in s['points']];y=np.asarray([p['value'] for p in s['points']]);name=legend_name(s,series,spec)
+                    local_kind=spec.series_chart_types.get(s['label'],'stacked_bar' if o.kind=='contribution' else 'bar' if o.kind=='dual_axis' and s['label'] in o.right_axis else legacy or 'line')
+                    if local_kind=='bar':
+                        style=spec.series_styles.get(s['label']);alpha=style.opacity if style and style.opacity is not None else 1
+                        if spec.presentation.bar_mode in {'stack','relative'}:
+                            bottoms=[]
+                            for date,value in zip(x,y):
+                                key=(id(ax),date,value>=0);bottom=bar_bases.get(key,0);bottoms.append(bottom);bar_bases[key]=bottom+value;bar_tops[(s['label'],date)]=bottom+value
+                            ax.bar(x,y,bottom=bottoms,width=.8,label=name,color=color(i,s),alpha=alpha)
+                        else:
+                            bars=[j for j,item in enumerate(series) if target(j,item) is ax and spec.series_chart_types.get(item['label'],'bar' if o.kind=='dual_axis' and item['label'] in o.right_axis else legacy or 'line')=='bar']
+                            width=.8/max(1,len(bars));offset=(bars.index(i)-(len(bars)-1)/2)*width
+                            ax.bar(np.asarray(x)+offset,y,width=width,label=name,color=color(i,s),alpha=alpha)
+                    elif o.kind=='contribution' and local_kind not in {'line','area'}:
                         base=np.where(y>=0,positive,negative)
                         ax.bar(x,y,bottom=base,label=name,color=color(i,s));positive+=np.maximum(y,0);negative+=np.minimum(y,0)
                     elif o.kind=='stacked_area': pass
-                    elif o.kind=='dual_axis' and s['label'] in o.right_axis:
-                        ax.bar(x,y,label=name,color=color(i,s),alpha=.5)
                     else:
-                        if legacy=='area':ax.fill_between(x,y,alpha=.2,color=color(i,s))
+                        if local_kind=='area':ax.fill_between(x,y,alpha=.15,color=color(i,s),zorder=0)
                         style=spec.series_styles.get(s['label']);dash=spec.series_dashes.get(s['label'],style.dash if style and style.dash else 'solid')
-                        ax.plot(x,y,label=name,color=color(i,s),linewidth=style.width if style and style.width else spec.line_width/1.5,
+                        ax.plot(x,y,label=name,color=color(i,s),linewidth=style.width if style and style.width else spec.line_width if spec.presentation.design_template=='snapshot' else spec.line_width/1.5,
                             linestyle={'solid':'-','dash':'--','dot':':','dashdot':'-.','longdash':(0,(6,2))}.get(dash,'-'),marker={'circle':'o','square':'s','diamond':'D','cross':'+','triangle-up':'^','triangle-down':'v'}.get(style.marker_symbol,'o') if style and style.markers else None,
                             alpha=style.opacity if style and style.opacity is not None else 1)
                     if o.kind=='panels': ax.set_title(name,fontproperties=font,fontsize=11)
+                # These labels are display text read from the current observations.
+                # No value, unit, date or axis range is copied from a reference.
+                if spec.presentation.latest_values and o.kind in {'forecast','panels','dual_axis','events','fan','scenario'} and legacy not in {'stacked_bar'}:
+                    from snapshot_chart_style import spaced_offsets
+                    fig.canvas.draw()
+                    groups={}
+                    for i,s in enumerate(series):
+                        if not s['points']:continue
+                        ax=target(i,s);last=s['points'][-1];anchor=bar_tops.get((s['label'],period_index[last['date']]),last['value']);position=ax.transData.transform((period_index[last['date']],anchor))[1]
+                        bounds=tuple(round(v,1) for v in ax.get_position().bounds)
+                        groups.setdefault(bounds,[]).append((i,position))
+                    offsets={key:spaced_offsets(entries,(spec.presentation.font_size+6)*fig.dpi/72) for key,entries in groups.items()}
+                    for i,s in enumerate(series):
+                        if not s['points']:continue
+                        ax=target(i,s);last=s['points'][-1];bounds=tuple(round(v,1) for v in ax.get_position().bounds)
+                        anchor=bar_tops.get((s['label'],period_index[last['date']]),last['value'])
+                        ax.annotate(f"{last['value']:,.{spec.presentation.number_decimals}f}",(period_index[last['date']],anchor),xytext=(6,offsets[bounds][i]*72/fig.dpi),textcoords='offset points',fontproperties=font,fontsize=spec.presentation.font_size,color=color(i,s),va='center',clip_on=False)
                 if o.kind=='stacked_area': primary.stackplot(range(len(periods)),*[ [p['value'] for p in s['points']] for s in series],labels=[s['label'] for s in series],colors=[color(i,s) for i,s in enumerate(series)])
             for band in sorted(o.intervals,key=lambda b:-b.level):
                 primary.fill_between([period_index[d] for d in band.periods],band.lower,band.upper,color=PALETTE[0],alpha=.15,label=f'{band.level:.0%} 구간',zorder=0)
             for i,ax in enumerate(axes.flat):
                 if i>=count: ax.remove();continue
                 if o.kind not in {'regression','bubble','violin'}:
-                    step=max(1,math_ceil(len(periods)/8));ticks=list(range(0,len(periods),step))
+                    limit=max(3,8//columns) if o.kind=='panels' else 8
+                    step=max(1,math_ceil((len(periods)-1)/max(1,limit-1)));ticks=list(range(0,len(periods),step))
                     if len(periods)-1 not in ticks:ticks.append(len(periods)-1)
                     from advanced_chart_render import period_text
-                    ax.set_xticks(ticks,[period_text(periods[j],series[i if o.kind=='panels' else 0].get('frequency'),o.date_format) for j in ticks],fontsize=spec.presentation.font_size*.72,fontproperties=font)
+                    ax.set_xticks(ticks,[period_text(periods[j],series[i if o.kind=='panels' else 0].get('frequency'),o.date_format) for j in ticks],fontsize=spec.presentation.font_size*.8,fontproperties=font)
                 if o.kind not in {'regression','bubble','heatmap'}:
                     ax.set_ylabel(series[i]['unit'] if o.kind=='panels' else next(s['unit'] for s in series if s['label'] not in o.right_axis),fontproperties=font)
                 ax.tick_params(labelsize=spec.presentation.font_size*.72)
@@ -205,7 +252,8 @@ def render_file(series,spec,result,format):
                     if xstyle.reverse:ax.invert_xaxis()
                 axis=spec.axes.get('y')
                 if axis:
-                    ax.grid(axis='y',visible=axis.show_grid)
+                    if axis.show_grid:ax.grid(True,axis='y',color=spec.presentation.grid_color,linewidth=.6)
+                    else:ax.grid(False,axis='y')
                     if axis.minimum is not None:ax.set_ylim(axis.minimum,axis.maximum)
                     if axis.scale=='log':
                         if any(p['value']<=0 for s in series for p in s['points']):raise ValueError('로그축에는 양수 데이터만 사용할 수 있습니다.')
@@ -217,6 +265,12 @@ def render_file(series,spec,result,format):
                     ax.axvline(periods.index(e.period),color='#777777',ls=':',lw=1);ax.text(periods.index(e.period),1.01,e.text,transform=ax.get_xaxis_transform(),fontproperties=font,fontsize=9)
             if secondary:
                 secondary.set_ylabel(next(s['unit'] for s in series if s['label'] in o.right_axis),fontproperties=font)
+                if spec.presentation.design_template=='snapshot':
+                    secondary.spines[['top','left','bottom']].set_visible(False)
+                    secondary.spines['right'].set_color('#d3d9df');secondary.spines['right'].set_linewidth(.7)
+                    secondary.tick_params(labelsize=spec.presentation.font_size*.8,colors=spec.presentation.font_color)
+                    secondary.grid(False)
+                    primary.set_zorder(secondary.get_zorder()+1);primary.patch.set_visible(False)
                 axis=spec.axes.get('y2')
                 if axis and axis.minimum is not None:secondary.set_ylim(axis.minimum,axis.maximum)
             for g in spec.guides:
@@ -274,3 +328,29 @@ def render_file(series,spec,result,format):
 def math_ceil(value):
     import math
     return math.ceil(value)
+
+
+def _print_layout(series,spec,result):
+    o=spec.report
+    count=len(series) if o.kind=='panels' else 1
+    columns=min(o.columns,count);rows=(count+columns-1)//columns
+    footer=[source_caption(result,o),*o.footnotes]
+    footer.extend(f'{b.label} {b.level:.0%}: {b.method}; {b.source}' for b in o.intervals)
+    lines=[line for text in footer for line in textwrap.wrap(text,max(35,int(o.width/13)-12))]
+    bottom=max(.15,len(lines)*.18/(o.height/100)+.08)
+    if bottom>.42:
+        raise ValueError('출처·각주가 출력 높이에 비해 너무 깁니다. 내용을 줄이거나 높이를 늘려 주세요.')
+    title_lines=textwrap.wrap(spec.title,50) or ['']
+    subtitle_lines=textwrap.wrap(spec.subtitle,70)
+    physical_height=o.height/100
+    subtitle_y=.97-len(title_lines)*spec.presentation.title_size*.72/72*1.35/physical_height-.025
+    legend_top=subtitle_y-len(subtitle_lines)*10/72*1.35/physical_height-.03
+    legend_labels=[spec.display_names.get(s['label'],s['label']) for s in series]
+    legend_columns=min(3,len(legend_labels)) if not any(len(label)>18 for label in legend_labels) else min(2,len(legend_labels))
+    legend_rows=math_ceil(len(legend_labels)/legend_columns) if legend_columns else 0
+    max_lines=max((len(textwrap.wrap(label,24)) for label in legend_labels),default=1)
+    legend_height=legend_rows*max_lines*spec.presentation.font_size*.72/72*1.4/physical_height if spec.show_legend else 0
+    top=legend_top-legend_height-.04
+    if top-bottom<.25 or (top-bottom)*o.height/rows<140:
+        raise ValueError('제목·범례·패널이 출력 높이에 비해 너무 많습니다. 높이를 늘리거나 제목·범례를 줄여 주세요.')
+    return bottom,title_lines,subtitle_lines,subtitle_y,legend_labels,legend_columns,legend_rows,max_lines,legend_height,legend_top,top,lines

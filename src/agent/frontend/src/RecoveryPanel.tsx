@@ -15,11 +15,13 @@ export default function RecoveryPanel({message,result,busy,retry,selectTable,sel
  const found=tables.filter(t=>(result?.status!=='need_details'||result.tables.some(x=>x.tableId===t.tableId))&&terms.every(term=>`${t.name} ${t.tableId} ${t.items.join(' ')}`.toLowerCase().includes(term)));
  const noTable=result?.status==='no_match';
  const detailsOnly=result?.status==='need_details';
+ const issue=result?.recovery?.issue;
+ const failureTitle=issue==='timeout'?'20초 응답 제한에 도달했습니다':issue==='input'?'입력한 조회 조건을 확인해 주세요':issue==='auth'?'로그인 상태를 확인해 주세요':issue==='server'?'서버 처리 중 문제가 발생했습니다':issue==='rate_limit'?'잠시 후 다시 시도해 주세요':issue==='network'?'서버 연결을 확인해 주세요':'현재 작업을 유지하고 이어서 진행할 수 있습니다';
  const selectedTable=tables.find(t=>t.tableId===table);
  const recovery=recoveryFor(result,message);
  const act=(id:string)=>{if(id==='retry')retry();else if(id==='revise')onRevise();else if(id==='table')setMode('table');else if(id==='period')setMode('period');};
  return <section className="agent-recovery" role="region" aria-label="이어서 진행하기">
- <div className="recovery-heading"><span className="recovery-mark" aria-hidden="true">!</span><div><small>요청 확인</small><h3>{noTable?'지원되지 않는 지표를 확인해 주세요':result?.status==='need_details'?'통계표를 찾았습니다. 조회할 분류를 지정해 주세요':'현재 작업을 유지하고 이어서 진행할 수 있습니다'}</h3></div></div>
+ <div className="recovery-heading"><span className="recovery-mark" aria-hidden="true">!</span><div><small>요청 확인</small><h3>{noTable?'지원되지 않는 지표를 확인해 주세요':result?.status==='need_details'?'통계표를 찾았습니다. 조회할 분류를 지정해 주세요':failureTitle}</h3></div></div>
  <p role="status">{message}</p>{result?.status==='need_details'&&<div className="recovery-matched-tables">{result.tables.map(t=><span key={t.tableId}>{t.name}<small>{t.tableId}</small></span>)}</div>}<p className="recovery-guidance">{recovery.question}</p>{result?.recovery?.requirements&&<details className="recovery-requirements"><summary>입력해야 할 분류 {result.recovery.requirements.length}개 확인</summary><ul>{result.recovery.requirements.map((requirement,i)=><li key={i}>{requirement}</li>)}</ul></details>}
  <div className="recovery-actions">{recovery.choices.map((c,i)=><button className={i===0?'control-primary':''} key={c.id} disabled={busy} onClick={()=>act(c.id)}>{c.label}</button>)}</div>
  {mode==='period'&&<div className="recovery-period"><label>시작일<input type="date" aria-label="재질문 시작일" value={start} onChange={e=>setStart(e.target.value)}/></label><label>종료일<input type="date" aria-label="재질문 종료일" value={end} onChange={e=>setEnd(e.target.value)}/></label><button disabled={busy||!start||!end||start>end} onClick={()=>selectPeriod(start,end)}>이 기간으로 계속</button></div>}

@@ -467,6 +467,9 @@ class ChartEditAgent:
                 anchor=bound_mark.points[0]
                 commands.append(ChartEditCommand(operation="set_presentation",kind="STYLE_EDIT",
                     params={"title_x":anchor.x,"title_y":1-anchor.y}))
+        if visual.reference_files:
+            from chart_reference_policy import validate_reference_style
+            validate_reference_style(commands,state['instruction'],state['current'])
         missing = [m for m in visual.marks if m.text.strip() and m.id not in handled_marks]
         if missing and not coverage and not state.get("_repairing_marks"):
             # Recover omitted mark instructions separately, then validate the whole

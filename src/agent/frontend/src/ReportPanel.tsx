@@ -5,7 +5,7 @@ import './ReportPanel.css';
 
 const Preview=lazy(()=>import('./ReportPreview'));
 const names:Record<string,string>={forecast:'실적·전망 시계열',dual_axis:'명시적 이중 축',contribution:'누적 기여도',panels:'다중 패널',events:'이벤트·기준선',fan:'신뢰구간 팬 차트',waterfall:'워터폴',regression:'산점도·OLS 회귀',heatmap:'히트맵',violin:'바이올린 분포',stacked_area:'누적 영역',scenario:'시나리오 비교',bubble:'버블'};
-type Revision={chartState?:Record<string,unknown>;editVersion?:number;echartsOption?:Record<string,unknown>;echartsUnavailable?:string};
+type Revision={exportFormats?:string[];chartState?:Record<string,unknown>;editVersion?:number;echartsOption?:Record<string,unknown>;echartsUnavailable?:string};
 
 export default function ReportPanel({series,sessionId,revision,onEdit,disabled}:{series:ChartSeries[];sessionId:string;revision:object;onEdit:(input:ChartEditInput)=>Promise<boolean>;disabled:boolean}){
   const output=revision as Revision,state=output.chartState||{};
@@ -67,7 +67,7 @@ export default function ReportPanel({series,sessionId,revision,onEdit,disabled}:
     <fieldset disabled={locked}><legend>파일 · 저장 복원</legend>
       <label>SVG 글자<select value={String(options.svg_text_mode||'path')} onChange={e=>change('svg_text_mode',e.target.value)}><option value="path">윤곽선 · 다른 컴퓨터에서도 동일하게 표시</option><option value="text">편집용 텍스트 · 같은 한글 폰트 필요</option></select></label>
       <div className="report-size">{[['width','너비',600,2400],['height','높이',400,2000],['dpi','DPI',96,400]].map(([key,label,min,max])=><label key={key}>{label}<input type="number" min={min} max={max} value={Number(options[key]||0)} onChange={e=>change(String(key),Number(e.target.value))}/></label>)}</div><small>논리 크기 기준 100DPI. 200DPI는 가로·세로 두 배 픽셀로 출력합니다. 설정 적용 후 다운로드하세요.</small>
-      <div className="report-actions">{['png','svg','pdf','json'].map(format=><button key={format} type="button" disabled={!saved&&format!=='json'} onClick={()=>void exportFile(format)}>{format.toUpperCase()} 저장</button>)}</div>
+      <div className="report-actions">{(saved?(output.exportFormats||['png','csv']).filter(format=>format!=='csv'):[]).map(format=><button key={format} type="button" disabled={!saved&&format!=='json'} onClick={()=>void exportFile(format)}>{format.toUpperCase()} 저장</button>)}</div>
       <label>JSON 복원<input type="file" accept="application/json,.json" aria-label="보고서 JSON 복원" onChange={e=>void importFile(e.target.files?.[0])}/></label>
       <button type="button" disabled={!output.echartsOption} onClick={()=>{setPreviewOpen(true);dialog.current?.showModal();}}>ECharts SVG 미리보기</button>{output.echartsUnavailable&&<small>{output.echartsUnavailable}</small>}
     </fieldset>

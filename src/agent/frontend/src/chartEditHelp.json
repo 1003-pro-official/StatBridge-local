@@ -1,5 +1,10 @@
 [
   {
+    "title": "보고서 표 편집 · 표 탭에서 사용",
+    "operations": ["set_table"],
+    "examples": ["소수점 한 자리로 바꿔줘", "최근 12시점만 보여줘", "기간을 행으로 바꿔줘"]
+  },
+  {
     "title": "보고서 템플릿·전망·출처·각주",
     "operations": ["set_report"],
     "examples": [
@@ -54,7 +59,8 @@
     "operations": [
       "set_chart_type",
       "set_layout",
-      "set_series_chart_type"
+      "set_series_chart_type",
+      "set_series_chart_types"
     ],
     "examples": [
       "전체 그래프를 막대 그래프로 바꿔줘.",

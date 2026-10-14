@@ -56,6 +56,3 @@ research/그림표-분석/원본스냅샷/
 
 # Generated report chart examples and print artifacts
 output/
-
-# 확인용 노트북은 로컬에서만 씁니다(커밋 금지)
-eval/reporter-table-discovery-30/*/notebooks/

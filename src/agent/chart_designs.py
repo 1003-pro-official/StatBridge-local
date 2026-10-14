@@ -1,5 +1,6 @@
 """Presentation presets only: never generate or change statistical values."""
 DESIGNS={
+ 'snapshot':{'name':'스냅샷 보고서형','palette':['#286a9d','#c08a52','#008d7d','#855c9d','#cc6262','#71859c','#9a8d3f','#447a72','#a66e8d','#6d737a'],'font':13,'title':20,'width':2,'grid':'#edf0f3','markers':False,'dash':['solid'],'legend':'top','margin':95},
  'report':{'name':'한국은행 경제보고서형','palette':['#2255a4','#d87832','#337f65'],'font':13,'title':20,'width':2,'grid':'#e3e8ee','markers':False,'dash':['solid'],'legend':'top','margin':90},
  'stability':{'name':'금융안정 분석형','palette':['#163e66','#bb4141','#398b83'],'font':13,'title':19,'width':2.5,'grid':'#d4dfe7','markers':True,'dash':['solid','dash'],'legend':'bottom','margin':105},
  'outlook':{'name':'경제전망 분석형','palette':['#246ba8','#dc8634','#638a76'],'font':14,'title':21,'width':2.5,'grid':'#e9edf1','markers':False,'dash':['solid','dash','dot'],'legend':'top','margin':105},
@@ -21,9 +22,13 @@ def apply_design(spec, key):
        'number_decimals':2 if key=='academic' else 1}
     # Explicit per-series overrides, annotations, data and title survive.
     updates={'presentation':PresentationStyle.model_validate(p),'line_width':d['width'],'legend_position':d['legend']}
-    if spec.report is None and spec.chart_type in {'auto','line'}:
+    if key!='snapshot' and spec.report is None and spec.chart_type in {'auto','line'}:
         from advanced_chart_spec import ReportOptions
         updates['report']=ReportOptions(kind='forecast' if spec.layout=='combined' else 'panels')
+    if key=='snapshot':
+        from output_schema import AxisStyle
+        updates['presentation']=updates['presentation'].model_copy(update={'latest_values':True,'number_decimals':2,'margin_right':95})
+        updates['axes']={**{name:AxisStyle(show_grid=name=='y',zero_line=False) for name in (('x','y','y2') if spec.secondary_axis_series else ('x','y'))},**spec.axes}
     return spec.model_copy(update=updates)
 
 def materialize(spec, labels):
@@ -34,5 +39,5 @@ def materialize(spec, labels):
     styles={}
     for i,label in enumerate(labels):
         styles[label]=SeriesStyle.model_validate({'markers':d['markers'],'marker_symbol':['circle','square','diamond'][i%3],
-            'dash':d['dash'][i%len(d['dash'])],**(spec.series_styles[label].model_dump(exclude_none=True) if label in spec.series_styles else {})})
+            'dash':spec.series_dashes.get(label,d['dash'][i%len(d['dash'])]),**(spec.series_styles[label].model_dump(exclude_none=True) if label in spec.series_styles else {})})
     return spec.model_copy(update={'series_styles':styles})
