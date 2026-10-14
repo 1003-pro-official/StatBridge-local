@@ -98,6 +98,6 @@
   "numeric_gold": "not_created",
   "source_boundary": "KOSIS Korea Bank of Korea only",
   "sha256_normalization": "LF",
-  "scoring_policy_sha256": "439fbe781ed1c12f9b165bb3b234cf24749f2c46b9988019a0fc7221a468ba65",
+  "scoring_policy_sha256": "636b44e54ea81c6890e59d393bf5ca77d10ee2cfa71471f15a60b0d07b83686f",
   "period_policy": "Explicit periods are converted to inclusive KOSIS periods; missing periods retain the runtime plan but expect the API need_period follow-up."
 }
