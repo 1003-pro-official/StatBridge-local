@@ -13,7 +13,7 @@ for(const query of [
 
 test('UI submits original request once, without hard-coded loan/rate questions',()=>{
   const app=readFileSync(new URL('./src/App.tsx',import.meta.url),'utf8');
-  const submit=app.slice(app.indexOf('const onSubmit ='),app.indexOf('const executeMultiIntents='));
+  const submit=app.slice(app.indexOf('const onSubmit ='),app.indexOf('const chooseClarification'));
   assert.match(submit,/trackedQuery\(initialQueryRequest\(query\)\)/);
   assert.equal((submit.match(/trackedQuery\(/g)||[]).length,1);
   assert.doesNotMatch(submit,/isLoanRateComparison|대출 얼마나 늘었어|금리 추이를 보여줘/);

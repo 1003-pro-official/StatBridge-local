@@ -74,7 +74,8 @@ def test_draw_arrow_adds_visible_arrow_without_recoloring_series(operation):
     assert not output['chartState']['range_styles'] and not output['chartState']['series_styles']
     note=output['chartState']['notes'][-1]
     assert note['arrow'] and note['arrow_width']==5 and note['color']=='#ef4444'
-    assert output['plotlyFigure']['layout']['annotations'][-1]['arrowwidth']==5
+    rendered=next(a for a in output['plotlyFigure']['layout']['annotations'] if a.get('name')==note['id'])
+    assert rendered['arrowwidth']==5 and rendered['arrowcolor']=='#ef4444'
 
 
 @pytest.mark.parametrize('symbol',['→','↗','↘','↔','★','●','■','▲','✓','!','♥','◆'])
