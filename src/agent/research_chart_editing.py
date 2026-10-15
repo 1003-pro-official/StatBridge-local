@@ -26,7 +26,7 @@ EDIT_HELP = {
     "add_annotation": "start=실제 관측 시점,value=주석 텍스트",
     "add_reference_line": "value=수평 기준선의 실제 수치",
     "hide_series": "value=숨길 정본 계열 이름",
-    "filter_period": "start/end=원자료에서 표시할 실제 기간. 추가 데이터 생성 아님",
+    "filter_period": "start/end=원자료에서 표시할 실제 기간. 또는 params={years:1/5/10/null}, 마지막 관측시점 기준 최근 N년/null은 확보 자료 전체. 추가 데이터 생성 아님",
     "set_top_n": "value=표시할 상위 계열 수 정수 또는 null로 해제",
     "set_transform": "value=raw/growth_rate/year_over_year/average/cumulative. 원자료를 보존한 표시 변환",
     "set_series_chart_type": "label=정본 계열,value=line/bar/area",
@@ -43,9 +43,9 @@ EDIT_HELP = {
     "reorder_series": "value=[정본 계열 이름,...] 모든 계열을 정확히 한 번 포함",
     "show_series": "value=숨긴 계열의 정본 이름", "clear_highlight": "강조 계열 해제",
     "remove_secondary_axis": "value=계열 이름, 보조축 해제",
-    "set_axis_style": "label=x/y/y2,params={minimum,maximum,scale:linear/log,reverse,show_grid,zero_line,tick_angle,tick_step,decimals,title}. x의 수치 범위는 산점도에서만",
-    "set_presentation": "params={design_template:snapshot/report/stability/outlook/slides/academic/explore,font_family,font_size,title_size,legend_size,font_color,background,grid_color,height,width,title_x,title_y,margin_left,margin_right,margin_top,margin_bottom,bar_mode:group/stack/relative,bar_gap,bar_orientation:vertical/horizontal,number_decimals,latest_values:true/false,shared_y,notes,color_scale:Viridis/Blues/Reds/RdBu/YlOrRd/Greens,reverse_colors,show_colorbar}",
-    "add_note": "params={text,label?,period?,x?,y?,ax?,ay?,arrow?,color?,font_size?}. 계열과 시점이 있으면 실제 관측점에 연결, 없으면 paper x/y=0~1(아래0 위1)",
+    "set_axis_style": "label=x/y/y2,params={minimum,maximum,scale:linear/log,reverse,show_grid,zero_line,tick_angle,tick_step,decimals,title,title_position:0~1,title_standoff:0~80}. x의 수치 범위는 산점도에서만",
+    "set_presentation": "params={design_template:snapshot/report/stability/outlook/slides/academic/explore,font_family,font_size,title_size,legend_size,font_color,background,grid_color,height,width,title_x,title_y,margin_left,margin_right,margin_top,margin_bottom,bar_mode:group/stack/relative,bar_gap:0~0.8,bar_group_gap:0~0.8,bar_orientation:vertical/horizontal,number_decimals,latest_values:true/false,shared_y,sync_y_axes,notes,color_scale:Viridis/Blues/Reds/RdBu/YlOrRd/Greens,reverse_colors,show_colorbar}",
+    "add_note": "params={text,placement?:inside/below,label?,period?,x?,y?,ax?,ay?,arrow?,color?,font_size?}. 계열과 시점이 있으면 실제 관측점에 연결, 없으면 paper x/y=0~1(아래0 위1)",
     "update_note": "value=notes의 id,params=변경 필드", "remove_note": "value=notes의 id",
     "add_guide": "params={orientation:horizontal/vertical,value,label?,text?,color?,dash?,width?}. 수평 실제 y값/수직 실제 시점",
     "update_guide": "value=guides의 id,params=변경 필드", "remove_guide": "value=guides의 id",
@@ -125,7 +125,10 @@ def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list
         if value not in labels:
             raise ValueError("계열을 확인해 주세요.")
         updates["secondary_axis_series"] = [label for label in spec.secondary_axis_series if label != value]
+        if spec.report and spec.report.kind=="dual_axis":
+            updates["report"]=spec.report.model_copy(update={"right_axis":updates["secondary_axis_series"],"kind":"dual_axis" if updates["secondary_axis_series"] else "forecast"})
         if not updates["secondary_axis_series"]:
+            updates["presentation"]=spec.presentation.model_copy(update={"sync_y_axes":False})
             updates["axes"] = {name: axis for name, axis in spec.axes.items() if name != "y2"}
     elif op == "clear_range_styles":
         if command.label and command.label not in labels:
@@ -173,8 +176,12 @@ def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list
 
 def validate_research_spec(series: list[dict[str, Any]], spec: ChartSpec) -> None:
     by_label = {s["label"]: s for s in series}
+    from synchronized_axes import synchronized_scale
+    synchronized_scale(series,spec)
     if spec.layout != "combined" and spec.chart_type in {"pie", "donut", "treemap", "waterfall", "scatter", "bubble", "heatmap"}:
         raise ValueError("이 그래프의 패널 배치는 지원하지 않습니다. 선·막대·영역·분포 그래프를 사용해 주세요.")
+    if spec.secondary_axis_series and set(spec.secondary_axis_series)>=set(by_label):
+        raise ValueError("왼쪽 축에도 적어도 하나의 계열을 남겨 주세요.")
     if spec.secondary_axis_series and spec.layout != "combined":
         raise ValueError("보조축은 합쳐 그리기에서만 지원합니다. 먼저 보조축을 해제해 주세요.")
     if spec.presentation.shared_y and len({s["unit"] for s in series}) > 1:

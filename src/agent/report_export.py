@@ -149,7 +149,7 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
         fig,axes=plt.subplots(rows,columns,figsize=(o.width/100,o.height/100),squeeze=False)
         primary=axes.flat[0];secondary=primary.twinx() if o.kind=='dual_axis' else None
         bottom,title_lines,subtitle_lines,subtitle_y,legend_labels,legend_columns,legend_rows,max_lines,legend_height,legend_top,top,lines=_print_layout(series,spec,result)
-        fig.subplots_adjust(left=.1,right=.9,top=top,bottom=bottom,wspace=.3,hspace=.5)
+        fig.subplots_adjust(left=max(.1,(85+(spec.axes["y"].title_standoff if "y" in spec.axes else 0))/o.width),right=1-max(.1,(85+(spec.axes["y2"].title_standoff if "y2" in spec.axes else 0))/o.width),top=top,bottom=bottom,wspace=.3,hspace=.5)
         def color(i,s):return (spec.series_styles[s['label']].color if s['label'] in spec.series_styles and spec.series_styles[s['label']].color else spec.series_colors.get(s['label'],colors[i%len(colors)]))
         def target(i,s):return axes.flat[i] if o.kind=='panels' else secondary if secondary and s['label'] in o.right_axis else primary
         try:
@@ -192,14 +192,14 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
                             bottoms=[]
                             for date,value in zip(x,y):
                                 key=(id(ax),date,value>=0);bottom=bar_bases.get(key,0);bottoms.append(bottom);bar_bases[key]=bottom+value;bar_tops[(s['label'],date)]=bottom+value
-                            ax.bar(x,y,bottom=bottoms,width=.8,label=name,color=color(i,s),alpha=alpha)
+                            ax.bar(x,y,bottom=bottoms,width=(1-spec.presentation.bar_gap)*(1-spec.presentation.bar_group_gap),label=name,color=color(i,s),alpha=alpha)
                         else:
                             bars=[j for j,item in enumerate(series) if target(j,item) is ax and spec.series_chart_types.get(item['label'],'bar' if o.kind=='dual_axis' and item['label'] in o.right_axis else legacy or 'line')=='bar']
-                            width=.8/max(1,len(bars));offset=(bars.index(i)-(len(bars)-1)/2)*width
+                            slot=(1-spec.presentation.bar_gap)/max(1,len(bars));width=slot*(1-spec.presentation.bar_group_gap);offset=(bars.index(i)-(len(bars)-1)/2)*slot
                             ax.bar(np.asarray(x)+offset,y,width=width,label=name,color=color(i,s),alpha=alpha)
                     elif o.kind=='contribution' and local_kind not in {'line','area'}:
                         base=np.where(y>=0,positive,negative)
-                        ax.bar(x,y,bottom=base,label=name,color=color(i,s));positive+=np.maximum(y,0);negative+=np.minimum(y,0)
+                        ax.bar(x,y,bottom=base,width=(1-spec.presentation.bar_gap)*(1-spec.presentation.bar_group_gap),label=name,color=color(i,s));positive+=np.maximum(y,0);negative+=np.minimum(y,0)
                     elif o.kind=='stacked_area': pass
                     else:
                         if local_kind=='area':ax.fill_between(x,y,alpha=.15,color=color(i,s),zorder=0)
@@ -241,7 +241,8 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
                 ax.tick_params(labelsize=spec.presentation.font_size*.72)
                 ax.spines[['top','right']].set_visible(False)
                 ax.grid(axis='y',color=spec.presentation.grid_color,linewidth=.6);ax.set_axisbelow(True)
-                if spec.x_axis_label and o.kind not in {'regression','bubble'}:ax.set_xlabel(spec.x_axis_label,fontproperties=font)
+                if spec.x_axis_label:ax.set_xlabel(spec.x_axis_label,fontproperties=font)
+                if spec.y_axis_label:ax.set_ylabel(spec.y_axis_label,fontproperties=font)
                 xstyle=spec.axes.get('x')
                 if xstyle:
                     # Matplotlib turns a disabled grid back on when style kwargs
@@ -264,6 +265,7 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
                 for e in o.events:
                     ax.axvline(periods.index(e.period),color='#777777',ls=':',lw=1);ax.text(periods.index(e.period),1.01,e.text,transform=ax.get_xaxis_transform(),fontproperties=font,fontsize=9)
             if secondary:
+                primary.set_zorder(secondary.get_zorder()+1);primary.patch.set_visible(False)
                 secondary.set_ylabel(next(s['unit'] for s in series if s['label'] in o.right_axis),fontproperties=font)
                 if spec.presentation.design_template=='snapshot':
                     secondary.spines[['top','left','bottom']].set_visible(False)
@@ -273,6 +275,25 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
                     primary.set_zorder(secondary.get_zorder()+1);primary.patch.set_visible(False)
                 axis=spec.axes.get('y2')
                 if axis and axis.minimum is not None:secondary.set_ylim(axis.minimum,axis.maximum)
+            from synchronized_axes import synchronized_scale
+            sync=synchronized_scale(series,spec)
+            if secondary and sync:
+                bounds,step,reverse=sync
+                for ax in [primary,secondary]:
+                    ax.set_ylim(list(reversed(bounds)) if reverse else bounds)
+                    ax.yaxis.set_major_locator(ticker.MultipleLocator(step))
+            # Position titles in axes coordinates; retain independent left/right units.
+            for name,style in spec.axes.items():
+                targets=[secondary] if name=='y2' and secondary else list(axes.flat) if name in {'x','y'} else []
+                for ax in targets:
+                    horizontal=name=='x';obj=ax.xaxis if horizontal else ax.yaxis
+                    if style.title is not None:obj.label.set_text(style.title)
+                    if style.title_position is not None or style.title_standoff:
+                        pos=style.title_position if style.title_position is not None else .5
+                        size=(ax.get_position().height*o.height if horizontal else ax.get_position().width*o.width)
+                        shift=(60+style.title_standoff)/max(1,size)
+                        if horizontal:obj.set_label_coords(pos,-shift);obj.label.set_ha('left' if pos==0 else 'right' if pos==1 else 'center')
+                        else:obj.set_label_coords(1+shift if name=='y2' else -shift,pos)
             for g in spec.guides:
                 if g.orientation=='horizontal':primary.axhline(float(g.value),color=g.color,ls='--',lw=g.width)
                 elif str(g.value) in periods:primary.axvline(periods.index(str(g.value)),color=g.color,ls='--',lw=g.width)
@@ -280,6 +301,7 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
             for h in spec.highlights:
                 if h.start in periods and h.end in periods:primary.axvspan(periods.index(h.start)-.5,periods.index(h.end)+.5,color=h.color,alpha=h.opacity,zorder=0)
             for note in spec.notes:
+                if note.placement == "below":continue
                 xy=(note.x,note.y);coords='axes fraction';target_ax=primary
                 if note.label and note.period:
                     s=next((s for s in series if s['label']==note.label),None)
@@ -334,10 +356,12 @@ def _print_layout(series,spec,result):
     o=spec.report
     count=len(series) if o.kind=='panels' else 1
     columns=min(o.columns,count);rows=(count+columns-1)//columns
-    footer=[source_caption(result,o),*o.footnotes]
+    footer=[*(n.text for n in spec.notes if n.placement=="below"),source_caption(result,o),*o.footnotes]
     footer.extend(f'{b.label} {b.level:.0%}: {b.method}; {b.source}' for b in o.intervals)
     lines=[line for text in footer for line in textwrap.wrap(text,max(35,int(o.width/13)-12))]
     bottom=max(.15,len(lines)*.18/(o.height/100)+.08)
+    if spec.axes.get("x") and (spec.axes["x"].title_position is not None or spec.axes["x"].title_standoff):
+        bottom=max(bottom,(110+spec.axes["x"].title_standoff+len(lines)*18)/o.height)
     if bottom>.42:
         raise ValueError('출처·각주가 출력 높이에 비해 너무 깁니다. 내용을 줄이거나 높이를 늘려 주세요.')
     title_lines=textwrap.wrap(spec.title,50) or ['']

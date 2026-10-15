@@ -17,7 +17,7 @@ def observations():
 @pytest.mark.parametrize('template', [f'BOK-T0{i}' for i in range(1, 7)])
 def test_all_templates_preserve_data_and_export(template):
     source = observations(); original = copy.deepcopy(source)
-    doc = build_table(source, TableOptions(template=template, emphasized_labels=['조회된 소계'], note='관측값 비교'))
+    doc = build_table(source, TableOptions(decimals=1, template=template, emphasized_labels=['조회된 소계'], note='관측값 비교'))
     assert source == original
     assert doc['sections'][0]['rows'][1][1:] == [1.234, 0, -2.5]
     assert doc['sections'][0]['emphasizedRows'] == [1]
@@ -27,7 +27,9 @@ def test_all_templates_preserve_data_and_export(template):
         sheet = ET.fromstring(archive.read('xl/worksheets/sheet1.xml'))
         ns = {'s': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
         assert [float(x.text) for x in sheet.findall('.//s:v', ns)] == [1.234, 0, -2.5] * 2
-        assert bool(sheet.findall('.//s:mergeCell', ns)) == (template in {'BOK-T02', 'BOK-T03'})
+        refs = [cell.get('ref') for cell in sheet.findall('.//s:mergeCell', ns)]
+        assert any(ref.startswith('A1:') for ref in refs)  # Shared title spans the table.
+        assert any(not ref.startswith('A') for ref in refs) == (template in {'BOK-T02', 'BOK-T03'})
 
 
 def test_grouping_respects_actual_dates_and_transpose():
@@ -55,6 +57,6 @@ def test_edit_contract_validates_labels_and_records_readable_description():
 
 @pytest.mark.parametrize('template', ['BOK-T02', 'BOK-T04', 'BOK-T05', 'BOK-T06'])
 def test_visual_exports(template):
-    doc = build_table(observations(), TableOptions(template=template, emphasized_labels=['조회된 소계']))
+    doc = build_table(observations(), TableOptions(decimals=1, template=template, emphasized_labels=['조회된 소계']))
     assert render_table_file(doc, 'png').startswith(b'\x89PNG')
     assert render_table_file(doc, 'pdf').startswith(b'%PDF')

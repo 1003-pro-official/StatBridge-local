@@ -7,6 +7,7 @@ import math
 import re
 import textwrap
 import zipfile
+import unicodedata
 from decimal import Decimal, ROUND_HALF_UP, localcontext
 from xml.sax.saxutils import escape
 
@@ -17,7 +18,10 @@ from typing import Literal
 class TableOptions(BaseModel):
     model_config = ConfigDict(extra='forbid')
     orientation: Literal['indicators', 'periods'] = 'indicators'
-    decimals: int = Field(default=1, ge=0, le=6)
+    decimals: int | None = Field(default=None, ge=0, le=6)
+    table_number: str = Field(default="1", max_length=20, pattern=r"^[0-9A-Za-z가-힣.\-]+$")
+    print_preset: Literal["auto", "a4_portrait", "a4_landscape"] = "auto"
+    comparison: Literal['none', 'previous_change', 'yearly_change', 'period_change', 'period_growth'] = 'none'
     recent_periods: int | None = Field(default=None, ge=1, le=600)
     labels: list[str] = Field(default_factory=list, max_length=100)
     highlight_latest: bool = True
@@ -34,7 +38,7 @@ def header_groups(headers, options):
     groups = []
     for index, label in enumerate(headers[1:], 1):
         match = re.match(r'^(\d{4})(?:-|년|$)', label)
-        year = match[1] + '년' if match else label
+        year = match[1] + '년' if match else ''
         if groups and groups[-1]['label'] == year:
             groups[-1]['span'] += 1
         else:
@@ -53,9 +57,28 @@ def period_label(value, frequency=''):
     return s
 
 
-def build_table(series, options=None, *, title='', sources=None):
+def build_table(series, options=None, *, title='', sources=None, display_names=None):
     options = options or TableOptions()
+    if options.comparison != 'none' and options.orientation != 'indicators':
+        raise ValueError('비교 계산 열은 지표를 행으로 배치할 때 사용할 수 있습니다.')
     known = {s['label']: s for s in series}
+    display_names = display_names or {}
+    if options.decimals is None:
+        rate = any('%' in s.get('unit', '') or '＝100' in s.get('unit', '') or '=100' in s.get('unit', '') for s in series)
+        precisions=[min(6,max(0,-Decimal(str(p['value'])).as_tuple().exponent))
+                    for s in series for p in s.get('points',[])
+                    if isinstance(p.get('value'),(int,float)) and math.isfinite(p['value'])]
+        options = options.model_copy(update={'decimals': max([2 if rate else 1,*precisions])})
+    visible_sources = {s.get('sourceId') for s in series if s.get('sourceId')}
+    unique_sources = {}
+    for source in sources or []:
+        if visible_sources and source.get('tableId') not in visible_sources:
+            continue
+        key = (source.get('tableId'), source.get('organizationId'))
+        unique_sources.setdefault(key, {**source, 'displaySource': '한국은행' if source.get('organizationId') == '301' else 'KOSIS'})
+    sources = list(unique_sources.values())
+    prefixes = [s['label'].split(' · ', 1) for s in series]
+    shared_prefix = prefixes[0][0] if len(prefixes)>1 and all(len(p)==2 and p[0]==prefixes[0][0] for p in prefixes) else None
     if options.labels and len(set(options.labels)) != len(options.labels):
         raise ValueError('표 항목은 현재 표시된 데이터에서 중복 없이 선택해 주세요.')
     retained = [label for label in options.labels if label in known]
@@ -81,16 +104,44 @@ def build_table(series, options=None, *, title='', sources=None):
                     raise ValueError('같은 항목·시점에 값이 두 개 있습니다. 분류를 구분해 다시 조회해 주세요.')
                 indexed[date] = value if isinstance(value, (int, float)) and math.isfinite(value) else None
             values.append([indexed.get(p) for p in periods])
-        names = [f"{s['label']} ({s['unit']})" for s in items]
+        names = [f"{display_names.get(s['label']) or (s['label'].split(' · ',1)[1] if shared_prefix else s['label'])} ({s['unit']})" for s in items]
         if options.orientation == 'indicators':
             headers = ['지표 · 단위', *[period_label(p, frequency) for p in periods]]
             rows = [[name, *v] for name, v in zip(names, values)]
         else:
             headers = ['시점', *names]
             rows = [[period_label(p, frequency), *[v[i] for v in values]] for i, p in enumerate(periods)]
+        computed = []
+        if options.comparison != 'none' and periods:
+            from report_summary import ordinal, difference_unit
+            label={'previous_change':'전기 대비','yearly_change':'전년동기 대비','period_change':'조회 시작 대비 변화','period_growth':'조회 시작 대비 증가율'}[options.comparison]
+            units={('%' if options.comparison=='period_growth' else difference_unit(s['unit'])) for s in items}
+            headers.append(label + (' ('+next(iter(units))+')' if len(units)==1 else ' (단위는 계산 근거 참조)'))
+            for row,item in zip(rows,items):
+                current=next((p for p in item['points'] if p['date']==periods[-1]),None)
+                baseline=None
+                if options.comparison.startswith('period_'):
+                    baseline=next((p for p in item['points'] if p['date']==periods[0]),None)
+                elif current:
+                    last=ordinal(current['date'],frequency)
+                    lag=({'M':12,'Q':4,'A':1,'Y':1}.get(frequency) if options.comparison=='yearly_change' else 1)
+                    if last is not None and lag:
+                        baseline=next((p for p in item['points'] if ordinal(p['date'],frequency)==last-lag),None)
+                value=None
+                if baseline and current:
+                    a,b=Decimal(str(current['value'])),Decimal(str(baseline['value']))
+                    if options.comparison=='period_growth':
+                        if b>0:value=float((a/b-1)*100)
+                    else:value=float(a-b)
+                row.append(value)
+                computed.append({'label':item['label'],'column':len(headers)-1,'unit':'%' if options.comparison=='period_growth' else difference_unit(item['unit']),
+                                 'formula':'(latest / baseline - 1) * 100' if options.comparison=='period_growth' else 'latest - baseline',
+                                 'observations':[p for p in [baseline,current] if p], 'value':value,
+                                 'reason':None if value is not None else '비교에 필요한 관측값이 없거나 증가율 기준값이 0 이하입니다.' })
         emphasized = [i for i, item in enumerate(items) if item['label'] in options.emphasized_labels] if options.orientation == 'indicators' else []
-        sections.append({'frequency': frequency, 'periods': periods, 'periodCaption': f'{period_label(periods[0], frequency)} ~ {period_label(periods[-1], frequency)}' if periods else '관측값 없음', 'headers': headers, 'rows': rows, 'headerGroups': header_groups(headers, options.model_dump()), 'emphasizedRows': emphasized})
+        sections.append({'frequency': frequency, 'periods': periods, 'periodCaption': f'{period_label(periods[0], frequency)} ~ {period_label(periods[-1], frequency)}' if periods else '관측값 없음', 'headers': headers, 'rows': rows, 'headerGroups': header_groups(headers, options.model_dump()), 'emphasizedRows': emphasized, 'computedCells': computed})
     return {'title': options.title or title or '통계 비교표', 'options': options.model_dump(),
+            'caption': f"표 {options.table_number}. {options.title or title or '통계 비교표'}",
             'sections': sections, 'sources': sources or [],
             'notes': ['—: 해당 시점의 관측값이 없습니다. 원자료 주기를 유지하며 합산·평균·보간하지 않았습니다.',
                       *(['그래프에서 제외되거나 변경된 항목은 표 선택에서도 제외했습니다.'] if removed else []),
@@ -110,8 +161,12 @@ def text_value(value, decimals):
     return str(value)
 
 
+def frequency_name(value):
+    return {'M':'월별','Q':'분기별','A':'연별','Y':'연별','D':'일별'}.get(value,value)
+
+
 def _source_lines(doc):
-    return [f"자료: {s.get('tableName', '')} · {s.get('tableId', '')} · {s.get('source', '')}" for s in doc['sources']]
+    return list(dict.fromkeys(f"자료: {s.get('displaySource', 'KOSIS')} · {s.get('tableName', '')}" for s in doc['sources']))
 
 
 def render_csv(doc):
@@ -123,7 +178,7 @@ def render_csv(doc):
         if v is None: return '—'
         if isinstance(v, str) and v.lstrip().startswith(('=', '+', '-', '@')): return "'" + v
         return text_value(v, doc['options']['decimals'])
-    writer.writerow([safe('표 1. ' + doc['title'])])
+    writer.writerow([safe(doc['caption'])])
     for section in doc['sections']:
         frequency = {'M': '월별', 'Q': '분기별', 'Y': '연별', 'A': '연별', 'D': '일별'}.get(section['frequency'], section['frequency'])
         writer.writerow([f"{frequency} · {section['periodCaption']}"])
@@ -147,9 +202,9 @@ def render_xlsx(doc):
         return out
     highlights = set()
     merges = []
-    records = [([doc['title']], 1)]
+    records = [([doc['caption']], 1)]
     for section in doc['sections']:
-        records += [([section['frequency'] + ' · ' + section['periodCaption']], 1)]
+        records += [([frequency_name(section['frequency']) + ' · ' + section['periodCaption']], 1)]
         if section.get('headerGroups'):
             grouped = [''] * len(section['headers'])
             for group in section['headerGroups']:
@@ -161,7 +216,7 @@ def render_xlsx(doc):
         for index, row in enumerate(section['rows']):
             ri = len(records) + 1
             if doc['options']['highlight_latest']:
-                if doc['options']['orientation'] == 'indicators': highlights.add(f'{col(len(row))}{ri}')
+                if doc['options']['orientation'] == 'indicators': highlights.add(f"{col(len(section['periods'])+1)}{ri}")
                 elif index == len(section['rows']) - 1: highlights.update(f'{col(j)}{ri}' for j in range(2, len(row) + 1))
             records.append((row, 1 if doc['options'].get('template') == 'BOK-T05' and index in section.get('emphasizedRows', []) else 0))
         records += [([], 0)]
@@ -171,6 +226,7 @@ def render_xlsx(doc):
     rows = []
     def xml_text(value):
         return escape(re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', str(value) if value is not None else '—'))
+    column_count=max((len(values) for values,_ in records),default=1)
     for i, (values, style) in enumerate(records, 1):
         cells = []
         for j, value in enumerate(values, 1):
@@ -179,14 +235,16 @@ def render_xlsx(doc):
                 cells.append(f'<c r="{address}" s="{4 if address in highlights or style else 2}"><v>{value}</v></c>')
             else:
                 cells.append(f'<c r="{address}" s="{style or 3}" t="inlineStr"><is><t xml:space="preserve">{xml_text(value)}</t></is></c>')
-        height = max([20, *[18 * max(1, math.ceil(len(str(v)) / (24 if j == 0 else 12))) for j, v in enumerate(values) if isinstance(v, str)]])
+        wide = len(values)==1 and isinstance(values[0],str) and column_count>1
+        if wide:merges.append(f'A{i}:{col(column_count)}{i}')
+        height = max([20, *[18 * max(1, math.ceil(sum(2 if unicodedata.east_asian_width(c) in {'W','F'} else 1 for c in str(v)) / ((30+11*(column_count-1)) if wide else 28 if j == 0 else 10))) for j, v in enumerate(values) if isinstance(v, str)]])
         rows.append(f'<row r="{i}" ht="{height}" customHeight="1">{"".join(cells)}</row>')
     ns = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
     decimals = doc['options']['decimals']
     number_format = '#,##0' + ('.' + '0' * decimals if decimals else '')
-    sheet = f'<worksheet xmlns="{ns}"><sheetViews><sheetView workbookViewId="0"><pane ySplit="3" topLeftCell="B4" state="frozen"/></sheetView></sheetViews><cols><col min="1" max="1" width="48" customWidth="1"/><col min="2" max="16384" width="24" customWidth="1"/></cols><sheetData>{"".join(rows)}</sheetData></worksheet>'
+    sheet = f'<worksheet xmlns="{ns}"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"><pane ySplit="3" topLeftCell="B4" state="frozen"/></sheetView></sheetViews><cols><col min="1" max="1" width="30" customWidth="1"/><col min="2" max="16384" width="11" customWidth="1"/></cols><sheetData>{"".join(rows)}</sheetData><printOptions horizontalCentered="1"/><pageMargins left="0.3" right="0.3" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>'
     if merges:
-        sheet = sheet.replace('</worksheet>', f'<mergeCells count="{len(merges)}">' + ''.join(f'<mergeCell ref="{ref}"/>' for ref in merges) + '</mergeCells></worksheet>')
+        sheet = sheet.replace('<printOptions', f'<mergeCells count="{len(merges)}">' + ''.join(f'<mergeCell ref="{ref}"/>' for ref in merges) + '</mergeCells><printOptions')
     if doc['sections'] and doc['sections'][0].get('headerGroups'):
         sheet = sheet.replace('ySplit="3" topLeftCell="B4"', 'xSplit="1" ySplit="4" topLeftCell="B5"')
     files = {
@@ -197,6 +255,12 @@ def render_xlsx(doc):
         'xl/styles.xml': f'<styleSheet xmlns="{ns}"><numFmts count="1"><numFmt numFmtId="164" formatCode="{number_format}"/></numFmts><fonts count="2"><font><sz val="11"/><name val="맑은 고딕"/></font><font><b/><sz val="11"/><name val="맑은 고딕"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFEDF7F3"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf><xf numFmtId="164" fontId="1" fillId="2" borderId="0" xfId="0" applyNumberFormat="1" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>',
         'xl/worksheets/sheet1.xml': sheet,
     }
+    repeat = 4 if doc['sections'] and doc['sections'][0].get('headerGroups') else 3
+    last_col = col(max((len(row) for row, _ in records), default=1))
+    names = f'<definedNames><definedName name="_xlnm.Print_Area" localSheetId="0">&apos;보고서 표&apos;!$A$1:${last_col}${len(records)}</definedName><definedName name="_xlnm.Print_Titles" localSheetId="0">&apos;보고서 표&apos;!$1:${repeat}</definedName></definedNames>'
+    files['xl/workbook.xml'] = files['xl/workbook.xml'].replace('</workbook>', names+'</workbook>')
+    if doc['options'].get('print_preset') == 'a4_portrait':
+        files['xl/worksheets/sheet1.xml'] = files['xl/worksheets/sheet1.xml'].replace('orientation="landscape"','orientation="portrait"')
     out = io.BytesIO()
     if doc['options'].get('template', 'default') != 'default':
         styles = files['xl/styles.xml'].replace('val="11"', 'val="9"').replace('FFEDF7F3', 'FFF4F6F7')
@@ -219,20 +283,36 @@ def render_table_file(doc, format):
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_pdf import PdfPages
     pages = []
+    sheet_width=8.27 if doc['options'].get('print_preset')=='a4_portrait' else 11.69 if doc['options'].get('print_preset')=='a4_landscape' else 14
+    wrap_columns=1
     def wrap_cell(value, first=False):
-        return '\n'.join(textwrap.wrap(str(value), 28 if first else 12))
+        # Korean glyphs use roughly twice the width of ASCII. A character-count
+        # wrap lets a long comparison header spill into the previous month.
+        available=sheet_width*.92*72*(.3 if first else .7/max(1,wrap_columns))*.8
+        limit=max(6,min(40,int(available/4.8)))
+        lines=[];line='';width=0
+        for char in str(value):
+            size=2 if unicodedata.east_asian_width(char) in {'W','F'} else 1
+            if char=='\n' or (line and width+size>limit):
+                lines.append(line.rstrip());line='';width=0
+            if char!='\n':line+=char;width+=size
+        if line:lines.append(line.rstrip())
+        return '\n'.join(lines)
     def line_count(value):
         return max(1, value.count('\n') + 1)
-    footer = '\n'.join('\n'.join(textwrap.wrap(x, 80)) for x in [*doc['notes'], *_source_lines(doc)])
+    footer = '\n'.join('\n'.join(textwrap.wrap(x, max(30,int(sheet_width*5)))) for x in [*doc['notes'], *_source_lines(doc)])
     appendix = footer.splitlines() if len(footer.splitlines()) > 10 else []
     # Repeat headers and split both axes instead of shrinking or clipping long tables.
     for section in doc['sections']:
-        for c in range(1, len(section['headers']), 5):
-            headers = [section['headers'][0], *section['headers'][c:c+5]]
+        page_width = 8.27 if doc['options'].get('print_preset') == 'a4_portrait' else 11.69 if doc['options'].get('print_preset') == 'a4_landscape' else 14
+        capacity = max(1, int(page_width * .92 * 72 * .7 / 48))
+        for c in range(1, len(section['headers']), capacity):
+            headers = [section['headers'][0], *section['headers'][c:c+capacity]]
+            wrap_columns=len(headers)-1
             header_height = max(line_count(wrap_cell(x, j == 0)) for j, x in enumerate(headers)) + 1
             chunk, heights = [], [header_height]
             for row in section['rows']:
-                subset = [row[0], *row[c:c+5]]
+                subset = [row[0], *row[c:c+capacity]]
                 height = max(line_count(wrap_cell(text_value(x, doc['options']['decimals']), j == 0)) for j, x in enumerate(subset)) + 1
                 if height + header_height > 34:
                     raise ValueError('표 항목 이름이 인쇄 영역을 초과합니다. 표시 이름을 짧게 변경하거나 Excel로 출력해 주세요.')
@@ -243,7 +323,7 @@ def render_table_file(doc, format):
             if chunk: pages.append((section['frequency'], headers, chunk, heights))
     if not pages: raise ValueError('출력할 표 관측값이 없습니다.')
     if len(pages) > 120: raise ValueError('인쇄 페이지가 120장을 초과합니다. 표시 기간·항목을 줄여 주세요.')
-    latest = {section['frequency']: (section['headers'][-1] if doc['options']['orientation'] == 'indicators' else section['rows'][-1][0]) for section in doc['sections'] if section['rows']}
+    latest = {section['frequency']: (section['headers'][len(section['periods'])] if doc['options']['orientation'] == 'indicators' else section['rows'][-1][0]) for section in doc['sections'] if section['rows']}
     out = io.BytesIO()
     with EXPORT_LOCK:
         font = _font()
@@ -251,13 +331,20 @@ def render_table_file(doc, format):
         images = []
         try:
             for i, (frequency, headers, rows, heights) in enumerate(pages):
-                fig = plt.figure(figsize=(14, 9))
+                wrap_columns=len(headers)-1
+                page_width = 8.27 if doc['options'].get('print_preset') == 'a4_portrait' else 11.69 if doc['options'].get('print_preset') == 'a4_landscape' else 14
+                title_lines = textwrap.wrap(doc['caption'], max(20,int(page_width*4)))
+                heading_height = .70 + .26 * len(title_lines)
+                page_height = 11.69 if doc['options'].get('print_preset') == 'a4_portrait' else 8.27 if doc['options'].get('print_preset') == 'a4_landscape' else max(3.2, sum(heights)*.22 + heading_height + .35 + min(10,len(footer.splitlines()))*.14)
+                fig = plt.figure(figsize=(page_width, page_height))
                 try:
-                    fig.text(.04, .95, '\n'.join(textwrap.wrap(doc['title'], 55)), fontproperties=font, fontsize=15, va='top')
+                    fig.text(.04, 1-.18/page_height, '\n'.join(title_lines), fontproperties=font, fontsize=15, va='top')
                     frequency_name = {'M': '월별', 'Q': '분기별', 'Y': '연별', 'A': '연별', 'D': '일별'}.get(frequency, frequency)
-                    fig.text(.04, .86, f'{frequency_name} · {i+1}/{len(pages)}', fontproperties=font, fontsize=10)
-                    table_height = min(.59, max(.14, sum(heights) * .021))
-                    table_bottom = .82 - table_height
+                    page_dates = [h for h in headers[1:] if re.match(r'^\d{4}(?:-|년|$)', h)] if doc['options']['orientation']=='indicators' else [r[0] for r in rows]
+                    page_caption = f'{page_dates[0]} ~ {page_dates[-1]}' if page_dates else next(s['periodCaption'] for s in doc['sections'] if s['frequency']==frequency)
+                    fig.text(.04, 1-(.23+.26*len(title_lines))/page_height, f'{frequency_name} · {page_caption} · {i+1}/{len(pages)}', fontproperties=font, fontsize=10, va='top')
+                    table_height = min(.59, max(.14, sum(heights) * .22 / page_height))
+                    table_bottom = 1-heading_height/page_height-table_height
                     ax = fig.add_axes([.04, table_bottom, .92, table_height]); ax.axis('off')
                     cells = [[wrap_cell(text_value(x, doc['options']['decimals']), j == 0) for j, x in enumerate(row)] for row in rows]
                     grouped = header_groups(headers, doc['options'])

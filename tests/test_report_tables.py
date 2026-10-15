@@ -83,13 +83,11 @@ def test_csv_and_print_rounding_agree_with_browser_halfway_values(value, decimal
     assert text_value(value, decimals) == expected
 
 
-def test_print_splits_long_tables_and_keeps_pdf_and_png_pages():
+def test_twelve_month_table_fits_one_page_without_fixed_five_column_split():
     rows = series(); rows[0]['points'] = [{'date': f'2024{i:02}', 'value': i} for i in range(1, 13)]
     doc = build_table(rows)
     out = render_table_file(doc, 'png')
-    with zipfile.ZipFile(io.BytesIO(out)) as archive:
-        assert len(archive.namelist()) == 3
-        assert all(archive.read(name).startswith(b'\x89PNG') for name in archive.namelist())
+    assert out.startswith(b'\x89PNG')
     assert render_table_file(doc, 'pdf').startswith(b'%PDF')
 
 

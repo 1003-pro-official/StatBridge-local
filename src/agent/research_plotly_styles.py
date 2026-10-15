@@ -128,7 +128,7 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
     fig.update_layout(font=dict(family=p.font_family, size=p.font_size, color=p.font_color),
         title=dict(font=dict(size=p.title_size), x=p.title_x, xref="container", xanchor="center" if 0 < p.title_x < 1 else ("left" if p.title_x == 0 else "right")), legend=dict(font=dict(size=p.legend_size)),
         paper_bgcolor=p.background, plot_bgcolor=p.background,
-        margin=dict(l=p.margin_left, r=p.margin_right, t=p.margin_top, b=p.margin_bottom), bargap=p.bar_gap)
+        margin=dict(l=p.margin_left, r=p.margin_right, t=p.margin_top, b=p.margin_bottom), bargap=p.bar_gap, bargroupgap=p.bar_group_gap)
     if p.width:
         fig.update_layout(width=p.width)
     if p.title_y is not None:
@@ -179,6 +179,11 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
                 return trace.xaxis or "x", trace.yaxis or "y"
         return "x", "y"
     for note in spec.notes:
+        if note.placement == "below":
+            fig.add_annotation(name=note.id, captureevents=True, x=0, y=-.01, xref="paper", yref="paper",
+                text=escape(note.text), showarrow=False, xanchor="left", yanchor="top",
+                font=dict(size=note.font_size, color=note.color), opacity=note.opacity)
+            continue
         if note.label:
             if note.label not in by_label:
                 continue

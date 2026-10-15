@@ -30,7 +30,7 @@ def test_auto_fallback_explains_only_successful_render(monkeypatch):
     monkeypatch.setattr(agent, "_propose_spec", lambda *_: {"chart_type": "scatter"})
     explanations = []
 
-    def explain(series, spec, summary):
+    def explain(series, spec, summary, **context):
         explanations.append(spec.chart_type)
         return {"text": summary, "source": "test"}
 
