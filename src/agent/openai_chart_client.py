@@ -72,6 +72,8 @@ class OpenAIEditModel:
     def interpret(self, system, context):
         visual = dict(context.get('visual') or {})
         references = list(visual.pop('reference_files', []))
+        has_reference_files=bool(references)
+        reference_file_count=len(references)
         for name in ('graph_image', 'marked_image'):
             image = visual.pop(name, None)
             if image:
@@ -82,9 +84,18 @@ class OpenAIEditModel:
                    '참고 이미지의 숫자를 현재 통계값으로 바꾸거나 없는 수치를 만들지 않는다. '
                    '모호하거나 데이터 차원이 부족하면 JSON clarification에 필요한 정보에 대한 질문을 반환한다. '
                    '적용할 수 있는 명령만 기존 스키마의 JSON commands로 반환한다.')
+        if has_reference_files:
+            from chart_reference_policy import REFERENCE_STYLE_POLICY,REFERENCE_STRUCTURE_POLICY,generic_reference_style
+            system += '\n' + REFERENCE_STYLE_POLICY
+            structure=generic_reference_style(context.get('instruction','')) and not visual.get('marks') and reference_file_count==1
+            if structure:system += '\n' + REFERENCE_STRUCTURE_POLICY
         text, _ = self.client.request(system, json.dumps(clean, ensure_ascii=False),
                                       references=references, max_tokens=8000, json_mode=True)
-        return self.client._json_object(text)
+        proposal=self.client._json_object(text)
+        if has_reference_files and structure:
+            from chart_reference_policy import bind_reference_structure
+            proposal=bind_reference_structure(proposal,context)
+        return proposal
 
     def review(self, system, context, proposal):
         from chart_edit_agent import Hcx007EditModel

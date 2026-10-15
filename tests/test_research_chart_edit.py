@@ -44,7 +44,7 @@ def test_point_style_does_not_restyle_edges():
     assert all(t["line"]["dash"]=="solid" and t["line"]["color"]!="#ff0000" for t in traces if t["mode"]=="lines")
     marker=traces[-1]
     assert marker["marker"]["symbol"]==["circle","circle","diamond","circle","circle"]
-    assert marker["text"]==["","","15.0","",""]
+    assert marker["text"]==["","","15.00","",""]
 
 
 @pytest.mark.parametrize("kind",["line","area","bar","stacked_bar","scatter","bubble"])
@@ -155,8 +155,11 @@ def test_axes_presentation_and_series_properties_render():
     assert figure["data"][1]["line"]=={"color":"#123456","dash":"dot","width":6.0,"shape":"linear"}
     assert figure["layout"]["yaxis"]["range"]==[1,40]
     assert figure["layout"]["yaxis"]["showgrid"] is False
-    assert figure["layout"]["font"]["size"]==16 and figure["layout"]["height"]==600
-    assert figure["layout"]["annotations"][-1]["text"]=="출처: 합성자료"
+    assert figure["layout"]["font"]["size"]==16 and figure["layout"]["height"]>=600
+    assert result['chartState']['presentation']['height']==600
+    assert figure['layout']['height']-figure['layout']['margin']['t']-figure['layout']['margin']['b']>=260-1e-6
+    assert any(a['text']=='출처: 합성자료' for a in figure['layout']['annotations'])
+    assert any('DT_TEST' in a['text'] for a in figure['layout']['annotations'])
 
 
 @pytest.mark.parametrize("layout",["separate","horizontal","grid"])

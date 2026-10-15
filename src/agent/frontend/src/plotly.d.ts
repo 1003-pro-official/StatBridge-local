@@ -1,6 +1,7 @@
 declare module "plotly.js-dist-min" {
   const Plotly: {
     react: (element: HTMLElement, data: unknown[], layout: object, config?: object) => Promise<unknown>;
+    relayout: (element: HTMLElement, update: object) => Promise<unknown>;
     purge: (element: HTMLElement) => void;
     Plots: { resize: (element: HTMLElement) => Promise<void> };
     toImage: (element: HTMLElement, options: { format: string; width: number; height: number }) => Promise<string>;

@@ -197,6 +197,10 @@ def test_target_runtime_contract_is_not_replaced():
     assert '?? "http://127.0.0.1:8000/api"' in client
     assert "isLoanRateComparison" not in app
     assert "trackedQuery(initialQueryRequest(query))" in app
-    assert "return submitQuery(payload);" in app
+    # Automatic presentation may await the reply, but must still send the
+    # original request to the authoritative backend without UI query rewriting.
+    assert "submitQuery(payload,signal)" in app
+    assert "withAnalysisDeadline(async signal=>" in app
+    assert "submitOutput(output,signal)" in app
     assert "outputSpec?.visualization?.editOptions" in app
     assert "$1[redacted]" in app

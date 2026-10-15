@@ -8,7 +8,8 @@ import math
 
 from output_schema import ChartEditCommand, ChartSpec, Highlight, Annotation
 from plotly_renderer import render_plotly
-from chart_availability import inspect_charts, combined_layout_reason
+from chart_availability import inspect_charts, combined_layout_reason, comparable_axis_units
+from report_table import build_table
 
 
 SUPPORTED_CHART_TYPES = {"auto", "line", "bar", "stacked_bar", "area", "scatter", "bubble", "pie", "donut", "histogram", "box", "heatmap", "treemap", "waterfall"}
@@ -16,30 +17,8 @@ SUPPORTED_LAYOUTS = {"combined", "separate", "horizontal", "grid"}
 
 
 def edit_change_description(command: ChartEditCommand) -> str:
-    if command.operation=='set_report':
-        from advanced_chart_spec import TEMPLATES
-        if command.params.get('clear'):return '일반 그래프 설정으로 복원했습니다.'
-        patch=command.params.get('patch',{})
-        template=TEMPLATES.get(patch.get('template'),{}).get('name','현재 보고서')
-        return f'보고서 설정 적용: {template}. 기존 관측값을 유지했습니다.'
-    if command.operation == "set_stickers":
-        return f"그래프 이모티콘 배치·크기·회전 적용: {len(command.params.get('items', []))}개"
-    names = {"set_title":"제목", "set_subtitle":"부제목", "set_axis_labels":"축 이름",
-        "set_axis_style":"축 표시", "set_legend":"범례", "set_presentation":"글꼴·배치",
-        "set_segment_style":"선택 구간 스타일", "set_point_style":"선택 관측점 스타일",
-        "set_series_color":"계열 색상", "set_series_dash":"선 모양", "set_series_style":"계열 스타일",
-        "set_line_width":"선 두께", "highlight_period":"기간 강조", "filter_period":"표시 기간",
-        "set_chart_type":"그래프 종류", "set_layout":"그래프 배치", "rename_series":"계열 표시 이름",
-        "set_transform":"표시값 변환", "hide_series":"계열 숨기기", "show_series":"계열 다시 표시",
-        "add_note":"메모 추가", "add_annotation":"주석 추가", "reset_styles":"스타일 초기화"}
-    fields = {"tick_step":"눈금 간격", "tick_angle":"글자 각도", "color":"색상", "dash":"선 모양",
-        "width":"선 두께", "marker_size":"점 크기", "show_grid":"격자 표시", "minimum":"최솟값",
-        "maximum":"최댓값", "title":"축 제목", "font_size":"글자 크기", "title_size":"제목 크기"}
-    detail = ", ".join(f"{fields.get(k,k)} {v}" for k,v in command.params.items()) if command.params else str(
-        command.value if command.value is not None else command.x_axis_label or command.y_axis_label or "")
-    label = {"x":"가로축", "y":"세로축", "y2":"보조 세로축"}.get(command.label, command.label) if command.operation == "set_axis_style" else command.label
-    period = f" · {command.start} ~ {command.end or command.start}" if command.start else ""
-    return f"{names.get(command.operation, '그래프 설정 변경')}{' · ' + label if label else ''}{period}: {detail}"
+    from edit_description import describe_edit
+    return describe_edit(command)
 
 
 @dataclass(slots=True)
@@ -295,7 +274,7 @@ class OutputAgent:
         validate_research_spec(series, spec)
         if spec.secondary_axis_series and spec.chart_type not in {"line", "bar", "stacked_bar", "area"}:
             raise ValueError("보조축은 선·막대·영역 그래프에서만 사용할 수 있습니다.")
-        mixed_units = len({s["unit"] for s in series}) > 1
+        mixed_units = len(comparable_axis_units(series)) > 1
         mixed_frequency = len({s["frequency"] for s in series if s["frequency"]}) > 1
         if not spec.report and (mixed_frequency or (mixed_units and not spec.secondary_axis_series)) and spec.layout == "combined" and spec.chart_type not in {"scatter", "bubble"}:
             raise ValueError(combined_layout_reason(series))
@@ -318,13 +297,25 @@ class OutputAgent:
             figure = render_plotly(series, materialize(spec,[s['label'] for s in series]))
             from advanced_chart_render import report_warnings
             renderer_info['warnings']=report_warnings(series,spec)
+            if spec.presentation.design_template=='snapshot':
+                import plotly.graph_objects as go
+                from plotly_renderer import arrange_bottom_captions
+                from advanced_chart_render import source_caption
+                from types import SimpleNamespace
+                native=go.Figure(figure)
+                native.add_annotation(name='statbridge-footer:source',x=0,y=-.1,xref='paper',yref='paper',text=source_caption(result,SimpleNamespace(source_note='')),showarrow=False,font=dict(size=11,color='#657586'))
+                arrange_bottom_captions(native,series,spec)
+                figure=json.loads(native.to_json())
         from report_summary import explain
+        from report_export import export_formats
         explanation = self._explain(summary_series, spec, summary) if generate_explanation else explain(summary_series)
         return {
             "status": "ready" if any(s["points"] for s in series) else "empty",
             "agent": "output-agent-chartspec-v2",
             "summary": explanation["text"],
             "table": self._table(series),
+            "exportFormats": export_formats(series,spec,result),
+            "tableDocument": build_table(series, spec.report_table, title=spec.title, sources=self._evidence(result)),
             "explanation": explanation,
             "evidence": self._evidence(result),
             "chartState": spec.model_dump(),
@@ -342,9 +333,26 @@ class OutputAgent:
         }
 
     def prepare(self, result: dict[str, Any], request: dict[str, Any] | None = None) -> dict[str, Any]:
-        raw = request or {}
+        raw = dict(request or {})
         series = self._series((result.get("execution") or {}).get("rows") or [])
-        proposed = self._propose_spec(series, raw)
+        quick = bool(raw.get('quick_output'))
+        if quick:
+            from quick_output import requested_chart
+            explicit = requested_chart(raw.get('natural_language') or '') if raw.get('chart_type') in {None, 'auto'} else None
+            if explicit:
+                raw['chart_type'] = explicit
+            if combined_layout_reason(series):
+                raw['layout'] = 'separate'
+            labels = list(dict.fromkeys(item['label'] for item in series))
+            title = ' · '.join(labels[:2])
+            parts=[label.split(' · ',1) for label in labels]
+            shared=len(labels)>1 and all(len(part)==2 and part[0]==parts[0][0] for part in parts)
+            if shared:title=parts[0][0]
+            elif len(labels) > 2:
+                title += f' 외 {len(labels)-2}개 지표'
+            proposed = {'title': title + (' 비교' if len(labels) > 1 else ' 추이') if title else '통계 그래프'}
+        else:
+            proposed = self._propose_spec(series, raw)
         # Initial output is neutral. Background highlights are user edits,
         # not decorations that the presentation model may invent.
         proposed.pop("highlights", None)
@@ -385,13 +393,16 @@ class OutputAgent:
             spec = ChartSpec(chart_type=self._select_chart_type(requested_type, series), layout=raw.get("layout") or "combined",
                              title=raw.get("title") or "", x_axis_label=raw.get("x_axis_label") or "",
                              y_axis_label=raw.get("y_axis_label") or "", show_legend=raw.get("show_legend", True))
+        if spec.presentation.design_template is None:
+            from chart_designs import apply_design
+            spec=apply_design(spec,'snapshot')
         try:
-            output=self._build(result, spec)
+            output=self._build(result, spec, generate_explanation=not quick)
         except ValueError:
             if requested_type != "auto" or spec.chart_type in {"line", "bar"}:
                 raise
             safe = ChartSpec.model_validate({**spec.model_dump(), "chart_type": self._select_chart_type("auto", series)})
-            output=self._build(result, safe)
+            output=self._build(result, safe, generate_explanation=not quick)
         if rejected_proposal:
             output['warnings']=['자동 스타일 제안의 항목명이 조회 결과와 달라 적용하지 않았습니다. 선택한 그래프 종류로 실제 조회된 계열을 표시했습니다.']
         return output
@@ -435,7 +446,8 @@ class OutputAgent:
                 and current_output.get('explanation', {}).get('facts')):
             edited['explanation'] = current_output['explanation']
             edited['summary'] = current_output['summary']
-        state_only=edited.get('plotlyFigure')==current_output.get('plotlyFigure')
+        state_only=(edited.get('plotlyFigure')==current_output.get('plotlyFigure')
+                    and edited.get('tableDocument')==current_output.get('tableDocument'))
         edited["editChanges"] = [edit_change_description(c) for c in effective]
         if state_only:
             edited['stateOnlyChange']=True
@@ -474,6 +486,8 @@ class OutputAgent:
             # An explicit legacy type selection takes precedence over a report
             # renderer's kind; do not leave a hidden report kind drawing lines.
             updates['report']=None
+            if current.report and current.report.kind == 'dual_axis' and value in {'line','bar','stacked_bar','area'}:
+                updates['secondary_axis_series'] = list(current.report.right_axis)
             # A global kind change must not retain per-series overrides from
             # the previous mixed chart, otherwise "bar" can still draw lines.
             updates.update(chart_type=value, series_chart_types={})
@@ -488,10 +502,15 @@ class OutputAgent:
                     updates.update(guides=[], notes=[note for note in current.notes if not note.label])
             if value not in {"line", "bar", "stacked_bar", "area"}:
                 updates["secondary_axis_series"] = []
+            if (value=='stacked_bar' and (value!=current.chart_type or current.series_chart_types)) or (current.series_chart_types and current.presentation.bar_mode in {'stack','relative'}):
+                presentation=updates.get('presentation',current.presentation)
+                updates['presentation']=presentation.model_copy(update={'bar_mode':'relative' if value=='stacked_bar' else 'group'})
         elif command.operation == "set_layout":
             updates['layout']=value
             if current.report and value!='combined':
                 updates['report']=current.report.model_copy(update={'kind':'panels','columns':len(labels) if value=='horizontal' else 2 if value=='grid' else 1})
+            elif current.report and current.report.kind=='panels':
+                updates['report']=current.report.model_copy(update={'kind':'forecast'})
         elif command.operation == "set_legend":
             if isinstance(value, bool): updates["show_legend"] = value
             else: updates["legend_position"] = value

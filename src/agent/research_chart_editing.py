@@ -11,6 +11,7 @@ from output_schema import (AxisStyle, ChartEditCommand, ChartSpec, Guide, Highli
 
 
 EDIT_HELP = {
+    "set_table": "STYLE_EDIT params={patch:{orientation:indicators/periods,decimals:0~6,recent_periods:1~600 또는 null,labels:실제 계열 이름 목록,highlight_latest:true/false,title,note,template:default/BOK-T01/BOK-T02/BOK-T03/BOK-T04/BOK-T05/BOK-T06,emphasized_labels:실제 강조 항목 이름 목록}}. 보고서 표의 배치·표시만 변경. 관측 수치·원자료·집계 주기를 변경하지 않는다. 표 탭에서 확인한다.",
     "set_report": "params={patch:{template,kind,forecast_start,intervals,events,right_axis,columns,source_note,footnotes,width,height,dpi}}. 기존 보고서 설정에 합친다. template은 /api/report/templates 등록 ID. kind=forecast/dual_axis/contribution/panels/events/fan/waterfall/regression/heatmap/violin/stacked_area/scenario/bubble. 기여도는 contribution_confirmed=true를 명시. 신뢰구간·정책 날짜·출처를 만들지 말고 사용자 제공 정보만 사용. params={clear:true}는 기존 일반 그래프 복원",
     "set_stickers": "params={items:[{id,asset_id,x,y,size,angle,opacity},...]}. 목록의 asset_id만 사용. paper 좌표0~1, size0.02~1, angle-360~360. 원자료 보존",
     "set_title": "value=제목 텍스트, 빈 문자열은 제목 삭제",
@@ -29,6 +30,7 @@ EDIT_HELP = {
     "set_top_n": "value=표시할 상위 계열 수 정수 또는 null로 해제",
     "set_transform": "value=raw/growth_rate/year_over_year/average/cumulative. 원자료를 보존한 표시 변환",
     "set_series_chart_type": "label=정본 계열,value=line/bar/area",
+    "set_series_chart_types": "STYLE_EDIT params={types:{정본 계열 이름:line/bar/area}}. 조회된 지표별 모양을 일괄 지정하며 수치는 유지한다.",
     "set_secondary_axis": "value=보조축에 표시할 정본 계열 이름",
     "set_series_color": "label=정본 계열,value=#RRGGBB",
     "set_series_dash": "label=정본 계열,value=solid/dot/dash/longdash/dashdot",
@@ -36,13 +38,13 @@ EDIT_HELP = {
     "set_segment_style": "label,start,end,params={color,dash,width,opacity,marker_size,marker_symbol,markers,show_values,line_shape:linear/spline/hv/vh/hvh/vhv}. 선분 구간만 수정",
     "set_point_style": "label,start=end,params={color,marker_size,marker_symbol,markers,show_values,opacity}. 점/막대만 수정",
     "remove_range_style": "value=range_styles의 id", "clear_range_styles": "label=계열 또는 생략하여 모든 부분 스타일 제거",
-    "set_series_style": "label,params={color,dash,width,opacity,marker_size,marker_symbol,markers,show_values,line_shape:linear/spline/hv/vh/hvh/vhv}",
+    "set_series_style": "label,params={color,dash,width,opacity,marker_size,marker_symbol,markers,show_values,line_shape:linear/spline/hv/vh/hvh/vhv}. 현재 계열 스타일만 변경하며 수치는 유지",
     "rename_series": "label=정본 이름,value=화면 표시 이름(데이터 ID 유지)",
     "reorder_series": "value=[정본 계열 이름,...] 모든 계열을 정확히 한 번 포함",
     "show_series": "value=숨긴 계열의 정본 이름", "clear_highlight": "강조 계열 해제",
     "remove_secondary_axis": "value=계열 이름, 보조축 해제",
     "set_axis_style": "label=x/y/y2,params={minimum,maximum,scale:linear/log,reverse,show_grid,zero_line,tick_angle,tick_step,decimals,title}. x의 수치 범위는 산점도에서만",
-    "set_presentation": "params={design_template:report/stability/outlook/slides/academic/explore,font_family,font_size,title_size,legend_size,font_color,background,grid_color,height,width,title_x,title_y,margin_left,margin_right,margin_top,margin_bottom,bar_mode:group/stack/relative,bar_gap,bar_orientation:vertical/horizontal,number_decimals,shared_y,notes,color_scale:Viridis/Blues/Reds/RdBu/YlOrRd/Greens,reverse_colors,show_colorbar}",
+    "set_presentation": "params={design_template:snapshot/report/stability/outlook/slides/academic/explore,font_family,font_size,title_size,legend_size,font_color,background,grid_color,height,width,title_x,title_y,margin_left,margin_right,margin_top,margin_bottom,bar_mode:group/stack/relative,bar_gap,bar_orientation:vertical/horizontal,number_decimals,latest_values:true/false,shared_y,notes,color_scale:Viridis/Blues/Reds/RdBu/YlOrRd/Greens,reverse_colors,show_colorbar}",
     "add_note": "params={text,label?,period?,x?,y?,ax?,ay?,arrow?,color?,font_size?}. 계열과 시점이 있으면 실제 관측점에 연결, 없으면 paper x/y=0~1(아래0 위1)",
     "update_note": "value=notes의 id,params=변경 필드", "remove_note": "value=notes의 id",
     "add_guide": "params={orientation:horizontal/vertical,value,label?,text?,color?,dash?,width?}. 수평 실제 y값/수직 실제 시점",
@@ -61,6 +63,23 @@ def _patch(model: Any, params: dict) -> Any:
 def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list[str]) -> ChartSpec | None:
     """Return None for legacy commands handled by OutputAgent."""
     op, value, params = command.operation, command.value, dict(command.params)
+    if op=='set_series_chart_types':
+        if command.kind!='STYLE_EDIT' or value is not None or command.label is not None or set(params)!={'types'} or not isinstance(params['types'],dict):
+            raise ValueError('혼합 차트는 지표별 모양 목록으로 지정해 주세요.')
+        mapping=params['types']
+        if not mapping or set(mapping)-set(labels) or any(kind not in {'line','bar','area'} for kind in mapping.values()):
+            raise ValueError('조회된 지표에 선·막대·영역 모양만 지정할 수 있습니다.')
+        return ChartSpec.model_validate({**spec.model_dump(),'series_chart_types':mapping})
+    if op == 'set_table':
+        from report_table import TableOptions
+        if command.kind != 'STYLE_EDIT' or value is not None or set(params) != {'patch'} or not isinstance(params['patch'], dict):
+            raise ValueError('표 설정은 STYLE_EDIT params.patch로 지정해 주세요.')
+        options = TableOptions.model_validate({**(spec.report_table.model_dump() if spec.report_table else {}), **params['patch']})
+        if options.labels and (set(options.labels) - set(labels) or len(options.labels) != len(set(options.labels))):
+            raise ValueError('표 항목은 현재 데이터에서 중복 없이 선택해 주세요.')
+        if set(options.emphasized_labels) - set(labels):
+            raise ValueError('강조할 항목은 현재 조회된 지표에서 선택해 주세요.')
+        return spec.model_copy(update={'report_table': options})
     if op=='set_report':
         from advanced_chart_spec import ReportOptions
         if value is not None or set(params)-{'patch','clear'} or not params:

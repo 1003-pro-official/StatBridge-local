@@ -4,9 +4,15 @@ from output_schema import ChartSpec
 CHART_TYPES = ("line","bar","stacked_bar","area","scatter","bubble","pie","donut","histogram","box","heatmap","treemap","waterfall")
 
 
+def comparable_axis_units(series):
+    # Two catalog spellings of an annual percentage rate. Do not rewrite the
+    # source unit, or merge percentages with annual rates or percentage points.
+    return {'연이율(%)' if str(s.get('unit') or '').strip() in {'연%','연리%'} else s.get('unit') or '단위 미상' for s in series}
+
+
 def combined_layout_reason(series):
     reasons=[]
-    if len({s.get('unit') or '단위 미상' for s in series})>1:
+    if len(comparable_axis_units(series))>1:
         reasons.append('한 그래프의 같은 축에 표시하려면 단위가 같아야 합니다. 현재 '+', '.join(f"{s['label']} ({s.get('unit') or '단위 미상'})" for s in series)+'입니다. 계열별 그래프를 선택해 주세요. 보조축은 별도로 명시한 경우에만 사용합니다.')
     frequencies={s.get('frequency') for s in series if s.get('frequency')}
     if len(frequencies)>1:

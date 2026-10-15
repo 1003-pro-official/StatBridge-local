@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "purpose": "스냅샷 시각 형식 독립 진단. 사이트 수치 대신 현재 KOSIS 관측값 유지",
+  "cases": [
+    {
+      "series_tables": [
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "기업대출"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "대기업대출"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "중소기업대출"
+        }
+      ],
+      "query": "2024년부터 2025년까지 예금은행 기업대출금리를 비교해줘",
+      "instruction": "이렇게 그려줘",
+      "id": "snapshot-line",
+      "source_url": "https://snapshot.bok.or.kr/chart.html?id=862",
+      "figure": "예금은행 가계대출금리",
+      "reference_file": "snapshot-line.jpg",
+      "expected": {
+        "chart_type": "line",
+        "series_count": 3
+      }
+    },
+    {
+      "series_tables": [
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "기업대출"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "대기업대출"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "중소기업대출"
+        }
+      ],
+      "query": "2024년부터 2025년까지 예금은행 기업대출금리를 비교해줘",
+      "instruction": "이렇게 그려줘",
+      "id": "snapshot-bar",
+      "source_url": "https://snapshot.bok.or.kr/chart.html?id=1174",
+      "figure": "가계대출 및 판매신용 증감액",
+      "reference_file": "snapshot-bar.jpg",
+      "expected": {
+        "chart_type": "bar",
+        "series_count": 3,
+        "trace_types": [
+          "bar",
+          "bar",
+          "bar"
+        ]
+      }
+    },
+    {
+      "series_tables": [
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "기업대출"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "대기업대출"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "중소기업대출"
+        }
+      ],
+      "query": "2024년부터 2025년까지 예금은행 기업대출금리를 비교해줘",
+      "instruction": "이렇게 그려줘",
+      "id": "snapshot-combo",
+      "source_url": "https://snapshot.bok.or.kr/chart.html?id=861",
+      "figure": "예금은행 여수신 금리",
+      "reference_file": "snapshot-combo.jpg",
+      "expected": {
+        "series_count": 3,
+        "trace_types": [
+          "scatter",
+          "scatter",
+          "bar"
+        ],
+        "secondary_axis": true
+      }
+    }
+  ]
+}

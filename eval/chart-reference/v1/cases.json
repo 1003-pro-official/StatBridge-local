@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "purpose": "공개 한국은행 그래프의 형식 재현 진단. 수치 정확도 골드와 혼용하지 않습니다.",
+  "cases": [
+    {
+      "id": "bok-line",
+      "report": "economic-outlook",
+      "source_url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?menuNo=200066&nttId=10098209",
+      "download_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_page": 28,
+      "figure": "그림 1.18 국제유가",
+      "crop": [
+        0.108,
+        0.404,
+        0.497,
+        0.665
+      ],
+      "query": "2024년 1월부터 2025년 12월까지 예금은행 대출금리(신규취급액 기준)의 대출평균과 기업대출을 각각 조회해줘",
+      "expected": {
+        "chart_type": "line",
+        "series_count": 2
+      },
+      "instruction": "이렇게 그려줘",
+      "series_tables": [
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "대출평균 1)"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "value_name": "기업대출"
+        }
+      ]
+    },
+    {
+      "id": "bok-stacked-bar",
+      "report": "economic-outlook",
+      "source_url": "https://www.bok.or.kr/portal/bbs/P0002359/view.do?menuNo=200066&nttId=10098209",
+      "download_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+      "pdf_page": 28,
+      "figure": "그림 1.19 호르무즈 통항 선박수",
+      "crop": [
+        0.498,
+        0.404,
+        0.895,
+        0.681
+      ],
+      "query": "2024년 1월부터 2025년 12월까지 국가별 결제통화(수입)을 국가별은 「달러 (호주)」, 표시 기준은 「비중(%)」으로 조회해줘",
+      "expected": {
+        "chart_type": "stacked_bar",
+        "series_count": 5
+      },
+      "instruction": "이렇게 그려줘",
+      "expand_country": "호주"
+    },
+    {
+      "id": "bok-panels",
+      "report": "financial-stability",
+      "source_url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200068&nttId=11062197",
+      "download_url": "https://www.bok.or.kr/fileSrc/portal/c3e54b8b9f7f41d791cd79161e223009/1/f337f655a97543bb933572fb645698d5.pdf",
+      "pdf_page": 22,
+      "figure": "그림 I-1-6 은행 및 비은행금융기관 가계대출 연체율",
+      "crop": [
+        0.514,
+        0.346,
+        0.846,
+        0.659
+      ],
+      "query": "2024년 1월부터 2025년 12월까지 국가별 결제통화(수입)을 국가별은 「달러 (호주)」, 표시 기준은 「비중(%)」으로 조회해줘",
+      "expected": {
+        "layout_not": "combined",
+        "series_count": 3
+      },
+      "instruction": "이렇게 그려줘",
+      "expand_country": "호주",
+      "max_series": 3
+    }
+  ]
+}

@@ -353,6 +353,26 @@ class StatBridgeAgent:
         confirmed=dict((state or {}).get('confirmed') or {})
         if clarification:confirmed[str(clarification['clarification_id'])]=str(clarification['value'])
         plans=[]; selected=[]
+        store=getattr(getattr(self.service,'service',self.service),'store',None)
+        supported={str(t.table_id) for t in store.available_supported_tables()} if store else set(self.tables_by_id)
+        def viable(candidate):
+            table=self.tables_by_id.get(candidate['table_id'],{})
+            if candidate['table_id'] not in supported:return False
+            bounds=[table,*[self.tables_by_id[p['table_id']] for p in plans]]
+            def boundary(t,end=False):
+                raw=str(t.get('period_end_observed' if end else 'period_start_observed') or '')
+                digits=re.sub(r'\D','',raw)
+                if len(digits)<4:return ''
+                year=int(digits[:4]);frequency=str(t.get('prd_se') or '')
+                part=int(digits[4:6] or '1') if len(digits)>=6 else 1
+                month=(part*3 if end else (part-1)*3+1) if frequency=='Q' else (part*6 if end else (part-1)*6+1) if frequency in {'H','S'} else part if frequency=='M' else 12 if end else 1
+                day=calendar.monthrange(year,month)[1] if end else 1
+                return date(year,month,day).isoformat()
+            starts=[boundary(t) for t in bounds];ends=[boundary(t,True) for t in bounds]
+            from request_period import explicit_period
+            requested=explicit_period(query,latest=min((e for e in ends if e),default=None))
+            if requested:starts.append(requested['start']);ends.append(requested['end'])
+            return max((s for s in starts if s),default='')<=min((e for e in ends if e),default='9999')
         for index,part in enumerate(parts):
             part=re.sub(r'신규\s*대출','신규취급액',part)
             prefix=f'comparison:{index}:'
@@ -360,10 +380,17 @@ class StatBridgeAgent:
             result=self.resolver.resolve(part+period,confirmed=local,top_k=8)
             next_state={'original_query':query,'_request_query':query,'_user_query':query,'confirmed':confirmed}
             if result['status']=='need_clarification':
+                options=[]
+                for option in result.get('options',[]):
+                    probe={**local,result['clarification_id']:option['value']}
+                    matches=self.resolver.rank(part+period,confirmed=probe,top_k=40)
+                    if any(viable(c) and (not str(option['value']).startswith('DT_') or c['table_id']==option['value']) for c in matches):
+                        options.append(option)
+                if not options:return {'status':'no_match','missing_series':[part],'state':next_state}
                 return {**result,'clarification_id':prefix+result['clarification_id'],
-                        'question':f'「{part}」: '+result['question'],'state':next_state}
+                        'options':options,'question':f'「{part}」: '+result['question'],'state':next_state}
             if result['status']!='resolved':return {**result,'state':next_state}
-            candidates=result.get('candidates') or []
+            candidates=[c for c in (result.get('candidates') or []) if viable(c)]
             if '대출' in part and '금리' not in part:
                 candidates=[c for c in candidates if '금리' not in c['table_name']]
                 if '신규취급액' in part:
@@ -408,7 +435,10 @@ class StatBridgeAgent:
                 if scoped is not None:return scoped
             if '금리' in query and not any(word in query for word in ['신규','잔액','비중','구성비']):
                 preflight=self.resolver.resolve(query,top_k=8)
-                if preflight.get('status')=='need_clarification':return preflight
+                if preflight.get('status')=='need_clarification':
+                    scoped=self._scoped_comparison(query,state,clarification)
+                    if scoped is not None:return scoped
+                    return preflight
             selected = catalog_selections(query, self.resolver.tables)
             if selected:
                 plans = [self.build_api_plan(query, item).as_dict() for item in selected]

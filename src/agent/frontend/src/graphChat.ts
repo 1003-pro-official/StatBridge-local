@@ -33,5 +33,5 @@ export function editDescription(before:QueryResponse,after:QueryResponse,action?
  const old=before.outputSpec?.chartState||{},next=after.outputSpec?.chartState||{};
  const fields=Object.keys(next).filter(k=>JSON.stringify(old[k])!==JSON.stringify(next[k]));
  const labels:Record<string,string>={title:'제목',subtitle:'부제',chart_type:'그래프 종류',legend_position:'범례 위치',series_colors:'데이터 색상',report:'보고서 설정',stickers:'그래프 기호'};
- return fields.length?fields.map(k=>`${labels[k]||k}: ${JSON.stringify(next[k])}`).join('\n'):'그래프 데이터를 조회하거나 표시 설정을 적용했습니다.';
+ return fields.length?Array.from(new Set(fields.map(k=>labels[k]||'그래프 표시 설정'))).map(label=>`${label}을 변경했습니다.`).join('\n'):'그래프 데이터를 조회하거나 표시 설정을 적용했습니다.';
 }

@@ -1,0 +1,156 @@
+{
+  "title": "한국은행 보고서 표 디자인 분류 · Statbridge 초안",
+  "scope": "공식 공개 보고서 2종의 웹 제공 표 구조 및 부록 안내; 개별 PDF 페이지의 시각적 전수 검사는 수행하지 못함",
+  "official_style_count": null,
+  "proposed_template_count": 6,
+  "verified_structures": [
+    "2층 이상 전망표 헤더",
+    "단위·자료·주석 결합",
+    "부록 통계표 존재"
+  ],
+  "styles": [
+    {
+      "id": "BOK-T01",
+      "name": "기본 3선형 통계표",
+      "use_case": "일반 경제통계·본문 간결표",
+      "borders": "상단·머리글 하단·표 하단 수평선, 세로선 최소화",
+      "header": "단층 머리글",
+      "alignment": "수치 우측, 항목 좌측",
+      "evidence_level": "관찰 기반 제안",
+      "tokens": {
+        "font": "Noto Sans KR, Malgun Gothic, sans-serif",
+        "font_size_pt": 9,
+        "header_weight": 600,
+        "body_color": "#222222",
+        "line_color": "#595959",
+        "line_width_px": 1,
+        "row_padding_px": 7,
+        "header_fill": "#FFFFFF",
+        "notes_font_size_pt": 8
+      },
+      "caveat": "예시 토큰은 Statbridge 구현 권장값이며 한국은행 원본의 측정 픽셀값이 아님"
+    },
+    {
+      "id": "BOK-T02",
+      "name": "다단 머리글 전망표",
+      "use_case": "연도·반기·연간 구분 전망치",
+      "borders": "그룹별 상위 머리글과 하위 머리글 2층, 그룹 구분선",
+      "header": "2~3층 그룹 머리글",
+      "alignment": "항목 좌측, 수치 소수점 정렬",
+      "evidence_level": "표 구조 확인",
+      "tokens": {
+        "font": "Noto Sans KR, Malgun Gothic, sans-serif",
+        "font_size_pt": 9,
+        "header_weight": 600,
+        "body_color": "#222222",
+        "line_color": "#595959",
+        "line_width_px": 1,
+        "row_padding_px": 7,
+        "header_fill": "#FFFFFF",
+        "notes_font_size_pt": 8
+      },
+      "caveat": "예시 토큰은 Statbridge 구현 권장값이며 한국은행 원본의 측정 픽셀값이 아님"
+    },
+    {
+      "id": "BOK-T03",
+      "name": "시계열 비교 통계표",
+      "use_case": "여러 기간의 실적·전망 비교",
+      "borders": "기간 그룹 헤더, 변동률·전망치 주석 기호",
+      "header": "계층형 머리글",
+      "alignment": "수치 우측, 기간 가운데",
+      "evidence_level": "관찰 기반 제안",
+      "tokens": {
+        "font": "Noto Sans KR, Malgun Gothic, sans-serif",
+        "font_size_pt": 9,
+        "header_weight": 600,
+        "body_color": "#222222",
+        "line_color": "#595959",
+        "line_width_px": 1,
+        "row_padding_px": 7,
+        "header_fill": "#FFFFFF",
+        "notes_font_size_pt": 8
+      },
+      "caveat": "예시 토큰은 Statbridge 구현 권장값이며 한국은행 원본의 측정 픽셀값이 아님"
+    },
+    {
+      "id": "BOK-T04",
+      "name": "부록 대형 데이터표",
+      "use_case": "지표별·기간별 다열 통계표",
+      "borders": "좁은 행간, 반복 헤더, 페이지 넘김 처리",
+      "header": "다열/반복 머리글",
+      "alignment": "첫 열 고정 제안, 수치 우측",
+      "evidence_level": "부록 존재 확인·세부 형식 제안",
+      "tokens": {
+        "font": "Noto Sans KR, Malgun Gothic, sans-serif",
+        "font_size_pt": 9,
+        "header_weight": 600,
+        "body_color": "#222222",
+        "line_color": "#595959",
+        "line_width_px": 1,
+        "row_padding_px": 7,
+        "header_fill": "#F4F6F7",
+        "notes_font_size_pt": 8
+      },
+      "caveat": "예시 토큰은 Statbridge 구현 권장값이며 한국은행 원본의 측정 픽셀값이 아님"
+    },
+    {
+      "id": "BOK-T05",
+      "name": "항목 그룹·소계 강조표",
+      "use_case": "산업/부문별 구성·합계",
+      "borders": "그룹 간 가는 수평 구분선, 합계 굵은 글씨",
+      "header": "그룹 레이블",
+      "alignment": "소계 및 합계 강조",
+      "evidence_level": "확장 템플릿(미실측)",
+      "tokens": {
+        "font": "Noto Sans KR, Malgun Gothic, sans-serif",
+        "font_size_pt": 9,
+        "header_weight": 600,
+        "body_color": "#222222",
+        "line_color": "#595959",
+        "line_width_px": 1,
+        "row_padding_px": 7,
+        "header_fill": "#F4F6F7",
+        "notes_font_size_pt": 8
+      },
+      "caveat": "예시 토큰은 Statbridge 구현 권장값이며 한국은행 원본의 측정 픽셀값이 아님"
+    },
+    {
+      "id": "BOK-T06",
+      "name": "주석·출처 결합표",
+      "use_case": "전망·가정·추정치 설명",
+      "borders": "표 아래 주/자료/단위 표기, 각주 위첨자",
+      "header": "단층 또는 다층",
+      "alignment": "표 외 하단 주석 분리",
+      "evidence_level": "표 구조 확인",
+      "tokens": {
+        "font": "Noto Sans KR, Malgun Gothic, sans-serif",
+        "font_size_pt": 9,
+        "header_weight": 600,
+        "body_color": "#222222",
+        "line_color": "#595959",
+        "line_width_px": 1,
+        "row_padding_px": 7,
+        "header_fill": "#FFFFFF",
+        "notes_font_size_pt": 8
+      },
+      "caveat": "예시 토큰은 Statbridge 구현 권장값이며 한국은행 원본의 측정 픽셀값이 아님"
+    }
+  ],
+  "sources": [
+    {
+      "title": "통화신용정책보고서(2025년 9월)",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000156/view.do?menuNo=200067&nttId=10093507",
+      "evidence": "세계경제 성장률 전망: 2024/2025/2026 상·하반기/연간 다단 헤더; 단위와 자료; 본문 및 부록 그림·표"
+    },
+    {
+      "title": "금융안정보고서(2025년 12월)",
+      "url": "https://www.bok.or.kr/portal/bbs/P0000593/view.do?menuNo=200068&nttId=10095308",
+      "evidence": "부록 1 그림 및 통계표; 본문 금융 안정 항목; 그림 데이터 제공"
+    },
+    {
+      "title": "경제전망보고서(2025년 5월)",
+      "url": "https://www.bok.or.kr/portal/main/contents.do?menuNo=200066",
+      "evidence": "경제전망보고서 시리즈; 직접 PDF 표 시각 검사 미수행"
+    }
+  ]
+}

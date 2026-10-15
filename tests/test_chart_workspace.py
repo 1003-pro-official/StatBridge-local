@@ -12,7 +12,7 @@ from test_advanced_reports import fixture
 def edit(agent,data,output,op,value=None,**kwargs):
     return agent.apply_edits(data,output,[ChartEditCommand(operation=op,kind='STYLE_EDIT',value=value,**kwargs)],generate_explanation=False)
 
-def test_six_designs_change_rendered_properties_without_changing_values():
+def test_registered_designs_change_rendered_properties_without_changing_values():
     agent=OutputAgent();data=fixture();before=copy.deepcopy(data)
     current=agent._build(data,ChartSpec(title='유지할 제목',report=ReportOptions()),generate_explanation=False)
     signatures=[]
@@ -21,7 +21,7 @@ def test_six_designs_change_rendered_properties_without_changing_values():
         f=current['plotlyFigure'];signatures.append((f['layout']['font']['size'],f['data'][0]['line']['color'],f['data'][0]['line']['width'],f['layout']['xaxis'].get('gridcolor')))
         assert current['chartState']['title']=='유지할 제목'
         assert current['table']['rows']==agent._table(agent._series(data['execution']['rows']))['rows']
-    assert len(set(signatures))==6 and data==before
+    assert len(set(signatures))==len(DESIGNS) and data==before
 
 def test_markers_can_be_disabled_and_remain_off_after_design_change():
     agent=OutputAgent();data=fixture()

@@ -202,6 +202,8 @@ def test_incomplete_request_accounting_is_corrected_as_a_whole():
 # Each public operation reaches the actual output renderer, rather than only
 # checking whether its name appears in the model prompt.
 OPERATION_CASES={
+ "set_series_chart_types":{"params":{"types":{"계열0":"line","계열1":"bar"}}},
+ "set_table":{"params":{"patch":{"decimals":2,"orientation":"periods"}}},
  "set_report":{"params":{"patch":{"template":"economic_outlook","kind":"forecast"}}},
  "set_title":{"value":"새 제목"}, "set_subtitle":{"value":"새 부제"},
  "set_axis_labels":{"x_axis_label":"기간","y_axis_label":"값"},
@@ -254,7 +256,12 @@ def test_every_supported_edit_operation_applies_and_renders(operation):
     command=ChartEditCommand(operation=operation,kind=kind,**OPERATION_CASES[operation])
     result=output.apply_edits(data,initial,[command])
     assert result["chartState"]!=initial["chartState"]
-    assert result["plotlyFigure"]!=initial["plotlyFigure"]
+    if operation == 'set_table':
+        assert result['tableDocument'] != initial['tableDocument']
+        assert result['plotlyFigure'] == initial['plotlyFigure']
+        assert not result.get('stateOnlyChange')
+    else:
+        assert result["plotlyFigure"]!=initial["plotlyFigure"]
     assert result["editChanges"] and data==before
 
 

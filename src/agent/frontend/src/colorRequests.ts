@@ -4,8 +4,16 @@ export function colorPreview(color:string,opacity:number):string {
   return `rgba(${parseInt(safe.slice(1,3),16)},${parseInt(safe.slice(3,5),16)},${parseInt(safe.slice(5,7),16)},${opacity})`;
 }
 const names:Record<string,string>={빨간:'#ef4444',빨강:'#ef4444',노란:'#eab308',노랑:'#eab308',초록:'#22c55e',녹색:'#22c55e',파란:'#3b82f6',파랑:'#3b82f6',보라:'#8b5cf6',주황:'#f97316',검정:'#111827',흰색:'#ffffff'};
+function clauses(text:string){return text.split(/[\n;]+|(?:바꾸고|변경하고|수정하고|그리고|바꾸며|변경하며)\s*|(?=(?:선(?:의)?|막대(?:의)?|점(?:의)?)\s*색|화살표|사각형|박스|타원|원 부분|격자|배경|제목|부제|범례|가로축|세로축|보조축|글자|텍스트|강조(?:된|되어|영역))/);}
+export function requiresColorChoice(text:string):boolean {
+ return clauses(text).some(piece=>{
+  if(!colorRequests(piece).length)return false;
+  const rgb=piece.match(/rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/i);
+  return !(/#[\da-f]{6}(?![\da-f])/i.test(piece)||Object.keys(names).some(name=>piece.includes(name))||(rgb&&rgb.slice(1).every(n=>Number(n)<=255)));
+ });
+}
 export function colorRequests(text:string):ColorRequest[] {
-  const pieces=text.split(/[\n;]+|(?=화살표|사각형|박스|타원|원 부분|격자|배경|제목|부제|범례|가로축|세로축|보조축|글자|텍스트|강조(?:된|되어|영역))/);
+  const pieces=clauses(text);
   const requests:ColorRequest[]=[];
   const arrowClause=text.match(/화살표(?:(?!박스|사각형|격자).)*/)?.[0]||'';
   const arrowGlyph=/그려|넣|추가/.test(arrowClause)&&!/차트|그래프|선 색|선의|부터|이후|뒤로/.test(arrowClause);

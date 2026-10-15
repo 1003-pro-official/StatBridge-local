@@ -88,7 +88,20 @@ validationError는 서버가 검증한 실패 이유다. 원문이 명확하면 
 
 
 def normalize_parameter_names(item: dict) -> dict:
+    # Optional, unused parameters are sometimes emitted as JSON null. Only
+    # normalize null; malformed strings/lists still fail schema validation.
+    if item.get('params') is None:
+        item={**item,'params':{}}
     op = item.get("operation")
+    if op in {'set_segment_style','set_point_style','set_series_style','set_axis_style','set_presentation','add_note','add_guide','add_shape','set_stickers','set_report','set_table'} and item.get('value')=='':
+        item={**item,'value':None}
+    if op in {'set_presentation','set_axis_style','set_series_style'} and isinstance(item.get('value'),dict):
+        params=item.get('params')
+        if not isinstance(params,dict):return item
+        value=item['value']
+        if any(key in params and params[key]!=v for key,v in value.items()):
+            raise CoverageContractError('표시 설정의 value와 params가 서로 다릅니다. 기존 그래프는 유지됩니다.')
+        item={**item,'value':None,'params':{**value,**params}}
     aliases = {}
     if op in {"set_segment_style", "set_point_style", "set_series_style", "add_guide", "update_guide", "add_shape", "update_shape"}:
         aliases = {"line_width":"width", "line_dash":"dash"}
