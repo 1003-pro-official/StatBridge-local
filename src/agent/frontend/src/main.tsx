@@ -5,6 +5,7 @@ import AccountGate from "./AccountGate";
 import "./styles.css";
 import "./professional.css";
 import "./controls.css";
+import "./buttonTheme.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

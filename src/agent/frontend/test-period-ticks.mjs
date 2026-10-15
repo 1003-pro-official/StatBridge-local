@@ -10,3 +10,9 @@ test('narrow date axes avoid a crowded last tick and keep original observations'
  assert.equal(result['xaxis.ticktext'].at(-1),'2025-12');assert.equal(JSON.stringify(figure),before);
  figure.layout.xaxis.dtick=1;assert.deepEqual(periodTickUpdate(figure,520),{});
 });
+
+test('a mixed monthly category array cannot generate Q7 or Q12 ticks',()=>{
+ const periods=Array.from({length:12},(_,i)=>`2024${String(i+1).padStart(2,'0')}`);
+ const update=periodTickUpdate({layout:{xaxis:{type:'category',categoryarray:periods,ticktext:['2024 Q1','2024 Q4']}}},500);
+ assert.ok(update['xaxis.ticktext'].every(t=>! /Q(?:[5-9]|1[0-2])/.test(t)));
+});

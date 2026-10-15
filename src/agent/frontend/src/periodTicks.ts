@@ -18,7 +18,7 @@ export function periodTickUpdate(figure:{layout:Record<string,unknown>},width:nu
   const indices=Array.from({length:Math.ceil(periods.length/step)},(_,i)=>i*step);
   const last=periods.length-1;
   if(indices[indices.length-1]!==last){if(last-indices[indices.length-1]<minimumGap&&indices.length>1)indices.pop();indices.push(last);}
-  const quarterly=axis.ticktext.some(t=>/ Q[1-4]$/.test(String(t)));
+  const quarterly=axis.ticktext.some(t=>/ Q[1-4]$/.test(String(t)))&&periods.every(p=>p.length===6&&Number(p.slice(4))>=1&&Number(p.slice(4))<=4);
   const yearOnly=axis.ticktext.every(t=>/^\d{4}$/.test(String(t)));
   const label=(p:string)=>yearOnly?p.slice(0,4):quarterly?`${p.slice(0,4)} Q${Number(p.slice(4))}`:p.length===6?`${p.slice(0,4)}-${p.slice(4)}`:p.length===8?`${p.slice(0,4)}-${p.slice(4,6)}-${p.slice(6)}`:p;
   update[name+'.tickvals']=indices;update[name+'.ticktext']=indices.map(i=>label(periods[i]));

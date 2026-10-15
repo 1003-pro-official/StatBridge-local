@@ -1,0 +1,131 @@
+/* Final button layer: one control system, with explicit navigation/chart exceptions. */
+:root {
+  --button-radius: 8px;
+  --button-height: 36px;
+  --button-border: #cadce8;
+  --button-text: #22516d;
+  --button-accent: #006394;
+}
+#root button {
+  box-sizing: border-box;
+  min-height: var(--button-height);
+  padding: 8px 13px;
+  border: 1px solid var(--button-border);
+  border-radius: var(--button-radius);
+  background: #fff;
+  color: var(--button-text);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: background-color .15s, border-color .15s, box-shadow .15s;
+  overflow-wrap: anywhere;
+}
+#root button:hover:not(:disabled) {
+  background: #f0f7fb;
+  border-color: #8bb6ce;
+  box-shadow: 0 2px 5px #174f710a;
+}
+#root button:active:not(:disabled) { background: #e5f0f7; box-shadow: inset 0 1px 2px #174f7114; }
+#root button:focus-visible, #root .workspace-actions>details>summary:focus-visible {
+  outline: 3px solid #80c1e1;
+  outline-offset: 3px;
+}
+#root button:disabled { opacity: .48; cursor: default; box-shadow: none; }
+#root button svg { flex-shrink: 0; vertical-align: middle; }
+
+/* Primary actions are deliberate, while undo/export/close remain secondary. */
+#root :is(.ask-box,.account-card form,.clarification-submit,.catalog-query-controls,.query-refinement-card) > button,
+#root .sujeongi-composer button, #root .report-table-controls>button,
+#root .sticker-apply, #root button.control-primary {
+  background: var(--button-accent);
+  color: #fff;
+  border-color: var(--button-accent);
+  box-shadow: 0 2px 4px #00639412;
+}
+#root :is(.ask-box,.account-card form,.clarification-submit,.catalog-query-controls,.query-refinement-card) > button:hover:not(:disabled),
+#root .sujeongi-composer button:hover:not(:disabled), #root .report-table-controls>button:hover:not(:disabled),
+#root .sticker-apply:hover:not(:disabled), #root button.control-primary:hover:not(:disabled) {
+  background: #004e78;
+  border-color: #004e78;
+}
+#root :is(.ask-box,.account-card form)>button { min-height: 44px; font-size: 13px; }
+#root .report-table-controls>button { min-height: 40px; margin-top: 18px; }
+
+/* Selection controls: a filled check and a visible border, including keyboard focus. */
+#root :is(.clarification-options,.workspace-view-tabs,.account-card nav,.sketch-toolbar,.sujeongi-toolbar) button:is(.selected,[aria-pressed=true]),
+#root .catalog-column button.selected, #root .recovery-table-option.selected {
+  background: #eaf5fb;
+  color: #005984;
+  border-color: #5b9fbe;
+  box-shadow: inset 0 0 0 1px #5b9fbe;
+}
+#root .clarification-options { gap: 10px; }
+#root .clarification-options button { display: inline-flex; align-items: center; justify-content: flex-start; gap: 10px; min-height: 46px; padding: 12px 16px; text-align: left; }
+#root .clarification-options button:has(small) { display: grid; gap: 5px; }
+#root .clarification-options button .multi-check { width: 18px; height: 18px; flex: 0 0 18px; border: 1px solid #b5cddc; border-radius: 5px; background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+#root .clarification-options button.selected .multi-check { background: var(--button-accent); border-color: var(--button-accent); color: #fff; }
+#root .workspace-view-tabs { display: inline-flex; gap: 3px; padding: 3px; background: #edf3f7; border: 1px solid #dde8ef; border-radius: 10px; }
+#root .workspace-view-tabs button { min-height: 30px; padding: 5px 12px; background: transparent; border-color: transparent; border-radius: 7px; }
+#root .workspace-view-tabs button[aria-pressed=true] { background: #fff; color: #005984; border-color: #c5dce9; box-shadow: 0 1px 3px #174f7110; }
+
+/* Toolbars, disclosure menus and compact controls share a baseline. */
+#root :is(.workspace-actions,.workspace-panel-toggles,.chat-session-actions,.report-actions,.sketch-toolbar,.sticker-actions) { gap: 8px; }
+#root .workspace-actions { flex-wrap: wrap; }
+#root .workspace-actions button, #root .workspace-actions>details>summary { min-height: 36px; padding: 8px 12px; font-size: 12px; line-height: 1.5; border-radius: var(--button-radius); }
+#root .workspace-actions>details>summary { display: flex; align-items: center; gap: 8px; box-sizing: border-box; cursor: pointer; color: var(--button-text); background: white; border: 1px solid var(--button-border); }
+#root .workspace-actions>details>summary:hover, #root .workspace-actions>details[open]>summary { background: #f0f7fb; border-color: #8bb6ce; }
+#root .workspace-actions>details>div>button { margin: 3px 0; text-align: left; box-shadow: none; }
+#root .table-order button { min-width: 32px; min-height: 32px; padding: 4px 8px; }
+#root .workspace-design-list button { padding: 8px; min-height: 58px; font-size: 11px; }
+#root .workspace-design-list button svg { display: block; margin: 0 auto 4px; }
+#root .chat-session-actions button { font-size: 11px; padding: 6px 9px; min-height: 32px; }
+
+/* Dialog actions no longer look like unstyled browser buttons. */
+#root .chat-modal { border: 1px solid #d9e5ed; border-radius: 18px; padding: 28px; box-shadow: 0 24px 80px #092a4533; }
+#root .chat-modal h2 { margin: 0 0 12px; font-size: 20px; letter-spacing: -.4px; }
+#root .chat-modal>p { margin: 10px 0 18px; color: #567185; }
+#root .chat-modal>button { margin: 8px 8px 0 0; min-width: 84px; }
+#root .chat-modal>button:last-child { background: #f2f7fa; }
+#root .chat-modal article { padding: 16px 0; }
+#root :is(.chat-modal,.account-saved) button.control-danger { color: #a63c45; background: #fff8f8; border-color: #e5c8cd; }
+#root :is(.chat-modal,.account-saved) button.control-danger:hover:not(:disabled) { background: #ffeff0; border-color: #ca929b; }
+
+/* Branding, navigation, legend hit targets and color swatches are not action pills. */
+#root button.institution-brand { border: 0; background: transparent; padding: 0; box-shadow: none; text-align: left; }
+#root .institution-links button { background: transparent; border: 0; border-radius: 0; padding: 0 2px; min-height: 44px; font-size: 17px; font-weight: 700; color: #071b35; box-shadow: none; }
+#root .institution-links button:is(:hover,[aria-current]) { color: #005b96; }
+#root .institution-chat-actions button { border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+#root .institution-chat-actions button:first-child { color: #fff; background: var(--button-accent); border-color: var(--button-accent); }
+#root button.institution-search { width: 44px; height: 44px; padding: 0; border-radius: 50%; background: var(--button-accent); color: #fff; border: 0; }
+#root .workspace-plot-legend button { min-height: 28px; padding: 3px; border: 0; background: transparent; font-size: 10px; font-weight: 400; box-shadow: none; text-align: left; }
+#root :is(.sujeongi-color-grid,.sticker-grid) button { padding: 4px; }
+#root .account-bar button { display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; min-height: 34px; padding: 6px 12px; }
+#root .sujeongi-swatches button { width: 25px; height: 25px; min-height: 25px; padding: 0; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #dbe5ea; }
+#root .sujeongi-swatches button[aria-pressed=true] { outline: 2px solid var(--button-accent); outline-offset: 2px; }
+#root button.sujeongi-fab { padding: 0; border: 0; background: transparent; box-shadow: none; cursor: grab; }
+#root button.sujeongi-fab.dragging { cursor: grabbing; }
+#root .sujeongi-panel header button { min-width: 32px; min-height: 32px; padding: 2px 8px; border-color: #ffffff40; background: transparent; color: #fff; }
+#root .clarification-card .step-number { background: var(--button-accent); }
+#root button:is(.institution-brand,.sujeongi-fab):is(:hover,:active),
+#root .institution-links button:is(:hover,:active) { background: transparent; border-color: transparent; box-shadow: none; }
+#root button.institution-search:hover:not(:disabled),
+#root .institution-chat-actions button:first-child:hover:not(:disabled) { background: #004e78; color: #fff; border-color: #004e78; }
+#root .sticker-actions a { display: inline-flex; align-items: center; box-sizing: border-box; min-height: 36px; padding: 8px 13px; border: 1px solid var(--button-border); border-radius: var(--button-radius); color: var(--button-text); background: white; font-size: 12px; font-weight: 600; line-height: 1.5; text-decoration: none; }
+
+@media(max-width:700px) {
+  #root .workspace-actions { width: 100%; margin-left: 0; }
+  #root .workspace-actions button, #root .workspace-actions>details>summary { font-size: 11px; padding: 7px 9px; }
+  #root .clarification-options button { width: 100%; }
+  #root .chat-modal { padding: 22px; }
+  #root .chat-modal>button { min-height: 40px; }
+  #root .institution-links button { font-size: 13px; padding: 13px 8px; }
+}
+@media(max-width:680px) {
+  #root .institution-chat-actions button { width: 34px; height: 34px; min-height: 34px; padding: 0; }
+  #root button.institution-search { width: 34px; height: 34px; min-height: 34px; }
+}
+@media(prefers-reduced-motion:reduce) { #root button { transition: none; } }

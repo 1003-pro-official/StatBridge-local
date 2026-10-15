@@ -8,3 +8,19 @@ test('duplicate traces and hidden series do not inflate the visible series count
 test('pie, donut and treemap retain a drawable domain above the value explanation',()=>{for(const type of ['pie','treemap']){const g=panelGeometry({data:[{type,labels:['a','b'],values:[4,6]}],layout:{height:900,margin:{t:100,b:500},annotations:[{text:'many<br>lines<br>below<br>the chart',y:-.08,font:{size:12}}]}});assert.equal(g.domainChart,true);assert.equal(g.expanded,true);assert.ok(g.minHeight>=500);assert.equal(g.titleSpace,35);}});
 
 test('automatic captions are outside axes for 1 through 10 series; user marks remain',()=>{for(let count=1;count<=10;count++){const figure={data:Array.from({length:count},(_,i)=>({name:`s${i}`})),layout:{annotations:[{text:'자료: KOSIS',yref:'paper',y:-.2},{text:'기준 시점',yref:'paper',y:-.08},{name:'user-note',text:'사용자 표시',yref:'paper',y:-.1},{text:'패널 제목',yref:'paper',y:1}]}};const captions=splitPlotAnnotations(figure);assert.equal(captions.footer.length,2);assert.deepEqual(captions.plot.map(a=>a.text),['사용자 표시','패널 제목']);assert.ok(panelGeometry(figure).minHeight>=260);}});
+
+// The renderer preserves a user note ID for subsequent edits. Outside notes
+// must move to the HTML footer before the responsive chart shrinks its margin.
+test('named below-chart notes remain visible outside the responsive plot',()=>{
+ for(let count=1;count<=10;count++){
+  const note={name:'saved-note-id',text:'그래프 설명 위치',xref:'paper',yref:'paper',x:0,y:0,yshift:-180,yanchor:'top'};
+  const source={name:'statbridge-footer:0',text:'자료: KOSIS',yref:'paper',y:0,yshift:-140};
+  const inside={name:'inside-note',text:'관측점 설명',yref:'paper',y:.8};
+  const figure={data:Array.from({length:count},(_,i)=>({name:`s${i}`})),layout:{annotations:[source,note,inside]}};
+  const captions=splitPlotAnnotations(figure);
+  assert.deepEqual(captions.footer.map(a=>a.text),['자료: KOSIS','그래프 설명 위치']);
+  assert.deepEqual(captions.plot,[inside]);
+  assert.equal(captions.footer[1].name,'saved-note-id');
+  assert.equal(figure.layout.annotations.length,3);
+ }
+});
