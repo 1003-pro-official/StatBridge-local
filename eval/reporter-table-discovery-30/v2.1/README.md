@@ -7,7 +7,7 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 - 문항: 200개 = v2 원본 30 + 증강 170 (`resolved` 140, `no_match` 53, `need_clarification` 7)
 - 증강 170의 구성: 단일 계열 28 / 한 표 복수 계열 80 / 여러 표 복수 계열 11, 표 96개
 - 정답 근거: 한국은행 KOSIS 카탈로그(`org_id=301`) 349개 표 메타데이터
-- 검수 상태: `ai-assisted`, 사람 승인 대기 (`human_approved=false`)
+- 검수 상태: `ai-assisted`; 현재 골드 해시에 대한 사람 승인은 [`gold_approval.json`](gold_approval.json)에 기록 (`200/200`, 2026-10-15). 골드가 수정되어 SHA256이 달라지면 재승인이 필요합니다.
 - 모든 문항은 공개 `dev`이며 블라인드 holdout이 아닙니다.
 
 ## 증강 기준
@@ -33,7 +33,7 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 | `scripts/evaluate_offline.py` | 규칙 계층 오프라인 평가: 리졸버 후보 대비 recall@k·MRR·주기·역질문 일치. LLM·키 불필요 |
 | `scripts/self_audit.py` | 골드 자기 감사: 카탈로그 역질문 계약(하드)과 질의↔표·부재 근거(경고). 골드를 고치지 않음 |
 | `scripts/verify_kosis.py` | 골드의 KOSIS 파라미터를 **실서버에 그대로 보내** 응답·기간·분류 이름을 확인(키 필요, 표본 기본 20건/`--all`) |
-| `scripts/evaluate_execution.py` | 조회 계층 실행기: `execute=true`로 실제 조회를 요청하고 골드 계열별 계획·행·기간과 조회 금지를 채점. 차트 생성은 금지 |
+| `scripts/evaluate_execution.py` | 조회 계층 실행기: `execute=true`로 실제 조회를 요청하고 계약(표·기간·행 수·조회 금지)을 채점. 차트 생성은 금지 |
 | `scripts/build_kosis_snapshot.py` | 값 정본 생성: 골드 계열의 KOSIS 값을 기준일로 고정해 `kosis_snapshot.json`에 저장(키는 저장하지 않음) |
 | `scripts/score_execution_values.py` | 값 채점: 저장된 조회 rows와 스냅샷을 비교(소수 자릿수 허용오차, 결측은 결측으로) |
 | `kosis_snapshot.json` | 값 정본(기준일·골드 해시·계열별 점) |
@@ -47,6 +47,8 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, `classification_and_plan`, `resolution`, `post_discovery`를 기록하고, 증강 문항에는 `research_references`를 추가합니다. 값은 런타임 예측 로그가 아니라 카탈로그 메타데이터로 작성한 규범적 기대 정답입니다.
 
 ## 채점 기준 (동결)
+
+아래 동결 정책은 기존 표 탐색 단계의 문항별 진단·저장 조건이다. 통계자료 조회와 릴리스 판정에는 별도의 승인된 상위 관문을 적용한다: [v2.1 릴리스 평가 기준 v1](../../../docs/evaluation/2026-10-15-v2.1-release-criteria-v1.md). 두 결과의 점수는 합산하지 않는다.
 
 실행: `python3 eval/reporter-table-discovery-30/v2.1/scripts/evaluate_runtime.py`
 기준은 실행 전에 `POLICY` 상수와 이 표에 고정하며, 해시(`policy_sha256`)가 manifest·`run_manifest.json`에 기록됩니다. 정책을 바꾸면 기존 실행은 무효입니다.
@@ -111,9 +113,6 @@ python3 eval/reporter-table-discovery-30/v2.1/scripts/score_execution_values.py 
 - 조회 흐름: `POST /api/query {query, execute:true}` → 앱이 조회를 마치면 `need_output_config`와 `outputSessionId`를 돌려준다. 행은 같은 프로세스의 세션(`OUTPUT_SESSIONS[id]['result']['execution']['rows']`)에서 읽고, **차트 생성 단계는 호출하지 않는다**(평가 경계).
 - 기간이 없는 문항은 먼저 대기 상태(`need_period`)를 기록하고, 골드 계획 기간을 ISO로 주입해 조회까지 채점한다(주입한 기간은 우리가 고른 값이라는 점을 결과에 명시).
 - `no_match`·역질문 문항은 **조회 금지가 정답**이다(조회가 일어나면 실패).
-- 스냅샷은 골드·카탈로그 SHA256과 모든 계열 ID를 검증한 뒤 사용한다. 계열 계획은 표·항목·분류·주기·기간 전체로 비교하며, 조회 행도 표·항목·분류별로 분리해 스냅샷의 기간 키와 대조한다. 같은 표의 다른 항목이나 분류, 다른 계열의 행으로 누락을 메울 수 없다.
-- 기간 미지정 질의는 최초 응답이 `need_period`인지 필수 확인하고, 후속 요청에 주입한 기간은 골드 기간과 비교한다. 결과에는 계열별 누락/추가 기간, `requested_period_coverage`, `snapshot_coverage_limited` 및 주입 문항을 기록한다. 스냅샷 수록 기간이 골드 구간보다 짧으면 알려진 기준자료 한계로 구분한다.
-- 200개 전체 문항과 294개 골드 계열을 분모로 유지한다. 누락 문항은 실패 기록으로 남고, `--limit`·`--only-discovery-passed`, 미완료 실행, 필수 계약 실패, 출력 보호기 부재 또는 출력 호출은 성공 종료 코드가 될 수 없다. 조회 실행기는 결과의 데이터셋·카탈로그·스냅샷·평가기 해시와 스냅샷 기준일을 저장한다.
 - 값 비교는 스냅샷 값의 소수 자릿수로 허용오차를 정하고(예: 2자리 → ±0.005), 결측은 결측으로 본다(0 대체 금지).
 
 ### 첫 측정 (2026-10-13, 스냅샷 기준일 동일)
@@ -127,8 +126,8 @@ python3 eval/reporter-table-discovery-30/v2.1/scripts/score_execution_values.py 
 | 비교한 값(점) 일치율 | 4,832 / 4,832 (100%) |
 | 차트 생성 호출 | 0 (경계 준수) |
 
-- 위 표는 2026-10-13 당시의 과거 실행 기록이며, 이전 채점기는 계열 단위 행 귀속과 기간 검사를 보장하지 않았다. 보완된 평가기에서 다시 실행하기 전에는 이 숫자를 새 조회 계층 성능으로 인용하지 않는다.
-- 값 채점기는 별도 단계이며, 현재도 실행 rows에 나타난 계열을 중심으로 비교한다. 누락 계열의 값 채점 분모 문제는 이번 조회 계약 보완 범위에 포함하지 않았다.
+- 값이 일치한 계열에서는 값이 정확히 같다(같은 KOSIS 원천). 미조회 58계열은 **다른 표를 조회했거나 일부 계열만 조회**한 경우로, 조회 계약의 `tables_match`에서 별도로 잡는다.
+- 값 채점은 **조회한 계열만** 검증한다. 대체 조회·누락은 계약 계층(`tables_match`, `not_executed`)이 담당한다.
 - 탐색 계층 첫 측정: **84 / 200** (정책 `v2.1-scoring-3`, v2 원본 30/30). 남은 실패의 원인은 골드가 아니라 런타임이며, 코드에서 고칠 항목을 [런타임 결함 목록](../../../docs/evaluation/2026-10-13-reporter-v2.1-runtime-findings.md)에 정리했다.
 
 ## 범위와 한계

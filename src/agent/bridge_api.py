@@ -719,6 +719,22 @@ def query(payload: QueryRequest) -> dict[str, Any]:
             raise HTTPException(status_code=400, detail=f"날짜를 확인해 주세요: {exc}") from exc
     period_start = payload.period_start or (text_period or {}).get("start")
     period_end = payload.period_end or (text_period or {}).get("end")
+    inherited_period = None
+    if not period_start and not period_end:
+        prior_context = agent._validated_followup_plans(payload.state)
+        if prior_context:
+            prior_plans = prior_context[1]
+            frequencies = {str(plan.get("frequency") or "") for plan in prior_plans}
+            starts = {str(plan.get("start_period") or "") for plan in prior_plans}
+            ends = {str(plan.get("end_period") or "") for plan in prior_plans}
+            if len(frequencies) == len(starts) == len(ends) == 1 and next(iter(starts)) and next(iter(ends)):
+                frequency = next(iter(frequencies))
+                inherited_period = {
+                    "start": _ui_period(next(iter(starts)), frequency),
+                    "end": _ui_period(next(iter(ends)), frequency, end=True),
+                }
+                if inherited_period["start"] and inherited_period["end"]:
+                    period_start, period_end = inherited_period["start"], inherited_period["end"]
     outside = bool(text_period and ((available_period["min"] and period_start < available_period["min"]) or (available_period["max"] and period_end > available_period["max"])))
     if not period_start or not period_end or outside or (text_period and not payload.execute):
         return {
@@ -738,7 +754,8 @@ def query(payload: QueryRequest) -> dict[str, Any]:
                 {"id": "period", "title": "조회 기간", "description": "사용자 입력 대기", "status": "active"},
             ],
             "warnings": [f"요청 기간: {period_start}–{period_end}; 제공 기간: {available_period['min']}–{available_period['max']}"] if outside else [],
-            "periodSelection": {"source":"text","requested":{"start":period_start,"end":period_end},"applied":{"start":period_start,"end":period_end}} if text_period and not outside else text_period,
+            "periodSelection": ({"source":"text","requested":{"start":period_start,"end":period_end},"applied":{"start":period_start,"end":period_end}} if text_period and not outside else
+                                {"source":"context","requested":inherited_period,"applied":inherited_period} if inherited_period else text_period),
             "state": result.get("state") or {},
             "debug": {"timingMs": {"resolve": resolve_ms, "total": resolve_ms}},
         }
@@ -746,7 +763,8 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     available_period = _availability_from_plans(plans)
     selected_start = period_start
     selected_end = period_end
-    period_selection = {"source":"text" if text_period else "ui","requested":{"start":period_start,"end":period_end},"applied":{"start":selected_start,"end":selected_end}}
+    period_selection = {"source":"text" if text_period else "context" if inherited_period else "ui",
+                        "requested":{"start":period_start,"end":period_end},"applied":{"start":selected_start,"end":selected_end}}
     adjusted_period = False
     if available_period["min"] and selected_start < available_period["min"]:
         selected_start = available_period["min"]

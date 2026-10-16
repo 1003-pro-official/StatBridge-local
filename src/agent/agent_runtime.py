@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import calendar
+import copy
 import json
 import os
 import re
@@ -19,6 +20,7 @@ from jev_series_hybrid import apply_jev_series_decision
 from request_match_guard import structure_request, table_evidence, catalog_mentions, scoped_metric_query, unsupported_quantity_terms
 from canonical_request_planner import instruction_text
 from catalog_request_planner import selections as catalog_selections, unavailable as unavailable_catalog_quantity
+from request_period import explicit_period
 
 
 @dataclass(slots=True)
@@ -175,6 +177,168 @@ class StatBridgeAgent:
             if re.fullmatch(r"objL[1-8]", param) and value_id:
                 classifications[param] = value_id
         return classifications
+
+    def _validated_followup_plans(self, state: dict[str, Any] | None) -> tuple[str, list[dict[str, Any]]] | None:
+        """Recheck client-carried prior plans against their original request and catalog."""
+        if not isinstance(state, dict):
+            return None
+        prior_query = str(state.get("_validated_request_query") or "").strip()
+        plans = state.get("_validated_api_plans")
+        if not prior_query or not isinstance(plans, list) or not plans:
+            return None
+        plans = copy.deepcopy(plans)
+        candidates = [self.resolver.candidate_shell(str(plan.get("table_id") or ""))
+                      for plan in plans if str(plan.get("table_id") or "") in self.tables_by_id]
+        if len(candidates) != len(plans):
+            return None
+        for candidate, plan in zip(candidates, plans):
+            table = self.tables_by_id[candidate["table_id"]]
+            values = {str(value.get("value_id")): value
+                      for dimension in table.get("dimensions") or []
+                      for value in dimension.get("values") or []}
+            hits = []
+            for param, value_id in (plan.get("classifications") or {}).items():
+                value = values.get(str(value_id))
+                if not value:
+                    return None
+                hits.append({"api_param": str(param), "value_id": str(value_id),
+                             "value_name": str(value.get("value_name") or "")})
+            candidate["dimension_hits"] = hits
+        prior_state = {"confirmed": copy.deepcopy(state.get("confirmed") or {})}
+        prior_result = {"status": "resolved", "selected_table": candidates[0],
+                        "selected_tables": candidates, "api_plan": plans[0],
+                        "api_plans": plans, "state": prior_state}
+        checked = self.validate_resolution(prior_query, prior_result)
+        if checked.get("status") != "resolved" or not (checked.get("request_validation") or {}).get("valid"):
+            return None
+        return prior_query, plans
+
+    def _followup_anchor_query(self, plan: dict[str, Any]) -> str:
+        """Turn a revalidated plan into a catalog-only anchor for follow-up parsing."""
+        table = self.tables_by_id[str(plan["table_id"])]
+        parts = [str(table.get("table_name") or "")]
+        item_id = str(plan.get("item_id") or "")
+        item_names = table.get("item_names") or []
+        item_ids = [str(value) for value in table.get("item_ids") or []]
+        if item_id in item_ids and item_ids.index(item_id) < len(item_names):
+            parts.append(str(item_names[item_ids.index(item_id)]))
+        for dimension in table.get("dimensions") or []:
+            value_id = str((plan.get("classifications") or {}).get(dimension.get("api_param")) or "")
+            value = next((value for value in dimension.get("values") or []
+                          if str(value.get("value_id")) == value_id), None)
+            if value:
+                parts.append(str(value.get("value_name") or ""))
+        parts.append(str(plan.get("frequency") or ""))
+        return " ".join(part for part in parts if part)
+
+    @staticmethod
+    def _explicit_dimension_value(query: str, dimension: dict[str, Any], *, exclude: set[str] | None = None) -> dict[str, Any] | None:
+        from semantic_catalog_planner import matches, norm, value_terms
+
+        excluded = exclude or set()
+        candidates = [value for value in matches(query, dimension)
+                      if str(value.get("value_id")) not in excluded]
+        if not candidates:
+            return None
+        normalized_query = norm(query)
+        def score(value):
+            explicit = max((len(norm(term)) for term in value_terms(value.get("value_name") or "")
+                            if norm(term) and norm(term) in normalized_query), default=0)
+            return explicit, len(norm(value.get("value_name") or ""))
+        candidates.sort(key=score, reverse=True)
+        best = score(candidates[0])
+        tied = [value for value in candidates if score(value) == best]
+        return candidates[0] if len(tied) == 1 else None
+
+    def _compute_followup_plans(self, query: str, prior_query: str,
+                                prior_plans: list[dict[str, Any]]) -> list[dict[str, Any]] | None:
+        """Apply explicit catalog mutations to an already validated plan."""
+        additive = bool(re.search(r"(추가|같이|함께|비교해\s*줘|함께\s*보여)", query))
+        replacement = bool(re.search(r"(아니|바꿔|바꾸|변경)", query))
+        if not additive and not replacement:
+            return None
+
+        base_ids = {str(plan.get("table_id") or "") for plan in prior_plans}
+        selected = self.resolver.rank_followup(self._followup_anchor_query(prior_plans[0]), query, top_k=12)
+        selected_ids = list(dict.fromkeys(str(item.get("table_id") or "") for item in selected
+                                          if str(item.get("table_id") or "") in self.tables_by_id))
+
+        def create_plan(table_id: str, previous: dict[str, Any] | None) -> dict[str, Any] | None:
+            table = self.tables_by_id.get(table_id)
+            if not table:
+                return None
+            candidate = self.resolver.candidate_shell(table_id)
+            dimension_query = instruction_text(query, [table])
+            hits = []
+            changed = False
+            for dimension in table.get("dimensions") or []:
+                param = str(dimension.get("api_param") or "")
+                old_code = str((previous or {}).get("classifications", {}).get(param) or "")
+                target = self._explicit_dimension_value(dimension_query, dimension,
+                                                        exclude={old_code} if additive and table_id in base_ids else None)
+                if target:
+                    value_id = str(target.get("value_id") or "")
+                    changed = changed or value_id != old_code
+                elif table_id in base_ids and previous:
+                    value_id = old_code
+                else:
+                    values = dimension.get("values") or []
+                    representative = str(dimension.get("representative_value_id") or "")
+                    value_id = representative if any(str(value.get("value_id")) == representative for value in values) else str(values[0].get("value_id") or "") if values else ""
+                value = next((value for value in dimension.get("values") or []
+                              if str(value.get("value_id")) == value_id), None)
+                if value:
+                    hits.append({"api_param": param, "value_id": value_id,
+                                 "value_name": str(value.get("value_name") or "")})
+            if table_id in base_ids and not changed:
+                return None
+            candidate["dimension_hits"] = hits
+            return self.build_api_plan(prior_query, candidate).as_dict()
+
+        if additive:
+            result = copy.deepcopy(prior_plans)
+            for prior in prior_plans:
+                table_id = str(prior.get("table_id") or "")
+                changed = create_plan(table_id, prior)
+                if changed and changed not in result:
+                    result.append(changed)
+            for table_id in selected_ids:
+                if table_id in base_ids:
+                    continue
+                added = create_plan(table_id, None)
+                if added and added not in result:
+                    result.append(added)
+            return result[:5] if len(result) > len(prior_plans) else None
+
+        target_ids = [table_id for table_id in selected_ids if table_id not in base_ids]
+        target_id = target_ids[-1] if target_ids else (selected_ids[-1] if selected_ids else "")
+        previous = next((plan for plan in prior_plans if str(plan.get("table_id")) == target_id), None)
+        if not target_id:
+            return None
+        replacement_plan = create_plan(target_id, previous)
+        if replacement_plan is None and target_id in base_ids:
+            # Table-name corrections can retain the same table while changing an
+            # item/dimension that has a clear catalog value in the user's turn.
+            candidate = self.resolver.candidate_shell(target_id)
+            dimension_query = instruction_text(query, [self.tables_by_id[target_id]])
+            for dimension in self.tables_by_id[target_id].get("dimensions") or []:
+                target = self._explicit_dimension_value(dimension_query, dimension)
+                if target:
+                    candidate["dimension_hits"].append({"api_param": dimension["api_param"],
+                        "value_id": str(target["value_id"]), "value_name": str(target.get("value_name") or "")})
+            replacement_plan = self.build_api_plan(prior_query, candidate).as_dict()
+            if all(replacement_plan.get("classifications", {}).get(k) == v
+                   for k, v in (previous or {}).get("classifications", {}).items()):
+                return None
+        return [replacement_plan] if replacement_plan else None
+
+    @staticmethod
+    def _period_only_followup(query: str) -> bool:
+        request = structure_request(query)
+        period_intent = bool(re.search(r"(조회\s*기간|기간을|조회\s*범위)", query))
+        has_boundary = bool(re.search(r"(?:부터|이후|까지|~|～|–|—)", query))
+        return (not request["metrics"] and not request["explicit_ids"] and period_intent
+                and has_boundary and explicit_period(query) is not None)
 
     def build_api_plan(self, query: str, selected: dict[str, Any]) -> ApiPlan:
         table_id = str(selected["table_id"])
@@ -417,6 +581,63 @@ class StatBridgeAgent:
             'dictionary_query':query,'request_query':query,'classification':{'status':'scoped_comparison'}})
 
     def resolve(self, query: str, state: dict[str, Any] | None = None, clarification: dict[str, str] | None = None) -> dict[str, Any]:
+        prior_context = self._validated_followup_plans(state)
+        if prior_context and not clarification and self._period_only_followup(query):
+            prior_query, plans = prior_context
+            candidates = [self.resolver.candidate_shell(str(plan["table_id"])) for plan in plans]
+            for candidate, plan in zip(candidates, plans):
+                table = self.tables_by_id[candidate["table_id"]]
+                values = {str(value.get("value_id")): value
+                          for dimension in table.get("dimensions") or []
+                          for value in dimension.get("values") or []}
+                candidate["dimension_hits"] = [
+                    {"api_param": str(param), "value_id": str(value_id),
+                     "value_name": str(values[str(value_id)].get("value_name") or "")}
+                    for param, value_id in (plan.get("classifications") or {}).items()
+                ]
+            next_state = {**state, "original_query": state.get("original_query") or prior_query,
+                          "_request_query": prior_query, "_user_query": query,
+                          "_validated_request_query": prior_query,
+                          "_validated_api_plans": copy.deepcopy(plans), "status": "resolved"}
+            return self.validate_resolution(prior_query, {
+                "status": "resolved", "selected_table": candidates[0],
+                "selected_tables": candidates, "api_plan": plans[0],
+                "api_plans": plans, "candidates": candidates,
+                "dictionary_query": state.get("original_query") or prior_query,
+                "classification": state.get("_classification") or {},
+                "state": next_state,
+            })
+        if prior_context and not clarification:
+            prior_query, prior_plans = prior_context
+            updated_plans = self._compute_followup_plans(query, prior_query, prior_plans)
+            if updated_plans:
+                candidates = []
+                for plan in updated_plans:
+                    candidate = self.resolver.candidate_shell(str(plan["table_id"]))
+                    table = self.tables_by_id[candidate["table_id"]]
+                    values = {str(value.get("value_id")): value
+                              for dimension in table.get("dimensions") or []
+                              for value in dimension.get("values") or []}
+                    candidate["dimension_hits"] = [
+                        {"api_param": str(param), "value_id": str(value_id),
+                         "value_name": str(values[str(value_id)].get("value_name") or "")}
+                        for param, value_id in (plan.get("classifications") or {}).items()
+                    ]
+                    candidates.append(candidate)
+                next_state = {**state, "original_query": state.get("original_query") or prior_query,
+                              "_request_query": prior_query, "_user_query": query,
+                              "_followup_base_request_query": prior_query,
+                              "_followup_base_api_plans": copy.deepcopy(prior_plans),
+                              "_followup_query": query, "status": "resolved"}
+                return self.validate_resolution(query, {
+                    "status": "resolved", "selected_table": candidates[0],
+                    "selected_tables": candidates, "api_plan": updated_plans[0],
+                    "api_plans": updated_plans, "candidates": candidates,
+                    "dictionary_query": self.resolver.merge_followup_query(
+                        self._followup_anchor_query(prior_plans[0]), query),
+                    "classification": state.get("_classification") or {},
+                    "state": next_state,
+                })
         repeat_grounded_request = bool(
             state and state.get('_catalog_grounded')
             and state.get('_user_query') == query and not state.get('confirmed')
@@ -478,8 +699,11 @@ class StatBridgeAgent:
                 top_k=8,
             )
         else:
-            prior_user_query = str((state or {}).get("_user_query") or "")
+            prior_user_query = (self._followup_anchor_query(prior_context[1][0])
+                                if prior_context else str((state or {}).get("_user_query") or ""))
             effective_query = self.resolver.merge_followup_query(prior_user_query, query) if prior_user_query else query
+            if prior_context:
+                request_query = effective_query
             # Everyday ambiguous concepts (for example bare "금리") must ask
             # the dictionary's button question before HCX expands them into
             # several speculative comparison series.
@@ -641,12 +865,50 @@ class StatBridgeAgent:
         def canonical(plans):
             return sorted(json.dumps(p, sort_keys=True, ensure_ascii=False) for p in plans)
 
+        # A period-only follow-up does not restate the measured concept. Accept
+        # only the byte-for-byte plans that revalidate against the saved original
+        # request; the bridge API performs this validation again at its boundary.
+        carried = self._validated_followup_plans(resolution.get("state"))
+        if (carried and self._period_only_followup(query)
+                and canonical(observed) == canonical(carried[1])):
+            return {**resolution, 'request_query': query, 'request_validation': {
+                'valid': True, 'errors': [], 'table_ids': [p['table_id'] for p in observed],
+                'evidence': 'catalog_revalidated_prior_plan_for_period_followup',
+                'prior_request_query': carried[0],
+            }}
+
+        state = resolution.get("state") or {}
+        base_query = str(state.get("_followup_base_request_query") or "")
+        base_plans = state.get("_followup_base_api_plans")
+        followup_query = str(state.get("_followup_query") or "")
+        if (base_query and isinstance(base_plans, list) and base_plans
+                and followup_query == query):
+            base_context = self._validated_followup_plans({
+                "_validated_request_query": base_query,
+                "_validated_api_plans": base_plans,
+            })
+            expected_followup = self._compute_followup_plans(query, base_query, base_plans) if base_context else None
+            if expected_followup and canonical(observed) == canonical(expected_followup):
+                context_query = " ".join(self._followup_anchor_query(plan) for plan in observed)
+                validated_state = {**state, "_validated_request_query": context_query,
+                                   "_validated_api_plans": copy.deepcopy(observed),
+                                   "_request_query": context_query}
+                return {**resolution, "state": validated_state, "request_query": query,
+                        "request_validation": {
+                            "valid": True, "errors": [],
+                            "table_ids": [plan["table_id"] for plan in observed],
+                            "evidence": "prior_plan_revalidated_and_explicit_catalog_mutation",
+                        }}
+
         # Reconstruct complete plans from current metadata rather than trusting
         # a model flag, table-name overlap, or only one member of a comparison.
         if (grounded_plans and canonical(grounded_plans) == canonical(observed)
                 and all(self.resolver._matches_confirmed_filters(self.tables_by_id[p['table_id']], confirmed)
                         for p in observed)):
-            return {**resolution, 'request_query': query, 'request_validation': {
+            validated_state = {**(resolution.get('state') or {}),
+                               '_validated_request_query': query,
+                               '_validated_api_plans': copy.deepcopy(observed)}
+            return {**resolution, 'state': validated_state, 'request_query': query, 'request_validation': {
                 'valid': True, 'errors': [], 'table_ids': [p['table_id'] for p in observed],
                 'evidence': 'measured_concept_and_each_catalog_dimension',
             }}
@@ -701,7 +963,10 @@ class StatBridgeAgent:
                     "api_plan":None,"api_plans":[],"request_validation":validation,
                     "missing_series":sorted(missing) or request["metrics"],
                     "state":{**(resolution.get("state") or {}),"status":"no_match"}}
-        return {**resolution,"request_query":query,"request_validation":validation}
+        validated_state = {**(resolution.get("state") or {}),
+                           "_validated_request_query": query,
+                           "_validated_api_plans": copy.deepcopy(plans)}
+        return {**resolution, "state": validated_state, "request_query": query, "request_validation": validation}
 
     def run(
         self,
