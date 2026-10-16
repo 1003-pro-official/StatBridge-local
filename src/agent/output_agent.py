@@ -75,6 +75,7 @@ class OutputAgent:
     def _series(self, rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         grouped: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
         frequencies: dict[tuple[str, str, str], str] = {}
+        calculations: dict[tuple[str,str,str],str] = {}
         for row in rows:
             if not isinstance(row, dict):
                 continue
@@ -89,6 +90,7 @@ class OutputAgent:
                 key = self._series_key(row)
                 grouped.setdefault(key, []).append({"date": period, "value": value})
                 frequencies[key] = str(row.get("_FREQUENCY") or "")
+                if row.get("_DERIVED_CALCULATION"):calculations[key]=row["_DERIVED_CALCULATION"]
         result = []
         for index, ((source_id, label, unit), points) in enumerate(grouped.items()):
             unique: dict[str, dict[str, Any]] = {}
@@ -99,6 +101,7 @@ class OutputAgent:
                 unique[point["date"]] = point
             result.append({
                 "id": f"series-{index + 1}",
+                **({"calculation":calculations[(source_id,label,unit)]} if (source_id,label,unit) in calculations else {}),
                 "label": label,
                 "unit": unit,
                 "sourceId": source_id,
@@ -308,17 +311,23 @@ class OutputAgent:
                 native.add_annotation(name='statbridge-footer:source',x=0,y=-.1,xref='paper',yref='paper',text=source_caption(result,SimpleNamespace(source_note='')),showarrow=False,font=dict(size=11,color='#657586'))
                 arrange_bottom_captions(native,series,spec)
                 figure=json.loads(native.to_json())
+        from level_yoy_comparison import CALCULATION_NOTE
+        calculations=(result.get('execution') or {}).get('calculations') or []
+        if calculations:renderer_info.setdefault('warnings',[]).append(CALCULATION_NOTE)
         from report_summary import explain
         from report_export import export_formats
         explanation = self._explain(summary_series, spec, summary, query=str(result.get("query") or "")) if generate_explanation else explain(summary_series, query=str(result.get('query') or ''))
         explanation['scope'] = {'basis': 'original_observations', 'transform': spec.transform, 'labels': [s['label'] for s in summary_series], 'periodStart': spec.period_start, 'periodEnd': spec.period_end}
+        table_document=build_table(series, spec.report_table, title=spec.title, sources=self._evidence(result), display_names=spec.display_names)
+        explanation['calculations']=calculations
+        if calculations:explanation['scope']['basis']='source_observations_and_server_calculations'
         return {
             "status": "ready" if any(s["points"] for s in series) else "empty",
             "agent": "output-agent-chartspec-v2",
             "summary": explanation["text"],
             "table": self._table(series),
             "exportFormats": export_formats(series,spec,result),
-            "tableDocument": build_table(series, spec.report_table, title=spec.title, sources=self._evidence(result), display_names=spec.display_names),
+            "tableDocument": table_document,
             "explanation": explanation,
             "evidence": self._evidence(result),
             "chartState": spec.model_dump(),
@@ -338,10 +347,12 @@ class OutputAgent:
     def prepare(self, result: dict[str, Any], request: dict[str, Any] | None = None) -> dict[str, Any]:
         raw = dict(request or {})
         series = self._series((result.get("execution") or {}).get("rows") or [])
+        from quick_output import dual_axis_requested,dual_axis_defaults
+        dual_intent=dual_axis_requested(raw.get('natural_language') or '')
         quick = bool(raw.get('quick_output'))
         if quick:
             from quick_output import requested_chart
-            explicit = requested_chart(raw.get('natural_language') or '') if raw.get('chart_type') in {None, 'auto'} else None
+            explicit = ('line' if dual_intent else requested_chart(raw.get('natural_language') or '')) if raw.get('chart_type') in {None, 'auto'} else None
             if explicit:
                 raw['chart_type'] = explicit
             if combined_layout_reason(series):
@@ -387,6 +398,25 @@ class OutputAgent:
             proposed.pop('secondary_axis_series',None)
         elif raw.get('layout') and raw['layout']!='combined':
             proposed.pop('secondary_axis_series',None)
+        calculations=(result.get('execution') or {}).get('calculations') or []
+        if calculations and requested_type in {'auto','line','bar'}:
+            derived={c['label'] for c in calculations}
+            right=[item['label'] for item in series if item['label'] in derived]
+            left=[item for item in series if item['label'] not in derived]
+            compatible=(len({item.get('frequency') for item in series})==1 and len(comparable_axis_units(left))==1)
+            if right and len(right)<len(series) and compatible:
+                raw['layout']='combined'
+                proposed.update(chart_type='line',series_chart_types={label:'bar' for label in right},secondary_axis_series=right,
+                    axes={'y':{'title_orientation':'horizontal','title_placement':'top'},'y2':{'title_orientation':'horizontal','title_placement':'top'}})
+            elif right and len(right)<len(series):
+                raw['layout']='separate'
+                proposed.pop('secondary_axis_series',None)
+                proposed.pop('series_chart_types',None)
+        if dual_intent:
+            if requested_type not in {'auto','line','bar','stacked_bar','area'}:
+                raise ValueError('이중축 혼합차트는 선·막대·영역 계열로 구성해 주세요.')
+            proposed.update(dual_axis_defaults(series))
+            raw['layout']='combined'
         proposed.update(layout=raw.get("layout") or "combined", show_legend=raw.get("show_legend", True))
         for field in ("title", "subtitle", "x_axis_label", "y_axis_label"):
             if raw.get(field): proposed[field] = raw[field]

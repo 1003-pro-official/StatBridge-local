@@ -269,7 +269,7 @@ class ChartEditAgent:
             "범례를 오른쪽 위로 이동은 set_legend(value=top-right)로 처리한다. 그래프 데이터 시점 선택은 필요 없다."
         )
         context = {"instruction": state["instruction"], "chartState": state["current"]["chartState"],
-                   "seriesLabels": sorted(labels), "visual": visual.model_dump(),
+                   "seriesLabels": [s["label"] for s in displayed], "visual": visual.model_dump(),
                    "confirmedSelections": [{"mark_id":m.id,"tool":m.tool,**m.selection.model_dump()} for m in visual.marks if m.selection],
                    "conversation": state["current"].get("editConversation", []),
                    "editHistory": state["current"].get("editHistory", []),
@@ -309,12 +309,22 @@ class ChartEditAgent:
                 label = next(iter(labels))
             proposal = {"commands":[{"operation":"set_series_color","label":label,"value":color}]}
         else:
-            proposal = state.get("_proposal_override") or self.model.interpret(system, context)
+            from chart_reference_policy import generic_reference_style
+            single_reference_pass = (getattr(self.model, 'single_reference_pass', False) and callable(getattr(self.model,'review',None)) and len(visual.reference_files)==1
+                and not visual.marks and generic_reference_style(state['instruction']) and not state.get('_proposal_override'))
+            if single_reference_pass:
+                # One source-aware VLM pass, followed by the same local coverage,
+                # reference identity, schema and rendering validation as before.
+                context['sources']=request_sources(state['instruction'],visual.model_dump())
+                proposal=self.model.review(system,context,{'commands':[]})
+            else:
+                proposal = state.get("_proposal_override") or self.model.interpret(system, context)
         coverage = []
         reviewer = getattr(self.model, "review", None)
         if callable(reviewer) and not color and not state.get("_repairing_marks") and not state.get("_proposal_override"):
             sources = request_sources(state["instruction"], visual.model_dump())
-            proposal = reviewer(system, {**context, "sources":sources}, proposal)
+            if not locals().get("single_reference_pass",False):
+                proposal = reviewer(system, {**context, "sources":sources}, proposal)
             if proposal.get("clarification"):
                 raise ValueError(str(proposal["clarification"])[:500])
             try:

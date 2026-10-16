@@ -16,7 +16,6 @@ def get_service() -> StatisticsService:
     return StatisticsService()
 
 
-@mcp.tool()
 def healthcheck() -> dict[str, Any]:
     """StatBridge MCP 서버 상태와 데이터 경로를 확인한다."""
     service = get_service()
@@ -62,6 +61,7 @@ def get_statistics(
     start_period: str | None = None,
     end_period: str | None = None,
     prefer_local: bool = True,
+    allow_fallback: bool = True,
 ) -> dict[str, Any]:
     """실제 통계 데이터를 조회한다. 로컬 CSV를 우선하고 KOSIS OpenAPI로 fallback한다."""
     return get_service().get_statistics(
@@ -72,10 +72,10 @@ def get_statistics(
         start_period=start_period,
         end_period=end_period,
         prefer_local=prefer_local,
+        allow_fallback=allow_fallback,
     )
 
 
-@mcp.tool()
 def validate_tables_batch(
     offset: int = 0,
     limit: int = 20,
@@ -91,7 +91,6 @@ def validate_tables_batch(
     )
 
 
-@mcp.tool()
 def validate_all_tables(
     limit: int = 0,
     prefer_local: bool = False,
@@ -101,6 +100,13 @@ def validate_all_tables(
         limit=limit,
         prefer_local=prefer_local,
     )
+
+
+@mcp.tool()
+def get_statistics_batch(requests: list[dict[str, Any]], timeout_seconds: float = 20) -> dict[str, Any]:
+    """확정한 조회 조건을 제한적으로 병렬 조회한다. 각 요청의 성공·실패·시간 초과를 반환한다."""
+    from .statistics_batch import get_statistics_batch as batch
+    return batch(get_service(),requests,timeout_seconds)
 
 
 if __name__ == "__main__":

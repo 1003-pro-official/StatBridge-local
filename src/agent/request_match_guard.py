@@ -66,7 +66,8 @@ def catalog_mentions(query, tables):
         title = str(table.get("table_name") or "")
         names = {compact(title)}
         base = compact(title.split("(", 1)[0])
-        if len(base) >= 4:
+        closed_vintage=bool(re.search(r'(?:19|20)\d{2}\s*[~∼-]\s*(?:19|20)\d{2}',title))
+        if len(base) >= 4 and not closed_vintage:
             names.add(base)
         for name in names:
             if len(name) < 3:
@@ -216,3 +217,27 @@ def table_evidence(query, table):
     if "지역별" in request["qualifiers"] and "지역" not in name:return False,hits,request
     if any(x in request["qualifiers"] for x in ("국가별","나라별")) and "국가" not in name:return False,hits,request
     return True,hits,request
+
+
+def missing_requested_scopes(query, selected, tables):
+    """A valid candidate does not establish coverage of the whole comparison."""
+    by_id={str(t['table_id']):t for t in tables}
+    ids={str(p['table_id']) for p in selected}
+    missing=[]
+    requested=structure_request(query)
+    missing.extend(tid for tid in requested['explicit_ids'] if tid.upper() not in {t.upper() for t in ids})
+    for mention in catalog_mentions(query,tables):
+        if not ids.intersection(mention['table_ids']):missing.append(mention['text'])
+    covered=set()
+    for candidate in selected:
+        tid=str(candidate['table_id'])
+        if tid not in by_id:continue
+        table=by_id[tid]
+        names=[hit.get('value_name','') for hit in candidate.get('dimension_hits',[])]
+        for dimension in table.get('dimensions',[]):
+            codes=str((candidate.get('classifications') or {}).get(dimension.get('api_param'),''))
+            names.extend(v['value_name'] for v in dimension.get('values',[]) if v['value_id'] in re.split(r'[+,]',codes))
+        measured={**table,'item_names':[*table.get('item_names',[]),*names]}
+        covered.update(table_evidence(query,measured)[1])
+    missing.extend(sorted(set(requested['metrics'])-covered))
+    return list(dict.fromkeys(missing))

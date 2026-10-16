@@ -8,7 +8,7 @@ import re
 import pandas as pd
 
 from .config import settings
-from .kosis_client import KosisApiError, KosisClient
+from .kosis_client import KosisApiError, KosisClient, KosisRequestDeferred
 from .metadata_store import (
     MetadataStore,
     normalize_frequency,
@@ -1449,6 +1449,10 @@ class StatisticsService:
                         "rows":
                             rows,
                     }
+
+            except KosisRequestDeferred as e:
+                return {"status": "busy", "source": "kosis_api", "table_id": table_id,
+                        "retry_after_seconds": e.retry_after_seconds, "error": str(e), "rows": []}
 
             except KosisApiError as e:
 

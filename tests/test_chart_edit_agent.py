@@ -207,3 +207,13 @@ def test_omitted_drawing_instructions_recovered_before_batch_render():
     assert result["chartState"]["highlights"][0]["color"]=="#FFA500"
     assert result["chartState"]["range_styles"][0]["style"]["color"]=="#ff0000"
     assert result["table"]==initial["table"]
+
+def test_model_context_keeps_display_order_instead_of_alphabetical_order():
+    data=fixture_result(2)
+    for row in data['execution']['rows']:
+        row['ITM_NM']='하나' if row['ITM_NM']=='계열0' else '가둘'
+    output=OutputAgent();initial=output.prepare(data,{'chart_type':'line'})
+    model=FakeEditModel({'commands':[{'operation':'set_title','value':'검증'}]})
+    ChartEditAgent(model,output).edit(data,initial,'제목을 검증으로 바꿔줘')
+    assert model.context['seriesLabels']==['하나','가둘']
+    assert [s['label'] for s in model.context['seriesMetadata']]==model.context['seriesLabels']

@@ -43,7 +43,7 @@ EDIT_HELP = {
     "reorder_series": "value=[정본 계열 이름,...] 모든 계열을 정확히 한 번 포함",
     "show_series": "value=숨긴 계열의 정본 이름", "clear_highlight": "강조 계열 해제",
     "remove_secondary_axis": "value=계열 이름, 보조축 해제",
-    "set_axis_style": "label=x/y/y2,params={minimum,maximum,scale:linear/log,reverse,show_grid,zero_line,tick_angle,tick_step,decimals,title,title_position:0~1,title_standoff:0~80}. x의 수치 범위는 산점도에서만",
+    "set_axis_style": "label=x/y/y2,params={minimum,maximum,scale:linear/log,reverse,show_grid,zero_line,tick_angle,tick_step,decimals,title,title_position:0~1,title_standoff:0~80,title_orientation:auto/horizontal/vertical,title_placement:side/top/bottom/custom,title_x:-0.3~1.3,title_y:-0.3~1.3}. x의 수치 범위는 산점도에서만",
     "set_presentation": "params={design_template:snapshot/report/stability/outlook/slides/academic/explore,font_family,font_size,title_size,legend_size,font_color,background,grid_color,height,width,title_x,title_y,margin_left,margin_right,margin_top,margin_bottom,bar_mode:group/stack/relative,bar_gap:0~0.8,bar_group_gap:0~0.8,bar_orientation:vertical/horizontal,number_decimals,latest_values:true/false,shared_y,sync_y_axes,notes,color_scale:Viridis/Blues/Reds/RdBu/YlOrRd/Greens,reverse_colors,show_colorbar}",
     "add_note": "params={text,placement?:inside/below,label?,period?,x?,y?,ax?,ay?,arrow?,color?,font_size?}. 계열과 시점이 있으면 실제 관측점에 연결, 없으면 paper x/y=0~1(아래0 위1)",
     "update_note": "value=notes의 id,params=변경 필드", "remove_note": "value=notes의 id",
@@ -91,7 +91,13 @@ def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list
         presentation=spec.presentation
         if spec.report is None and presentation==PresentationStyle():
             presentation=PresentationStyle.model_validate({**presentation.model_dump(),'font_family':'Malgun Gothic, Noto Sans CJK KR, sans-serif','font_size':13,'title_size':20})
-        return spec.model_copy(update={'report':options,'presentation':presentation})
+        updates={'report':options,'presentation':presentation}
+        if options.kind=='dual_axis':
+            # Keep the editor's canonical axis assignment in sync with the
+            # report renderer; otherwise the right axis is drawn but hidden
+            # from controls after selecting an advanced mixed preset.
+            updates['secondary_axis_series']=list(options.right_axis)
+        return spec.model_copy(update=updates)
     if op == "update_shape" and set(params) & {"x0","x1","y0","y1"} and "data_anchor" not in params:
         params["data_anchor"] = None
     if op not in {"set_segment_style", "set_point_style", "remove_range_style", "clear_range_styles", "set_series_style", "rename_series", "reorder_series", "show_series", "clear_highlight", "set_axis_style", "set_presentation", "remove_secondary_axis", "add_note", "update_note", "remove_note", "add_guide", "update_guide", "remove_guide", "update_highlight", "remove_highlight", "add_shape", "update_shape", "remove_shape", "reset_styles", "set_stickers"}:

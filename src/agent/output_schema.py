@@ -62,6 +62,10 @@ class AxisStyle(StrictStyle):
     title: str | None = Field(default=None, max_length=80)
     title_position: float | None = Field(default=None, ge=0, le=1)
     title_standoff: int = Field(default=0, ge=0, le=80)
+    title_orientation: Literal["auto", "horizontal", "vertical"] = "auto"
+    title_placement: Literal["side", "top", "bottom", "custom"] = "side"
+    title_x: float = Field(default=0, ge=-.3, le=1.3)
+    title_y: float = Field(default=1.05, ge=-.3, le=1.3)
 
     @model_validator(mode="after")
     def valid_range(self) -> "AxisStyle":
