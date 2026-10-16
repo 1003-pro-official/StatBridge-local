@@ -48,7 +48,7 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     columns = len(series) if layout_mode == "horizontal" else (min(len(series),spec.presentation.panel_columns) if layout_mode == "grid" else 1)
     if spec.presentation.design_template=='snapshot' and panels:columns=min(4,columns)
     if panels:
-        fig = make_subplots(rows=math.ceil(len(series)/columns), cols=columns, shared_xaxes=layout_mode == "separate" and chart_type not in {'histogram','box'},
+        fig = make_subplots(rows=math.ceil(len(series)/columns), cols=columns, shared_xaxes=False,
                             shared_yaxes=spec.presentation.shared_y,
                             subplot_titles=[wrapped(spec.display_names.get(s["label"], s["label"]),26) for s in series],
                             vertical_spacing=.18 if math.ceil(len(series)/columns)<=2 else min(.18, 160/(math.ceil(len(series)/columns)*420+200)))
@@ -190,25 +190,33 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
         periods = sorted({p["date"] for s in series for p in s["points"]})
         horizontal = chart_type in {"bar", "stacked_bar"} and spec.presentation.bar_orientation == "horizontal"
         updater = fig.update_yaxes if horizontal else fig.update_xaxes
-        updater(type="category", categoryorder="array", categoryarray=periods)
+        if panels:
+            for index, item in enumerate(series):
+                own = sorted({p['date'] for p in item['points']})
+                updater(type="category", categoryorder="array", categoryarray=own,
+                        row=index//columns+1, col=index%columns+1)
+        else:
+            updater(type="category", categoryorder="array", categoryarray=periods)
     decorate(fig, series, spec, dual_axis)
     # Plotly treats numeric-looking category shape coordinates as serial indices.
     # Keep trace/customdata period codes intact, but bind decorations to indices.
     if chart_type in {"line", "bar", "stacked_bar", "area", "waterfall", "heatmap"}:
-        def period_coordinate(value):
+        def period_coordinate(value, ref):
             if isinstance(value, str):
-                return min(len(periods)-1, max(0, bisect_left(periods, value)))
+                axis_name=('yaxis' if horizontal else 'xaxis')+ref[1:]
+                own=list(fig.layout[axis_name].categoryarray or periods)
+                return min(len(own)-1, max(0, bisect_left(own, value)))
             return value
         for shape in fig.layout.shapes or []:
             ref = shape.yref if horizontal else shape.xref
             if ref and ref.startswith("y" if horizontal else "x") and "domain" not in ref:
                 for field in ("y0", "y1") if horizontal else ("x0", "x1"):
-                    setattr(shape, field, period_coordinate(getattr(shape, field)))
+                    setattr(shape, field, period_coordinate(getattr(shape, field), ref))
         for annotation in fig.layout.annotations or []:
             ref = (annotation.yref or "y") if horizontal else (annotation.xref or "x")
             if ref and ref.startswith("y" if horizontal else "x") and "domain" not in ref:
                 field = "y" if horizontal else "x"
-                setattr(annotation, field, period_coordinate(getattr(annotation, field)))
+                setattr(annotation, field, period_coordinate(getattr(annotation, field), ref))
     from research_plotly_styles import arrange_top_captions
     arrange_top_captions(fig, len({p["date"] for s in series for p in s["points"]}))
     # Keep legend labels short, with full source labels retained in hover/meta.
@@ -269,6 +277,15 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     arrange_bottom_captions(fig, series, spec, math.ceil(len(series)/columns) if panels else 1)
     from snapshot_chart_style import finish_snapshot
     finish_snapshot(fig, series, spec, panels, columns)
+    from synchronized_axes import synchronized_scale
+    sync=synchronized_scale(series,spec)
+    if sync:
+        bounds,step,reverse=sync
+        fig.update_yaxes(range=list(reversed(bounds)) if reverse else bounds,autorange=False,dtick=step,tickmode="linear",tick0=0)
+    from axis_title_layout import position_axis_titles
+    position_axis_titles(fig,spec)
+    if dual_axis and any(spec.series_chart_types.get(s["label"],chart_type)=="bar" for s in series if s["label"] in spec.secondary_axis_series):
+        fig.update_layout(yaxis=dict(overlaying="y2",side="left"),yaxis2=dict(overlaying=None,side="right"))
     return json.loads(pio.to_json(fig, validate=True))
 
 
@@ -297,13 +314,15 @@ def arrange_heading_lanes(fig, spec, panels=False):
 
 def arrange_bottom_captions(fig, series, spec, rows=1):
     """Reserve pixel lanes for ticks, axis titles, legend and automatic captions."""
-    captions=[a for a in fig.layout.annotations or [] if (not a.name or str(a.name).startswith('statbridge-footer:')) and a.yref=='paper' and a.y is not None and (a.y<0 or a.y==0 and (a.yshift or 0)<0)]
+    note_ids={n.id for n in spec.notes if n.placement=='below'}
+    captions=[a for a in fig.layout.annotations or [] if (not a.name or a.name in note_ids or str(a.name).startswith('statbridge-footer:')) and a.yref=='paper' and a.y is not None and (a.y<0 or a.y==0 and (a.yshift or 0)<0)]
     if not captions:
         return
     font=fig.layout.font.size or 12
     longest=max((len(str(p['date'])) for s in series for p in s['points']),default=6)
     title_lines=max((str(fig.layout[k].title.text or '').count('<br>')+1 for k in fig.layout if k.startswith('xaxis')),default=1)
     tick_room=30 if spec.chart_type in {'pie','donut','treemap'} else max(120,longest*font*.8+title_lines*font*1.5+24)
+    tick_room=max(tick_room,100+(spec.axes["x"].title_standoff if "x" in spec.axes else 0))
     legend_room=0
     if spec.show_legend and spec.legend_position=='bottom':
         labels=[str(v) for t in fig.data for v in (t.labels if t.type in {'pie','treemap'} else [t.name or '']) if str(v)]
@@ -311,7 +330,7 @@ def arrange_bottom_captions(fig, series, spec, rows=1):
     offset=tick_room+legend_room+16
     for index,a in enumerate(captions):
         a.text='<br>'.join(wrapped(unescape(line),40) for line in str(a.text or '').split('<br>'))
-        a.update(name=f'statbridge-footer:{index}',x=0,y=0,yref='paper',yanchor='top',xanchor='left',yshift=-offset)
+        a.update(name=a.name if a.name in note_ids else f'statbridge-footer:{index}',x=0,y=0,yref='paper',yanchor='top',xanchor='left',yshift=-offset)
         offset+=(str(a.text or '').count('<br>')+1)*(a.font.size or 12)*1.5+16
     bottom=max(fig.layout.margin.b or 0,offset+16)
     top=fig.layout.margin.t or 100

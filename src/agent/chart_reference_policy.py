@@ -26,7 +26,7 @@ def validate_reference_style(commands,instruction,current):
             if any(patch.get(key) for key in ('forecast_start','intervals','events','source_note','footnotes')):
                 raise ValueError('참고 이미지의 전망·기준값·출처를 현재 통계의 근거로 추가하지 않습니다. 시각적 형식만 적용해 주세요.')
 
-REFERENCE_STRUCTURE_POLICY='''선·막대가 함께 있거나 좌우 축이 있는 참고에는 reference_style 안에 series_types:[그림의 범례 순서대로 line/bar/area], secondary_axis_indices:[실제 오른쪽 축에 연결된 계열의 0부터 시작하는 순서]도 반드시 반환한다. 여러 색의 선이 같은 축에 있는 경우 두 필드를 생략할 수 있다. 오른쪽 단위가 왼쪽과 다르고 막대가 해당 축에 연결된 그림이면 그 막대 순서를 secondary_axis_indices에 넣는다. 현재 데이터의 단위가 같더라도 그림의 실제 좌우축 구조 판독을 생략하지 않는다. 이 필드는 참고 수치나 단위를 복사하지 않고 현재 지표의 같은 순서에 형식만 연결하기 위한 구조다. 참고 파일 응답에는 commands와 함께 reference_style={chart_type:line/bar/stacked_bar/area/scatter/bubble/pie/donut/histogram/box/heatmap/treemap/waterfall, panel_count:양의 정수, columns:1~4}를 반드시 반환한다. 이 필드는 추론 과정이 아니라 그림에서 직접 확인한 시각 구조이다. 여러 색의 선이 같은 시간축에 겹쳐 있는 그림은 panel_count=1이다. 별도의 작은 그래프 또는 세로 구분선으로 나뉘어 시간축이 반복되는 비교 영역은 각각 한 패널로 세어라. 예를 들어 세 영역에 각각 같은 연도가 반복되면 panel_count=3,columns=3이다. 패널 수를 현재 데이터 계열 수로 추측하지 말고 참고 파일에서 읽어라. 현재 계열 수와 영역 수가 맞으면 각 실제 계열을 한 패널에 표시하고 해당 set_layout을 포함한다. 이 경우 현재 seriesLabels 순서대로 한 계열씩 배치하는 기준이 이미 정해졌으므로 패널 분류나 그룹 지정 clarification을 요청하지 않는다. 검토 단계에서도 후보의 이 배치를 유지한다. 현재 계열 수가 다르고 원본의 그룹별 여러 곡선을 복제해야 하는 경우 필요한 그룹 구분을 구체적으로 질문한다. 빈 value, start, end, label 등의 불필요한 필드는 생략하거나 JSON null로 반환한다.'''
+REFERENCE_STRUCTURE_POLICY='''series_types와 secondary_axis_indices의 길이와 순서는 반드시 이미지의 실제 범례/곡선을 기준으로 읽는다. 현재 계열이 4개이고 이미지가 선 1개와 막대 1개면 series_types는 2개여야 한다. 현재 계열 수에 맞춰 이미지의 선/막대를 복제하거나 배열을 늘리지 않는다. 선·막대가 함께 있거나 좌우 축이 있는 참고에는 reference_style 안에 series_types:[그림의 범례 순서대로 line/bar/area], secondary_axis_indices:[실제 오른쪽 축에 연결된 계열의 0부터 시작하는 순서]도 반드시 반환한다. 여러 색의 선이 같은 축에 있는 경우 두 필드를 생략할 수 있다. 오른쪽 단위가 왼쪽과 다르고 막대가 해당 축에 연결된 그림이면 그 막대 순서를 secondary_axis_indices에 넣는다. 현재 데이터의 단위가 같더라도 그림의 실제 좌우축 구조 판독을 생략하지 않는다. 이 필드는 참고 수치나 단위를 복사하지 않고 현재 지표의 같은 순서에 형식만 연결하기 위한 구조다. 참고 파일 응답에는 commands와 함께 reference_style={chart_type:line/bar/stacked_bar/area/scatter/bubble/pie/donut/histogram/box/heatmap/treemap/waterfall, panel_count:양의 정수, columns:1~4}를 반드시 반환한다. 이 필드는 추론 과정이 아니라 그림에서 직접 확인한 시각 구조이다. 여러 색의 선이 같은 시간축에 겹쳐 있는 그림은 panel_count=1이다. 별도의 작은 그래프 또는 세로 구분선으로 나뉘어 시간축이 반복되는 비교 영역은 각각 한 패널로 세어라. 예를 들어 세 영역에 각각 같은 연도가 반복되면 panel_count=3,columns=3이다. 패널 수를 현재 데이터 계열 수로 추측하지 말고 참고 파일에서 읽어라. 현재 계열 수와 영역 수가 맞으면 각 실제 계열을 한 패널에 표시하고 해당 set_layout을 포함한다. 이 경우 현재 seriesLabels 순서대로 한 계열씩 배치하는 기준이 이미 정해졌으므로 패널 분류나 그룹 지정 clarification을 요청하지 않는다. 검토 단계에서도 후보의 이 배치를 유지한다. 현재 계열 수가 다르고 원본의 그룹별 여러 곡선을 복제해야 하는 경우 필요한 그룹 구분을 구체적으로 질문한다. 빈 value, start, end, label 등의 불필요한 필드는 생략하거나 JSON null로 반환한다.'''
 
 
 def compact_reference_settings(commands):
@@ -71,6 +71,8 @@ def bind_reference_structure(proposal,context):
     if mixed and len(appearance.series_types)!=count:
         raise ValueError(f'참고 복합 그래프는 {len(appearance.series_types)}개 계열이며 현재는 {count}개입니다. 각 선·막대와 좌우 축에 연결할 현재 지표를 지정해 주세요.')
     if any(type(i) is not int or not 0<=i<count for i in appearance.secondary_axis_indices):raise ValueError('참고 그림의 보조축 계열 위치를 확인하지 못했습니다.')
+    if appearance.secondary_axis_indices and len(set(appearance.secondary_axis_indices))>=count:
+        raise ValueError("참고 이미지의 좌우 축 연결을 확인해 주세요. 왼쪽 축에도 계열이 필요합니다.")
     if mixed and appearance.panel_count!=1:raise ValueError('복합축의 여러 패널은 현재 지표별 축 연결을 먼저 지정해 주세요.')
     if appearance.panel_count>1 and appearance.panel_count!=count:
         raise ValueError(f'참고 그림은 {appearance.panel_count}개 비교 영역이며 현재 데이터는 {count}개 계열입니다. 각 영역에 넣을 지표의 그룹을 지정해 주세요. 데이터는 복제하지 않습니다.')
@@ -98,6 +100,12 @@ def bind_reference_structure(proposal,context):
         for label,kind in zip(labels,appearance.series_types):
             if kind!=base or mapping.get(label,base)!=base:
                 commands.append({'operation':'set_series_chart_type','label':label,'value':kind,'params':{}})
+        desired_right={labels[i] for i in appearance.secondary_axis_indices}
+        old_right=set((context.get('chartState') or {}).get('secondary_axis_series') or [])
+        old_right.update(((context.get('chartState') or {}).get('report') or {}).get('right_axis') or [])
+        commands=[c for c in commands if c.get('operation')!='remove_secondary_axis']
+        for label in sorted(old_right-desired_right):
+            if label in labels:commands.append({'operation':'remove_secondary_axis','value':label,'params':{}})
         for index in appearance.secondary_axis_indices:
             commands.append({'operation':'set_secondary_axis','value':labels[index],'params':{}})
         if (context.get('chartState') or {}).get('report'):

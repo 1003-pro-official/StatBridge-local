@@ -78,3 +78,13 @@ def test_reference_layout_can_return_from_panels_to_one_chart():
  spec=ChartSpec(layout='horizontal',report=ReportOptions(kind='panels',columns=3))
  changed=OutputAgent._apply_edit_spec(spec,ChartEditCommand(operation='set_layout',kind='STYLE_EDIT',value='combined'),['a','b','c'])
  assert changed.layout=='combined' and changed.report.kind=='forecast'
+
+
+def test_reference_dual_axis_replaces_stale_mapping_not_append():
+ from chart_reference_policy import bind_reference_structure
+ p={'reference_style':{'chart_type':'line','panel_count':1,'columns':1,'series_types':['line','bar'],'secondary_axis_indices':[1]},'commands':[]}
+ r=bind_reference_structure(p,{'seriesLabels':['잔액','증가율'],'chartState':{'chart_type':'line','secondary_axis_series':['잔액']}})
+ assert any(c['operation']=='remove_secondary_axis' and c['value']=='잔액' for c in r['commands'])
+ assert any(c['operation']=='set_secondary_axis' and c['value']=='증가율' for c in r['commands'])
+ p['reference_style']['secondary_axis_indices']=[0,1]
+ with pytest.raises(ValueError,match='왼쪽 축'):bind_reference_structure(p,{'seriesLabels':['잔액','증가율']})

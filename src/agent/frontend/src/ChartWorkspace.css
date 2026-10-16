@@ -112,3 +112,32 @@
 .report-table-document[data-template="BOK-T04"] thead th,.report-table-document[data-template="BOK-T05"] thead th{background:#f4f6f7}
 .report-table-document .table-emphasized>*{font-weight:700;border-top:1px solid #9ca8b0!important}
 .report-table-document[data-template="BOK-T06"] footer{color:#404851;border-top:0}
+
+/* Review #38: short display names and a dedicated reading surface. */
+.report-table-document th:first-child{min-width:130px;max-width:200px;width:180px}
+.report-table-document th,.report-table-document td{min-width:72px;padding:10px}
+.report-table-document.table-expanded{position:fixed;inset:24px;z-index:220;height:auto;background:white;border:1px solid #cadce8;border-radius:14px;box-shadow:0 0 0 40px #102b4666,0 20px 70px #102b4633;padding:28px}
+.report-table-document.table-expanded .report-table-scroll{max-height:calc(100dvh - 330px)}
+.table-expand-button{float:right;margin:0 0 12px 12px}
+.summary-evidence{padding:0 18px 14px;font-size:12px;color:#526d80;line-height:1.7}
+.summary-evidence details{border:1px solid #dce7ef;border-radius:8px;padding:10px 12px;background:#f8fbfd}
+.summary-evidence summary{cursor:pointer;color:#23516e;font-weight:600}
+.summary-evidence article{border-top:1px solid #e2ebf1;padding:8px 0;margin-top:8px;overflow-wrap:anywhere}
+@media(max-width:700px){.report-table-document.table-expanded{inset:8px;padding:16px}.report-table-document.table-expanded .report-table-scroll{max-height:60dvh}}
+
+.report-draft{margin:0 18px 16px;padding:12px;border:1px solid #dce7ef;border-radius:9px;font-size:12px;line-height:1.7}.report-draft summary{font-weight:600;cursor:pointer}.report-draft article{border-top:1px solid #dce7ef;margin-top:12px;padding-top:8px}.report-draft input{display:block;border:1px solid #cbdde9;border-radius:6px;padding:7px;margin:6px 0 12px}.report-draft small{overflow-wrap:anywhere;color:#557084}
+
+.report-table-document.table-expanded th,.report-table-document.table-expanded td{min-width:56px;padding:8px 7px;font-size:11px}.report-table-document.table-expanded th:first-child{width:160px;min-width:120px;max-width:180px}
+
+.report-table-document>footer{display:block;align-items:initial;justify-content:initial;background:transparent;padding:12px 0 0;gap:0}.report-table-document>footer p{display:block;margin:6px 0}.report-table-document>footer details{margin:8px 0}
+
+/* Keep explanatory text and related actions on distinct rows. */
+.chart-workspace .workspace-control-help { display:block; margin:8px 0 12px; line-height:1.65; }
+.chart-workspace .workspace-control-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0 14px; }
+.chart-workspace .workspace-control-actions button { margin:0; min-width:0; padding-inline:10px; }
+
+.chart-workspace .workspace-quick-periods { display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:12px 16px; border-bottom:1px solid #dce7ee; background:#f7fafc; }
+.chart-workspace .workspace-quick-periods strong { font-size:12px; margin-right:4px; }
+.chart-workspace .workspace-quick-periods button { margin:0; min-width:48px; }
+#root .chart-workspace .workspace-quick-periods button[aria-pressed="true"] { background:#005f8f; color:#fff; opacity:1; border-color:#005f8f; }
+.chart-workspace .workspace-quick-periods small { flex-basis:100%; color:#607c91; font-size:11px; }

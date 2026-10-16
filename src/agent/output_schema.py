@@ -60,6 +60,8 @@ class AxisStyle(StrictStyle):
     tick_step: float | None = Field(default=None, gt=0)
     decimals: int | None = Field(default=None, ge=0, le=6)
     title: str | None = Field(default=None, max_length=80)
+    title_position: float | None = Field(default=None, ge=0, le=1)
+    title_standoff: int = Field(default=0, ge=0, le=80)
 
     @model_validator(mode="after")
     def valid_range(self) -> "AxisStyle":
@@ -93,9 +95,11 @@ class PresentationStyle(StrictStyle):
     margin_bottom: int = Field(default=85, ge=30, le=240)
     bar_mode: Literal["group", "stack", "relative"] | None = None
     bar_gap: float = Field(default=0.2, ge=0, le=0.8)
+    bar_group_gap: float = Field(default=0, ge=0, le=0.8)
     bar_orientation: Literal["vertical", "horizontal"] = "vertical"
     number_decimals: int = Field(default=1, ge=0, le=6)
     shared_y: bool = False
+    sync_y_axes: bool = False
     notes: str = Field(default="", max_length=500)
     color_scale: Literal["Viridis", "Blues", "Reds", "RdBu", "YlOrRd", "Greens"] = "Viridis"
     reverse_colors: bool = False
@@ -103,6 +107,7 @@ class PresentationStyle(StrictStyle):
 
 
 class PositionedNote(StrictStyle):
+    placement: Literal["inside", "below"] = "inside"
     id: str = Field(default_factory=lambda: uuid4().hex)
     text: str = Field(min_length=1, max_length=300)
     label: str | None = None
@@ -234,6 +239,7 @@ class ChartSpec(BaseModel):
     top_n: int | None = Field(default=None, ge=1, le=100)
     transform: Literal["raw", "growth_rate", "year_over_year", "average", "cumulative"] = "raw"
     series_chart_types: dict[str, Literal["line", "bar", "area"]] = Field(default_factory=dict)
+    period_window_years: Literal[1, 5, 10] | None = None
     secondary_axis_series: list[str] = Field(default_factory=list)
     series_colors: dict[str, str] = Field(default_factory=dict)
     series_dashes: dict[str, Literal["solid", "dot", "dash", "longdash", "dashdot"]] = Field(default_factory=dict)
