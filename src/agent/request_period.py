@@ -15,6 +15,25 @@ def _boundary(match,end=False):
 
 def explicit_period(query, latest=None):
     text=str(query or '');matches=list(TOKEN.finditer(text))
+    relative = re.search(r'최근\s*(\d{1,2})\s*년', text)
+    if relative and not matches and latest:
+        end = date.fromisoformat(latest)
+        count = int(relative[1])
+        if count < 1: return None
+        month_index = end.year * 12 + end.month - count * 12
+        year, month = divmod(month_index, 12)
+        return {'start': date(year, month+1, 1).isoformat(), 'end': end.isoformat(),
+                'source': 'latest_observation', 'expression': relative[0],
+                'basis': '최신 제공 관측 시점 기준'}
+    if len(matches) == 1:
+        tail = text[matches[0].end():]
+        short = re.match(r'\s*(?:부터|~|～|–)\s*(\d{1,2})\s*월\s*까지', tail)
+        if short and (matches[0]['month'] or matches[0]['im']):
+            start = _boundary(matches[0])
+            year, month = int(matches[0]['year']), int(short[1])
+            end = date(year, month, calendar.monthrange(year, month)[1]).isoformat()
+            if start > end: raise ValueError('텍스트의 시작일이 종료일보다 늦습니다.')
+            return {'start': start, 'end': end, 'source': 'text', 'expression': text[matches[0].start():matches[0].end()+short.end()]}
     if not matches:return None
     if len(matches)>2:return None
     if len(matches)==2:

@@ -46,9 +46,9 @@ def selections(query,tables, *, allow_combined_values=False):
         candidates=groups[(a,b)]
         # Bind only an immediately adjacent ID. A later clause's prefix ID
         # cannot narrow the current title; duplicate titles retain their own IDs.
-        before=re.search(r'\[(DT_[0-9A-Za-z]+)\]\s*$',query[:a])
-        after=re.match(r'\s*[」》”"]?\s*\[(DT_[0-9A-Za-z]+)\]',query[b:])
-        ids={m.group(1) for m in (before,after) if m}
+        before=re.search(r'(?:\[(DT_[0-9A-Za-z]+)\]|\((DT_[0-9A-Za-z]+)\))\s*$',query[:a])
+        after=re.match(r'\s*[」》”"]?\s*(?:\[(DT_[0-9A-Za-z]+)\]|\((DT_[0-9A-Za-z]+)\))',query[b:])
+        ids={next(g for g in m.groups() if g) for m in (before,after) if m}
         if len(ids)>1:return []
         if ids:
             candidates=[t for t in candidates if t['table_id'] in ids]

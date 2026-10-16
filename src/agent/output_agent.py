@@ -174,9 +174,9 @@ class OutputAgent:
             "maximum": max(s["points"], key=lambda p: p["value"]) if s["points"] else None,
         } for s in series]
 
-    def _explain(self, series: list[dict[str, Any]], spec: ChartSpec, fallback: str) -> dict[str, Any]:
+    def _explain(self, series: list[dict[str, Any]], spec: ChartSpec, fallback: str, query: str = "") -> dict[str, Any]:
         from report_summary import explain
-        return explain(series, self.ncp_client)
+        return explain(series, self.ncp_client, query=query)
 
     def _propose_spec(self, series: list[dict[str, Any]], request: dict[str, Any]) -> dict[str, Any]:
         if not self.ncp_client or not self.ncp_client.configured:
@@ -258,6 +258,8 @@ class OutputAgent:
             if (not spec.period_start or p['date'] >= spec.period_start)
             and (not spec.period_end or p['date'] <= spec.period_end)]} for item in source_series]
         series = self._apply_data_edits(source_series, spec)
+        visible_labels = {s['label'] for s in series}
+        summary_series = [s for s in summary_series if s['label'] in visible_labels]
         series = [{**s, "color": spec.series_colors.get(s["label"], s["color"])} for s in series]
         from chart_designs import palette, materialize
         design_colors=palette(spec)
@@ -308,14 +310,15 @@ class OutputAgent:
                 figure=json.loads(native.to_json())
         from report_summary import explain
         from report_export import export_formats
-        explanation = self._explain(summary_series, spec, summary) if generate_explanation else explain(summary_series)
+        explanation = self._explain(summary_series, spec, summary, query=str(result.get("query") or "")) if generate_explanation else explain(summary_series, query=str(result.get('query') or ''))
+        explanation['scope'] = {'basis': 'original_observations', 'transform': spec.transform, 'labels': [s['label'] for s in summary_series], 'periodStart': spec.period_start, 'periodEnd': spec.period_end}
         return {
             "status": "ready" if any(s["points"] for s in series) else "empty",
             "agent": "output-agent-chartspec-v2",
             "summary": explanation["text"],
             "table": self._table(series),
             "exportFormats": export_formats(series,spec,result),
-            "tableDocument": build_table(series, spec.report_table, title=spec.title, sources=self._evidence(result)),
+            "tableDocument": build_table(series, spec.report_table, title=spec.title, sources=self._evidence(result), display_names=spec.display_names),
             "explanation": explanation,
             "evidence": self._evidence(result),
             "chartState": spec.model_dump(),
@@ -435,6 +438,17 @@ class OutputAgent:
         before = spec.model_dump()
         effective = []
         for command in commands:
+            if command.operation=='filter_period' and 'years' in command.params:
+                years=command.params['years']
+                if years is not None and (type(years) is not int or years not in {1,5,10}):
+                    raise ValueError('빠른 기간은 1년·5년·10년·전체 중에서 선택해 주세요.')
+                dates=sorted({p['date'] for s in self._series((result.get('execution') or {}).get('rows') or []) for p in s['points']})
+                if not dates:raise ValueError('기간을 선택할 관측값이 없습니다.')
+                start=None;end=None
+                if years:
+                    end=dates[-1];cutoff=str(int(end[:4])-years).zfill(4)+end[4:]
+                    start=next(d for d in dates if d>cutoff)
+                command=command.model_copy(update={'start':start,'end':end})
             changed = self._apply_edit_spec(spec, command, labels)
             if changed.model_dump() != spec.model_dump():
                 effective.append(command)
@@ -444,7 +458,8 @@ class OutputAgent:
         edited = self._build(result, spec, generate_explanation=generate_explanation)
         if (edited.get('explanation', {}).get('facts') == current_output.get('explanation', {}).get('facts')
                 and current_output.get('explanation', {}).get('facts')):
-            edited['explanation'] = current_output['explanation']
+            # Reuse wording, but retain the current display/transform scope.
+            edited['explanation'] = {**current_output['explanation'], 'scope': edited['explanation'].get('scope', {})}
             edited['summary'] = current_output['summary']
         state_only=(edited.get('plotlyFigure')==current_output.get('plotlyFigure')
                     and edited.get('tableDocument')==current_output.get('tableDocument'))
@@ -466,7 +481,7 @@ class OutputAgent:
         if extended is not None:
             return extended
         updates: dict[str, Any] = {}
-        if command.params and (command.operation != "highlight_period" or set(command.params) - {"color", "opacity"}):
+        if command.params and not (command.operation=="filter_period" and set(command.params)<={"years"}) and (command.operation != "highlight_period" or set(command.params) - {"color", "opacity"}):
             raise ValueError(f"{command.operation} 명령에 적용할 수 없는 설정이 있습니다: {', '.join(command.params)}. 설정을 확인해 주세요.")
         value = command.value
         if command.operation == "remove_annotation":
@@ -524,7 +539,7 @@ class OutputAgent:
         elif command.operation == "hide_series":
             if value not in labels: raise ValueError("제외할 계열이 조회 결과에 없습니다.")
             updates["hidden_series"] = [*current.hidden_series, str(value)]
-        elif command.operation == "filter_period": updates.update(period_start=command.start, period_end=command.end)
+        elif command.operation == "filter_period": updates.update(period_start=command.start, period_end=command.end,period_window_years=command.params.get("years"))
         elif command.operation == "set_top_n": updates["top_n"] = value
         elif command.operation == "set_transform": updates["transform"] = value
         elif command.operation == "set_series_chart_type":
@@ -534,6 +549,8 @@ class OutputAgent:
             if value not in labels: raise ValueError("보조축에 표시할 계열이 조회 결과에 없습니다.")
             updates["secondary_axis_series"] = list(dict.fromkeys([*current.secondary_axis_series, str(value)]))
             updates["layout"] = "combined"
+            if current.report:
+                updates["report"]=current.report.model_copy(update={"kind":"dual_axis","right_axis":updates["secondary_axis_series"]})
         elif command.operation in {"set_series_color", "set_series_dash"}:
             if command.label not in labels:
                 raise ValueError("수정할 계열이 조회 결과에 없습니다.")

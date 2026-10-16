@@ -16,6 +16,6 @@ export function panelGeometry(figure:{data:Array<Record<string,unknown>>;layout:
 
 export function splitPlotAnnotations(figure:{layout:Record<string,unknown>}){
  const annotations=(figure.layout.annotations||[]) as Array<Record<string,unknown>>;
- const isFooter=(a:Record<string,unknown>)=>String(a.name||'').startsWith('statbridge-footer:')||(!a.name&&a.yref==='paper'&&typeof a.y==='number'&&a.y<0);
+ const isFooter=(a:Record<string,unknown>)=>String(a.name||'').startsWith('statbridge-footer:')||(a.yref==='paper'&&a.y===0&&typeof a.yshift==='number'&&a.yshift<0)||(!a.name&&a.yref==='paper'&&typeof a.y==='number'&&a.y<0);
  return {plot:annotations.filter(a=>!isFooter(a)),footer:annotations.filter(isFooter)};
 }

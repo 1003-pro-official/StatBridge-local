@@ -222,3 +222,16 @@ API: `/api/output/edit`의 `set_table` 명령(검증된 `STYLE_EDIT params.patch
 ## 혼합 차트 선택
 
 그래프 편집의 차트 종류에서 선·막대·영역 혼합 7종을 선택하고 지표별 모양을 수정합니다. 데이터의 주기·단위·시점·지표 수를 충족하는 조합만 표시합니다. 실제 관측쌍이 있는 두 지표에는 산점도·회귀선도 표시합니다. `set_series_chart_types` 명령은 `STYLE_EDIT params.types={조회된 지표 이름: line/bar/area}`로 모양을 일괄 지정하며 수치를 변경하지 않습니다. [점검·검증 기록](docs/implementation/2026-10-14-mixed-chart-and-output-audit.md).
+
+
+### 보고서 검토 후 보완 (2026-10-15)
+
+- ID에 소괄호 또는 대괄호를 붙여도 같은 통계표·분류로 해석합니다. 요약은 현재 표시 계열의 원자료만 사용합니다. 연%·연리% 차이는 %p, 기준년 지수 차이는 포인트로 표시합니다.
+- 월·분기 분리 패널은 각 주기의 독립 범주 축을 사용합니다. 축약 종료 월과 최신 제공 시점을 기준으로 한 최근 N년을 해석합니다.
+- 표는 금리·지수 기본 2자리, 중복 없는 기관 출처, 표시명 축약·확대 보기, 표 번호, 인쇄 배치를 지원합니다. 화면의 표 문서를 그대로 내보냅니다. PDF는 고정 5열 대신 폭 기반으로 분할하고 Excel에는 인쇄 영역·반복 머리글·배율을 기록합니다.
+- `TableOptions.comparison`은 `none`, `previous_change`, `yearly_change`, `period_change`, `period_growth`를 지원합니다. 계산 열은 지표를 행으로 놓을 때만 사용할 수 있고, 기준 관측값이 없으면 결측으로 남깁니다. 증가율의 기준값이 0 이하이면 자동 계산하지 않습니다. 원자료를 변경하거나 다른 주기를 합산하지 않습니다.
+- `POST /api/report/interpret`: 로그인한 편집 세션의 `edit_session_id`, 최신 `revision`, 선택적 ISO 날짜 `as_of`를 받습니다. 응답은 검토용 `headline`, `paragraphs`, 근거 ID가 있는 `claims`, `passages`, `limitations`, `needsHumanReview`를 제공합니다. 계열·기간 변경 시 기존 초안은 화면에서 해제됩니다.
+- 기본 빠른 출력은 계속 모델 문장 작성 없이 관측 요약을 만듭니다. 별도 초안 버튼에서만 모델 작성을 요청합니다. 검수 원문이 없으면 관측 사실만 허용하며, 모델 응답 검증 실패 시 서버 관측 문장으로 대체합니다. 모든 초안은 담당자의 원문·문장 검토가 필요합니다.
+- 원문 검색은 선택 설정 `STATBRIDGE_REPORT_PASSAGES`의 JSONL 인덱스만 읽습니다. 각 레코드는 `id`, `title`, `publication_date`, `period_start`, `period_end`, 원본 PDF 물리 페이지 `page`, `text`, 원본 위치 `reference`, `kind` (`observation/factor/forecast`), `verified:true`가 필요합니다. **본문·각주·그림·표 연결과 개인정보 제거를 원본 PDF로 대조한 발췌만** 등록합니다. 에이전트 대조는 `verification_method`로 표시하고 `human_reviewed:false`를 유지합니다. 담당자 검수 전 자료를 사람의 승인 완료로 표시하지 않습니다. 자동 OCR/추정 md를 검수 근거로 승격하지 마세요. 설정이 비어 있으면 프로젝트 `.venv/cache/report-evidence/reviewed.jsonl`을 확인합니다. 인덱스는 서버 로컬 파일이며 공개 저장소에 원문을 포함하지 않습니다.
+- 발간일이 `as_of` 이후이거나 분석 기간과 겹치지 않는 발췌는 검색에서 제외합니다. 기본 기준일은 조회 종료일이며, 사용자가 이후 기준일을 지정하면 사후 해석임을 표시합니다. 원본 PDF 자동 수집·OCR·검수, 경제 원인 자체의 자동 판정, 의미상 원문 함의의 완전한 검증은 구현했다고 주장하지 않습니다.
+- 공식 자료의 잠정·속보·전망 상태, 상하위 분류·공식 소계, 복합 주기 열의 집계 정의는 원천 메타데이터와 담당자 검수 없이는 만들지 않습니다. 다른 주기 표는 별도 섹션 정책을 유지합니다.

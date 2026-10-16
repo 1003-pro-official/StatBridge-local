@@ -1,6 +1,16 @@
 """Observation-only report sentences; the language model may select IDs only."""
 from decimal import Decimal
 import json
+import re
+
+
+def difference_unit(unit):
+    normalized = re.sub(r'\s+', '', str(unit)).replace('％', '%')
+    if normalized in {'%', '연%', '연리%', '%p', '%P', '퍼센트포인트'}:
+        return '%p'
+    if re.search(r'\d{4}\s*[=＝]\s*100', str(unit)) or normalized in {'지수', 'index'}:
+        return '포인트'
+    return unit
 
 
 def number(value):
@@ -41,19 +51,24 @@ def facts_for(series):
         def date(p):
             return period(p['date'], frequency)
         def value(p):
+            if unit.strip() in {'연%', '연리%'}: return '연 ' + number(p['value']) + '%'
+            if re.search(r'\d{4}\s*[=＝]\s*100', unit): return number(p['value']) + ' (' + unit.replace('＝','=') + ')'
             return number(p['value']) + (' ' + unit if unit else '')
         def add(kind, text, evidence):
             facts.append({'id': f's{index}-{kind}', 'kind': kind, 'series': index,
-                          'text': text, 'observations': evidence})
+                          'text': text, 'observations': evidence, 'sourceId': item.get('sourceId'),
+                          'label': label, 'unit': unit, 'frequency': frequency})
         add('latest', f'{label}의 {date(last)} 관측값은 {value(last)}입니다.', [last])
         def change(previous, name, kind):
             delta = Decimal(str(last['value'])) - Decimal(str(previous['value']))
             direction = '상승' if delta > 0 else '하락'
-            delta_unit = '%p' if unit.strip() == '%' else unit
+            delta_unit = difference_unit(unit)
             detail = number(abs(delta)) + (' ' + delta_unit if delta_unit else '')
             text = (f'{subject} {name}({date(previous)}, {value(previous)}) 대비 {detail} {direction}하였습니다.'
                     if delta else f'{subject} {name}({date(previous)})과 같은 수준을 유지하였습니다.')
             add(kind, text, [previous, last])
+            facts[-1].update(formula='latest - baseline', result=str(delta), unit=delta_unit,
+                             basis=name, sourceId=item.get('sourceId'))
         last_ordinal = ordinal(last['date'], frequency)
         lookup = {ordinal(p['date'], frequency): p for p in points if ordinal(p['date'], frequency) is not None}
         if last_ordinal is not None and last_ordinal - 1 in lookup:
@@ -120,7 +135,7 @@ SYSTEM = (
 )
 
 
-def explain(series, client=None):
+def explain(series, client=None, *, query=''):
     facts = facts_for(series)
     selected = default_ids(facts)
     source = 'rules'
@@ -145,6 +160,37 @@ def explain(series, client=None):
             selected, source = ids, client.settings.main_model
         except Exception:
             pass
+    # Extra comparisons are server computed, never written or calculated by a model.
+    if '비교' in query or '격차' in query:
+        for index, left in enumerate(series):
+            for peer, right in enumerate(series[index+1:], index+1):
+                if not left.get('sourceId') or left.get('sourceId') != right.get('sourceId'):
+                    continue
+                if left.get('unit') != right.get('unit') or left.get('frequency') != right.get('frequency'):
+                    continue
+                if not left.get('points') or not right.get('points') or left['points'][-1]['date'] != right['points'][-1]['date']:
+                    continue
+                a, b = left['points'][-1], right['points'][-1]
+                gap = Decimal(str(a['value'])) - Decimal(str(b['value']))
+                unit = difference_unit(left.get('unit', ''))
+                evidence = [a, b]
+                text = f"{period(a['date'], left.get('frequency'))} {left['label']}에서 {right['label']}을 뺀 격차는 {number(gap)} {unit}입니다."
+                previous = ordinal(a['date'], left.get('frequency'))
+                if previous is not None:
+                    la = {ordinal(p['date'], left.get('frequency')): p for p in left['points']}
+                    rb = {ordinal(p['date'], right.get('frequency')): p for p in right['points']}
+                    if previous-1 in la and previous-1 in rb:
+                        old = Decimal(str(la[previous-1]['value'])) - Decimal(str(rb[previous-1]['value']))
+                        width = abs(gap) - abs(old)
+                        text += f" 직전 기간 격차 {number(old)} {unit}에 비해 격차의 절댓값이 {number(abs(width))} {unit} {'확대' if width > 0 else '축소' if width < 0 else '유지'}되었습니다."
+                        evidence += [la[previous-1], rb[previous-1]]
+                fact = {'id': f's{index}-gap-{peer}', 'kind': 'gap', 'series': index,
+                        'peerSeries': peer, 'text': text, 'observations': evidence,
+                        'formula': 'left - right', 'result': str(gap), 'unit': unit,
+                        'sourceId': left['sourceId'], 'frequency': left.get('frequency')}
+                facts.append(fact); selected.append(fact['id'])
+    if re.search(r'추이|흐름|기간|부터|연간', query):
+        selected += [f['id'] for f in facts if f['kind'] == 'period' and f['id'] not in selected]
     return {'text': compose(facts, selected) if facts else '선택한 기간에 요약할 관측값이 없습니다.',
             'source': source, 'method': '조회 관측값의 검증된 존댓말 문장 선택',
             'factIds': selected, 'facts': facts}

@@ -223,6 +223,42 @@ class TableExportRequest(BaseModel):
     revision: int = Field(ge=0)
 
 
+class ReportInterpretRequest(BaseModel):
+    edit_session_id: str
+    revision: int = Field(ge=0)
+    as_of: str | None = Field(default=None, pattern=r'^\d{4}-\d{2}-\d{2}$')
+
+
+@app.post('/api/report/interpret')
+def interpret_report(payload: ReportInterpretRequest):
+    from datetime import date
+    from report_interpretation import build_draft, retrieve_passages
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(payload.edit_session_id)
+        if not session:raise HTTPException(status_code=404,detail='분석 편집 세션이 없습니다.')
+        if payload.revision!=session['output'].get('editVersion',0):raise HTTPException(status_code=409,detail='최신 분석에서 보고서 초안을 다시 작성해 주세요.')
+        snapshot=copy.deepcopy(session)
+    scopes=snapshot.get('sessions') or []
+    starts=[s.get('period',{}).get('start','') for s in scopes if s.get('period',{}).get('start')]
+    ends=[s.get('period',{}).get('end','') for s in scopes if s.get('period',{}).get('end')]
+    if not starts or not ends:raise HTTPException(status_code=422,detail='분석 기간을 확인할 수 없습니다. 먼저 자료를 조회해 주세요.')
+    start,end=min(starts),max(ends)
+    cutoff=payload.as_of or end
+    try:
+        date.fromisoformat(cutoff)
+        from runtime_paths import layout as runtime_layout
+        evidence_path=os.getenv('STATBRIDGE_REPORT_PASSAGES','').strip() or str(runtime_layout()['root']/'.venv/cache/report-evidence/reviewed.jsonl')
+        passages=retrieve_passages(evidence_path,snapshot['result'].get('query',''),start=start,end=end,as_of=cutoff)
+        draft=build_draft(snapshot['output'].get('explanation',{}),snapshot['result'].get('query',''),passages,
+                          agent.output_agent.ncp_client,as_of=cutoff)
+    except (ValueError,TypeError,KeyError) as exc:
+        raise HTTPException(status_code=422,detail='검수 원문 인덱스 또는 분석 기간을 확인해 주세요.') from exc
+    with EDIT_LOCK:
+        live=EDIT_SESSIONS.get(payload.edit_session_id)
+        if not live or payload.revision!=live['output'].get('editVersion',0):raise HTTPException(status_code=409,detail='분석이 변경되었습니다. 최신 분석에서 초안을 다시 작성해 주세요.')
+    return {**draft,'revision':payload.revision,'retrospective':cutoff>end}
+
+
 @app.post('/api/table/export')
 def export_table(payload: TableExportRequest):
     from fastapi.responses import Response
@@ -234,10 +270,11 @@ def export_table(payload: TableExportRequest):
             raise HTTPException(status_code=409, detail='최신 분석에서 표를 다시 출력해 주세요.')
         result = copy.deepcopy(session['result'])
         state = copy.deepcopy(session['output']['chartState'])
+        displayed_document = copy.deepcopy(session['output'].get('tableDocument'))
     try:
         spec = ChartSpec.model_validate(state)
         series = agent.output_agent._apply_data_edits(agent.output_agent._series(result.get('execution', {}).get('rows', [])), spec)
-        doc = build_table(series, spec.report_table, title=spec.title, sources=agent.output_agent._evidence(result))
+        doc = displayed_document or build_table(series, spec.report_table, title=spec.title, sources=agent.output_agent._evidence(result), display_names=spec.display_names)
         content = render_table_file(doc, payload.format)
     except (ValueError, TypeError) as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
@@ -754,7 +791,7 @@ def query(payload: QueryRequest) -> dict[str, Any]:
                 {"id": "period", "title": "조회 기간", "description": "사용자 입력 대기", "status": "active"},
             ],
             "warnings": [f"요청 기간: {period_start}–{period_end}; 제공 기간: {available_period['min']}–{available_period['max']}"] if outside else [],
-            "periodSelection": ({"source":"text","requested":{"start":period_start,"end":period_end},"applied":{"start":period_start,"end":period_end}} if text_period and not outside else
+            "periodSelection": ({"source":text_period.get("source","text"),"basis":text_period.get("basis"),"requested":{"start":period_start,"end":period_end},"applied":{"start":period_start,"end":period_end}} if text_period and not outside else
                                 {"source":"context","requested":inherited_period,"applied":inherited_period} if inherited_period else text_period),
             "state": result.get("state") or {},
             "debug": {"timingMs": {"resolve": resolve_ms, "total": resolve_ms}},
@@ -763,8 +800,12 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     available_period = _availability_from_plans(plans)
     selected_start = period_start
     selected_end = period_end
-    period_selection = {"source":"text" if text_period else "context" if inherited_period else "ui",
-                        "requested":{"start":period_start,"end":period_end},"applied":{"start":selected_start,"end":selected_end}}
+    period_selection = {
+        "source": (text_period or {}).get("source", "text") if text_period else "context" if inherited_period else "ui",
+        "basis": (text_period or {}).get("basis"),
+        "requested": {"start": period_start, "end": period_end},
+        "applied": {"start": selected_start, "end": selected_end},
+    }
     adjusted_period = False
     if available_period["min"] and selected_start < available_period["min"]:
         selected_start = available_period["min"]
@@ -955,6 +996,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
             reasons=' / '.join(checked.get('request_validation',{}).get('errors',[]))
             raise HTTPException(status_code=422, detail="출력 요청과 조회된 통계표를 확인해 주세요. "+reasons)
     merged = dict(results[0])
+    merged["query"] = payload.natural_language or " · ".join(s["query"] for s in sessions)
     merged_execution = {
         "status": "success",
         "rows": [row for result in results for row in ((result.get("execution") or {}).get("rows") or [])],
