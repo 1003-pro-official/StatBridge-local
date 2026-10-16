@@ -113,7 +113,7 @@ pnpm dev
 PYTHONPATH=src/backend .venv/bin/python src/backend/server.py
 ```
 
-MCP 도구에는 검색, 메타데이터·수치 조회, 배치 검증, 상태 확인이 포함됩니다. API 키가 없으면 KOSIS·NCP 네트워크 기능은 사용할 수 없지만 사전 기반 질의와 메타데이터 탐색은 가능합니다. 벡터 인덱스는 별도 생성물이며 필요할 때 `tools/build_stat_vector_index.py`로 빌드합니다.
+MCP 공개 도구는 `search_tables`, `get_table_metadata`, `get_statistics`, `get_statistics_batch` 4개입니다. 배치는 최대 20개 요청을 받아 중복 조건을 합치고 최대 3개를 동시에 실행합니다. 최대 대기는 20초이며, 호출 제한 대기가 예산을 초과하면 `busy`·`retry_after_seconds`를 반환합니다. 상태 확인·전체 검증은 운영용 Python/CLI에 유지합니다. API 키가 없으면 KOSIS·NCP 네트워크 기능은 사용할 수 없지만 사전 기반 질의와 메타데이터 탐색은 가능합니다. 벡터 인덱스는 별도 생성물이며 필요할 때 `tools/build_stat_vector_index.py`로 빌드합니다.
 
 ## 검증과 평가
 
@@ -235,3 +235,5 @@ API: `/api/output/edit`의 `set_table` 명령(검증된 `STYLE_EDIT params.patch
 - 원문 검색은 선택 설정 `STATBRIDGE_REPORT_PASSAGES`의 JSONL 인덱스만 읽습니다. 각 레코드는 `id`, `title`, `publication_date`, `period_start`, `period_end`, 원본 PDF 물리 페이지 `page`, `text`, 원본 위치 `reference`, `kind` (`observation/factor/forecast`), `verified:true`가 필요합니다. **본문·각주·그림·표 연결과 개인정보 제거를 원본 PDF로 대조한 발췌만** 등록합니다. 에이전트 대조는 `verification_method`로 표시하고 `human_reviewed:false`를 유지합니다. 담당자 검수 전 자료를 사람의 승인 완료로 표시하지 않습니다. 자동 OCR/추정 md를 검수 근거로 승격하지 마세요. 설정이 비어 있으면 프로젝트 `.venv/cache/report-evidence/reviewed.jsonl`을 확인합니다. 인덱스는 서버 로컬 파일이며 공개 저장소에 원문을 포함하지 않습니다.
 - 발간일이 `as_of` 이후이거나 분석 기간과 겹치지 않는 발췌는 검색에서 제외합니다. 기본 기준일은 조회 종료일이며, 사용자가 이후 기준일을 지정하면 사후 해석임을 표시합니다. 원본 PDF 자동 수집·OCR·검수, 경제 원인 자체의 자동 판정, 의미상 원문 함의의 완전한 검증은 구현했다고 주장하지 않습니다.
 - 공식 자료의 잠정·속보·전망 상태, 상하위 분류·공식 소계, 복합 주기 열의 집계 정의는 원천 메타데이터와 담당자 검수 없이는 만들지 않습니다. 다른 주기 표는 별도 섹션 정책을 유지합니다.
+
+그래프·표·보고서 편집 설정은 변경 후 약 350ms 동안 입력이 멈추면 자동 반영됩니다. 같은 설정의 연속 입력은 합치고 요청을 순서대로 처리합니다. 기존 적용 버튼을 제거했으며, 새 설명·기간 강조 추가와 저장·내보내기는 별도 작업입니다. 불완전한 숫자·JSON은 유효해진 뒤 반영합니다.

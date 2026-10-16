@@ -76,11 +76,20 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
   const latestRevision=useRef(revision);latestRevision.current=revision;
   useEffect(()=>()=>{if(download)URL.revokeObjectURL(download.url);},[download]);
   const stickerDraft=useRef<{revision:object;items:ChartSticker[]}|null>(null);
+  const editQueue=useRef<Promise<unknown>>(Promise.resolve()),liveEdit=useRef(onEdit),liveSession=useRef(sessionId);
+  liveEdit.current=onEdit;liveSession.current=sessionId;
   const editWithDraft=(input:ChartEditInput)=>{
     const pending=stickerDraft.current?.revision===revision?stickerDraft.current.items:null;
     const saved=(revision as {chartState?:{stickers?:ChartSticker[]}}).chartState?.stickers||[];
-    return onEdit({...input,...(!input.document&&(!input.action||input.action==='edit')&&input.stickers===undefined&&pending&&JSON.stringify(pending)!==JSON.stringify(saved)?{stickers:pending}:{})});
+    const payload={...input,...(!input.document&&(!input.action||input.action==='edit')&&input.stickers===undefined&&pending&&JSON.stringify(pending)!==JSON.stringify(saved)?{stickers:pending}:{})};
+    const requestSession=sessionId;
+    const task=editQueue.current.catch(()=>{}).then(async()=>{
+      await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
+      if(liveSession.current!==requestSession)return false;
+      return liveEdit.current(payload);
+    });editQueue.current=task;return task;
   };
+  (editWithDraft as typeof editWithDraft & {scope:string}).scope=sessionId;
   const [enabled,setEnabled] = useState(false);
   const [tool,setTool] = useState<SketchMark["tool"]>("pen");
   const [marks,setMarks] = useState<EditableMark[]>([]);

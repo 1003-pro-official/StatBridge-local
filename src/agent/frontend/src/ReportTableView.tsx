@@ -1,12 +1,14 @@
-import {useEffect,useState} from 'react';
+import {useAutoEdit} from './useAutoEdit';
+import {useEffect,useRef,useState} from 'react';
 import type {ChartEditInput,ChartSeries} from './api/types';
 import type {TableDocument,TableOptions} from './reportTable';
 import {tableCell,tableFrequency,tableTemplates} from './reportTable';
 
 export function TableControls({document,series,disabled,onEdit}:{document:TableDocument;series:ChartSeries[];disabled:boolean;onEdit:(input:ChartEditInput)=>Promise<boolean>}){
  const [draft,setDraft]=useState<TableOptions>(document.options);
- useEffect(()=>setDraft(document.options),[document]);
- const update=(patch:Partial<TableOptions>)=>setDraft({...draft,...patch});
+ const auto=useAutoEdit(onEdit),draftRef=useRef(document.options);
+ useEffect(()=>{if(auto.pending('settings'))return;draftRef.current=document.options;setDraft(document.options);},[document]);
+ const update=(patch:Partial<TableOptions>)=>{const next={...draftRef.current,...patch};draftRef.current=next;setDraft(next);if(next.recent_periods!=null&&(!Number.isInteger(next.recent_periods)||next.recent_periods<1||next.recent_periods>600)){auto.cancel('settings');return;}auto.schedule({instruction:'',commands:[{operation:'set_table',kind:'STYLE_EDIT',params:{patch:next}}]});};
  const chosen=draft.labels.length?draft.labels:series.map(s=>s.label);
  const toggle=(label:string)=>update({labels:chosen.includes(label)?chosen.filter(x=>x!==label):[...chosen,label]});
  return <fieldset className="report-table-controls" disabled={disabled}><legend>보고서 표 편집</legend>
@@ -20,7 +22,7 @@ export function TableControls({document,series,disabled,onEdit}:{document:TableD
  <label className="table-check"><input type="checkbox" checked={draft.highlight_latest} onChange={e=>update({highlight_latest:e.target.checked})}/>최신 시점 강조</label>
  <details open><summary>표 항목 · 순서</summary>{series.map(s=><label className="table-check" key={s.label}><input type="checkbox" checked={chosen.includes(s.label)} disabled={chosen.length===1&&chosen.includes(s.label)} onChange={()=>toggle(s.label)}/>{s.label}</label>)}{chosen.map((label,i)=><div className="table-order" key={label}><span>{i+1}. {label}</span><button type="button" disabled={i===0} aria-label={`${label} 앞으로 이동`} onClick={()=>{const next=[...chosen];[next[i-1],next[i]]=[next[i],next[i-1]];update({labels:next});}}>↑</button></div>)}</details>
  <label>추가 주석<textarea maxLength={500} value={draft.note} onChange={e=>update({note:e.target.value})}/></label><small>출처는 조회 결과에서 자동 표시됩니다. 수치는 편집할 수 없습니다.</small>
- <button type="button" onClick={()=>void onEdit({instruction:'',commands:[{operation:'set_table',kind:'STYLE_EDIT',params:{patch:draft}}]})}>표 설정 적용</button>
+ <small role="status">설정을 변경하면 자동 반영됩니다.</small>{auto.error&&<p role="alert">{auto.error}</p>}
  </fieldset>;
 }
 
