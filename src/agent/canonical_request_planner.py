@@ -79,6 +79,9 @@ def selections(query,tables, *, allow_combined_values=False):
                     q=compact(text)
                     found=[v for v in values if len(compact(v['value_name']))>=2 and compact(v['value_name']) in q]
                     found=[v for v in found if not any(compact(v['value_name'])!=compact(w['value_name']) and compact(v['value_name']) in compact(w['value_name']) for w in found)]
+                    if not found:
+                        from semantic_catalog_planner import matches
+                        found=matches(text,dimension)
             if not found and allow_combined_values:
                 q=compact(text)
                 found=[v for v in values if compact(v['value_name']) in q or ((m:=re.fullmatch(r'(.+?)\s*\((.+)\)',v['value_name'])) and all(compact(part) in q for part in m.groups()))]

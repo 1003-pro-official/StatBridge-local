@@ -4,7 +4,7 @@ No benchmark queries, IDs, answers or response fixtures are loaded here.
 """
 from itertools import product
 import re
-from request_match_guard import structure_request, unsupported_quantity_terms
+from request_match_guard import structure_request, unsupported_quantity_terms, missing_requested_scopes
 from canonical_request_planner import selections as canonical_selections
 
 def compact(text):
@@ -206,14 +206,14 @@ def selections(query,tables):
         eligible=[t for t in tables if not any('sentiment' in domain for domain in t.get('domains',[])) or any(word in str(t.get('table_name')) for word in ['지역별','국가별'])]
         tables=eligible
     explicit=canonical_selections(query,tables)
-    if explicit:return explicit
+    if explicit and not missing_requested_scopes(query,explicit,tables):return explicit
     if structure_request(query)['explicit_ids']:return []
     if unavailable(query,tables) or unsupported_quantity_terms(query,tables):return []
     from semantic_catalog_planner import selections as semantic_selections
     legacy=legacy_selections(query,tables)
-    if legacy and all('explicit_catalog_scope' in item.get('reasons',[]) for item in legacy):return legacy
+    if legacy and not missing_requested_scopes(query,legacy,tables) and all('explicit_catalog_scope' in item.get('reasons',[]) for item in legacy):return legacy
     protected={'GDP지출','성장기여도','국제수지','경상수지','생산자물가','수출물가','수입물가','수출물량','수입물량','가계대출','산업대출','금융망'}
-    if legacy and any(domain in protected for domain,_ in domains(query)) and not ('기업대출' in query and '가계대출' in query and '금리' not in query) and not ('여행수지' in query and '운송수지' not in query and not any(w in query for w in ['상품수지','서비스수지','본원소득'])):return legacy
+    if legacy and not missing_requested_scopes(query,legacy,tables) and any(domain in protected for domain,_ in domains(query)) and not ('기업대출' in query and '가계대출' in query and '금리' not in query) and not ('여행수지' in query and '운송수지' not in query and not any(w in query for w in ['상품수지','서비스수지','본원소득'])):return legacy
     selected=semantic_selections(query,tables)
-    if selected:return selected
-    return legacy
+    if selected and not missing_requested_scopes(query,selected,tables):return selected
+    return legacy if legacy and not missing_requested_scopes(query,legacy,tables) else []

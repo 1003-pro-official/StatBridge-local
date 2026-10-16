@@ -1,7 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {canMix,isMixed,mixedCommands,mixedChoices,mixedPresets,mixedSelection,seriesKind,canRegression} from './src/mixedChart.ts';
+import {canMix,isMixed,mixedCommands,mixedChoices,mixedPresets,mixedSelection,seriesKind,canRegression,dualAxisCommands} from './src/mixedChart.ts';
 const series=[{label:'금리',unit:'%',frequency:'M',points:[{date:'202401',value:1},{date:'202402',value:2}]},{label:'금액',unit:'억원',frequency:'M',points:[{date:'202401',value:1},{date:'202402',value:2}]}];
+test('explicit dual-axis choice groups units and respects an existing right-axis assignment',()=>{
+ const commands=dualAxisCommands(series);
+ assert.deepEqual(commands[3].params.patch.right_axis,['금리']);
+ assert.deepEqual(commands.at(-1).params.types,{금리:'bar',금액:'line'});
+ assert.equal(commands[2].params.sync_y_axes,false);
+ assert.deepEqual(dualAxisCommands(series,{secondary_axis_series:['금액']})[3].params.patch.right_axis,['금액']);
+ assert.throws(()=>dualAxisCommands([series[0],{...series[1],frequency:'Q'}]));
+ const same=series.map(s=>({...s,unit:'%'}));
+ assert.deepEqual(dualAxisCommands(same)[3].params.patch.right_axis,['금액']);
+});
 test('mixed menu requires two series, supported line/bar and compatible frequencies/units',()=>{
  assert.equal(canMix(series,['line','bar']),true);
  assert.equal(canMix(series,[]),false);assert.equal(canMix(series.slice(0,1),['line','bar']),false);

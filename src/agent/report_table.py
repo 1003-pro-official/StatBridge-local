@@ -1,5 +1,6 @@
 """Observation-bound report tables. No model, interpolation or implicit aggregation."""
 from __future__ import annotations
+from level_yoy_comparison import CALCULATION_NOTE
 
 import csv
 import io
@@ -145,7 +146,8 @@ def build_table(series, options=None, *, title='', sources=None, display_names=N
             'sections': sections, 'sources': sources or [],
             'notes': ['—: 해당 시점의 관측값이 없습니다. 원자료 주기를 유지하며 합산·평균·보간하지 않았습니다.',
                       *(['그래프에서 제외되거나 변경된 항목은 표 선택에서도 제외했습니다.'] if removed else []),
-                      *([options.note] if options.note else [])]}
+                      *([options.note] if options.note else []),
+                      *([CALCULATION_NOTE] if any(s.get('calculation') in {'year_over_year','year_over_year_difference'} for s in series) else [])]}
 
 
 def text_value(value, decimals):

@@ -506,11 +506,14 @@ class StatBridgeAgent:
         if '보유' in query and '예금취급기관' in query:return None
         # A choice for one compared metric must not filter the other metric.
         text=re.sub(r'(20\d{2})년\s*(?:과|와|부터)\s*(20\d{2})년까지(?:의)?', ' ', query)
+        from canonical_request_planner import references
+        spans=list({(start,end):(start,end,table) for start,end,table in references(text,self.resolver.tables)}.values())
+        protected={}
+        for i,(start,end,table) in enumerate(sorted(spans,key=lambda s:s[0],reverse=True)):
+            token=f'@CATALOG{i}@';protected[token]=text[start:end];text=text[:start]+token+text[end:]
         parts=[p.strip() for p in re.split(r'그리고|\s+및\s+|와\s+|과\s+',text) if p.strip()]
-        if not 2<=len(parts)<=5 or not all(structure_request(p)['metrics'] for p in parts):
-            return None
-        # Exact catalog requests already have a separate, proven matching path.
-        if catalog_mentions(query,self.resolver.tables):
+        for token,title in protected.items():parts=[p.replace(token,title) for p in parts]
+        if not 2<=len(parts)<=5 or not all(structure_request(p)['metrics'] or catalog_mentions(p,self.resolver.tables) for p in parts):
             return None
         years=re.findall(r'20\d{2}',query)
         period=f' {years[0]}년부터 {years[-1]}년까지' if len(years)>=2 else ''
@@ -541,6 +544,11 @@ class StatBridgeAgent:
             part=re.sub(r'신규\s*대출','신규취급액',part)
             prefix=f'comparison:{index}:'
             local={k[len(prefix):]:v for k,v in confirmed.items() if k.startswith(prefix)}
+            scoped_catalog=catalog_selections(part+period,self.resolver.tables) if not local else []
+            if scoped_catalog and all(not c.get('_missing_dimensions') and viable(c) for c in scoped_catalog):
+                selected.extend(scoped_catalog)
+                plans.extend(self.build_api_plan(part+period,c).as_dict() for c in scoped_catalog)
+                continue
             result=self.resolver.resolve(part+period,confirmed=local,top_k=8)
             next_state={'original_query':query,'_request_query':query,'_user_query':query,'confirmed':confirmed}
             if result['status']=='need_clarification':
@@ -902,7 +910,9 @@ class StatBridgeAgent:
 
         # Reconstruct complete plans from current metadata rather than trusting
         # a model flag, table-name overlap, or only one member of a comparison.
-        if (grounded_plans and canonical(grounded_plans) == canonical(observed)
+        from request_match_guard import missing_requested_scopes
+        incomplete=missing_requested_scopes(query,observed,self.resolver.tables)
+        if (not incomplete and grounded_plans and canonical(grounded_plans) == canonical(observed)
                 and all(self.resolver._matches_confirmed_filters(self.tables_by_id[p['table_id']], confirmed)
                         for p in observed)):
             validated_state = {**(resolution.get('state') or {}),
@@ -1047,13 +1057,26 @@ class StatBridgeAgent:
         try:
             all_rows=[]; sources=[]
             prefer_local = not bool(os.getenv("KOSIS_API_KEY", "").strip())
-            for plan in plans:
-                data = self.service.get_statistics(
-                    table_id=plan["table_id"], item_id=plan["item_id"],
-                    classifications=plan["classifications"], frequency=plan["frequency"],
-                    start_period=plan["start_period"], end_period=plan["end_period"], prefer_local=prefer_local,
-                    allow_fallback=False,
-                )
+            requests=[dict(request_id=str(i),table_id=p['table_id'],item_id=p['item_id'],classifications=p['classifications'],frequency=p['frequency'],start_period=p['start_period'],end_period=p['end_period'],prefer_local=prefer_local,allow_fallback=False) for i,p in enumerate(plans)]
+            from level_yoy_comparison import measurement_mode,comparison_modes,with_comparison_history,append_yoy
+            # Validated raw-data plans need no further catalog lookup. Only
+            # explicit derived measures require per-table query scoping.
+            modes={str(p['table_id']):'raw' for p in plans}
+            if measurement_mode(query)!='raw':
+                modes=comparison_modes(query,plans,self.resolver.tables)
+            level_yoy=any(mode!='raw' for mode in modes.values())
+            if level_yoy:requests=[with_comparison_history([req])[0] if modes[req['table_id']]!='raw' else req for req in requests]
+            batch=getattr(self.service,'get_statistics_batch',None)
+            outcomes=batch(requests)['results'] if callable(batch) else None
+            for index,plan in enumerate(plans):
+                if outcomes is not None:
+                    outcome=outcomes[index]
+                    if outcome['status']!='success':
+                        detail=outcome.get('error','조회 실패')
+                        raise RuntimeError(f"{plan['table_name']}: {detail}")
+                    data=outcome['data']
+                else:
+                    data=self.service.get_statistics(**{k:v for k,v in requests[index].items() if k!='request_id'})
                 if data.get("status") != "success":
                     errors = data.get("errors") or []
                     detail = "; ".join(str(item.get("error") or item) for item in errors if item)
@@ -1068,7 +1091,11 @@ class StatBridgeAgent:
                     enriched["_FREQUENCY"] = str(plan["frequency"])
                     all_rows.append(enriched)
                 sources.append({"table_id": plan["table_id"], "source": data.get("source"), "row_count": len(data.get("rows") or [])})
+            calculations=[];missing=[]
+            if level_yoy:all_rows,calculations,missing=append_yoy(all_rows,plans,modes)
             execution = {"status": "success", "rows": all_rows, "row_count": len(all_rows), "sources": sources}
+            if calculations:execution.update(calculations=calculations,missingComparisonPeriods=missing,
+                comparisonFetchPeriods=[{'table_id':req['table_id'],'start':req['start_period'],'end':req['end_period']} for req in requests if modes[req['table_id']]!='raw'])
             answer = ""
             if generate_answer and os.getenv("STATBRIDGE_GENERATE_NARRATIVE", "1").lower() in {"1", "true", "on"}:
                 try:

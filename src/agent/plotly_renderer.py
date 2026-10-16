@@ -175,6 +175,8 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
             fig.update_xaxes(title_text=spec.x_axis_label or ' / '.join(sorted(units)))
             fig.update_yaxes(title_text=spec.y_axis_label or '시점')
         if dual_axis:
+            left_units = {s.get("unit") or "" for s in series if s["label"] not in spec.secondary_axis_series}
+            fig.update_yaxes(title_text=wrapped(spec.y_axis_label or " / ".join(sorted(left_units))), secondary_y=False)
             right_units = {s.get("unit") or "" for s in series if s["label"] in spec.secondary_axis_series}
             fig.update_yaxes(title_text=" / ".join(sorted(right_units)), secondary_y=True)
     if chart_type in {"line", "bar", "stacked_bar", "area"}:

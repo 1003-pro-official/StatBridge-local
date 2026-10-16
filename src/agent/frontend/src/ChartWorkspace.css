@@ -116,18 +116,18 @@
 /* Review #38: short display names and a dedicated reading surface. */
 .report-table-document th:first-child{min-width:130px;max-width:200px;width:180px}
 .report-table-document th,.report-table-document td{min-width:72px;padding:10px}
-.report-table-document.table-expanded{position:fixed;inset:24px;z-index:220;height:auto;background:white;border:1px solid #cadce8;border-radius:14px;box-shadow:0 0 0 40px #102b4666,0 20px 70px #102b4633;padding:28px}
-.report-table-document.table-expanded .report-table-scroll{max-height:calc(100dvh - 330px)}
+
+
 .table-expand-button{float:right;margin:0 0 12px 12px}
 .summary-evidence{padding:0 18px 14px;font-size:12px;color:#526d80;line-height:1.7}
 .summary-evidence details{border:1px solid #dce7ef;border-radius:8px;padding:10px 12px;background:#f8fbfd}
 .summary-evidence summary{cursor:pointer;color:#23516e;font-weight:600}
 .summary-evidence article{border-top:1px solid #e2ebf1;padding:8px 0;margin-top:8px;overflow-wrap:anywhere}
-@media(max-width:700px){.report-table-document.table-expanded{inset:8px;padding:16px}.report-table-document.table-expanded .report-table-scroll{max-height:60dvh}}
+
 
 .report-draft{margin:0 18px 16px;padding:12px;border:1px solid #dce7ef;border-radius:9px;font-size:12px;line-height:1.7}.report-draft summary{font-weight:600;cursor:pointer}.report-draft article{border-top:1px solid #dce7ef;margin-top:12px;padding-top:8px}.report-draft input{display:block;border:1px solid #cbdde9;border-radius:6px;padding:7px;margin:6px 0 12px}.report-draft small{overflow-wrap:anywhere;color:#557084}
 
-.report-table-document.table-expanded th,.report-table-document.table-expanded td{min-width:56px;padding:8px 7px;font-size:11px}.report-table-document.table-expanded th:first-child{width:160px;min-width:120px;max-width:180px}
+
 
 .report-table-document>footer{display:block;align-items:initial;justify-content:initial;background:transparent;padding:12px 0 0;gap:0}.report-table-document>footer p{display:block;margin:6px 0}.report-table-document>footer details{margin:8px 0}
 
@@ -141,3 +141,16 @@
 .chart-workspace .workspace-quick-periods button { margin:0; min-width:48px; }
 #root .chart-workspace .workspace-quick-periods button[aria-pressed="true"] { background:#005f8f; color:#fff; opacity:1; border-color:#005f8f; }
 .chart-workspace .workspace-quick-periods small { flex-basis:100%; color:#607c91; font-size:11px; }
+
+/* A top-layer reading surface escapes workspace paint containment and chat overlays. */
+.report-table-dialog{box-sizing:border-box;width:calc(100vw - 32px);max-width:none;height:calc(100dvh - 32px);max-height:none;padding:0;margin:auto;border:1px solid #cadce8;border-radius:14px;background:#fff;color:#143b56;box-shadow:0 20px 70px #102b4644;overflow:hidden}
+.report-table-dialog[open]{display:flex;flex-direction:column}
+.report-table-dialog::backdrop{background:#102b467a}
+.report-table-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none;padding:12px 20px;border-bottom:1px solid #d0dfeb;background:#f5f9fc}
+.report-table-dialog-header h2{margin:0;font-size:17px;line-height:1.4}
+.report-table-dialog-header button{flex:none;min-height:40px;padding:8px 16px;border:1px solid #b6cfdf;border-radius:8px;background:#fff;color:#16466b;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.report-table-dialog-header button:hover{background:#eaf2f8}.report-table-dialog-header button:focus-visible{outline:2px solid #1d75ad;outline-offset:2px}
+.report-table-dialog-content{flex:1;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain}
+.report-table-dialog .report-table-document{height:auto;max-height:none;overflow:visible}
+.report-table-dialog .report-table-scroll{max-height:65dvh;overscroll-behavior:contain}
+@media(max-width:700px){.report-table-dialog{width:calc(100vw - 16px);height:calc(100dvh - 16px);border-radius:10px}.report-table-dialog-header{padding:10px 12px;gap:8px}.report-table-dialog-header h2{font-size:15px}}

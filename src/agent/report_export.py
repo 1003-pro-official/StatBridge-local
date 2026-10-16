@@ -103,6 +103,10 @@ def export_preflight(series,spec,result,format):
         spec=spec.model_copy(update={'report':ReportOptions(kind='dual_axis' if right else 'panels' if spec.layout!='combined' else kinds[legacy],right_axis=right,columns=columns,height=height,contribution_confirmed=legacy=='stacked_bar'),
             'secondary_axis_series':[], 'series_chart_types':{**spec.series_chart_types,**{label:spec.series_chart_types.get(label,spec.chart_type) for label in right}}})
     o=spec.report;periods=validate_report(series,o)
+    if o.kind=='dual_axis' and set(spec.secondary_axis_series)==set(o.right_axis):
+        # The editor mirrors report assignments for its controls. Consume the
+        # report assignment once without treating that mirror as a conflict.
+        spec=spec.model_copy(update={'secondary_axis_series':[]})
     period_index={d:i for i,d in enumerate(periods)}
     if spec.presentation.bar_orientation=='horizontal' or any(kind not in {'line','bar','area'} for kind in spec.series_chart_types.values()) or spec.secondary_axis_series:
         raise ValueError('기존 가로 막대·혼합 종류·보조축 설정은 보고서 인쇄와 함께 사용할 수 없습니다. 보고서의 종류·right_axis 설정을 사용하세요.')
@@ -288,12 +292,20 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
                 for ax in targets:
                     horizontal=name=='x';obj=ax.xaxis if horizontal else ax.yaxis
                     if style.title is not None:obj.label.set_text(style.title)
-                    if style.title_position is not None or style.title_standoff:
+                    if style.title_position is not None or style.title_standoff or style.title_orientation!='auto' or style.title_placement!='side':
                         pos=style.title_position if style.title_position is not None else .5
                         size=(ax.get_position().height*o.height if horizontal else ax.get_position().width*o.width)
                         shift=(60+style.title_standoff)/max(1,size)
                         if horizontal:obj.set_label_coords(pos,-shift);obj.label.set_ha('left' if pos==0 else 'right' if pos==1 else 'center')
-                        else:obj.set_label_coords(1+shift if name=='y2' else -shift,pos)
+                        else:
+                            right=name=='y2'
+                            obj.label.set_rotation(0 if style.title_orientation=='horizontal' or (style.title_orientation=='auto' and style.title_placement!='side') else 270 if right else 90)
+                            if style.title_placement=='side':obj.set_label_coords(1+shift if right else -shift,pos)
+                            else:
+                                x=style.title_x if style.title_placement=='custom' else (1 if right else 0)
+                                y=style.title_y if style.title_placement=='custom' else (1 if style.title_placement=='top' else 0)
+                                obj.set_label_coords(x,y+(18+style.title_standoff)/max(1,ax.get_position().height*o.height)*( -1 if style.title_placement=='bottom' else 1))
+                                obj.label.set_ha('right' if right else 'left');obj.label.set_va('bottom' if style.title_placement!='bottom' else 'top')
             for g in spec.guides:
                 if g.orientation=='horizontal':primary.axhline(float(g.value),color=g.color,ls='--',lw=g.width)
                 elif str(g.value) in periods:primary.axvline(periods.index(str(g.value)),color=g.color,ls='--',lw=g.width)

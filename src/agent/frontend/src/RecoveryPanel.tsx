@@ -16,7 +16,7 @@ export default function RecoveryPanel({message,result,busy,retry,selectTable,sel
  const noTable=result?.status==='no_match';
  const detailsOnly=result?.status==='need_details';
  const issue=result?.recovery?.issue;
- const failureTitle=issue==='timeout'?'20초 응답 제한에 도달했습니다':issue==='input'?'입력한 조회 조건을 확인해 주세요':issue==='auth'?'로그인 상태를 확인해 주세요':issue==='server'?'서버 처리 중 문제가 발생했습니다':issue==='rate_limit'?'잠시 후 다시 시도해 주세요':issue==='network'?'서버 연결을 확인해 주세요':'현재 작업을 유지하고 이어서 진행할 수 있습니다';
+ const failureTitle=issue==='calculation'?'증가율 계산 기준을 확인해 주세요':issue==='timeout'?'20초 응답 제한에 도달했습니다':issue==='input'?'입력한 조회 조건을 확인해 주세요':issue==='auth'?'로그인 상태를 확인해 주세요':issue==='server'?'서버 처리 중 문제가 발생했습니다':issue==='rate_limit'?'잠시 후 다시 시도해 주세요':issue==='network'?'서버 연결을 확인해 주세요':'현재 작업을 유지하고 이어서 진행할 수 있습니다';
  const selectedTable=tables.find(t=>t.tableId===table);
  const recovery=recoveryFor(result,message);
  const act=(id:string)=>{if(id==='retry')retry();else if(id==='revise')onRevise();else if(id==='table')setMode('table');else if(id==='period')setMode('period');};

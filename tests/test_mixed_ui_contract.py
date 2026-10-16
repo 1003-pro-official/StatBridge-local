@@ -28,6 +28,9 @@ def test_selector_edit_restore_and_vector_exports(two_units):
         content=render_file(data,spec,result,format)
         assert len(content)>1000
     if two_units:
+        assert spec.secondary_axis_series==spec.report.right_axis==['지표 2']
+        with pytest.raises(ValueError,match='right_axis'):
+            render_file(data,spec.model_copy(update={'secondary_axis_series':['지표 1']}),result,'svg')
         for kind in ['line','bar']:
             plain=agent.apply_edits(result,edited,[ChartEditCommand(operation='set_chart_type',kind='STYLE_EDIT',value=kind)],generate_explanation=False)
             assert plain['chartState']['secondary_axis_series']==['지표 2']

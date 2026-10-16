@@ -1003,6 +1003,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
         "row_count": sum(int((result.get("execution") or {}).get("row_count") or 0) for result in results),
         "sources": [source for result in results for source in ((result.get("execution") or {}).get("sources") or [])],
     }
+    merged_execution["calculations"]=[c for result in results for c in (result.get("execution") or {}).get("calculations",[])]
     merged["execution"] = merged_execution
     merged["api_plans"] = [plan for result in results for plan in (result.get("api_plans") or [result.get("api_plan")]) if plan]
     merged["request_validation"] = {"valid":True,"table_ids":[p["table_id"] for p in merged["api_plans"]],"requests":[s["query"] for s in sessions]}

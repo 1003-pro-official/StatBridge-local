@@ -19,3 +19,7 @@ class McpToolGateway:
 
     def get_statistics(self, **kwargs: Any):
         return self.service.get_statistics(**kwargs)
+
+    def get_statistics_batch(self, requests, timeout_seconds=20):
+        from statbridge_mcp.statistics_batch import get_statistics_batch
+        return get_statistics_batch(self.service,requests,timeout_seconds)

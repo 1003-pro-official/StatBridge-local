@@ -1,3 +1,4 @@
+import {withRequestDeadline} from './requestDeadline';
 import {workspacePng,startFileDownload} from './workspaceDownload';
 import {panelGeometry} from './plotPanelLayout';
 import {apiFetch,accountKey} from './accountApi';
@@ -57,7 +58,7 @@ function Mark({ mark }: { mark: EditableMark }) {
 
 async function readImage(src: string): Promise<HTMLImageElement> {
   const image = new Image();
-  await new Promise<void>((resolve,reject) => { image.onload=()=>resolve(); image.onerror=()=>reject(new Error("그래프 이미지 생성에 실패했습니다.")); image.src=src; });
+  await withRequestDeadline(()=>new Promise<void>((resolve,reject) => { image.onload=()=>resolve(); image.onerror=()=>reject(new Error("그래프 이미지 생성에 실패했습니다.")); image.src=src; }),'참고 그래프 이미지 생성 요청');
   return image;
 }
 
@@ -76,11 +77,19 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
   const latestRevision=useRef(revision);latestRevision.current=revision;
   useEffect(()=>()=>{if(download)URL.revokeObjectURL(download.url);},[download]);
   const stickerDraft=useRef<{revision:object;items:ChartSticker[]}|null>(null);
+  const editQueue=useRef<Promise<unknown>>(Promise.resolve()),liveEdit=useRef(onEdit),liveSession=useRef(sessionId);
+  liveEdit.current=onEdit;liveSession.current=sessionId;
   const editWithDraft=(input:ChartEditInput)=>{
     const pending=stickerDraft.current?.revision===revision?stickerDraft.current.items:null;
     const saved=(revision as {chartState?:{stickers?:ChartSticker[]}}).chartState?.stickers||[];
-    return onEdit({...input,...(!input.document&&(!input.action||input.action==='edit')&&input.stickers===undefined&&pending&&JSON.stringify(pending)!==JSON.stringify(saved)?{stickers:pending}:{})});
+    const payload={...input,...(!input.document&&(!input.action||input.action==='edit')&&input.stickers===undefined&&pending&&JSON.stringify(pending)!==JSON.stringify(saved)?{stickers:pending}:{})};
+    const requestSession=sessionId;
+    const task=editQueue.current.catch(()=>{}).then(async()=>{
+      if(liveSession.current!==requestSession)return false;
+      return liveEdit.current(payload);
+    });editQueue.current=task;return task;
   };
+  (editWithDraft as typeof editWithDraft & {scope:string}).scope=sessionId;
   const [enabled,setEnabled] = useState(false);
   const [tool,setTool] = useState<SketchMark["tool"]>("pen");
   const [marks,setMarks] = useState<EditableMark[]>([]);
@@ -203,7 +212,7 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
         if (plot && overlay.current) {
           const bounds=stage.current!.getBoundingClientRect();
           const width=900, height=Math.min(1600,Math.max(250,Math.round(width*bounds.height/bounds.width)));
-          const src=await Plotly.toImage(plot,{format:"png",width,height});
+          const src=await withRequestDeadline(()=>Plotly.toImage(plot,{format:"png",width,height}),'편집 그래프 이미지 생성 요청');
           const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
           const context=canvas.getContext("2d");
           if(!context)throw new Error("편집 이미지 생성 기능을 사용할 수 없습니다.");
