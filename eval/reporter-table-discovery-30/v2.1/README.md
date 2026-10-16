@@ -7,7 +7,7 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 - 문항: 200개 = v2 원본 30 + 증강 170 (`resolved` 140, `no_match` 53, `need_clarification` 7)
 - 증강 170의 구성: 단일 계열 28 / 한 표 복수 계열 80 / 여러 표 복수 계열 11, 표 96개
 - 정답 근거: 한국은행 KOSIS 카탈로그(`org_id=301`) 349개 표 메타데이터
-- 검수 상태: `ai-assisted`, 사람 승인 대기 (`human_approved=false`)
+- 검수 상태: `ai-assisted`; 현재 골드 해시에 대한 사람 승인은 [`gold_approval.json`](gold_approval.json)에 기록 (`200/200`, 2026-10-15). 골드가 수정되어 SHA256이 달라지면 재승인이 필요합니다.
 - 모든 문항은 공개 `dev`이며 블라인드 holdout이 아닙니다.
 
 ## 증강 기준
@@ -47,6 +47,8 @@ v2의 30문항과 단계별 정답 형식을 그대로 유지하고, 한국은�
 v2와 동일하게 `query_interpretation`, `table_discovery`, `item_selection`, `classification_and_plan`, `resolution`, `post_discovery`를 기록하고, 증강 문항에는 `research_references`를 추가합니다. 값은 런타임 예측 로그가 아니라 카탈로그 메타데이터로 작성한 규범적 기대 정답입니다.
 
 ## 채점 기준 (동결)
+
+아래 동결 정책은 기존 표 탐색 단계의 문항별 진단·저장 조건이다. 통계자료 조회와 릴리스 판정에는 별도의 승인된 상위 관문을 적용한다: [v2.1 릴리스 평가 기준 v1](../../../docs/evaluation/2026-10-15-v2.1-release-criteria-v1.md). 두 결과의 점수는 합산하지 않는다.
 
 실행: `python3 eval/reporter-table-discovery-30/v2.1/scripts/evaluate_runtime.py`
 기준은 실행 전에 `POLICY` 상수와 이 표에 고정하며, 해시(`policy_sha256`)가 manifest·`run_manifest.json`에 기록됩니다. 정책을 바꾸면 기존 실행은 무효입니다.

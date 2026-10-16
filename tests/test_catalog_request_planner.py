@@ -51,6 +51,85 @@ def test_period_reentry_retains_each_grounded_series_without_model(agent):
     assert first['api_plans'] == again['api_plans']
 
 
+def test_followup_period_change_retains_validated_plan(agent):
+    initial = '2020년 1월부터 2025년 12월까지 국제수지 상품수지를 월별로 조회해줘'
+    followup = '조회 기간을 2022년 1월부터 2024년 12월까지로 바꿔줘'
+
+    first = agent.resolve(initial)
+    assert first['status'] == 'resolved'
+    assert first['request_validation']['valid'] is True
+    assert first['state'].get('_validated_api_plans') == first['api_plans']
+
+    second = agent.resolve(followup, state=first['state'])
+    assert second['status'] == 'resolved'
+    assert second['api_plans'] == first['api_plans']
+    assert second['api_plans'][0]['table_id'] == 'DT_301Y013'
+    checked = agent.validate_resolution(followup, second)
+    assert checked['status'] == 'resolved'
+    assert checked['request_validation']['valid'] is True
+
+
+def test_followup_catalog_addition_keeps_prior_series_and_revalidates(agent):
+    initial = '2020년 1월부터 2025년 12월까지 국제수지 상품수지를 월별로 조회해줘'
+    followup = '서비스수지도 같이 추가해줘'
+
+    first = agent.resolve(initial)
+    assert first['status'] == 'resolved'
+    second = agent.resolve(followup, state=first['state'])
+
+    assert second['status'] == 'resolved'
+    assert len(second['api_plans']) == 2
+    assert [plan['classifications']['objL1'] for plan in second['api_plans']] == [
+        '13102134519ACC_CD.100000', '13102134519ACC_CD.200000',
+    ]
+    checked = agent.validate_resolution(followup, second)
+    assert checked['status'] == 'resolved'
+    assert checked['request_validation']['valid'] is True
+
+
+def test_followup_catalog_correction_replaces_only_the_explicit_dimension(agent):
+    initial = '2020년 1월부터 2025년 12월까지 국제수지 상품수지를 월별로 조회해줘'
+    followup = '아니 서비스수지로 바꿔줘. 기간은 그대로 둬.'
+    first = agent.resolve(initial)
+
+    second = agent.resolve(followup, state=first['state'])
+
+    assert second['status'] == 'resolved'
+    assert len(second['api_plans']) == 1
+    assert second['api_plans'][0]['classifications']['objL1'] == '13102134519ACC_CD.200000'
+    checked = agent.validate_resolution(followup, second)
+    assert checked['status'] == 'resolved'
+    assert checked['request_validation']['valid'] is True
+
+
+def test_year_in_table_title_does_not_turn_series_correction_into_period_reentry(agent):
+    initial = ('한국은행 KOSIS 소비자동향조사(전국 월 2008.9~)에서 현재생활형편CSI 전체 자료를 '
+               '2021년 1월부터 2025년 12월까지 월별로 조회할 표를 찾아줘.')
+    followup = ('아니, 소비자동향조사(전국 월 2008.9~) 생활형편전망CSI 전체로 바꿔줘. '
+                '기간과 주기는 그대로 둬.')
+    first = agent.resolve(initial)
+    assert first['status'] == 'resolved'
+    assert agent._period_only_followup(followup) is False
+
+    second = agent.resolve(followup, state=first['state'])
+
+    assert second['status'] == 'resolved'
+    assert second['api_plans'][0]['classifications']['objL1'] == '13102134688CSI_CD.FMBA'
+
+
+def test_tampered_carried_plan_is_not_used_for_a_followup(agent):
+    initial = '2020년 1월부터 2025년 12월까지 국제수지 상품수지를 월별로 조회해줘'
+    followup = '조회 기간을 2022년 1월부터 2024년 12월까지로 바꿔줘'
+    first = agent.resolve(initial)
+    state = copy.deepcopy(first['state'])
+    state['_validated_api_plans'][0]['classifications']['objL1'] = 'invented-code'
+    state['_validated_api_plans'][0]['exact_params']['objL1'] = 'invented-code'
+
+    result = agent.resolve(followup, state=state)
+    assert result['status'] != 'resolved'
+    assert not result.get('api_plans')
+
+
 @pytest.mark.parametrize('query', [
     '신용카드와 체크카드 금액 그리고 한국은행 기준금리',
     '신용카드 금액과 소비자물가지수',

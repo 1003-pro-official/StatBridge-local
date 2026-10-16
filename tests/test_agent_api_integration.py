@@ -32,6 +32,27 @@ def test_catalog_only_table_uses_ui_table_shape(monkeypatch):
     assert response["tables"][0]["tableId"] == "DT_284Y001"
 
 
+def test_followup_keeps_a_revalidated_period_without_reasking():
+    import bridge_api
+
+    initial = bridge_api.query(bridge_api.QueryRequest(
+        query="2020년 1월부터 2025년 12월까지 국제수지 상품수지를 월별로 조회해줘",
+        execute=False,
+    ))
+    followup = bridge_api.query(bridge_api.QueryRequest(
+        query="서비스수지도 같이 추가해줘",
+        state=initial["state"],
+        execute=False,
+    ))
+
+    assert initial["status"] == "need_period"
+    assert followup["status"] != "no_match"
+    assert followup["periodSelection"]["source"] == "context"
+    assert followup["periodSelection"]["requested"] == {
+        "start": "2020-01-01", "end": "2025-12-31",
+    }
+
+
 def test_execution_failure_is_not_reported_as_resolved(monkeypatch):
     import bridge_api
 

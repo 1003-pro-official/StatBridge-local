@@ -1,0 +1,10 @@
+{
+  "dataset": "reporter-table-discovery-200",
+  "version": "v2.1",
+  "dataset_sha256": "b350188a76ba1e31739b8cc56b8512b84f90f479380e86fcbf04d181ccc32563",
+  "human_approved": true,
+  "approved_case_count": 200,
+  "approved_at": "2026-10-15",
+  "approval_evidence": "사용자가 Codex 대화에서 v2.1 골드 200문항 모두 검토 및 승인함.",
+  "scope": "현재 dataset_sha256에 해당하는 골드 라벨 전체. 골드 내용이 바뀌면 이 승인은 새 해시로 승계되지 않음."
+}
