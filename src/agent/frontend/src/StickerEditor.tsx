@@ -1,3 +1,4 @@
+import {useAutoEdit} from './useAutoEdit';
 import { useEffect, useRef, useState, type RefObject, type PointerEvent } from "react";
 import { createPortal } from "react-dom";
 import type { ChartEditInput, ChartSticker, StickerAsset } from "./api/types";
@@ -9,6 +10,7 @@ type Plot = HTMLElement & {_fullLayout?:{_size?:{l:number;t:number;w:number;h:nu
 type Gesture = {id:string;kind:"move"|"size"|"rotate";startX:number;startY:number;original:ChartSticker};
 
 export default function StickerEditor({stage,items,initialDraft,revision,disabled,drawing,onActivate,onDraftChange,onEdit}:Props) {
+  const auto=useAutoEdit(onEdit);
   const [catalog,setCatalog]=useState<StickerAsset[]>([]);
   const [draft,setDraft]=useState<ChartSticker[]>(()=>initialDraft?.()??items);
   const lastRevision=useRef(revision);
@@ -17,10 +19,10 @@ export default function StickerEditor({stage,items,initialDraft,revision,disable
   const [category,setCategory]=useState("전체");
   const [search,setSearch]=useState("");
   const [error,setError]=useState("");
-  const [busy,setBusy]=useState(false);
+  const busy=false;
   const [box,setBox]=useState<PlotBox|null>(null);
   const gesture=useRef<Gesture|null>(null);
-  const pending=useRef(false);
+
   const current=draft.find(s=>s.id===selected);
   const asset=catalog.find(a=>a.id===current?.asset_id);
   const dirty=JSON.stringify(draft)!==JSON.stringify(items);
@@ -31,7 +33,7 @@ export default function StickerEditor({stage,items,initialDraft,revision,disable
     fetch("/stickers/catalog.json",{signal:controller.signal}).then(r=>{if(!r.ok)throw new Error("주석 기호 목록을 불러오지 못했습니다.");return r.json();}).then(setCatalog).catch(e=>{if(!controller.signal.aborted)setError(String(e.message));});
     return()=>controller.abort();
   },[]);
-  useEffect(()=>{if(lastRevision.current===revision)return;lastRevision.current=revision;setDraft(items);setSelected(null);setActive(false);gesture.current=null;setError("");},[revision]);
+  useEffect(()=>{if(lastRevision.current===revision)return;lastRevision.current=revision;if(!auto.pending('stickers')&&JSON.stringify(items)!==JSON.stringify(draft)){setDraft(items);setSelected(null);setActive(false);gesture.current=null;}setError("");},[revision]);
   useEffect(()=>{if(drawing)setActive(false);},[drawing]);
   useEffect(()=>{
     const host=stage.current,plot=host?.querySelector<Plot>(".plotly-chart");
@@ -56,12 +58,9 @@ export default function StickerEditor({stage,items,initialDraft,revision,disable
     else next.size=clamp(Math.hypot(p.x-center.x,p.y-center.y)*Math.SQRT2/Math.min(box.width,box.height),.02,1);
     setDraft(rows=>rows.map(s=>s.id===g.id?next:s));
   };
-  const finish=(e:PointerEvent<HTMLDivElement>)=>{gesture.current=null;if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);};
+  const finish=(e:PointerEvent<HTMLDivElement>)=>{gesture.current=null;if(dirty)auto.schedule({instruction:'',stickers:draft},'stickers');if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);};
   const cancel=()=>{const g=gesture.current;if(g)setDraft(rows=>rows.map(s=>s.id===g.id?g.original:s));gesture.current=null;};
-  const apply=async()=>{if(pending.current||locked||!dirty)return;pending.current=true;setBusy(true);setError("");
-    try{if(await onEdit({instruction:"",stickers:draft}))setActive(false);}catch(e){setError(e instanceof Error?e.message:"주석 기호을 적용하지 못했습니다.");}
-    finally{pending.current=false;setBusy(false);}
-  };
+  useEffect(()=>{if(dirty&&!gesture.current)auto.schedule({instruction:'',stickers:draft},'stickers');},[draft]);
   const overlay=active&&box&&stage.current?createPortal(<div className="sticker-overlay" aria-label="주석 기호 배치 영역"
     onPointerDown={e=>{if(e.target===e.currentTarget&&!locked){gesture.current=null;setSelected(null);}}}
     >{draft.map(s=>{const a=catalog.find(a=>a.id===s.asset_id);if(!a)return null;const center=stickerCenter(s,box),side=s.size*Math.min(box.width,box.height),envelope=Math.ceil(Math.hypot(a.width,a.height));
@@ -86,7 +85,7 @@ export default function StickerEditor({stage,items,initialDraft,revision,disable
       <label>투명도 <input type="range" aria-label="주석 기호 투명도" min="0" max="100" value={Math.round((1-current.opacity)*100)} disabled={locked} onChange={e=>patch({opacity:1-Number(e.target.value)/100})}/><span>{Math.round((1-current.opacity)*100)}%</span></label>
       <div className="sticker-actions"><button type="button" disabled={locked} onClick={remove}>선택 삭제</button><a href={`/stickers/${asset.file}`} download={`${asset.id}.png`}>PNG 다운로드</a></div>
     </div>}
-    <div className="sticker-actions"><button type="button" disabled={locked} onClick={()=>{setDraft(items);setSelected(null);setActive(false);}}>조정 취소</button><button type="button" disabled={locked} onClick={()=>{if(active)setActive(false);else activate();}}>{active?"배치 미리보기 종료":"배치 조정"}</button><button className="sticker-apply" type="button" disabled={locked||!dirty} onClick={()=>void apply()}>{busy?"적용 중…":"주석 기호 적용"}</button></div>
-    {dirty&&!active&&<small>적용 전입니다. 배치 조정을 눌러 미리 보거나 적용해 주세요.</small>}{error&&<p role="alert">{error}</p>}
+    <div className="sticker-actions"><button type="button" disabled={locked} onClick={()=>{setDraft(items);setSelected(null);setActive(false);}}>저장한 배치로 복원</button><button type="button" disabled={locked} onClick={()=>{if(active)setActive(false);else activate();}}>{active?"배치 미리보기 종료":"배치 조정"}</button></div>
+    {dirty&&!active&&<small>변경한 배치는 자동 저장됩니다.</small>}{(error||auto.error)&&<p role="alert">{error||auto.error}</p>}
   </details>{overlay}</>;
 }

@@ -10,7 +10,7 @@ import {displayedPeriod,emptyAvailablePeriod,groupSources,resultInsights,titlePe
 import QueryRefinementCard from './QueryRefinementCard';
 import exploreExamples from './exploreExamples.json';
 import ExecutionEvidence from './ExecutionEvidence';
-import {panelGeometry,splitPlotAnnotations} from './plotPanelLayout';
+import {panelGeometry,splitPlotAnnotations,resizeVisiblePlot} from './plotPanelLayout';
 import {appendChat,readChat,writeChat,deleteChat,saveChat,savedChats,removeSavedChat,editDescription,type SavedChat} from './graphChat';
 import RecoveryPanel from './RecoveryPanel';
 import {accountKey,accountRequest} from './accountApi';
@@ -18,7 +18,7 @@ import {ownsHistory} from './accountScope';
 import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import Plotly from "plotly.js-dist-min";
 import ChartSketchEditor from "./ChartSketchEditor";
-import { fetchCatalog, fetchWorkspace, submitOutput, submitOutputEdit, submitQuery } from "./api/client";
+import { EditConflictError, fetchCatalog, fetchWorkspace, submitOutput, submitOutputEdit, submitQuery } from "./api/client";
 import {allowedCharts,chartLabels,chartDescriptions} from "./chartChoices";
 import {initialQueryRequest} from "./querySubmission";
 import type { CatalogResponse, CatalogTable, ChartEditInput, ChartSeries, ChartType, OutputRenderRequest, QueryRequest, QueryResponse } from "./api/types";
@@ -265,8 +265,8 @@ export function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Recor
     const select=(kind:string,label?:string,id?:string)=>element.dispatchEvent(new CustomEvent('statbridge:graph-select',{bubbles:true,detail:{kind,label,id}}));
     const selectText=(event:MouseEvent)=>{const node=event.target as Element;if(node.closest('.gtitle'))select('title');else if(node.closest('.xtick,.xtitle'))select('x');else if(node.closest('.ytick,.ytitle'))select('y');else if(node.closest('.annotation')){const index=Number(node.closest('.annotation')?.getAttribute('data-index'));const annotation=(copy.layout.annotations as Array<{name?:string}>|undefined)?.[index];if(annotation?.name?.startsWith('statbridge-axis-title:'))select(annotation.name.includes('xaxis')?'x':annotation.name.endsWith('yaxis2')?'y2':'y');else if(annotation?.name?.startsWith('statbridge-latest:'))select('series',annotation.name.slice('statbridge-latest:'.length));else if(annotation?.name)select('note',undefined,annotation.name);}};
     element.addEventListener('click',selectText);
-    queue.current=queue.current.catch(()=>{}).then(async()=>{if(!active)return;await Plotly.react(element, copy.data, copy.layout, { responsive: true, displaylogo: false });if(!active)return;await Plotly.Plots.resize(element);if(!active)return;
-      rendered=true;await Plotly.relayout(element,periodTickUpdate(figure,element.getBoundingClientRect().width));if(!active)return;
+    queue.current=queue.current.catch(()=>{}).then(async()=>{if(!active)return;await Plotly.react(element, copy.data, copy.layout, { responsive: true, displaylogo: false });if(!active)return;const visible=await resizeVisiblePlot(element,target=>Plotly.Plots.resize(target));if(!active)return;
+      rendered=true;if(visible)await Plotly.relayout(element,periodTickUpdate(figure,element.getBoundingClientRect().width));if(!active)return;
       element.dataset.plotVersion=String(version);element.dataset.plotReady='true';
       const events=element as unknown as HTMLElement & {on:(name:string,fn:(event:any)=>unknown)=>void;removeListener:(name:string,fn:(event:any)=>unknown)=>void};
       const click=(event:any)=>{const trace=event.points?.[0]?.data;const label=trace?.meta?.seriesLabel||trace?.customdata?.[0]?.[0]||trace?.name;if(label)select('series',label);};
@@ -277,7 +277,7 @@ export function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Recor
     }).catch(()=>{
       if(active)setRenderError("그래프 화면을 그리지 못했습니다. 새로고침 후 다시 확인해 주세요.");
     });
-    const observer=new ResizeObserver(()=>{if(active&&rendered)queue.current=queue.current.catch(()=>{}).then(()=>active?Plotly.Plots.resize(element).then(()=>active?Plotly.relayout(element,periodTickUpdate(figure,element.getBoundingClientRect().width)):undefined):undefined);});
+    const observer=new ResizeObserver(()=>{if(active&&rendered)queue.current=queue.current.catch(()=>{}).then(async()=>{if(active&&await resizeVisiblePlot(element,target=>Plotly.Plots.resize(target))&&active)await Plotly.relayout(element,periodTickUpdate(figure,element.getBoundingClientRect().width));}).catch(()=>{if(active)setRenderError('그래프 크기를 조정하지 못했습니다. 창 크기를 바꾸거나 다시 확인해 주세요.');});});
     observer.observe(element);
     return () => {active=false;observer.disconnect();unbind();element.removeEventListener('click',selectText);};
   }, [figure,heading?.title,heading?.subtitle]);
@@ -610,13 +610,20 @@ export default function App() {
   };
 
   const editSelectedOutput = (input: ChartEditInput): Promise<boolean> => {
+    const targetSession=(liveResult.current||result)?.editSessionId;
     retryAction.current=()=>void editSelectedOutput(input).catch(()=>{});
     const job=editQueue.current.then(async()=>{
-      const current=liveResult.current||result;if(!current?.editSessionId)return false;
+      const current=liveResult.current||result;if(!targetSession||current?.editSessionId!==targetSession)return false;
       if(current.outputSpec?.chatReadOnly)throw new Error('서버 세션이 만료된 저장 그래프입니다. 새 채팅에서 통계를 다시 조회해 주세요.');
       setLoading(true);setError("");
       try { const updated=await submitOutputEdit({edit_session_id:current.editSessionId,revision:current.outputSpec?.editVersion,...input});if(liveResult.current?.editSessionId!==current.editSessionId)return false;appendChat(current.editSessionId,{role:'assistant',kind:'edit',text:editDescription(current,updated,input.action)});showResult(updated,true); return true; }
-      catch(err){if(!input.conversation?.length)setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");throw err;}
+      catch(err){
+        if(err instanceof EditConflictError){
+          try{const latest=await fetchWorkspace(current.editSessionId);if(liveResult.current?.editSessionId===current.editSessionId)showResult(latest,true);}
+          catch{/* Preserve the current analysis; the same retry can refresh again. */}
+        }
+        if(!input.conversation?.length)setError(err instanceof Error?err.message:"그래프 수정 중 오류가 발생했습니다.");throw err;
+      }
       finally{setLoading(false);}
     });
     editQueue.current=job.then(()=>{},()=>{});return job;

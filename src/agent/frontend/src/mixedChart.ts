@@ -15,6 +15,17 @@ export function mixedChoices(series:ChartSeries[],types:ChartType[]){
  return mixedPresets.filter(p=>series.length>=p.shapes.length+(p.stack?1:0)&&p.shapes.every(t=>types.includes(t))&&(!p.stack||(types.includes('stacked_bar')&&new Set(series.map(s=>s.unit)).size===1&&series.every(s=>JSON.stringify(s.points?.map(p=>p.date))===JSON.stringify(series[0].points?.map(p=>p.date))))));
 }
 export function canMix(series:ChartSeries[],types:ChartType[]){return mixedChoices(series,types).some(p=>p.id==='mixed');}
+export function dualAxisCommands(series:ChartSeries[],state:MixedState&{secondary_axis_series?:string[]}={}):NonNullable<ChartEditInput['commands']>{
+ if(!canMix(series,['line','bar']))throw new Error('이중축은 같은 주기의 지표 두 개 이상과 최대 두 종류의 단위가 필요합니다.');
+ const units=[...new Set(series.map(s=>s.unit))];
+ const existing=(state.secondary_axis_series?.length?state.secondary_axis_series:state.report?.right_axis??[]).filter(label=>series.some(s=>s.label===label));
+ const rightUnit=units.find(u=>/[%％]/.test(u))??units.at(-1);
+ const right=existing.length&&existing.length<series.length?existing:units.length===2?series.filter(s=>s.unit===rightUnit).map(s=>s.label):[series.at(-1)!.label];
+ return [{operation:'set_chart_type',kind:'STYLE_EDIT',value:'line'},{operation:'set_layout',kind:'STYLE_EDIT',value:'combined'},
+  {operation:'set_presentation',kind:'STYLE_EDIT',params:{shared_y:false,sync_y_axes:false,bar_mode:'group'}},
+  {operation:'set_report',kind:'STYLE_EDIT',params:{patch:{kind:'dual_axis',right_axis:right}}},
+  {operation:'set_series_chart_types',kind:'STYLE_EDIT',params:{types:Object.fromEntries(series.map(s=>[s.label,right.includes(s.label)?'bar':'line']))}}];
+}
 export function canRegression(series:ChartSeries[],types:ChartType[]){
  if(series.length!==2||!types.includes('scatter')||new Set(series.map(s=>s.frequency||'')).size!==1)return false;
  const second=new Set(series[1].points.map(p=>p.date)),pairs=series[0].points.filter(p=>second.has(p.date));
