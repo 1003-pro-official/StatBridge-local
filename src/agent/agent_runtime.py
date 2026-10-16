@@ -782,13 +782,18 @@ class StatBridgeAgent:
         try:
             all_rows=[]; sources=[]
             prefer_local = not bool(os.getenv("KOSIS_API_KEY", "").strip())
-            for plan in plans:
-                data = self.service.get_statistics(
-                    table_id=plan["table_id"], item_id=plan["item_id"],
-                    classifications=plan["classifications"], frequency=plan["frequency"],
-                    start_period=plan["start_period"], end_period=plan["end_period"], prefer_local=prefer_local,
-                    allow_fallback=False,
-                )
+            requests=[dict(request_id=str(i),table_id=p['table_id'],item_id=p['item_id'],classifications=p['classifications'],frequency=p['frequency'],start_period=p['start_period'],end_period=p['end_period'],prefer_local=prefer_local,allow_fallback=False) for i,p in enumerate(plans)]
+            batch=getattr(self.service,'get_statistics_batch',None)
+            outcomes=batch(requests)['results'] if callable(batch) else None
+            for index,plan in enumerate(plans):
+                if outcomes is not None:
+                    outcome=outcomes[index]
+                    if outcome['status']!='success':
+                        detail=outcome.get('error','조회 실패')
+                        raise RuntimeError(f"{plan['table_name']}: {detail}")
+                    data=outcome['data']
+                else:
+                    data=self.service.get_statistics(**{k:v for k,v in requests[index].items() if k!='request_id'})
                 if data.get("status") != "success":
                     errors = data.get("errors") or []
                     detail = "; ".join(str(item.get("error") or item) for item in errors if item)
