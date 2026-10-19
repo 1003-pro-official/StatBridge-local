@@ -71,7 +71,7 @@ def report_style(spec):
 def source_caption(result, options):
     plans=result.get('api_plans') or ([result['api_plan']] if result.get('api_plan') else [])
     ids=list(dict.fromkeys(str(p['table_id']) for p in plans))
-    names={'kosis_api':'KOSIS','local_csv':'로컬 통계자료','local_csv_filtered':'로컬 통계자료'}
+    names={'kosis_api':'KOSIS','user_file':'사용자 제공 파일','local_csv':'로컬 통계자료','local_csv_filtered':'로컬 통계자료'}
     origins=list(dict.fromkeys(names.get(str(s.get('source')),str(s.get('source') or '출처 확인 필요')) for s in (result.get('execution') or {}).get('sources',[])))
     caption='자료: '+(' / '.join(origins) or '제공된 데이터')+(' · '+', '.join(ids) if ids else '')
     return caption + (' | 사용자 표기: '+options.source_note if options.source_note else '')

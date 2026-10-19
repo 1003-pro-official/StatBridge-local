@@ -14,7 +14,10 @@ def _boundary(match,end=False):
 
 
 def explicit_period(query, latest=None):
-    text=str(query or '');matches=list(TOKEN.finditer(text))
+    original=str(query or '')
+    # Index base years are metadata, not a second observation endpoint.
+    text=re.sub(r'(?<!\d)(?:19|20)\d{2}\s*(?:년\s*)?[=＝]\s*100(?!\d)',lambda m:' '*len(m[0]),original)
+    matches=list(TOKEN.finditer(text))
     relative = re.search(r'최근\s*(\d{1,2})\s*년', text)
     if relative and not matches and latest:
         end = date.fromisoformat(latest)
@@ -25,15 +28,34 @@ def explicit_period(query, latest=None):
         return {'start': date(year, month+1, 1).isoformat(), 'end': end.isoformat(),
                 'source': 'latest_observation', 'expression': relative[0],
                 'basis': '최신 제공 관측 시점 기준'}
-    if len(matches) == 1:
-        tail = text[matches[0].end():]
-        short = re.match(r'\s*(?:부터|~|～|–)\s*(\d{1,2})\s*월\s*까지', tail)
-        if short and (matches[0]['month'] or matches[0]['im']):
-            start = _boundary(matches[0])
-            year, month = int(matches[0]['year']), int(short[1])
-            end = date(year, month, calendar.monthrange(year, month)[1]).isoformat()
-            if start > end: raise ValueError('텍스트의 시작일이 종료일보다 늦습니다.')
-            return {'start': start, 'end': end, 'source': 'text', 'expression': text[matches[0].start():matches[0].end()+short.end()]}
+    inherited=[]
+    for match in matches:
+        tail=text[match.end():]
+        connector=r'\s*(?:부터|에서|~|～|–|—|to)\s*'
+        short=re.match(connector+r'(\d{1,2})\s*월(?:\s*(\d{1,2})\s*일)?\s*(?:까지|동안|사이)',tail,re.I)
+        if short and (match['month'] or match['im']):
+            year,month=int(match['year']),int(short[1])
+            day=int(short[2]) if short[2] else calendar.monthrange(year,month)[1]
+            end=date(year,month,day).isoformat()
+        else:
+            short=re.match(connector+r'(\d{1,2})\s*일\s*(?:까지|동안|사이)',tail,re.I)
+            if short and (match['day'] or match['iday']):
+                end=date(int(match['year']),int(match['month'] or match['im']),int(short[1])).isoformat()
+            else:
+                short=re.match(connector+r'([1-4])\s*분기\s*(?:까지|동안|사이)',tail,re.I)
+                if not short or not match['quarter']:continue
+                year,month=int(match['year']),int(short[1])*3
+                end=date(year,month,calendar.monthrange(year,month)[1]).isoformat()
+        start=_boundary(match)
+        if start>end:raise ValueError('텍스트의 시작일이 종료일보다 늦습니다.')
+        inherited.append({'start':start,'end':end,'source':'text',
+                          'expression':original[match.start():match.end()+short.end()]})
+    if inherited:
+        # Several comparison periods must not collapse into a single interval.
+        full_pairs=sum(bool(re.fullmatch(connector,text[a.end():b.start()],re.I))
+                       for a,b in zip(matches,matches[1:]))
+        if len(inherited)>1 or full_pairs:return None
+        return inherited[0]
     if not matches:return None
     if len(matches)>2:return None
     if len(matches)==2:

@@ -1,8 +1,8 @@
 import type {QueryResponse} from './types';
 
-export function analysisTimedOut(query:string):QueryResponse {
+export function analysisTimedOut(query:string,timeoutMs=20_000):QueryResponse {
  const result=queryFailure(query,undefined,'');
- return {...result,summary:'20초 안에 분석 결과나 조회 조건 안내가 도착하지 않아 대기를 중단했습니다. 질문과 기존 그래프·표는 유지됩니다.',recovery:{issue:'timeout',question:'지원 통계표를 직접 선택하거나 질문을 구체화해 주세요. 같은 요청을 다시 시도하실 수도 있습니다.',choices:[{id:'table',label:'통계표 직접 선택'},{id:'revise',label:'질문 수정'},{id:'retry',label:'같은 요청 다시 시도'}],preserveState:true}};
+ return {...result,...(timeoutMs>20_000?{analysisKind:'derived' as const}:{}),summary:`${timeoutMs/1000}초 안에 분석 결과나 조회 조건 안내가 도착하지 않아 대기를 중단했습니다. 질문과 기존 그래프·표는 유지됩니다.`,recovery:{issue:'timeout',question:'지원 통계표를 직접 선택하거나 질문을 구체화해 주세요. 같은 요청을 다시 시도하실 수도 있습니다.',choices:[{id:'table',label:'통계표 직접 선택'},{id:'revise',label:'질문 수정'},{id:'retry',label:'같은 요청 다시 시도'}],preserveState:true}};
 }
 
 export function queryFailure(query:string,status:number|undefined,detail:unknown):QueryResponse {

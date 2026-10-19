@@ -1,18 +1,24 @@
 import ReportDraft from "./ReportDraft";
 import SummaryEvidence from "./SummaryEvidence";
+import DerivedEvidence from './DerivedEvidence';
+import {derivedBudget} from './derivedDeadline';
 import {periodTickUpdate} from './periodTicks';
 import {withAnalysisDeadline,AnalysisTimeoutError} from './analysisDeadline';
 import {analysisTimedOut} from './api/queryFailure';
 import {wantsReportTable} from './reportTable';
 import {analysisEntries,type AccountAnalysis} from './analysisLibrary';
 import {automaticOutput} from './automaticOutput';
-import {displayedPeriod,emptyAvailablePeriod,groupSources,resultInsights,titlePeriodMismatch} from './resultPresentation';
+import {displayedPeriod,emptyAvailablePeriod,groupSources,resultInsights,resultSourceLabel,titlePeriodMismatch} from './resultPresentation';
 import QueryRefinementCard from './QueryRefinementCard';
 import exploreExamples from './exploreExamples.json';
 import ExecutionEvidence from './ExecutionEvidence';
 import {panelGeometry,splitPlotAnnotations,resizeVisiblePlot} from './plotPanelLayout';
 import {appendChat,readChat,writeChat,deleteChat,saveChat,savedChats,removeSavedChat,editDescription,type SavedChat} from './graphChat';
 import RecoveryPanel from './RecoveryPanel';
+import DerivedSupplementPanel from './DerivedSupplementPanel';
+import DerivedAvailabilityPanel from './DerivedAvailabilityPanel';
+import DerivedUploadRecovery from './DerivedUploadRecovery';
+import {shouldShowDerivedSupplement} from './derivedAvailability';
 import {accountKey,accountRequest} from './accountApi';
 import {ownsHistory} from './accountScope';
 import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
@@ -440,12 +446,13 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
     <div className="result-grid">
       <article className="panel chart-panel">
         <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length>0&&<button onClick={exportPng}><Icon name="chart" size={17}/> PNG</button>}<button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button><button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
-        {result.chart.length>0?<section className="result-conditions" aria-label="현재 그래프 조회 조건"><div><small>표시된 관측 기간</small><strong>{actualPeriod.start||result.period.start} ~ {actualPeriod.end||result.period.end}</strong></div><div><small>주기 · 계열</small><strong>{[...new Set(result.chart.map(series=>({M:'월별',Q:'분기별',A:'연별',Y:'연별',D:'일별'} as Record<string,string>)[series.frequency||'']||series.frequency||result.frequency))].join(' / ')} · {result.chart.length}개</strong></div><div><small>자료 출처</small><strong>한국은행 · KOSIS</strong></div>{titlePeriodMismatch(String(result.outputSpec?.chartState?.title||editOptions?.title||""),actualPeriod)&&<p role="status">제목에 적힌 기간과 현재 관측 기간이 다릅니다. 현재 자료는 위 관측 기간을 기준으로 확인하고, 필요하면 왼쪽에서 제목을 수정해 주세요.</p>}{result.outputSpec?.cachedSnapshot&&<p>저장 당시 자료를 표시합니다. 최신 관측값은 새로 조회해 주세요.</p>}</section>:<PeriodConfirmation result={result}/>}
+        {result.chart.length>0?<section className="result-conditions" aria-label="현재 그래프 조회 조건"><div><small>표시된 관측 기간</small><strong>{actualPeriod.start||result.period.start} ~ {actualPeriod.end||result.period.end}</strong></div><div><small>주기 · 계열</small><strong>{[...new Set(result.chart.map(series=>({M:'월별',Q:'분기별',A:'연별',Y:'연별',D:'일별',category:'항목별 비교'} as Record<string,string>)[series.frequency||'']||series.frequency||result.frequency))].join(' / ')} · {result.chart.length}개</strong></div><div><small>자료 출처</small><strong>{resultSourceLabel(result)}</strong></div>{titlePeriodMismatch(String(result.outputSpec?.chartState?.title||editOptions?.title||""),actualPeriod)&&<p role="status">제목에 적힌 기간과 현재 관측 기간이 다릅니다. 현재 자료는 위 관측 기간을 기준으로 확인하고, 필요하면 왼쪽에서 제목을 수정해 주세요.</p>}{result.outputSpec?.cachedSnapshot&&<p>저장 당시 자료를 표시합니다. 최신 관측값은 새로 조회해 주세요.</p>}</section>:<PeriodConfirmation result={result}/>}
         {result.outputSpec?.editChanges?.length ? <div className="setup-block" role="status"><strong>수정이 적용되었습니다</strong><ul>{result.outputSpec.editChanges.map((change,index)=><li key={index}>{change}</li>)}</ul></div> : null}
         {!result.editSessionId&&result.warnings?.map((warning, index) => <div className="error-banner" role="status" key={index}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi, "$1[redacted]")}</div>)}
         {!result.editSessionId&&<div className="chart-header"><div><h3>{editOptions?.title||(result.chart.length ? `${chartLabels[result.chartType||'line']} 분석 결과` : "MCP 통계표 탐색 결과")}</h3>{result.chart.length > 0 && editOptions?.showLegend!==false && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>}
         {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor preferTable={wantsReportTable(result.query)} onEvidence={()=>setEvidenceOpen(true)} warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
         {insights.observations.length>0&&<div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{insights.observations.map((x,index) => <li key={`${index}-${x}`}>{x}</li>)}</ul></div>}
+        <DerivedEvidence key={result.derivedEvidence?.calculationId} result={result}/>
         <details className="workspace-analysis-summary" open><summary>관측 요약</summary><div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div><SummaryEvidence result={result}/>{result.editSessionId&&<ReportDraft key={`${result.editSessionId}-${result.outputSpec?.editVersion??0}`} sessionId={result.editSessionId} revision={result.outputSpec?.editVersion??0}/>}</details>
         {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><div><h3>{allDataOpen?"전체 데이터":"주요 데이터 예시"}</h3><p>{allDataOpen?"조회된 모든 관측치를 표시합니다.":"각 계열의 시작과 최근 값을 간략히 보여줍니다."}</p></div><span>전체 {allRows.length}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{visibleRows.map(({series,point}) => <tr key={`${series.id}-${point.date}`}><td>{series.label}</td><td>{point.date}</td><td>{point.value.toLocaleString()} {series.unit}</td></tr>)}</tbody></table>{allRows.length>previewRows.length&&<div className="data-more"><span>{allDataOpen?`전체 ${allRows.length}개를 표시 중입니다.`:`${previewRows.length}개 예시만 표시 중입니다.`}</span><button type="button" aria-expanded={allDataOpen} onClick={()=>setAllDataOpen((current)=>!current)}>{allDataOpen?"간략히 보기":`전체 데이터 더 보기 (${allRows.length}개)`}<Icon name="chevron" size={14}/></button></div>}</div>}
       </article>
@@ -480,6 +487,7 @@ export default function App() {
   const retryAction=useRef<(()=>void)|null>(null);
   const runCachedOutput=async(payload:OutputRenderRequest)=>{setLoading(true);setError('');try{showResult(await submitOutput(payload));}catch(e){if(e instanceof AnalysisTimeoutError)setFailedQuery(analysisTimedOut(lastQueryRequest.current?.query||query));else setError(e instanceof Error?e.message:'그래프를 만들지 못했습니다. 다시 시도해 주세요.');}finally{setLoading(false);}};
   const trackedQuery=async(payload:QueryRequest)=>{
+    const budget=derivedBudget(payload.query,payload.state);
     setPendingOutput(null);lastQueryRequest.current=payload;retryAction.current=()=>void runQuery(payload);
     try{return await withAnalysisDeadline(async signal=>{
     const data=await submitQuery(payload,signal);if(signal.aborted)throw new AnalysisTimeoutError();const output=automaticOutput(data);
@@ -490,7 +498,7 @@ export default function App() {
       const message=e instanceof Error?e.message:'기본 그래프를 만들지 못했습니다.';
       return {...data,summary:'조회된 자료는 유지됩니다. 아래에서 지원되는 그래프를 선택해 주세요.',warnings:[...(data.warnings||[]),message]};
     }
-    });}catch(e){if(e instanceof AnalysisTimeoutError)return analysisTimedOut(payload.query);throw e;}
+    },undefined,budget);}catch(e){if(e instanceof AnalysisTimeoutError)return analysisTimedOut(payload.query,budget);throw e;}
   };
   const runQuery=async(payload:QueryRequest)=>{setLoading(true);setError('');try{showResult(await trackedQuery(payload));}catch(e){setError(e instanceof Error?e.message:String(e));}finally{setLoading(false);}};
 
@@ -616,7 +624,7 @@ export default function App() {
       const current=liveResult.current||result;if(!targetSession||current?.editSessionId!==targetSession)return false;
       if(current.outputSpec?.chatReadOnly)throw new Error('서버 세션이 만료된 저장 그래프입니다. 새 채팅에서 통계를 다시 조회해 주세요.');
       setLoading(true);setError("");
-      try { const updated=await submitOutputEdit({edit_session_id:current.editSessionId,revision:current.outputSpec?.editVersion,...input});if(liveResult.current?.editSessionId!==current.editSessionId)return false;appendChat(current.editSessionId,{role:'assistant',kind:'edit',text:editDescription(current,updated,input.action)});showResult(updated,true); return true; }
+      try { const updated=await submitOutputEdit({edit_session_id:current.editSessionId,revision:current.outputSpec?.editVersion,...input},!!current.derivedEvidence);if(liveResult.current?.editSessionId!==current.editSessionId)return false;appendChat(current.editSessionId,{role:'assistant',kind:'edit',text:editDescription(current,updated,input.action)});showResult(updated,true); return true; }
       catch(err){
         if(err instanceof EditConflictError){
           try{const latest=await fetchWorkspace(current.editSessionId);if(liveResult.current?.editSessionId===current.editSessionId)showResult(latest,true);}
@@ -689,7 +697,10 @@ export default function App() {
       <Header view={view} goHome={goHome} selectView={navigateView} busy={loading}/>
       {view === "lineage" ? <DataCatalog onQuery={queryCatalogTable} loading={loading}/> : <main id="main-content" tabIndex={-1}>
         <Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/>
-        {(error||failedQuery)&& (failedQuery?.requiresQueryRefinement?<QueryRefinementCard result={failedQuery} busy={loading} onSubmit={text=>{setQuery(text);void runQuery(initialQueryRequest(text));}}/>:<RecoveryPanel message={error||failedQuery?.summary||''} result={failedQuery||result} busy={loading} retry={()=>{if(retryAction.current)retryAction.current();else void runQuery(initialQueryRequest(result?.query||query));}} onRevise={()=>document.getElementById('statistics-query')?.focus()} selectPeriod={(start,end)=>{const last=lastQueryRequest.current;void runQuery({...last||initialQueryRequest(result?.query||query),period_start:start,period_end:end,execute:true});}} selectTable={table=>{const last=lastQueryRequest.current;const next={query:`${table.tableId} ${table.name}`,execute:true,...(/^\d{4}-\d{2}-\d{2}$/.test(last?.period_start||failedQuery?.period?.start||'')?{period_start:last?.period_start||failedQuery?.period?.start,period_end:last?.period_end||failedQuery?.period?.end}:{})};setQuery(next.query);void runQuery(next);}}/>)}
+        {(error||failedQuery)&&!failedQuery?.availability&& !(failedQuery?.supplement&&(failedQuery.supplement.missing.length>0||failedQuery.supplement.uploaded.length>0))&& (failedQuery?.requiresQueryRefinement?<QueryRefinementCard result={failedQuery} busy={loading} onSubmit={text=>{setQuery(text);void runQuery(initialQueryRequest(text));}}/>:<RecoveryPanel message={error||failedQuery?.summary||''} result={failedQuery||result} busy={loading} retry={()=>{if(retryAction.current)retryAction.current();else void runQuery(initialQueryRequest(result?.query||query));}} onRevise={()=>document.getElementById('statistics-query')?.focus()} selectPeriod={(start,end)=>{const last=lastQueryRequest.current;void runQuery({...last||initialQueryRequest(result?.query||query),period_start:start,period_end:end,execute:true});}} selectTable={table=>{const last=lastQueryRequest.current;const next={query:`${table.tableId} ${table.name}`,execute:true,...(/^\d{4}-\d{2}-\d{2}$/.test(last?.period_start||failedQuery?.period?.start||'')?{period_start:last?.period_start||failedQuery?.period?.start,period_end:last?.period_end||failedQuery?.period?.end}:{})};setQuery(next.query);void runQuery(next);}}/>)}
+        {!failedQuery&&!result&&<DerivedUploadRecovery open={showResult}/>}
+        {shouldShowDerivedSupplement(failedQuery)&&failedQuery&&<DerivedSupplementPanel key={failedQuery.supplement?.workspaceId||failedQuery.query} result={failedQuery} onResult={async data=>{const output=automaticOutput(data);showResult(output?await submitOutput(output):data);}}/>}
+        {failedQuery?.availability&&<DerivedAvailabilityPanel key={failedQuery.query} result={failedQuery} onResult={async data=>{showResult(data);window.setTimeout(()=>document.querySelector('.ds-panel')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}} busy={loading} retry={()=>void runQuery(initialQueryRequest(failedQuery.query))} confirm={answer=>{const next=failedQuery.query+'\n추가 조건: '+answer+'\n아직 계산하지 말고 원자료 확인만 이어가 주세요.';setQuery(next);void runQuery(initialQueryRequest(next));}}/>}
         {result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification} advance={trackedQuery} onResult={showResult}/>}
         {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>}
         {(pendingOutput||result?.status === "need_output_config") && <OutputConfigPanel result={pendingOutput||result!} loading={loading} submit={renderSelectedOutput}/>}

@@ -26,6 +26,7 @@ if str(MCP_ROOT) not in sys.path:
     sys.path.insert(0, str(MCP_ROOT))
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -37,7 +38,7 @@ from output_schema import VisualEditContext, ChartSpec, ChartSticker, ChartEditC
 from advanced_chart_spec import ReportOptions, TEMPLATES
 from request_match_guard import structure_request, catalog_mentions, unsupported_quantity_terms
 from request_period import explicit_period
-from chart_edit_period import revise_period
+from chart_edit_period import revise_period, period_redraw
 from canonical_request_planner import instruction_text
 
 
@@ -84,6 +85,22 @@ except RuntimeError as exc:
 mcp_gateway = McpToolGateway(service)
 agent = StatBridgeAgent(service=mcp_gateway)
 from openai_chart_client import OpenAIChartClient, OpenAIEditModel
+from derived_indicator_runtime import DerivedIndicatorRuntime
+from derived_indicator_planner import is_derived_request, is_availability_check
+from derived_intent_router import is_calculation_edit
+agent.workflow.derived_runtime = DerivedIndicatorRuntime(
+    mcp_gateway, OpenAIChartClient(model='gpt-5.4'), ROOT / 'runtime_data' / 'derived_evidence')
+if getattr(service.client,'api_key',None):
+    from live_derived_catalog import LiveDerivedCatalog
+    live_derived_catalog=LiveDerivedCatalog(service.store,service.client)
+    agent.workflow.derived_runtime.catalog=live_derived_catalog
+    agent.workflow.derived_runtime.planner.catalog=live_derived_catalog
+    from derived_api_inventory import DerivedApiInventory
+    agent.workflow.derived_runtime.api_inventory=DerivedApiInventory(live_derived_catalog,ROOT/'runtime_data/derived_api_inventory')
+else:
+    agent.workflow.derived_runtime.availability_unconfigured=True
+from derived_supplement import DerivedSupplementService
+derived_supplements=DerivedSupplementService(agent.workflow.derived_runtime,Path(os.getenv('STATBRIDGE_DERIVED_SUPPLEMENT_DIR',str(ROOT/'runtime_data'/'derived_supplements'))))
 from chart_reference import ChartReference
 if os.getenv('STATBRIDGE_OUTPUT_PROVIDER', 'openai') == 'ncp':
     edit_agent = ChartEditAgent(Hcx007EditModel(agent.ncp), agent.output_agent)
@@ -134,6 +151,7 @@ class EditConversationMessage(BaseModel):
 
 
 class OutputEditRequest(BaseModel):
+    derived_node_patch: dict[str, Any] | None = None
     reference_files: list[ChartReference] = Field(default_factory=list, max_length=3)
     edit_session_id: str
     instruction: str = Field(default="", max_length=1000)
@@ -151,6 +169,24 @@ class OutputEditRequest(BaseModel):
     restore_initial: bool = False
     undo_property: Literal['title','subtitle','legend_position','series_color'] | None = None
     property_label: str | None = Field(default=None,max_length=300)
+
+
+class DerivedDataRequest(BaseModel):
+    edit_session_id: str
+    offset: int = Field(default=0, ge=0)
+    limit: int = Field(default=200, ge=1, le=1000)
+
+
+@app.post('/api/output/derived-data')
+def derived_data(payload: DerivedDataRequest):
+    session = EDIT_SESSIONS.get(payload.edit_session_id)
+    if not session or not session['result'].get('_derived'):
+        raise HTTPException(status_code=404, detail='파생지표 계산 근거를 찾을 수 없습니다.')
+    record = session['result']['_derived']['record']
+    return {'sources': [{'alias': alias, 'total': len(source['rows']),
+                         'rows': source['rows'][payload.offset:payload.offset + payload.limit]}
+                        for alias, source in record['source_data'].items()],
+            'plan': record['plan'], 'bounds': record['bounds']}
 
 
 @app.get('/api/chart/designs')
@@ -343,6 +379,8 @@ EDIT_LOCK = RLock()
 
 
 def _table_card(table_id: str) -> dict[str, str]:
+    if table_id.startswith('USER_FILE:'):
+        return {'tableId':table_id,'name':'사용자 업로드 · '+table_id.split(':',1)[1],'source':'사용자 제공 자료 (KOSIS 자료 아님)','item':'파일 관측값','unit':'계산 근거 참조'}
     try:
         meta = service.get_table_metadata(table_id, live_period_fallback=False)
         items = meta.get("items") or []
@@ -485,6 +523,10 @@ def _ui_period(value: str | None, frequency: str, *, end: bool = False) -> str |
     if len(digits) < 4:
         return None
     year = int(digits[:4])
+    if frequency == 'D':
+        from expression_tree_validator import period_index
+        period_index(digits, 'D')
+        return f'{digits[:4]}-{digits[4:6]}-{digits[6:]}'
     if frequency == "M":
         month = max(1, min(12, int(digits[4:6] or "1") if len(digits) >= 6 else 1))
         day = calendar.monthrange(year, month)[1] if end else 1
@@ -600,12 +642,241 @@ def health() -> dict[str, Any]:
     }
 
 
+def _query_derived(payload):
+    q = payload.query.strip()
+    result = agent.workflow.invoke(query=q, conversation_state=payload.state, execute=payload.execute,
+        start_period=payload.period_start, end_period=payload.period_end,
+        generate_answer=False, output_request=None)
+    from derived_support_policy import assessment_scope
+    assessment=result.get('availability') or {}
+    if (not is_availability_check(q) and assessment_scope(assessment)=='mixed'
+            and not assessment.get('questions')):
+        outcome=derived_supplements.from_assessment(account_auth.current_user()['id'],result.get('query') or q,assessment)
+        if outcome.get('supplement'):return outcome
+        # Keep original source checks and clarification when file preparation is not ready.
+    if not is_availability_check(q) and not result.get('derivedEvidence') and (result.get('missing') or result.get('failure_stage')=='execute_derived_sources') and agent.workflow.derived_runtime.planner.client.configured:
+        try:
+            outcome=derived_supplements.start(account_auth.current_user()['id'],result.get('query') or q,payload.period_start,payload.period_end,
+                planning=result if result.get('status')=='inputs_required' else None)
+            if outcome.get('status')!='calculated':return outcome
+            result=outcome['result']
+        except (ValueError,TypeError,KeyError) as exc:
+            result['question']=(result.get('question') or '')+' 파일 보완 준비를 완료하지 못했습니다: '+str(exc)
+    return _derived_query_response(payload,result)
+
+
+def _runtime_for_derived(result):
+    identifier=(result.get('_derived') or {}).get('supplemental_workspace_id')
+    if not identifier:return agent.workflow.derived_runtime
+    w=derived_supplements.load(account_auth.current_user()['id'],identifier)
+    # Pin this graph to the immutable file content used in its own receipt.
+    # A later corrected upload in the same workspace must not alter old graphs.
+    w=copy.deepcopy(w)
+    for source in result['derivedEvidence']['plan']['sources']:
+        if source['table_id'].startswith('USER_FILE:'):
+            stored=result['_derived']['responses'][source['alias']]
+            w['files'][source['table_id'].split(':',1)[1]]={**stored,'required_data':source['required_data']}
+    return derived_supplements.runtime(w)
+
+
+def _derived_query_response(payload,result):
+    q=payload.query.strip()
+    common = {'query': q, 'interpretedQuery': q, 'period': {'start': payload.period_start or '', 'end': payload.period_end or ''},
+              'frequency': '', 'chart': [], 'tables': [], 'insights': [], 'lineage': [], 'warnings': [],
+              'analysisKind': 'derived', 'state': result.get('state') or {}}
+    from derived_support_policy import assessment_scope, unsupported
+    if result.get('availability') and assessment_scope(result['availability'])=='unsupported':
+        result={**result,**unsupported(q),'availability':result['availability']}
+    if result.get('unsupported'):
+        question = result['question']
+        return {**common, 'status':'need_details', 'state':{}, 'summary':question,
+                **({'availability':result['availability']} if result.get('availability') else {}),
+                'recovery':{'issue':'unsupported','question':question,
+                            'choices':[{'id':'revise','label':'질문 다시 작성'}], 'preserveState':True}}
+    if not result.get('derivedEvidence'):
+        question = result.get('question') or '파생지표 계산에 필요한 자료와 조건을 확인해 주세요.'
+        if result.get('availability'):
+            assessment=result['availability']
+            user=account_auth.USER.get()
+            if user:
+                check_id=uuid4().hex
+                if len(DERIVED_SOURCE_CHECKS)>=100:DERIVED_SOURCE_CHECKS.pop(next(iter(DERIVED_SOURCE_CHECKS)))
+                DERIVED_SOURCE_CHECKS[check_id]={'owner':user['id'],'query':q,'assessment':copy.deepcopy(assessment),'created':time.time()}
+                assessment={**assessment,'checkId':check_id}
+            return {**common,'status':'need_details','summary':question,'availability':assessment,
+                'recovery':{'issue':'source_verification' if assessment['status']!='checked' else 'clarification',
+                    'question':'확인 중인 자료는 부족 자료로 단정하지 않습니다.' if assessment['status']!='checked' else '계산 기준을 답해 주시면 같은 요청을 이어갑니다.',
+                    'choices':[{'id':'retry','label':'자료 확인 다시 시도'}] if assessment['status']!='checked' else [{'id':'revise','label':'계산 조건 답하기'}],
+                    'preserveState':True}}
+        if result.get('failure_kind') in {'model_provider_error','model_response_error'}:
+            return {**common,'status':'request_failed','summary':question,
+                'failure_kind':result['failure_kind'],'failure_stage':result.get('failure_stage'),
+                'recovery':{'issue':'model','question':'원자료가 없다는 판정이 아니라 분석 모델의 응답 처리 문제입니다. 입력과 현재 작업을 유지했으니 같은 요청을 다시 시도해 주세요.',
+                            'choices':[{'id':'retry','label':'같은 요청 다시 시도'},{'id':'revise','label':'질문 수정'}],'preserveState':True}}
+        return {**common, 'status': 'data_unavailable' if result.get('status') == 'data_unavailable' else 'need_details',
+                'summary': question, 'missingData': result.get('missing', []), 'catalogSearches': result.get('searches', []),
+                'recovery': {'issue': 'derived_data', 'question': question,
+                             'requirements': [x['required_data'] for x in result.get('missing', [])],
+                             'choices': [{'id': 'revise', 'label': '계산 조건 입력'}], 'preserveState': True}}
+    evidence = result['derivedEvidence']
+    plan = evidence['plan']
+    frequency = plan['sources'][0]['frequency']
+    period = {'start': _ui_period(plan['start_period'], frequency), 'end': _ui_period(plan['end_period'], frequency, end=True)}
+    session_id = uuid4().hex
+    if len(OUTPUT_SESSIONS) >= MAX_EDIT_SESSIONS:
+        OUTPUT_SESSIONS.pop(next(iter(OUTPUT_SESSIONS)))
+    OUTPUT_SESSIONS[session_id] = {'created': time.time(), 'result': result, 'query': q,
+        'account_id': (account_auth.USER.get() or {}).get('id'), 'table_name': plan['indicator_name'],
+        'frequency': plan['sources'][0]['frequency'], 'period': period,
+        'available_period': {'min': period['start'], 'max': period['end']}, 'adjusted_period': False,
+        'resolve_ms': 0, 'execute_ms': 0}
+    inspection = agent.output_agent.inspect(result)
+    has_file=any(s.get('origin')=='user_file' for s in evidence['sourceSelections'])
+    has_api=any(s.get('origin')=='kosis_api' for s in evidence['sourceSelections'])
+    source_label='API·사용자 파일로' if has_file and has_api else '사용자 제공 파일로' if has_file else 'KOSIS 원자료로'
+    return {**common, 'status': 'need_output_config', 'summary': source_label+' 파생지표 계산을 완료했습니다. 그래프 종류를 선택해 주세요.',
+            'period': period, 'frequency': plan['sources'][0]['frequency'], 'outputSessionId': session_id,
+            'outputOptions': inspection, 'seriesCount': inspection['seriesCount'], 'derivedEvidence': evidence,
+            'tables': [_table_card(s['table_id']) for s in plan['sources']],
+            'warnings': [f"결측·계산 불가 {len(evidence['issues'])}건의 시점별 근거가 기록되었습니다."] if evidence['issues'] else []}
+
+
+class SupplementStartRequest(BaseModel):
+    query:str=Field(min_length=1,max_length=8000)
+    period_start:str|None=None
+    period_end:str|None=None
+
+
+DERIVED_SOURCE_CHECKS={}
+
+
+class SupplementCheckRequest(BaseModel):
+    check_id:str=Field(pattern=r'^[a-f0-9]{32}$')
+
+
+class ComparisonSeriesDeclaration(BaseModel):
+    model_config={'extra':'forbid'}
+    alias:str=Field(pattern=r'^[a-z][a-z0-9_]{0,47}$')
+    label:str=Field(min_length=1,max_length=100)
+    direction:Literal['direct','inverse']
+
+
+class SupplementComparisonRequest(BaseModel):
+    model_config={'extra':'forbid'}
+    periods:list[dict[str,str]]=Field(min_length=2,max_length=4)
+    series:list[ComparisonSeriesDeclaration]=Field(min_length=1,max_length=12)
+    average_aliases:list[str]=Field(min_length=1,max_length=12)
+    complete_observations_confirmed:bool
+
+
+class SupplementUploadRequest(BaseModel):
+    alias:str=Field(pattern=r'^[a-z][a-z0-9_]{0,47}$')
+    filename:str=Field(min_length=1,max_length=120)
+    content:str=Field(max_length=2_700_000)
+    encoding:Literal['utf8','base64']='utf8'
+
+
+def _supplement_call(action):
+    try:
+        outcome=action()
+        if outcome.get('status')=='calculated':
+            return _derived_query_response(QueryRequest(query=outcome['result']['query']),outcome['result'])
+        return outcome
+    except KeyError:
+        raise HTTPException(404,'자료 보완 작업을 찾을 수 없습니다.') from None
+    except ValueError as exc:
+        raise HTTPException(422,str(exc)) from None
+
+
+@app.post('/api/derived/supplement')
+def start_derived_supplement(payload:SupplementStartRequest):
+    return _supplement_call(lambda:derived_supplements.start(account_auth.current_user()['id'],payload.query,payload.period_start,payload.period_end))
+
+
+@app.get('/api/derived/supplement')
+def list_derived_upload_workspaces():
+    owner=account_auth.current_user()['id'];parent=derived_supplements.directory/('user-'+str(owner))
+    workspaces=[]
+    for path in sorted(parent.glob('*/workspace.json'),key=lambda p:p.stat().st_mtime,reverse=True)[:20]:
+        w=derived_supplements.load(owner,path.parent.name)
+        if w.get('prefetched') and (w.get('files') or w.get('missing')):
+            workspaces.append({'workspaceId':w['id'],'query':w['query'],'uploaded':len(w['files']),'missing':len(w['missing'])})
+    return {'items':workspaces}
+
+
+@app.get('/api/derived/supplement/{identifier}')
+def restore_derived_upload_workspace(identifier:str):
+    return _supplement_call(lambda:derived_supplements.public(derived_supplements.load(account_auth.current_user()['id'],identifier)))
+
+
+@app.post('/api/derived/supplement/from-check')
+def supplement_from_check(payload:SupplementCheckRequest):
+    owner=account_auth.current_user()['id'];checked=DERIVED_SOURCE_CHECKS.get(payload.check_id)
+    if not checked or checked['owner']!=owner or time.time()-checked['created']>3600:
+        raise HTTPException(404,'자료 확인 세션이 만료됐습니다. 같은 질문으로 다시 확인해 주세요.')
+    if checked.get('workspace_id'):
+        return derived_supplements.public(derived_supplements.load(owner,checked['workspace_id']))
+    outcome=_supplement_call(lambda:derived_supplements.from_assessment(owner,checked['query'],checked['assessment']))
+    if outcome.get('supplement'):checked['workspace_id']=outcome['supplement']['workspaceId']
+    return outcome
+
+
+@app.post('/api/derived/supplement/{identifier}/comparison')
+def configure_supplement_comparison(identifier:str,payload:SupplementComparisonRequest):
+    return _supplement_call(lambda:derived_supplements.configure_comparison(account_auth.current_user()['id'],identifier,payload.model_dump()))
+
+
+@app.get('/api/derived/supplement/{identifier}/template/{alias}')
+def derived_supplement_template(identifier:str,alias:str,format:Literal['csv','json','tsv']='csv'):
+    try:
+        text=derived_supplements.template(account_auth.current_user()['id'],identifier,alias,format)
+        media={'csv':'text/csv; charset=utf-8','json':'application/json','tsv':'text/tab-separated-values; charset=utf-8'}[format]
+        return Response(text,media_type=media,headers={'Content-Disposition':f'attachment; filename="{alias}.{format}"','Cache-Control':'no-store'})
+    except KeyError:raise HTTPException(404,'자료 보완 작업을 찾을 수 없습니다.') from None
+    except ValueError as exc:raise HTTPException(422,str(exc)) from None
+
+
+@app.post('/api/derived/supplement/{identifier}/upload')
+def upload_derived_supplement(identifier:str,payload:SupplementUploadRequest):
+    return _supplement_call(lambda:derived_supplements.upload(account_auth.current_user()['id'],identifier,payload.alias,payload.filename,payload.content,payload.encoding))
+
+
+@app.post('/api/derived/supplement/{identifier}/resume')
+def resume_derived_supplement(identifier:str):
+    return _supplement_call(lambda:derived_supplements.resume(account_auth.current_user()['id'],identifier))
+
+
+def _derived_output_spec(original, revised, previous):
+    spec = ChartSpec.model_validate(previous['chartState'])
+    old_plan, new_plan = original['derivedEvidence']['plan'], revised['derivedEvidence']['plan']
+    old_outputs, new_outputs = old_plan['outputs'], new_plan['outputs']
+    by_node = {out['node']: out['label'] for out in new_outputs}
+    mapping = {out['label']: by_node[out['node']] for out in old_outputs if out['node'] in by_node}
+    if len(old_outputs) == len(new_outputs):
+        for old, new in zip(old_outputs, new_outputs):
+            mapping.setdefault(old['label'], new['label'])
+    labels = {out['label'] for out in new_outputs}
+    changes = {}
+    if spec.title == old_plan['indicator_name']:
+        changes['title'] = new_plan['indicator_name']
+    for field in ('series_colors', 'series_dashes', 'series_styles', 'display_names', 'series_chart_types'):
+        changes[field] = {mapping.get(key, key): value for key, value in getattr(spec, field).items()
+                          if mapping.get(key, key) in labels}
+    for field in ('hidden_series', 'series_order', 'secondary_axis_series'):
+        changes[field] = [mapping.get(key, key) for key in getattr(spec, field) if mapping.get(key, key) in labels]
+    changes['range_styles'] = [style.model_copy(update={'label': mapping.get(style.label, style.label)})
+                              for style in spec.range_styles if mapping.get(style.label, style.label) in labels]
+    return spec.model_copy(update=changes)
+
+
 @app.post("/api/query")
 def query(payload: QueryRequest) -> dict[str, Any]:
     request_started = time.perf_counter()
     q = payload.query.strip()
     if not q:
         raise HTTPException(status_code=400, detail="query is required")
+    if is_derived_request(q) or (payload.state or {}).get('_derived_query'):
+        return _query_derived(payload)
 
     # Resolve the table first. Numeric execution waits until the user has
     # explicitly chosen the chart period.
@@ -974,6 +1245,9 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
 
     base = sessions[0]
     results = [session["result"] for session in sessions]
+    derived = any(result.get('derivedEvidence') for result in results)
+    if derived and len(results) != 1:
+        raise HTTPException(status_code=422, detail='파생지표는 한 계산 계획씩 출력해 주세요. 비교는 같은 질문에서 요청할 수 있습니다.')
     output_periods = {}
     for session in sessions:
         plans = session["result"].get("api_plans") or [session["result"].get("api_plan")]
@@ -982,11 +1256,15 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
             _api_period(session["period"]["end"], str(plan["frequency"]), end=True),
         ) for plan in plans if plan and session.get("period")}
         output_periods.update(confirmed_periods)
+        if session['result'].get('derivedEvidence'):
+            from expression_tree_schema import ExpressionPlan
+            _runtime_for_derived(session['result']).validate(ExpressionPlan.model_validate(session['result']['derivedEvidence']['plan']))
+            continue
         checked = agent.validate_resolution(str(session["query"]), session["result"], confirmed_periods=confirmed_periods)
         if checked.get("status") != "resolved":
             raise HTTPException(status_code=422, detail="요청과 통계표가 일치하지 않습니다. 다시 검색해 주세요.")
     output_intent=structure_request(payload.natural_language or '')
-    if payload.natural_language and (output_intent['metrics'] or output_intent['explicit_ids']
+    if not derived and payload.natural_language and (output_intent['metrics'] or output_intent['explicit_ids']
             or catalog_mentions(payload.natural_language,agent.tables_by_id.values())
             or unsupported_quantity_terms(payload.natural_language,agent.tables_by_id.values())):
         # Each session's clarification constraints were checked above. They belong
@@ -1018,6 +1296,9 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
         "y_axis_label": payload.y_axis_label,
         "natural_language": payload.natural_language or " · ".join(str(session["query"]) for session in sessions),
     }
+    if derived:
+        output_request.update(quick_output=True, natural_language='',
+                              title=payload.title or results[0]['derivedEvidence']['plan']['indicator_name'])
     try:
         rendered = agent.render_output(merged, output_request)
     except ValueError as exc:
@@ -1044,6 +1325,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
     warnings.extend(output.get('warnings') or [])
     response = {
         "status": "resolved",
+        **({'analysisKind': 'derived', 'derivedEvidence': merged['derivedEvidence']} if derived else {}),
         "periodSelection": base.get("periodSelection"),
         "query": " · ".join(str(session["query"]) for session in sessions),
         "interpretedQuery": table_name,
@@ -1103,7 +1385,13 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         payload.visual = (payload.visual or VisualEditContext()).model_copy(update={'reference_files':payload.reference_files})
     period_update=None
     try:
+        if payload.derived_node_patch and (not candidate_result.get('_derived') or payload.instruction or payload.commands or payload.document or payload.action != 'edit' or payload.restore_initial):
+            raise ValueError('계산 노드 수정은 파생지표에서 다른 수정과 분리해 요청해 주세요.')
+        if candidate_result.get('_derived') and any(c.operation in {'set_transform'} for c in payload.commands):
+            raise ValueError('파생지표 계산 조건은 자연어 또는 계산 노드 수정으로 변경해 주세요.')
         data_change=bool(payload.append_session_ids or payload.replace_session_ids)
+        if candidate_result.get('_derived') and data_change:
+            raise ValueError('파생지표 비교 항목은 자연어로 요청해 원자료와 계산식을 함께 검증해 주세요.')
         if sum([data_change,payload.restore_initial,bool(payload.undo_property)])>1:raise ValueError('데이터 변경·복원·개별 취소를 따로 실행해 주세요.')
         if (data_change or payload.restore_initial or payload.undo_property) and (payload.action!='edit' or payload.instruction or payload.commands or payload.report or payload.clear_report or payload.document or payload.visual or payload.stickers is not None):
             raise ValueError('데이터 변경·원본 복원은 다른 수정과 분리해 실행하세요.')
@@ -1175,6 +1463,21 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
                 [ChartEditCommand(operation="set_stickers", kind="STYLE_EDIT",
                     params={"items": [s.model_dump() for s in payload.stickers]})], generate_explanation=False)
             output["editCapabilities"] = previous.get("editCapabilities", {})
+        elif payload.action == "edit" and candidate_result.get('_derived') and (
+                payload.derived_node_patch or is_calculation_edit(payload.instruction)):
+            if payload.reference_files or (payload.visual and (payload.visual.marks or payload.visual.reference_files or
+                                                                payload.visual.graph_image or payload.visual.marked_image)):
+                raise ValueError('계산 조건 수정과 그림·첨부 수정을 나누어 요청해 주세요.')
+            period = explicit_period(payload.instruction) or {}
+            period_only = period_redraw(payload.instruction)
+            revised = _runtime_for_derived(candidate_result).revise(candidate_result,
+                instruction=payload.instruction if not payload.derived_node_patch and not (period_only and period_only.get('only_period')) else None,
+                node_patch=payload.derived_node_patch, start=period.get('start'), end=period.get('end'))
+            output = agent.output_agent._build(revised, _derived_output_spec(candidate_result, revised, previous), generate_explanation=False)
+            candidate_result = revised
+            plan = revised['derivedEvidence']['plan']
+            candidate_sessions = [{**s, 'result': revised, 'period': {'start': _ui_period(plan['start_period'], plan['sources'][0]['frequency']), 'end': _ui_period(plan['end_period'], plan['sources'][0]['frequency'], end=True)},
+                                   'table_name': plan['indicator_name'], 'frequency': plan['sources'][0]['frequency']} for s in session['sessions']]
         elif payload.action == "edit":
             period_update=revise_period(session,payload.instruction,agent.output_agent,agent.execute_resolution,_availability_from_plans,_api_period)
             if period_update:
@@ -1241,6 +1544,7 @@ def workspace_response(session,payload,period_update=None):
     ends = sorted(str(item["period"]["end"]) for item in sessions)
     return {
         "status": "resolved",
+        **({'analysisKind': 'derived', 'derivedEvidence': merged['derivedEvidence']} if merged.get('derivedEvidence') else {}),
         "query": " · ".join(str(item["query"]) for item in sessions),
         "interpretedQuery": " · ".join(str(item["table_name"]) for item in sessions),
         "summary": output.get("summary") or "",

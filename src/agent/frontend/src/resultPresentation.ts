@@ -1,5 +1,11 @@
 import type {ChartSeries, QueryResponse, SelectedTable} from './api/types';
 
+export function resultSourceLabel(result:Pick<QueryResponse,'derivedEvidence'>):string {
+ const selections=result.derivedEvidence?.sourceSelections||[];
+ if(!selections.some(s=>s.origin==='user_file'))return '한국은행 · KOSIS';
+ return selections.every(s=>s.origin==='user_file')?'사용자 제공 파일':'API·사용자 제공 파일';
+}
+
 // Observation codes are interpreted using each series' own frequency.
 export function observationDate(code:string, frequency:string|undefined, end=false):string {
  const value=code.replace(/[-/]/g,'');
