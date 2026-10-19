@@ -54,7 +54,8 @@ class OutputAgent:
     data shaping and edit options; the frontend only renders the returned spec.
     """
 
-    palette = ["#4568ff", "#ff805e", "#24a47c", "#9a62df", "#e3a52b", "#2aa7c9"]
+    palette = ["#4568ff", "#ff805e", "#24a47c", "#9a62df", "#e3a52b", "#2aa7c9",
+               "#8c564b", "#d857a8", "#607d8b", "#a3a527", "#5b8c5a", "#2d4472"]
 
     def __init__(self, ncp_client: Any | None = None) -> None:
         self.ncp_client = ncp_client
@@ -237,6 +238,8 @@ class OutputAgent:
         return shaped
 
     def _build(self, result: dict[str, Any], spec: ChartSpec, generate_explanation: bool = True) -> dict[str, Any]:
+        if result.get('derivedEvidence') and spec.transform != 'raw':
+            raise ValueError('파생지표의 계산 조건은 자연어 요청 또는 계산 트리에서 수정해 주세요.')
         validation = result.get("request_validation")
         if validation is not None and validation.get("valid") is not True:
             raise ValueError("요청과 통계표가 일치하지 않아 그래프 출력을 중단했습니다.")
@@ -246,9 +249,16 @@ class OutputAgent:
             raise ValueError("검증 이후 출력 통계표가 변경되었습니다.")
         for row in (result.get("execution") or {}).get("rows") or []:
             source = row.get("_SOURCE_SERIES_ID") or row.get("TBL_ID")
+            if result.get('derivedEvidence'):
+                from derived_indicator_runtime import validate_derived_output_row
+                validate_derived_output_row(result, row, planned_ids)
+                continue
             if planned_ids and source and str(source) not in planned_ids:
                 raise ValueError("출력 자료의 출처가 요청한 통계표와 다릅니다.")
         source_series = self._series((result.get("execution") or {}).get("rows") or [])
+        from derived_period_comparison import output_series, comparison_plan, decorate_figure
+        source_series = output_series(result,source_series)
+        comparison = comparison_plan(result)
         for item in source_series:
             matching = [p for p in plans if str(p.get('table_id')) == item.get('sourceId')]
             if not matching and len(plans) == 1:
@@ -283,7 +293,7 @@ class OutputAgent:
         mixed_frequency = len({s["frequency"] for s in series if s["frequency"]}) > 1
         if not spec.report and (mixed_frequency or (mixed_units and not spec.secondary_axis_series)) and spec.layout == "combined" and spec.chart_type not in {"scatter", "bubble"}:
             raise ValueError(combined_layout_reason(series))
-        summary = self._summary(summary_series)
+        summary = '업로드한 원자료와 확인한 기간·방향·평균 대상으로 변화율을 계산했습니다.' if comparison else self._summary(summary_series)
         renderer_info={}
         if spec.report:
             from advanced_chart_render import plotly_report, echarts_report, report_warnings
@@ -311,14 +321,23 @@ class OutputAgent:
                 native.add_annotation(name='statbridge-footer:source',x=0,y=-.1,xref='paper',yref='paper',text=source_caption(result,SimpleNamespace(source_note='')),showarrow=False,font=dict(size=11,color='#657586'))
                 arrange_bottom_captions(native,series,spec)
                 figure=json.loads(native.to_json())
+        figure=decorate_figure(result,figure,series)
         from level_yoy_comparison import CALCULATION_NOTE
         calculations=(result.get('execution') or {}).get('calculations') or []
-        if calculations:renderer_info.setdefault('warnings',[]).append(CALCULATION_NOTE)
+        if calculations:
+            note = ('파생지표는 KOSIS 원자료와 확인된 계산식으로 산출했습니다. 원자료·산식·결측 처리는 계산 근거에서 확인할 수 있습니다.'
+                    if result.get('derivedEvidence') else CALCULATION_NOTE)
+            renderer_info.setdefault('warnings',[]).append(note)
+            if any(s.get('source')=='user_file' for s in (result.get('execution') or {}).get('sources',[])):
+                renderer_info['warnings'][-1]='파생지표에 사용자 제공 파일이 포함되어 있습니다. API 자료와 파일의 단위·출처·해시는 계산 근거에서 확인해 주세요.'
         from report_summary import explain
         from report_export import export_formats
-        explanation = self._explain(summary_series, spec, summary, query=str(result.get("query") or "")) if generate_explanation else explain(summary_series, query=str(result.get('query') or ''))
+        explanation = {'text':summary,'facts':[]} if comparison else (self._explain(summary_series, spec, summary, query=str(result.get("query") or "")) if generate_explanation else explain(summary_series, query=str(result.get('query') or '')))
         explanation['scope'] = {'basis': 'original_observations', 'transform': spec.transform, 'labels': [s['label'] for s in summary_series], 'periodStart': spec.period_start, 'periodEnd': spec.period_end}
         table_document=build_table(series, spec.report_table, title=spec.title, sources=self._evidence(result), display_names=spec.display_names)
+        if comparison:
+            table_document['notes']=['사용자 파일의 실제 관측값으로 계산한 기간별 변화율(%)입니다. 월평균은 선택한 시작 월·종료 월의 관측값 평균 후 계산했습니다. 휴일·결측값은 보간하지 않았습니다.',
+                '계산 기간·원자료 표시 방향·평균 구성·출처·파일 해시는 계산 근거에서 확인해 주세요.']
         explanation['calculations']=calculations
         if calculations:explanation['scope']['basis']='source_observations_and_server_calculations'
         return {
@@ -347,6 +366,8 @@ class OutputAgent:
     def prepare(self, result: dict[str, Any], request: dict[str, Any] | None = None) -> dict[str, Any]:
         raw = dict(request or {})
         series = self._series((result.get("execution") or {}).get("rows") or [])
+        from derived_period_comparison import output_series,comparison_plan
+        series=output_series(result,series)
         from quick_output import dual_axis_requested,dual_axis_defaults
         dual_intent=dual_axis_requested(raw.get('natural_language') or '')
         quick = bool(raw.get('quick_output'))
@@ -429,6 +450,10 @@ class OutputAgent:
         if spec.presentation.design_template is None:
             from chart_designs import apply_design
             spec=apply_design(spec,'snapshot')
+        if comparison_plan(result):
+            spec.chart_type='bar' if requested_type=='auto' else spec.chart_type
+            spec.y_axis_label='변화율 (%)'
+            spec.series_colors={**{s['label']:s['color'] for s in series},**spec.series_colors}
         try:
             output=self._build(result, spec, generate_explanation=not quick)
         except ValueError:
@@ -595,11 +620,13 @@ class OutputAgent:
     def inspect(self, result: dict[str, Any]) -> dict[str, Any]:
         """Describe available output choices without producing a render spec."""
         series = self._series((result.get("execution") or {}).get("rows") or [])
+        from derived_period_comparison import output_series,comparison_plan
+        series=output_series(result,series)
         allowed, unavailable = inspect_charts(series)
         return {
             "seriesCount": len(series),
             "pointCount": sum(len(item.get("points") or []) for item in series),
-            "recommendedChartType": self._select_chart_type("auto", series),
+            "recommendedChartType": 'bar' if comparison_plan(result) else self._select_chart_type("auto", series),
             "supportedChartTypes": allowed,
             "unavailableChartTypes": unavailable,
             "combinedLayoutReason": combined_layout_reason(series),

@@ -2,6 +2,7 @@ import {withRequestDeadline} from '../requestDeadline';
 import {apiFetch,accountKey} from '../accountApi';
 import {queryFailure,analysisTimedOut} from "./queryFailure";
 import {withAnalysisDeadline,AnalysisTimeoutError} from '../analysisDeadline';
+import {derivedBudget,DERIVED_TIMEOUT_MS} from '../derivedDeadline';
 import { mockResponse } from "./mock";
 import type { CatalogResponse, OutputEditRequest, OutputRenderRequest, QueryRequest, QueryResponse } from "./types";
 
@@ -60,6 +61,7 @@ export async function fetchCatalog(): Promise<CatalogResponse> {
 }
 
 export async function submitQuery(payload: QueryRequest,signal?:AbortSignal): Promise<QueryResponse> {
+  const budget=derivedBudget(payload.query,payload.state);
   if (USE_MOCK) {
     await new Promise((resolve) => window.setTimeout(resolve, 300));
     return { ...mockResponse, query: payload.query };
@@ -72,7 +74,7 @@ export async function submitQuery(payload: QueryRequest,signal?:AbortSignal): Pr
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
       signal: activeSignal,
-    });
+    },budget);
 
     if (!response.ok) {
       const data = await response.json().catch(() => ({}));
@@ -80,9 +82,9 @@ export async function submitQuery(payload: QueryRequest,signal?:AbortSignal): Pr
     }
 
     return (await response.json()) as QueryResponse;
-    },signal);
+    },signal,budget);
   } catch (error) {
-    if(error instanceof AnalysisTimeoutError)return analysisTimedOut(payload.query);
+    if(error instanceof AnalysisTimeoutError)return analysisTimedOut(payload.query,budget);
     const message = error instanceof Error ? error.message : "network error";
     return queryFailure(payload.query, undefined, message);
   }
@@ -95,7 +97,7 @@ export async function submitOutput(payload: OutputRenderRequest,signal?:AbortSig
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
     signal: activeSignal,
-  });
+  },signal?DERIVED_TIMEOUT_MS:20_000);
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
     throw new Error(typeof data.detail === "string" ? data.detail : `출력 Agent API 오류: HTTP ${response.status}`);
@@ -112,11 +114,12 @@ export async function inspectOutputOptions(session_ids:string[]):Promise<NonNull
  },'그래프 선택지 조회 요청');
 }
 
-export async function submitOutputEdit(payload: OutputEditRequest): Promise<QueryResponse> {
+export async function submitOutputEdit(payload: OutputEditRequest,derived=false): Promise<QueryResponse> {
+ const budget=derived?DERIVED_TIMEOUT_MS:derivedBudget(payload.instruction);
  return withRequestDeadline(async signal=>{
   const response = await apiFetch(`${API_BASE_URL}/output/edit`,{signal,
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
-  });
+  },budget);
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     if(response.status===409)throw new EditConflictError();
@@ -125,5 +128,5 @@ export async function submitOutputEdit(payload: OutputEditRequest): Promise<Quer
     throw new Error(typeof error.detail === "string" ? error.detail : fields || `그래프 수정 오류: HTTP ${response.status}`);
   }
   return (await response.json()) as QueryResponse;
- },'편집 요청');
+ },'편집 요청',undefined,budget);
 }

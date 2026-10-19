@@ -54,6 +54,30 @@ export type QueryState = {
 };
 
 export type QueryResponse = {
+  availability?:{status:string;checkId?:string;calculationGuide?:string;checkedAt?:string;checkedTables:number;requiredTables:number;origin?:string;sha256?:string;calculationExecuted?:boolean;
+    questions:string[];sources:Array<{name:string;status:string;reason:string;unit:string;quotation:string;
+      periods:Array<{label:string;start:string;end:string;frequency:string}>;
+      candidateTables:Array<{tableId:string;name:string;frequencies:string[]}>;
+      observationChecks?:Array<{status:string;observations?:number;unit?:string;reason?:string}>;
+      guidance?:{title:string;description:string;links:Array<{label:string;url:string;note:string}>}|null}>};
+  supplement?:{workspaceId:string;revision:number;calculationGuide?:string;
+    comparison?:{periods:Array<{label:string;start:string;end:string;frequency:string}>;series:Array<{alias:string;label:string;unit:string}>;configured:boolean;settings?:{periods:Array<{label:string;start:string;end:string;basis:string}>;series:Array<{alias:string;label:string;direction:string}>;average_aliases:string[];complete_observations_confirmed:boolean}}|null;
+    acceptedFormats?:string[];maxFileBytes?:number;maxRows?:number;question?:string|null;
+    missing:Array<{alias:string;required_data:string;reason:string;unit:string;frequency:string;lookback:number;periods?:Array<{label:string;start:string;end:string;frequency:string}>;
+      guidance?:{kind:string;title:string;description:string;searchTerms:string;verifiedAt:string;links:Array<{label:string;url:string;note:string}>;checklist:string[]}}>;
+    available:Array<{required_data:string;origin:string;tableId:string;observations:number}>;
+    uploaded:Array<{alias:string;filename:string;sha256:string;origin:string}>};
+  analysisKind?: 'derived';
+  missingData?: Array<{required_data:string;reason:string}>;
+  derivedEvidence?: {
+    categoryAverages?:Array<{label:string;end:string;nodes:string[];formula:string;value:number;unit:string}>;
+    calculationId:string;sha256:string;catalogVersion:string;
+    plan:{indicator_name:string;economic_definition:string;start_period:string;end_period:string;
+      nodes:Array<{id:string;operator:string;inputs:string[];lag?:number|null;window?:number|null;base_period?:string|null;exponent?:number|null;direction?:string|null;periods?:Array<{label:string;start:string;end:string;basis:string}>|null}>};
+    bounds:{fetch_start:string;fetch_end:string};
+    sourceSelections:Array<{alias:string;selection:string;tableId?:string;itemId?:string;frequency?:string;classifications?:Record<string,string>;origin?:string;sha256?:string;filename?:string;provenance?:string[]}>;
+    issues:Array<{node:string;period:string;reason:string}>;missingPolicy:string;
+  };
   requiresQueryRefinement?: boolean;
   refinementQuestion?: string;
   recovery?: {issue:string;requirements?:string[];question:string;choices:Array<{id:string;label:string}>;preserveState:boolean};

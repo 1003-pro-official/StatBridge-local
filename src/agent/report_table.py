@@ -93,7 +93,9 @@ def build_table(series, options=None, *, title='', sources=None, display_names=N
         groups.setdefault(item.get('frequency') or '원자료 주기', []).append(item)
     sections = []
     for frequency, items in groups.items():
-        periods = sorted({str(p['date']) for s in items for p in s['points']})
+        periods = list(dict.fromkeys(str(p['date']) for s in items for p in s['points'])) if frequency=='category' else sorted({str(p['date']) for s in items for p in s['points']})
+        if frequency=='category' and options.comparison!='none':
+            raise ValueError('항목별 비교표의 변화율은 기존 계산 근거에 정의되어 있습니다. 국가 간 값을 시차 증가율로 계산할 수 없습니다.')
         if options.recent_periods:
             periods = periods[-options.recent_periods:]
         values = []
@@ -110,7 +112,7 @@ def build_table(series, options=None, *, title='', sources=None, display_names=N
             headers = ['지표 · 단위', *[period_label(p, frequency) for p in periods]]
             rows = [[name, *v] for name, v in zip(names, values)]
         else:
-            headers = ['시점', *names]
+            headers = ['항목' if frequency=='category' else '시점', *names]
             rows = [[period_label(p, frequency), *[v[i] for v in values]] for i, p in enumerate(periods)]
         computed = []
         if options.comparison != 'none' and periods:
@@ -164,7 +166,7 @@ def text_value(value, decimals):
 
 
 def frequency_name(value):
-    return {'M':'월별','Q':'분기별','A':'연별','Y':'연별','D':'일별'}.get(value,value)
+    return {'M':'월별','Q':'분기별','A':'연별','Y':'연별','D':'일별','category':'항목별 비교'}.get(value,value)
 
 
 def _source_lines(doc):
@@ -182,7 +184,7 @@ def render_csv(doc):
         return text_value(v, doc['options']['decimals'])
     writer.writerow([safe(doc['caption'])])
     for section in doc['sections']:
-        frequency = {'M': '월별', 'Q': '분기별', 'Y': '연별', 'A': '연별', 'D': '일별'}.get(section['frequency'], section['frequency'])
+        frequency = {'M': '월별', 'Q': '분기별', 'Y': '연별', 'A': '연별', 'D': '일별', 'category':'항목별 비교'}.get(section['frequency'], section['frequency'])
         writer.writerow([f"{frequency} · {section['periodCaption']}"])
         if section.get('headerGroups'):
             grouped = [''] * len(section['headers'])

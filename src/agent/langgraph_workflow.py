@@ -27,6 +27,8 @@ class StatBridgeGraphState(TypedDict, total=False):
     result: dict[str, Any]
     orchestration_stage: str
     orchestration_path: list[str]
+    derived_planning: dict[str, Any]
+    derived_responses: dict[str, Any]
 
 
 class StatBridgeWorkflow:
@@ -35,16 +37,33 @@ class StatBridgeWorkflow:
     def __init__(self, agent: Any, output_agent: Any | None = None) -> None:
         self.agent = agent
         self.output_agent = output_agent
+        self.derived_runtime = None
         builder = StateGraph(StatBridgeGraphState)
         builder.add_node("resolve_request", self._resolve_request)
         builder.add_node("await_clarification", self._await_clarification)
         builder.add_node("finish_unresolved", self._finish_unresolved)
         builder.add_node("execute_statistics", self._execute_statistics)
         builder.add_node("prepare_output", self._prepare_output)
+        builder.add_node('classify_analysis_intent', lambda state: {
+            'orchestration_stage': 'derived_intent_classified',
+            'orchestration_path': self._path(state, 'classify_analysis_intent')})
+        builder.add_edge('classify_analysis_intent', 'plan_derived_indicator')
+        builder.add_node("plan_derived_indicator", self._plan_derived_indicator)
+        builder.add_node("validate_derived_plan", self._validate_derived_plan)
+        builder.add_node("execute_derived_sources", self._execute_derived_sources)
+        builder.add_node("calculate_derived_indicator", self._calculate_derived_indicator)
+        builder.add_node("finish_derived", lambda state: {})
+        for node, target in (("plan_derived_indicator", "validate_derived_plan"),
+                             ("validate_derived_plan", "execute_derived_sources"),
+                             ("execute_derived_sources", "calculate_derived_indicator"),
+                             ("calculate_derived_indicator", "prepare_output")):
+            builder.add_conditional_edges(node, self._route_derived,
+                                          {"continue": target, "stop": "finish_derived"})
+        builder.add_edge("finish_derived", END)
         builder.add_conditional_edges(
             START,
             self._route_start,
-            {"input": "resolve_request", "output": "prepare_output"},
+            {"input": "resolve_request", "output": "prepare_output", "derived": "classify_analysis_intent"},
         )
         builder.add_conditional_edges(
             "resolve_request",
@@ -85,9 +104,91 @@ class StatBridgeWorkflow:
             "orchestration_path": self._path(state, "resolve_request"),
         }
 
+    def _route_start(self, state: StatBridgeGraphState):
+        if state.get("execution_result") is not None:
+            return "output"
+        from derived_indicator_planner import is_derived_request
+        if self.derived_runtime and (is_derived_request(state.get('query', '')) or
+                                     (state.get('conversation_state') or {}).get('_derived_query')):
+            return "derived"
+        return "input"
+
     @staticmethod
-    def _route_start(state: StatBridgeGraphState) -> Literal["input", "output"]:
-        return "output" if state.get("execution_result") is not None else "input"
+    def _route_derived(state):
+        return 'stop' if (state.get('result') or {}).get('derived_blocked') else 'continue'
+
+    def _derived_failure(self, state, stage, message):
+        planning = state.get('derived_planning') or {}
+        continuation = self._derived_context(state)
+        failure_kind = getattr(message, 'failure_kind', 'analysis_error')
+        self.derived_runtime.evidence.save({'query': state['query'], 'status': 'failed', 'stage': stage,
+            'failure_kind': failure_kind,
+            'error': str(message), 'plan': planning['plan'].model_dump() if planning.get('plan') else None,
+            'catalog_version': self.derived_runtime.catalog.version, 'planner_trace': getattr(message, 'evidence', None),
+            'usage': planning.get('usage')})
+        return {'result': {'status': 'data_unavailable', 'query': state['query'], 'derived_blocked': True,
+                           'failure_kind': failure_kind, 'failure_stage': stage,
+                           'question': str(message), 'state': continuation},
+                'orchestration_stage': stage, 'orchestration_path': self._path(state, stage)}
+
+    @staticmethod
+    def _derived_context(state, query=None):
+        prior = dict(state.get('conversation_state') or {})
+        original = prior.get('_derived_query')
+        combined = query or (f'{original}\n추가 조건: {state["query"]}' if original and original != state['query'] else state['query'])
+        return {**prior, '_derived_query': combined,
+                '_derived_start': state.get('start_period') or prior.get('_derived_start'),
+                '_derived_end': state.get('end_period') or prior.get('_derived_end')}
+
+    def _plan_derived_indicator(self, state):
+        prior = (state.get('conversation_state') or {}).get('_derived_query')
+        query = f'{prior}\n추가 조건: {state["query"]}' if prior and prior != state['query'] else state['query']
+        try:
+            continuation = self._derived_context(state, query)
+            planning = self.derived_runtime.plan(query, start_period=continuation.get('_derived_start'), end_period=continuation.get('_derived_end'))
+            if planning['status'] != 'planned':
+                self.derived_runtime.evidence.save({'query': query, 'catalog_version': self.derived_runtime.catalog.version,
+                    'status': planning['status'], 'missing': planning.get('missing'), 'searches': planning.get('searches'),
+                    'usage': planning.get('usage'), 'question': planning.get('question'), 'availability':planning.get('availability')})
+                return {'result': {**planning, 'query': query, 'derived_blocked': True, 'state': continuation},
+                        'orchestration_stage': 'awaiting_derived_details',
+                        'orchestration_path': self._path(state, 'plan_derived_indicator')}
+            return {'derived_planning': planning, 'orchestration_path': self._path(state, 'plan_derived_indicator')}
+        except (ValueError, TypeError, KeyError) as exc:
+            return self._derived_failure(state, 'plan_derived_indicator', exc)
+
+    def _validate_derived_plan(self, state):
+        try:
+            planning = dict(state['derived_planning'])
+            planning['bounds'] = self.derived_runtime.validate(planning['plan'])
+            if not state.get('execute', True):
+                self.derived_runtime.evidence.save({'query': state['query'], 'status': 'planned_only',
+                    'plan': planning['plan'].model_dump(), 'bounds': planning['bounds'],
+                    'catalog_version': self.derived_runtime.catalog.version, 'usage': planning.get('usage'),
+                    'searches': planning.get('searches'), 'semantic_review': planning.get('semantic_review')})
+                return {'result': {'status': 'resolved', 'derived_blocked': True,
+                                  'execution': {'status': 'planned_only'}, 'plan': planning['plan'].model_dump(),
+                                  'question': '계산 계획을 검증했습니다. 실제 데이터 조회는 생략했습니다.'},
+                        'orchestration_path': self._path(state, 'validate_derived_plan')}
+            return {'derived_planning': planning, 'orchestration_path': self._path(state, 'validate_derived_plan')}
+        except (ValueError, TypeError, KeyError) as exc:
+            return self._derived_failure(state, 'validate_derived_plan', exc)
+
+    def _execute_derived_sources(self, state):
+        try:
+            planning = state['derived_planning']
+            return {'derived_responses': self.derived_runtime.fetch(planning['plan'], planning['bounds']),
+                    'orchestration_path': self._path(state, 'execute_derived_sources')}
+        except (ValueError, TypeError, KeyError) as exc:
+            return self._derived_failure(state, 'execute_derived_sources', exc)
+
+    def _calculate_derived_indicator(self, state):
+        try:
+            return {'result': self.derived_runtime.calculate(state['query'], state['derived_planning'], state['derived_responses']),
+                    'orchestration_stage': 'derived_calculated',
+                    'orchestration_path': self._path(state, 'calculate_derived_indicator')}
+        except (ValueError, TypeError, KeyError) as exc:
+            return self._derived_failure(state, 'calculate_derived_indicator', exc)
 
     @staticmethod
     def _route_after_resolution(
@@ -140,6 +241,8 @@ class StatBridgeWorkflow:
     def _prepare_output(self, state: StatBridgeGraphState) -> dict[str, Any]:
         result = dict(state.get("execution_result") or state.get("result") or {})
         execution_status = str((result.get("execution") or {}).get("status") or "")
+        if result.get('derivedEvidence') and not (state.get('output_request') or {}).get('chart_type'):
+            return {'result': result, 'orchestration_stage': 'awaiting_output_selection', 'orchestration_path': self._path(state, 'prepare_output')}
         if self.output_agent is not None and execution_status == "success":
             result["output"] = self.output_agent.prepare(result, state.get("output_request"))
         return {
