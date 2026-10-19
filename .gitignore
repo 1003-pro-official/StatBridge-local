@@ -56,3 +56,19 @@ research/그림표-분석/원본스냅샷/
 
 # Generated report chart examples and print artifacts
 output/
+
+# Immutable derived calculation observations and private query evidence
+runtime_data/derived_evidence/
+runtime_data/derived_api_inventory/
+
+runtime_data/derived_supplements/
+
+eval/derived_*.json
+
+eval/derived_*.txt
+
+eval/derived_*.xml
+
+eval/derived_*_cases/
+
+eval/derived_live_records/
