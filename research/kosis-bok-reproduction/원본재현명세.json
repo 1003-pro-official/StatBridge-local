@@ -1,0 +1,552 @@
+[
+  {
+    "id": "RATE-FULL",
+    "source": {
+      "release_id": "10095382",
+      "title": "2025년 11월 금융기관 가중평균금리",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=10095382&menuNo=201264",
+      "pdf_page": 2,
+      "sha256": "f22e0486170d17eb3b5f8842d9398053a62cb98221e356d8bed61d0245655e50"
+    },
+    "periods": [
+      "202312",
+      "202412",
+      "202509",
+      "202510",
+      "202511"
+    ],
+    "series": [
+      {
+        "table_id": "DT_121Y002",
+        "item_id": "13103134588999",
+        "classifications": {
+          "objL1": "13102134588ACC_ITEM.BEABAA2"
+        },
+        "label": "저축성수신",
+        "observation_version": "42c5781e4ace24dd872f284483679c7c94163af90a4f5ad990777b61f71fcb15"
+      },
+      {
+        "table_id": "DT_121Y002",
+        "item_id": "13103134588999",
+        "classifications": {
+          "objL1": "13102134588ACC_ITEM.BEABAA21"
+        },
+        "label": "순수저축성예금 1)",
+        "observation_version": "6c6f76bac1a7dcfd127fcdb6f57b70a5edcbce2bf151009f77068185df9ee4be"
+      },
+      {
+        "table_id": "DT_121Y002",
+        "item_id": "13103134588999",
+        "classifications": {
+          "objL1": "13102134588ACC_ITEM.BEABAA22"
+        },
+        "label": "시장형금융상품",
+        "observation_version": "f4668774e778cbbf2324f8daac6eecd479dc75c229b312de87a718152ee6f932"
+      },
+      {
+        "table_id": "DT_121Y006",
+        "item_id": "13103134553999",
+        "classifications": {
+          "objL1": "13102134553ACC_ITEM.BECBLA01"
+        },
+        "label": "대출평균 1)",
+        "observation_version": "a46fd9f99d5321a5d94e907fe117fdc82a78f7e71109261f3b23a6da43469667"
+      },
+      {
+        "table_id": "DT_121Y006",
+        "item_id": "13103134553999",
+        "classifications": {
+          "objL1": "13102134553ACC_ITEM.BECBLA02"
+        },
+        "label": "기업대출",
+        "observation_version": "bcff6c888cf649eff40d208ace540b289a0cd369280f4dc029ff4cd5e81bd5ef"
+      },
+      {
+        "table_id": "DT_121Y006",
+        "item_id": "13103134553999",
+        "classifications": {
+          "objL1": "13102134553ACC_ITEM.BECBLA0201"
+        },
+        "label": "대기업대출",
+        "observation_version": "75f554df4ca3507d2af546038e46d8501db61b5cd8299edc3fa5262a34318bd7"
+      },
+      {
+        "table_id": "DT_121Y006",
+        "item_id": "13103134553999",
+        "classifications": {
+          "objL1": "13102134553ACC_ITEM.BECBLA0202"
+        },
+        "label": "중소기업대출",
+        "observation_version": "a6db587d272854bfb05a1394417c31d93c7965a726a36147d62f5c78be459a66"
+      },
+      {
+        "table_id": "DT_121Y006",
+        "item_id": "13103134553999",
+        "classifications": {
+          "objL1": "13102134553ACC_ITEM.BECBLA03"
+        },
+        "label": "가계대출",
+        "observation_version": "a9411710b1f790351920adeb5606a5d729ddd8792f0ffae68a523227ea166eac"
+      },
+      {
+        "table_id": "DT_121Y006",
+        "item_id": "13103134553999",
+        "classifications": {
+          "objL1": "13102134553ACC_ITEM.BECBLA0302"
+        },
+        "label": "주택담보대출",
+        "observation_version": "6ed456d35e5e7fa96f1e8db365e4025b9b1469fdc2015fdc6082fbcf12ab28b6"
+      },
+      {
+        "table_id": "DT_121Y013",
+        "item_id": "13103134701999",
+        "classifications": {
+          "objL1": "13102134701ACC_ITEM.BEABAB2"
+        },
+        "label": "총수신(요구불예금 및 수시입출식 저축성예금 포함)",
+        "observation_version": "b48c7236e51b93aff77b58b325c1d36ac248b7cc085780ced455703b8ce408fb"
+      },
+      {
+        "table_id": "DT_121Y015",
+        "item_id": "13103134612999",
+        "classifications": {
+          "objL1": "13102134612ACC_ITEM.BECBLB01"
+        },
+        "label": "총대출 1)",
+        "observation_version": "7f20218a008fb34cc98d1ede9d620c246a11714597c105e604cd286d0e8b885d"
+      }
+    ],
+    "derived_rows": [
+      "B-A",
+      "D-C"
+    ],
+    "derived_column": "202511-202510",
+    "unit": "연 %, %p",
+    "notes": [
+      "202511 잠정치"
+    ],
+    "required_cells": 78
+  },
+  {
+    "comparison_periods": [
+      "202506",
+      "202507",
+      "202508",
+      "202509",
+      "202510",
+      "202511",
+      "202512"
+    ],
+    "id": "ESI-FULL",
+    "source": {
+      "release_id": "10095393",
+      "title": "2025년 12월 기업경기조사 결과 및 경제심리지수(ESI)",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=10095393&menuNo=201264",
+      "pdf_page": 8,
+      "sha256": "c2a0e0f6245449413d1f8643ffc255bb7a0033ac69d88b02f50538189c0bc379"
+    },
+    "periods": [
+      "201301",
+      "201302",
+      "201303",
+      "201304",
+      "201305",
+      "201306",
+      "201307",
+      "201308",
+      "201309",
+      "201310",
+      "201311",
+      "201312",
+      "201401",
+      "201402",
+      "201403",
+      "201404",
+      "201405",
+      "201406",
+      "201407",
+      "201408",
+      "201409",
+      "201410",
+      "201411",
+      "201412",
+      "201501",
+      "201502",
+      "201503",
+      "201504",
+      "201505",
+      "201506",
+      "201507",
+      "201508",
+      "201509",
+      "201510",
+      "201511",
+      "201512",
+      "201601",
+      "201602",
+      "201603",
+      "201604",
+      "201605",
+      "201606",
+      "201607",
+      "201608",
+      "201609",
+      "201610",
+      "201611",
+      "201612",
+      "201701",
+      "201702",
+      "201703",
+      "201704",
+      "201705",
+      "201706",
+      "201707",
+      "201708",
+      "201709",
+      "201710",
+      "201711",
+      "201712",
+      "201801",
+      "201802",
+      "201803",
+      "201804",
+      "201805",
+      "201806",
+      "201807",
+      "201808",
+      "201809",
+      "201810",
+      "201811",
+      "201812",
+      "201901",
+      "201902",
+      "201903",
+      "201904",
+      "201905",
+      "201906",
+      "201907",
+      "201908",
+      "201909",
+      "201910",
+      "201911",
+      "201912",
+      "202001",
+      "202002",
+      "202003",
+      "202004",
+      "202005",
+      "202006",
+      "202007",
+      "202008",
+      "202009",
+      "202010",
+      "202011",
+      "202012",
+      "202101",
+      "202102",
+      "202103",
+      "202104",
+      "202105",
+      "202106",
+      "202107",
+      "202108",
+      "202109",
+      "202110",
+      "202111",
+      "202112",
+      "202201",
+      "202202",
+      "202203",
+      "202204",
+      "202205",
+      "202206",
+      "202207",
+      "202208",
+      "202209",
+      "202210",
+      "202211",
+      "202212",
+      "202301",
+      "202302",
+      "202303",
+      "202304",
+      "202305",
+      "202306",
+      "202307",
+      "202308",
+      "202309",
+      "202310",
+      "202311",
+      "202312",
+      "202401",
+      "202402",
+      "202403",
+      "202404",
+      "202405",
+      "202406",
+      "202407",
+      "202408",
+      "202409",
+      "202410",
+      "202411",
+      "202412",
+      "202501",
+      "202502",
+      "202503",
+      "202504",
+      "202505",
+      "202506",
+      "202507",
+      "202508",
+      "202509",
+      "202510",
+      "202511",
+      "202512"
+    ],
+    "series": [
+      {
+        "table_id": "DT_513Y001",
+        "item_id": "13103134473999",
+        "classifications": {
+          "objL1": "13102134473ACC_CD.E1000"
+        },
+        "label": "경제심리지수(원계열)",
+        "observation_version": "e7223feb91f0992ac4b3abad96cf1e208a7c05412948cc93c90703109ebffe5d"
+      },
+      {
+        "table_id": "DT_513Y001",
+        "item_id": "13103134473999",
+        "classifications": {
+          "objL1": "13102134473ACC_CD.E2000"
+        },
+        "label": "경제심리지수(순환변동치)",
+        "observation_version": "7e2d37a149c0ef4599b07de898a0b4d1ecd984ce1b8069c9927585421485d630"
+      }
+    ],
+    "benchmark": 100,
+    "axes": {
+      "min": 50,
+      "max": 140,
+      "step": 10
+    },
+    "notes": [
+      "원본 기준치 100은 2003~2024년 중 장기평균; 현행 계열의 기준기간과 다를 수 있음",
+      "순환변동치는 계절 및 불규칙 변동요인 제거"
+    ],
+    "required_observations": 312
+  },
+  {
+    "id": "CREDIT-FULL",
+    "source": {
+      "release_id": "11063896",
+      "title": "2026년 2/4분기중 가계신용(잠정)",
+      "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063896&menuNo=201264",
+      "pdf_page": 7,
+      "sha256": "0bcdbb68911daf4028b96c97de6cef51b1f2a0e8e63bbfc6e5c47e75157c9e32"
+    },
+    "periods": [
+      "202304",
+      "202404",
+      "202504",
+      "202401",
+      "202402",
+      "202403",
+      "202404",
+      "202501",
+      "202502",
+      "202503",
+      "202504",
+      "202601",
+      "202602"
+    ],
+    "series": [
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1000000"
+        },
+        "label": "가계신용",
+        "observation_version": "bb9f9109036e96a9bde5bf271f301e16e0052f1c2a81a88a2d885d9c9ad36aee"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1100000"
+        },
+        "label": "가계대출",
+        "observation_version": "82c99bbc540316849839dde4f6bfcc04da6928452285ff2edf6628ec46fa7569"
+      },
+      {
+        "table_id": "DT_151Y004",
+        "item_id": "13103134772999",
+        "classifications": {
+          "objL1": "13102134772ACC_ITEM.11000A0"
+        },
+        "label": "주택관련대출",
+        "observation_version": "5e68712a31aaa03b93fd72b8ed3b9014ccfa18f6fed9c7d2030ab094f8401c68"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1110000"
+        },
+        "label": "예금취급기관",
+        "observation_version": "1463a2ea2d6b4a4897067b53843a9b5c7287e30b2284c9422fb2803c47aab511"
+      },
+      {
+        "table_id": "DT_151Y004",
+        "item_id": "13103134772999",
+        "classifications": {
+          "objL1": "13102134772ACC_ITEM.11100A0"
+        },
+        "label": "주택관련대출-예금취급기관",
+        "observation_version": "87ebdb4c590c1bd7add782b8b53ca620121ae85715b2568be20c90f6d46f4ed0"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1111000"
+        },
+        "label": "예금은행",
+        "observation_version": "8ae1f758985c76b5ea13a4fc0be1df74ef9df72b4e4927ae4d2262198765fda8"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.11A0000"
+        },
+        "label": "비은행예금취급기관",
+        "observation_version": "bbdab4e03bef89d94cef19098d755a6d91b5a36913ac8a1949075f939aae0708"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1120000"
+        },
+        "label": "기타금융기관 등",
+        "observation_version": "5e5e965de77b013574d10e4176fb72facadb41184260125ed351cac766384639"
+      },
+      {
+        "table_id": "DT_151Y004",
+        "item_id": "13103134772999",
+        "classifications": {
+          "objL1": "13102134772ACC_ITEM.11200A0"
+        },
+        "label": "주택관련대출-기타금융기관 등",
+        "observation_version": "dc735a95f3527b5c92e181e557e30b956a36e3c6555098418b33162f998a4e21"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1121000"
+        },
+        "label": "보험회사",
+        "observation_version": "a954f96f33710210c05a7a612aa81816e727ade18b50e85eca77256fdb7d46f6"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1121400"
+        },
+        "label": "연금기금",
+        "observation_version": "d9bc91c7dd17d82c51eb8b12d65e29c908155e36137d471907cb55ede8b629e9"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1122000"
+        },
+        "label": "여신전문기관",
+        "observation_version": "c5854de36a767e8887ec49c397cda8941390d89160f59637b66d7ec38d93f817"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1122300"
+        },
+        "label": "공적금융기관",
+        "observation_version": "70229a24522939730bb6f8579c81718469a3fdfed7523bb25af9764f35c3cdd7"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1122400"
+        },
+        "label": "기타금융중개회사",
+        "observation_version": "f81a13ca8aa255d622734e68e9fff58df3ca09a93a78538ceeae4c7415323b48"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1123000"
+        },
+        "label": "기타",
+        "observation_version": "ced449390051946bb4a7b217a785951fcd4c6d4f218258999a18a6a0c944a62a"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1200000"
+        },
+        "label": "판매신용",
+        "observation_version": "dee31985fcd212b5454710c9a0bc54143454803c23d5e41570ebe9988ac2791b"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1210000"
+        },
+        "label": "여신전문기관",
+        "observation_version": "ec93f86c1e3595db98be2c5d337b1485d152d14c1252f3673341d6011938ebb6"
+      },
+      {
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "classifications": {
+          "objL1": "13102134771ACC_ITEM.1220000"
+        },
+        "label": "판매회사",
+        "observation_version": "6a7f41ba9a737441e97207c271e3135ffbd96503c3f04ebffe004c74dd6117d1"
+      },
+      {
+        "table_id": "DT_151Y004",
+        "item_id": "13103134772999",
+        "classifications": {
+          "objL1": "13102134772ACC_ITEM.1120093"
+        },
+        "label": "[참고] 주택금융공사 및 주택도시기금의 정책대출",
+        "observation_version": "5d4c829f8cecce1a635800c007853794e0d5085583319910de5f219271cbf989"
+      },
+      {
+        "table_id": "DT_151Y004",
+        "item_id": "13103134772999",
+        "classifications": {
+          "objL1": "13102134772ACC_ITEM.1120094"
+        },
+        "label": "[참고] 예금은행 전세자금대출",
+        "observation_version": "f89eaaba3559997c79266a2e164ffd024fbf561261dab01ea63a2da88b2640ae"
+      }
+    ],
+    "required_cells": 260,
+    "unit": "십억원",
+    "aggregation": "연간 잔액=4분기 말값",
+    "notes": [
+      "보험·연금·여신전문·공적금융·기타중개·기타 기관의 원본 주석 1~7 유지 필요",
+      "2025~2026 잠정치"
+    ]
+  }
+]
