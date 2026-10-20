@@ -57,8 +57,8 @@ class ReportOptions(StrictReport):
     footnotes: list[str] = Field(default_factory=list, max_length=8)
     regression: Literal['ols'] = 'ols'
     date_format: Literal['period','year'] = 'period'
-    width: int = Field(default=1200, ge=600, le=2400)
-    height: int = Field(default=720, ge=400, le=2000)
+    width: int = Field(default=1200, ge=1)
+    height: int = Field(default=720, ge=1)
     dpi: int = Field(default=200, ge=96, le=400)
     svg_text_mode: Literal['path','text'] = 'path'
 

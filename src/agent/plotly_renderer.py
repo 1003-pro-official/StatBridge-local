@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statbridge_mcp.observability import observed
 
 import json
 from bisect import bisect_left
@@ -20,6 +21,7 @@ def wrapped(text, width=24):
     return '<br>'.join(escape(line) for line in textwrap.wrap(str(text),width=width,break_long_words=True,break_on_hyphens=False))
 
 
+@observed('chart.render', 'span')
 def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, Any]:
     """Render validated chart state and numeric data without executing model code."""
     if not series:
@@ -182,7 +184,8 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     if chart_type in {"line", "bar", "stacked_bar", "area"}:
         for highlight in spec.highlights:
             fig.add_vrect(x0=highlight.start, x1=highlight.end, fillcolor=highlight.color, opacity=highlight.opacity,
-                          line_width=0, annotation_text=escape(highlight.label),name=highlight.id)
+                          line_width=0, layer='below', annotation_text=escape(highlight.label),
+                          annotation_position='inside top right', annotation_name='statbridge-highlight:'+highlight.id, name=highlight.id)
         for value in spec.reference_lines:
             fig.add_hline(y=value, line_dash="dash", line_color="gray")
         for annotation in spec.annotations:
@@ -288,6 +291,8 @@ def render_plotly(series: list[dict[str, Any]], spec: ChartSpec) -> dict[str, An
     position_axis_titles(fig,spec)
     if dual_axis and any(spec.series_chart_types.get(s["label"],chart_type)=="bar" for s in series if s["label"] in spec.secondary_axis_series):
         fig.update_layout(yaxis=dict(overlaying="y2",side="left"),yaxis2=dict(overlaying=None,side="right"))
+    from publication_chart import finish_publication
+    finish_publication(fig, series, spec)
     return json.loads(pio.to_json(fig, validate=True))
 
 

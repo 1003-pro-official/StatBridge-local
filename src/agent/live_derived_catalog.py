@@ -7,6 +7,7 @@ from statbridge_mcp.kosis_client import META_URL
 from statbridge_mcp.metadata_store import normalize_frequency,normalize_period
 
 class LiveDerivedCatalog(DerivedCatalogTools):
+    supports_metadata_prefetch = True
     def __init__(self,store,client):
         super().__init__(store);self.client=client;self.cache={};self.lock=RLock()
 

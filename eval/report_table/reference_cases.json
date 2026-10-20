@@ -1,0 +1,998 @@
+[
+  {
+    "id": "pdf05",
+    "page": 5,
+    "title": "기대인플레이션 응답분포 · 발췌",
+    "series": [
+      {
+        "id": "향후1년 · 하락",
+        "label": "향후1년 · 하락",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 0.8
+          },
+          {
+            "date": "202609",
+            "value": 0.4
+          }
+        ]
+      },
+      {
+        "id": "향후1년 · 0~1%",
+        "label": "향후1년 · 0~1%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 6.8
+          },
+          {
+            "date": "202609",
+            "value": 6.3
+          }
+        ]
+      },
+      {
+        "id": "향후1년 · 1~2%",
+        "label": "향후1년 · 1~2%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 18.2
+          },
+          {
+            "date": "202609",
+            "value": 18.9
+          }
+        ]
+      },
+      {
+        "id": "향후1년 · 2~3%",
+        "label": "향후1년 · 2~3%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 31.6
+          },
+          {
+            "date": "202609",
+            "value": 32
+          }
+        ]
+      },
+      {
+        "id": "3년후 · 하락",
+        "label": "3년후 · 하락",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 0.6
+          },
+          {
+            "date": "202609",
+            "value": 0.6
+          }
+        ]
+      },
+      {
+        "id": "3년후 · 0~1%",
+        "label": "3년후 · 0~1%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 7.2
+          },
+          {
+            "date": "202609",
+            "value": 6.5
+          }
+        ]
+      },
+      {
+        "id": "3년후 · 1~2%",
+        "label": "3년후 · 1~2%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 19.6
+          },
+          {
+            "date": "202609",
+            "value": 20.7
+          }
+        ]
+      },
+      {
+        "id": "3년후 · 2~3%",
+        "label": "3년후 · 2~3%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 31.5
+          },
+          {
+            "date": "202609",
+            "value": 31.2
+          }
+        ]
+      },
+      {
+        "id": "5년후 · 하락",
+        "label": "5년후 · 하락",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 1.1
+          },
+          {
+            "date": "202609",
+            "value": 0.7
+          }
+        ]
+      },
+      {
+        "id": "5년후 · 0~1%",
+        "label": "5년후 · 0~1%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 7
+          },
+          {
+            "date": "202609",
+            "value": 7.1
+          }
+        ]
+      },
+      {
+        "id": "5년후 · 1~2%",
+        "label": "5년후 · 1~2%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 20.5
+          },
+          {
+            "date": "202609",
+            "value": 21.3
+          }
+        ]
+      },
+      {
+        "id": "5년후 · 2~3%",
+        "label": "5년후 · 2~3%",
+        "unit": "%",
+        "frequency": "M",
+        "points": [
+          {
+            "date": "202608",
+            "value": 30.4
+          },
+          {
+            "date": "202609",
+            "value": 29.5
+          }
+        ]
+      }
+    ],
+    "options": {
+      "decimals": 1,
+      "layout": {
+        "enabled": true,
+        "matrix_columns": [
+          {
+            "id": "h0a",
+            "label": "8월 (A)"
+          },
+          {
+            "id": "h0b",
+            "label": "9월 (B)"
+          },
+          {
+            "id": "h0d",
+            "label": "B−A (%p)"
+          },
+          {
+            "id": "h1a",
+            "label": "8월 (A)"
+          },
+          {
+            "id": "h1b",
+            "label": "9월 (B)"
+          },
+          {
+            "id": "h1d",
+            "label": "B−A (%p)"
+          },
+          {
+            "id": "h2a",
+            "label": "8월 (A)"
+          },
+          {
+            "id": "h2b",
+            "label": "9월 (B)"
+          },
+          {
+            "id": "h2d",
+            "label": "B−A (%p)"
+          }
+        ],
+        "matrix_rows": [
+          {
+            "id": "r0",
+            "label": "하락",
+            "cells": {
+              "h0a": {
+                "series": "향후1년 · 하락",
+                "period": "202608"
+              },
+              "h0b": {
+                "series": "향후1년 · 하락",
+                "period": "202609"
+              },
+              "h0d": {
+                "series": "향후1년 · 하락",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h1a": {
+                "series": "3년후 · 하락",
+                "period": "202608"
+              },
+              "h1b": {
+                "series": "3년후 · 하락",
+                "period": "202609"
+              },
+              "h1d": {
+                "series": "3년후 · 하락",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h2a": {
+                "series": "5년후 · 하락",
+                "period": "202608"
+              },
+              "h2b": {
+                "series": "5년후 · 하락",
+                "period": "202609"
+              },
+              "h2d": {
+                "series": "5년후 · 하락",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              }
+            }
+          },
+          {
+            "id": "r1",
+            "label": "0~1%",
+            "cells": {
+              "h0a": {
+                "series": "향후1년 · 0~1%",
+                "period": "202608"
+              },
+              "h0b": {
+                "series": "향후1년 · 0~1%",
+                "period": "202609"
+              },
+              "h0d": {
+                "series": "향후1년 · 0~1%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h1a": {
+                "series": "3년후 · 0~1%",
+                "period": "202608"
+              },
+              "h1b": {
+                "series": "3년후 · 0~1%",
+                "period": "202609"
+              },
+              "h1d": {
+                "series": "3년후 · 0~1%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h2a": {
+                "series": "5년후 · 0~1%",
+                "period": "202608"
+              },
+              "h2b": {
+                "series": "5년후 · 0~1%",
+                "period": "202609"
+              },
+              "h2d": {
+                "series": "5년후 · 0~1%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              }
+            }
+          },
+          {
+            "id": "r2",
+            "label": "1~2%",
+            "cells": {
+              "h0a": {
+                "series": "향후1년 · 1~2%",
+                "period": "202608"
+              },
+              "h0b": {
+                "series": "향후1년 · 1~2%",
+                "period": "202609"
+              },
+              "h0d": {
+                "series": "향후1년 · 1~2%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h1a": {
+                "series": "3년후 · 1~2%",
+                "period": "202608"
+              },
+              "h1b": {
+                "series": "3년후 · 1~2%",
+                "period": "202609"
+              },
+              "h1d": {
+                "series": "3년후 · 1~2%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h2a": {
+                "series": "5년후 · 1~2%",
+                "period": "202608"
+              },
+              "h2b": {
+                "series": "5년후 · 1~2%",
+                "period": "202609"
+              },
+              "h2d": {
+                "series": "5년후 · 1~2%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              }
+            }
+          },
+          {
+            "id": "r3",
+            "label": "2~3%",
+            "cells": {
+              "h0a": {
+                "series": "향후1년 · 2~3%",
+                "period": "202608"
+              },
+              "h0b": {
+                "series": "향후1년 · 2~3%",
+                "period": "202609"
+              },
+              "h0d": {
+                "series": "향후1년 · 2~3%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h1a": {
+                "series": "3년후 · 2~3%",
+                "period": "202608"
+              },
+              "h1b": {
+                "series": "3년후 · 2~3%",
+                "period": "202609"
+              },
+              "h1d": {
+                "series": "3년후 · 2~3%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              },
+              "h2a": {
+                "series": "5년후 · 2~3%",
+                "period": "202608"
+              },
+              "h2b": {
+                "series": "5년후 · 2~3%",
+                "period": "202609"
+              },
+              "h2d": {
+                "series": "5년후 · 2~3%",
+                "period": "202609",
+                "baseline": "202608",
+                "operation": "difference"
+              }
+            }
+          }
+        ],
+        "header_bands": [
+          {
+            "label": "향후1년",
+            "columns": [
+              "matrix:h0a",
+              "matrix:h0b",
+              "matrix:h0d"
+            ],
+            "level": 0
+          },
+          {
+            "label": "3년후",
+            "columns": [
+              "matrix:h1a",
+              "matrix:h1b",
+              "matrix:h1d"
+            ],
+            "level": 0
+          },
+          {
+            "label": "5년후",
+            "columns": [
+              "matrix:h2a",
+              "matrix:h2b",
+              "matrix:h2d"
+            ],
+            "level": 0
+          }
+        ],
+        "annotations": [
+          {
+            "id": "n1",
+            "text": "원본 PDF 5쪽의 4개 응답 구간 발췌. 단위 %, B−A는 %p. API 확보 검증이 아닌 표 편집 평가 자료입니다.",
+            "target": ""
+          }
+        ]
+      }
+    },
+    "source": {
+      "artifact": "한국은행_원본_표그래프_모음.pdf",
+      "sha256": "edb8c235fdd2d968e1fd72fdd1dff0cd66660860434d13f5f9a64dae01395ce9",
+      "page": 5,
+      "kind": "frozen_reference_not_live_api",
+      "review": "첨부 PDF와 대조한 발췌 관측값. 통계 해석 전문가 승인 미실시."
+    }
+  },
+  {
+    "id": "pdf13",
+    "page": 13,
+    "title": "가계신용 잔액 · 연·분기 발췌",
+    "series": [
+      {
+        "id": "가계신용 연간",
+        "label": "가계신용 연간",
+        "unit": "십억원",
+        "frequency": "Y",
+        "points": [
+          {
+            "date": "2023",
+            "value": 1882633.9
+          },
+          {
+            "date": "2024",
+            "value": 1922366
+          },
+          {
+            "date": "2025",
+            "value": 1979088.6
+          }
+        ]
+      },
+      {
+        "id": "가계신용 분기",
+        "label": "가계신용 분기",
+        "unit": "십억원",
+        "frequency": "Q",
+        "points": [
+          {
+            "date": "2024Q1",
+            "value": 1879403.3
+          },
+          {
+            "date": "2024Q2",
+            "value": 1892719.1
+          },
+          {
+            "date": "2024Q3",
+            "value": 1911441
+          },
+          {
+            "date": "2024Q4",
+            "value": 1922366
+          }
+        ]
+      },
+      {
+        "id": "가계대출 연간",
+        "label": "가계대출 연간",
+        "unit": "십억원",
+        "frequency": "Y",
+        "points": [
+          {
+            "date": "2023",
+            "value": 1764435.4
+          },
+          {
+            "date": "2024",
+            "value": 1802398.3
+          },
+          {
+            "date": "2025",
+            "value": 1852904.1
+          }
+        ]
+      },
+      {
+        "id": "가계대출 분기",
+        "label": "가계대출 분기",
+        "unit": "십억원",
+        "frequency": "Q",
+        "points": [
+          {
+            "date": "2024Q1",
+            "value": 1763467.7
+          },
+          {
+            "date": "2024Q2",
+            "value": 1776679.5
+          },
+          {
+            "date": "2024Q3",
+            "value": 1793606.3
+          },
+          {
+            "date": "2024Q4",
+            "value": 1802398.3
+          }
+        ]
+      }
+    ],
+    "options": {
+      "orientation": "periods",
+      "decimals": 1,
+      "layout": {
+        "enabled": true,
+        "bindings": [
+          {
+            "id": "credit",
+            "label": "가계신용 (A+B)",
+            "series": [
+              "가계신용 연간",
+              "가계신용 분기"
+            ]
+          },
+          {
+            "id": "loan",
+            "label": "가계대출 (A)",
+            "series": [
+              "가계대출 연간",
+              "가계대출 분기"
+            ]
+          }
+        ],
+        "header_bands": [
+          {
+            "label": "가계신용 잔액 · 원자료 주기 유지",
+            "columns": [
+              "binding:credit",
+              "binding:loan"
+            ],
+            "level": 0
+          }
+        ],
+        "annotations": [
+          {
+            "id": "n1",
+            "text": "원본 PDF 13쪽의 주요 2개 항목 발췌. 연간 관측값과 분기 관측값을 직접 배치하며 합산하지 않습니다.",
+            "target": ""
+          }
+        ]
+      }
+    },
+    "source": {
+      "artifact": "한국은행_원본_표그래프_모음.pdf",
+      "sha256": "edb8c235fdd2d968e1fd72fdd1dff0cd66660860434d13f5f9a64dae01395ce9",
+      "page": 13,
+      "kind": "frozen_reference_not_live_api",
+      "review": "첨부 PDF와 대조한 발췌 관측값. 통계 해석 전문가 승인 미실시."
+    }
+  },
+  {
+    "id": "pdf18",
+    "page": 18,
+    "title": "전자지급결제대행 서비스(PG) 이용 현황",
+    "series": [
+      {
+        "id": "이용금액 합계",
+        "label": "이용금액 합계",
+        "unit": "억원",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 14102.8
+          },
+          {
+            "date": "2024S2",
+            "value": 14370.9
+          },
+          {
+            "date": "2025S1",
+            "value": 15309.7
+          },
+          {
+            "date": "2025S2",
+            "value": 15771.4
+          },
+          {
+            "date": "2026S1",
+            "value": 17234.4
+          }
+        ]
+      },
+      {
+        "id": "금액 신용카드",
+        "label": "금액 신용카드",
+        "unit": "억원",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 10252.2
+          },
+          {
+            "date": "2024S2",
+            "value": 10515.6
+          },
+          {
+            "date": "2025S1",
+            "value": 11343.2
+          },
+          {
+            "date": "2025S2",
+            "value": 11976.3
+          },
+          {
+            "date": "2026S1",
+            "value": 12795.9
+          }
+        ]
+      },
+      {
+        "id": "금액 가상계좌",
+        "label": "금액 가상계좌",
+        "unit": "억원",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 2293.6
+          },
+          {
+            "date": "2024S2",
+            "value": 2133.6
+          },
+          {
+            "date": "2025S1",
+            "value": 2053.8
+          },
+          {
+            "date": "2025S2",
+            "value": 1752.8
+          },
+          {
+            "date": "2026S1",
+            "value": 2085.3
+          }
+        ]
+      },
+      {
+        "id": "금액 계좌이체",
+        "label": "금액 계좌이체",
+        "unit": "억원",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 645.6
+          },
+          {
+            "date": "2024S2",
+            "value": 706.6
+          },
+          {
+            "date": "2025S1",
+            "value": 813.9
+          },
+          {
+            "date": "2025S2",
+            "value": 835.4
+          },
+          {
+            "date": "2026S1",
+            "value": 949.9
+          }
+        ]
+      },
+      {
+        "id": "금액 기타",
+        "label": "금액 기타",
+        "unit": "억원",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 911.4
+          },
+          {
+            "date": "2024S2",
+            "value": 1015.1
+          },
+          {
+            "date": "2025S1",
+            "value": 1098.8
+          },
+          {
+            "date": "2025S2",
+            "value": 1206.9
+          },
+          {
+            "date": "2026S1",
+            "value": 1403.3
+          }
+        ]
+      },
+      {
+        "id": "이용건수 합계",
+        "label": "이용건수 합계",
+        "unit": "만건",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 2962.9
+          },
+          {
+            "date": "2024S2",
+            "value": 3052
+          },
+          {
+            "date": "2025S1",
+            "value": 3277.5
+          },
+          {
+            "date": "2025S2",
+            "value": 3449
+          },
+          {
+            "date": "2026S1",
+            "value": 3675
+          }
+        ]
+      },
+      {
+        "id": "건수 신용카드",
+        "label": "건수 신용카드",
+        "unit": "만건",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 2303.7
+          },
+          {
+            "date": "2024S2",
+            "value": 2363.6
+          },
+          {
+            "date": "2025S1",
+            "value": 2544.2
+          },
+          {
+            "date": "2025S2",
+            "value": 2662.5
+          },
+          {
+            "date": "2026S1",
+            "value": 2807.6
+          }
+        ]
+      },
+      {
+        "id": "건수 가상계좌",
+        "label": "건수 가상계좌",
+        "unit": "만건",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 90.2
+          },
+          {
+            "date": "2024S2",
+            "value": 85.4
+          },
+          {
+            "date": "2025S1",
+            "value": 84
+          },
+          {
+            "date": "2025S2",
+            "value": 75.7
+          },
+          {
+            "date": "2026S1",
+            "value": 79.1
+          }
+        ]
+      },
+      {
+        "id": "건수 계좌이체",
+        "label": "건수 계좌이체",
+        "unit": "만건",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 157.3
+          },
+          {
+            "date": "2024S2",
+            "value": 175.3
+          },
+          {
+            "date": "2025S1",
+            "value": 191
+          },
+          {
+            "date": "2025S2",
+            "value": 208.8
+          },
+          {
+            "date": "2026S1",
+            "value": 224.9
+          }
+        ]
+      },
+      {
+        "id": "건수 기타",
+        "label": "건수 기타",
+        "unit": "만건",
+        "frequency": "S",
+        "points": [
+          {
+            "date": "2024S1",
+            "value": 411.7
+          },
+          {
+            "date": "2024S2",
+            "value": 427.7
+          },
+          {
+            "date": "2025S1",
+            "value": 458.3
+          },
+          {
+            "date": "2025S2",
+            "value": 502
+          },
+          {
+            "date": "2026S1",
+            "value": 563.4
+          }
+        ]
+      }
+    ],
+    "options": {
+      "decimals": 1,
+      "layout": {
+        "enabled": true,
+        "comparisons": [
+          {
+            "id": "yoy",
+            "label": "증감 B−A (증가율 %)",
+            "baseline": "2025S1",
+            "current": "2026S1",
+            "operation": "difference_growth"
+          }
+        ],
+        "header_bands": [
+          {
+            "label": "2024년",
+            "columns": [
+              "period:2024S1",
+              "period:2024S2"
+            ],
+            "level": 0
+          },
+          {
+            "label": "2025년",
+            "columns": [
+              "period:2025S1",
+              "period:2025S2"
+            ],
+            "level": 0
+          },
+          {
+            "label": "2026년",
+            "columns": [
+              "period:2026S1"
+            ],
+            "level": 0
+          }
+        ],
+        "row_groups": [
+          {
+            "label": "이용금액 · 억원",
+            "rows": [
+              "series:dad28b48d28573a1",
+              "series:657f34b33f227a92",
+              "series:5ad83274c142224e",
+              "series:376ed83bea578ab0",
+              "series:aacee8e3bce1bd5a"
+            ],
+            "level": 0
+          },
+          {
+            "label": "이용건수 · 만건",
+            "rows": [
+              "series:20e8dcf9000ae2a8",
+              "series:69b9c55f40b06c2e",
+              "series:8f0e702998c5870d",
+              "series:08ac91ba86229474",
+              "series:b2e568e2ea45409e"
+            ],
+            "level": 0
+          }
+        ],
+        "annotations": [
+          {
+            "id": "n1",
+            "text": "( ) 안은 전년동기 대비 증가율(%). 원자료는 원본 PDF 18쪽에서 고정한 일평균 관측값입니다. API 검증으로 보고하지 않습니다.",
+            "target": "comparison:yoy"
+          }
+        ],
+        "formats": {
+          "period:2026S1": {
+            "bold": true,
+            "bottom": "medium"
+          }
+        },
+        "rows_per_page": 24
+      }
+    },
+    "source": {
+      "artifact": "한국은행_원본_표그래프_모음.pdf",
+      "sha256": "edb8c235fdd2d968e1fd72fdd1dff0cd66660860434d13f5f9a64dae01395ce9",
+      "page": 18,
+      "kind": "frozen_reference_not_live_api",
+      "review": "첨부 PDF와 대조한 발췌 관측값. 통계 해석 전문가 승인 미실시."
+    }
+  }
+]

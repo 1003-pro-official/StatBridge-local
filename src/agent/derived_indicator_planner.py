@@ -1,4 +1,5 @@
 """GPT designs a plan by requesting bounded, approved catalog tools."""
+from statbridge_mcp.observability import observed
 import json
 import re
 import time
@@ -87,6 +88,12 @@ class DerivedIndicatorPlanner:
     def __init__(self, client, catalog):
         self.client, self.catalog = client, catalog
 
+    def _request(self, stage, *args, **kwargs):
+        from statbridge_mcp.observability import span
+        with span('planner.' + stage):
+            return self.client.request(*args, **kwargs)
+
+    @observed('planner.generate', 'span')
     def plan(self, query, *, start_period=None, end_period=None, previous=None, allow_deterministic=True, verified_sources=None):
         trace = {'usage': [], 'searches': [], 'attempts': 0}
         started = time.perf_counter()
@@ -156,6 +163,21 @@ missing의 각 항목은 정확히 하나의 시계열이다. 여러 나라·항
 '''
         searches, inspected, usage = trace['searches'], {}, trace['usage']
         searches.append(initial)
+        # Supply bounded metadata for explicitly named tables before asking GPT
+        # to choose a tool. This is context, never automatic source selection.
+        if (not assessment_only and not previous and not verified_sources
+                and getattr(self.catalog, 'supports_metadata_prefetch', False)):
+            compact = re.sub(r'\s+', '', query).casefold()
+            named = [r for r in initial['results']
+                     if len(r['table_name']) >= 4 and re.sub(r'\s+', '', r['table_name']).casefold() in compact]
+            for candidate in named[:2]:
+                metadata = self.catalog.bounded_metadata(candidate['table_id'], query)
+                context['tools'].append({'action': 'metadata', 'result': metadata, 'source': 'server_prefetch'})
+                inspected[candidate['table_id']] = {
+                    'items': {i['item_id'] for i in metadata['items']},
+                    'dimensions': {d['mcp_param']: {v['class_id'] for v in d['values']} for d in metadata['dimensions']}}
+            if named:
+                system += '\n서버가 질문에 명시된 표의 실제 메타데이터 후보를 미리 제공했다. 필요한 항목·분류가 이미 있으면 동일 메타데이터를 다시 요청하지 말고 계산 계획을 작성하라. 후보는 자동 확정이 아니며 질문과 불일치하면 다른 표를 검색하라.'
         if supplemental:
             for metadata in getattr(self.catalog,'file_metadata',lambda:[])():
                 context['tools'].append({'action':'metadata','result':metadata,'source':'authorized_user_file'})
@@ -220,7 +242,7 @@ missing의 각 항목은 정확히 하나의 시계열이다. 여러 나라·항
                                 'properties':{'required_data':{'type':'string'},'reason':{'type':'string'}},
                                 'required':['required_data','reason']}}},
                         'required':['action','question','missing']}
-            raw, meta = self.client.request(system, encoded, max_tokens=6500, json_mode=True, **request_options)
+            raw, meta = self._request('action', system, encoded, max_tokens=6500, json_mode=True, **request_options)
             usage.append({'model': meta.get('model'), 'usage': meta.get('usage', {}),
                           'stage': 'planning', 'seconds': time.perf_counter() - call_started})
             if len(raw.encode()) > 131072:
@@ -371,7 +393,7 @@ missing의 각 항목은 정확히 하나의 시계열이다. 여러 나라·항
                         review_context['query']=query+'\n\n현재 사용자 후속 요청: 필요한 파일은 업로드했고 양식 안내도 확인했습니다. 이제 위에서 요청한 동일한 지표·기간·분자·분모·해석 조건을 유지하여 업로드한 자료와 API 자료로 계산을 이어가 주세요.'
                 trace['attempts'] += 1
                 call_started = time.perf_counter()
-                review_raw, review_meta = self.client.request(
+                review_raw, review_meta = self._request('semantic_review',
                     '경제학적 의미 검토자다. 사용자 요청/경제학적 정의/선택 원자료/수식이 일치하는지 검토한다. '
                     'CPI와 PPI, 환율과 구매력, 명목/실질, 원계열/계절조정, 유량/저량, 기준시점, 비율/수준 혼동을 거부한다. '
                     '지원되지 않는 연산·코드 실행 요청에 기존 계산식을 그대로 반환한 계획은 요청 불일치로 거부한다. '

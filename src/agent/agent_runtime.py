@@ -17,7 +17,7 @@ from langgraph_workflow import StatBridgeWorkflow
 from output_agent import OutputAgent
 from jev_series_client import JevSeriesClient
 from jev_series_hybrid import apply_jev_series_decision
-from request_match_guard import structure_request, table_evidence, catalog_mentions, scoped_metric_query, unsupported_quantity_terms
+from request_match_guard import COMBINED_RATE_PATTERN, structure_request, table_evidence, catalog_mentions, scoped_metric_query, unsupported_quantity_terms
 from canonical_request_planner import instruction_text
 from catalog_request_planner import selections as catalog_selections, unavailable as unavailable_catalog_quantity
 from request_period import explicit_period
@@ -513,6 +513,10 @@ class StatBridgeAgent:
             token=f'@CATALOG{i}@';protected[token]=text[start:end];text=text[:start]+token+text[end:]
         parts=[p.strip() for p in re.split(r'그리고|\s+및\s+|와\s+|과\s+',text) if p.strip()]
         for token,title in protected.items():parts=[p.replace(token,title) for p in parts]
+        # Copy the whole clause so both rates inherit institution, basis and dates.
+        parts=[COMBINED_RATE_PATTERN.sub(rate, part)
+               for part in parts
+               for rate in (('대출금리', '수신금리') if COMBINED_RATE_PATTERN.search(part) else ('',))]
         if not 2<=len(parts)<=5 or not all(structure_request(p)['metrics'] or catalog_mentions(p,self.resolver.tables) for p in parts):
             return None
         years=re.findall(r'20\d{2}',query)
@@ -590,7 +594,11 @@ class StatBridgeAgent:
 
     def resolve(self, query: str, state: dict[str, Any] | None = None, clarification: dict[str, str] | None = None) -> dict[str, Any]:
         prior_context = self._validated_followup_plans(state)
-        if prior_context and not clarification and self._period_only_followup(query):
+        # The period picker resubmits the same question and its validated state.
+        # Re-expanding that question with a table-name anchor can duplicate a
+        # canonical reference and invalidate the already checked plan.
+        same_request = bool(prior_context and query.strip() == prior_context[0].strip())
+        if prior_context and not clarification and (same_request or self._period_only_followup(query)):
             prior_query, plans = prior_context
             candidates = [self.resolver.candidate_shell(str(plan["table_id"])) for plan in plans]
             for candidate, plan in zip(candidates, plans):
@@ -659,7 +667,7 @@ class StatBridgeAgent:
             if missing:
                 return {'status': 'no_match', 'missing_series': [missing],
                         'state': {'original_query': query}}
-            if re.search(r'(?:^|까지(?:의)?\s+|(?:최근|현재)\s+)금리(?:와|과)\s',query):
+            if COMBINED_RATE_PATTERN.search(query) or re.search(r'(?:^|까지(?:의)?\s+|(?:최근|현재)\s+)금리(?:와|과)\s',query):
                 scoped=self._scoped_comparison(query,state,clarification)
                 if scoped is not None:return scoped
             if '금리' in query and not any(word in query for word in ['신규','잔액','비중','구성비']):

@@ -1,4 +1,5 @@
 """Bounded calendar-keyed arithmetic; no eval/exec and no network access."""
+from statbridge_mcp.observability import observed, span, annotate
 import math
 from decimal import Decimal, localcontext
 from dataclasses import dataclass
@@ -87,101 +88,108 @@ def period_change(item, node):
 
 
 class DynamicExpressionExecutor:
+    @observed('dag.execute', 'span')
     def execute(self, plan, inputs, *, cached=None, changed=None):
         series = dict(inputs)
         issues, calculations = [], {}
         dirty = set(changed or [])
         cells = sum(len(s.values) for s in series.values())
         work = 0
+        cached_count = 0
         for node in plan.nodes:
-            if any(ref in dirty for ref in node.inputs):
-                dirty.add(node.id)
-            if cached and node.id not in dirty and node.id in cached:
-                series[node.id] = cached[node.id]
+            with span('dag.node'):
+                annotate(operation=node.operator)
+                if any(ref in dirty for ref in node.inputs):
+                    dirty.add(node.id)
+                if cached and node.id not in dirty and node.id in cached:
+                    cached_count += 1
+                    annotate(cache_hit=True,unit=cached[node.id].unit,frequency=cached[node.id].frequency)
+                    series[node.id] = cached[node.id]
+                    calculations[node.id] = {'label': node.id, 'operator': node.operator, 'inputs': node.inputs,
+                        'parameters': node.model_dump(exclude={'id', 'operator', 'inputs'}, exclude_none=True)}
+                    continue
+                args = [series[ref] for ref in node.inputs]
+                if len({a.frequency for a in args}) != 1:
+                    raise DerivedValidationError('주기가 다른 계열의 결합은 차단됩니다.')
+                freq = args[0].frequency
+                unit = result_unit(node.operator, [a.unit for a in args], node.exponent)
+                annotate(unit=unit,frequency=freq)
+                if node.operator=='period_change':
+                    values,details=period_change(args[0],node)
+                    series[node.id]=Series(values,unit,freq,args[0].source_ids)
+                    calculations[node.id]={'label':node.id,'operator':node.operator,'inputs':node.inputs,
+                        'parameters':node.model_dump(exclude={'id','operator','inputs'},exclude_none=True),'period_details':details}
+                    cells+=len(values);work+=len(args[0].values)*len(node.periods)
+                    if cells>MAX_CELLS or work>MAX_WORK:raise DerivedValidationError('기간 비교 계산량 한도를 초과했습니다.')
+                    continue
+                # Include all calendar positions so lag/rolling never bridge gaps.
+                starts = [min(a.values) for a in args]
+                ends = [max(a.values) for a in args]
+                start, end = min(*starts, plan.start_period), max(*ends, plan.end_period)
+                count = period_index(end, freq) - period_index(start, freq) + 1
+                if count > MAX_POINTS or cells + count > MAX_CELLS:
+                    raise DerivedValidationError('실제 계산 메모리 한도를 초과했습니다.')
+                cells += count
+                work += count * (node.window or 1)
+                if work > MAX_WORK:
+                    raise DerivedValidationError('실제 계산 작업량 한도를 초과했습니다.')
+                values = {}
+                accumulator, cumulative_valid = 0.0, True
+                for offset in range(count):
+                    period = shift_period(start, freq, offset)
+                    x = args[0].values.get(period)
+                    y = args[1].values.get(period) if len(args) == 2 else None
+                    value, reason = None, None
+                    op = node.operator
+                    try:
+                        if op == 'lag':
+                            value = args[0].values.get(shift_period(period, freq, -node.lag))
+                        elif op == 'cumulative_sum':
+                            # The cumulative domain is explicitly the displayed interval.
+                            if period < plan.start_period:
+                                value = None
+                            else:
+                                if x is None:
+                                    cumulative_valid = False
+                                if cumulative_valid:
+                                    accumulator += x
+                                    value = accumulator
+                        elif op == 'rolling_mean':
+                            window = [args[0].values.get(shift_period(period, freq, -k)) for k in range(node.window)]
+                            if all(v is not None for v in window):
+                                value = sum(window) / node.window
+                        elif x is not None:
+                            if op in {'add', 'subtract', 'multiply', 'divide'} and y is not None:
+                                if op == 'add': value = x + y
+                                elif op == 'subtract': value = x - y
+                                elif op == 'multiply': value = x * y
+                                else: value = x / y
+                            elif op in {'pct_change', 'yoy_pct', 'difference'}:
+                                prior_period = prior_year_period(period, freq) if op == 'yoy_pct' else shift_period(period, freq, -node.lag)
+                                prior = args[0].values.get(prior_period)
+                                if prior is not None:
+                                    value = x - prior if op == 'difference' else (x / prior - 1) * 100
+                            elif op == 'rebase_100':
+                                base = args[0].values.get(node.base_period)
+                                if base is not None: value = x / base * 100
+                            elif op == 'inverse': value = 1 / x
+                            elif op == 'log': value = math.log(x)
+                            elif op == 'power':
+                                if x < 0 and float(node.exponent) % 1:
+                                    raise ValueError('실수 범위에서 정의되지 않은 거듭제곱입니다.')
+                                value = x ** node.exponent
+                    except ZeroDivisionError:
+                        reason = 'zero_division'
+                    except (ValueError, OverflowError):
+                        reason = 'domain_or_overflow'
+                    if value is not None and not math.isfinite(value):
+                        value, reason = None, 'non_finite'
+                    values[period] = value
+                    if value is None and plan.start_period <= period <= plan.end_period:
+                        issues.append({'node': node.id, 'period': period, 'reason': reason or 'missing_input_or_history'})
+                series[node.id] = Series(values, unit, freq, sorted({s for a in args for s in a.source_ids}))
                 calculations[node.id] = {'label': node.id, 'operator': node.operator, 'inputs': node.inputs,
-                    'parameters': node.model_dump(exclude={'id', 'operator', 'inputs'}, exclude_none=True)}
-                continue
-            args = [series[ref] for ref in node.inputs]
-            if len({a.frequency for a in args}) != 1:
-                raise DerivedValidationError('주기가 다른 계열의 결합은 차단됩니다.')
-            freq = args[0].frequency
-            unit = result_unit(node.operator, [a.unit for a in args], node.exponent)
-            if node.operator=='period_change':
-                values,details=period_change(args[0],node)
-                series[node.id]=Series(values,unit,freq,args[0].source_ids)
-                calculations[node.id]={'label':node.id,'operator':node.operator,'inputs':node.inputs,
-                    'parameters':node.model_dump(exclude={'id','operator','inputs'},exclude_none=True),'period_details':details}
-                cells+=len(values);work+=len(args[0].values)*len(node.periods)
-                if cells>MAX_CELLS or work>MAX_WORK:raise DerivedValidationError('기간 비교 계산량 한도를 초과했습니다.')
-                continue
-            # Include all calendar positions so lag/rolling never bridge gaps.
-            starts = [min(a.values) for a in args]
-            ends = [max(a.values) for a in args]
-            start, end = min(*starts, plan.start_period), max(*ends, plan.end_period)
-            count = period_index(end, freq) - period_index(start, freq) + 1
-            if count > MAX_POINTS or cells + count > MAX_CELLS:
-                raise DerivedValidationError('실제 계산 메모리 한도를 초과했습니다.')
-            cells += count
-            work += count * (node.window or 1)
-            if work > MAX_WORK:
-                raise DerivedValidationError('실제 계산 작업량 한도를 초과했습니다.')
-            values = {}
-            accumulator, cumulative_valid = 0.0, True
-            for offset in range(count):
-                period = shift_period(start, freq, offset)
-                x = args[0].values.get(period)
-                y = args[1].values.get(period) if len(args) == 2 else None
-                value, reason = None, None
-                op = node.operator
-                try:
-                    if op == 'lag':
-                        value = args[0].values.get(shift_period(period, freq, -node.lag))
-                    elif op == 'cumulative_sum':
-                        # The cumulative domain is explicitly the displayed interval.
-                        if period < plan.start_period:
-                            value = None
-                        else:
-                            if x is None:
-                                cumulative_valid = False
-                            if cumulative_valid:
-                                accumulator += x
-                                value = accumulator
-                    elif op == 'rolling_mean':
-                        window = [args[0].values.get(shift_period(period, freq, -k)) for k in range(node.window)]
-                        if all(v is not None for v in window):
-                            value = sum(window) / node.window
-                    elif x is not None:
-                        if op in {'add', 'subtract', 'multiply', 'divide'} and y is not None:
-                            if op == 'add': value = x + y
-                            elif op == 'subtract': value = x - y
-                            elif op == 'multiply': value = x * y
-                            else: value = x / y
-                        elif op in {'pct_change', 'yoy_pct', 'difference'}:
-                            prior_period = prior_year_period(period, freq) if op == 'yoy_pct' else shift_period(period, freq, -node.lag)
-                            prior = args[0].values.get(prior_period)
-                            if prior is not None:
-                                value = x - prior if op == 'difference' else (x / prior - 1) * 100
-                        elif op == 'rebase_100':
-                            base = args[0].values.get(node.base_period)
-                            if base is not None: value = x / base * 100
-                        elif op == 'inverse': value = 1 / x
-                        elif op == 'log': value = math.log(x)
-                        elif op == 'power':
-                            if x < 0 and float(node.exponent) % 1:
-                                raise ValueError('실수 범위에서 정의되지 않은 거듭제곱입니다.')
-                            value = x ** node.exponent
-                except ZeroDivisionError:
-                    reason = 'zero_division'
-                except (ValueError, OverflowError):
-                    reason = 'domain_or_overflow'
-                if value is not None and not math.isfinite(value):
-                    value, reason = None, 'non_finite'
-                values[period] = value
-                if value is None and plan.start_period <= period <= plan.end_period:
-                    issues.append({'node': node.id, 'period': period, 'reason': reason or 'missing_input_or_history'})
-            series[node.id] = Series(values, unit, freq, sorted({s for a in args for s in a.source_ids}))
-            calculations[node.id] = {'label': node.id, 'operator': node.operator, 'inputs': node.inputs,
-                                     'parameters': node.model_dump(exclude={'id', 'operator', 'inputs'}, exclude_none=True)}
+                                         'parameters': node.model_dump(exclude={'id', 'operator', 'inputs'}, exclude_none=True)}
         rows = []
         for output in plan.outputs:
             item = series[output.node]
@@ -193,4 +201,5 @@ class DynamicExpressionExecutor:
                 rows.append({'PRD_DE': period, 'DT': value, 'ITM_NM': output.label, 'UNIT_NM': item.unit,
                              '_SERIES_LABEL': output.label, '_SOURCE_SERIES_ID': output.node,
                              '_FREQUENCY': item.frequency, '_DERIVED_CALCULATION': output.node})
+        annotate(row_count=len(rows),issue_count=len(issues),cached_nodes=cached_count,work_units=work,cells=cells)
         return {'rows': rows, 'issues': issues, 'series': series, 'calculations': calculations}

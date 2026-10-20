@@ -1,5 +1,7 @@
 // Display fewer date labels in a narrow panel; observation coordinates stay intact.
 export function periodTickUpdate(figure:{layout:Record<string,unknown>},width:number){
+ const meta=figure.layout.meta as {publicationYoy?:boolean;publicationAxes?:boolean}|undefined;
+ if(meta?.publicationYoy||meta?.publicationAxes)return {};
  const layout=figure.layout,margin=(layout.margin||{}) as {l?:number;r?:number};
  const inner=Math.max(80,width-Number(margin.l||0)-Number(margin.r||0));
  const update:Record<string,unknown>={};

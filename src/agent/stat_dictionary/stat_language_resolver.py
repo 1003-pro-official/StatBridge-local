@@ -1,7 +1,7 @@
 import copy, json, os, re, unicodedata
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from request_match_guard import table_evidence, catalog_mentions, scoped_metric_query, residual_catalog_query, structure_request, unsupported_quantity_terms, measured_intent_matches, active_measure_text
+from request_match_guard import COMBINED_RATE_PATTERN, table_evidence, catalog_mentions, scoped_metric_query, residual_catalog_query, structure_request, unsupported_quantity_terms, measured_intent_matches, active_measure_text
 
 @dataclass
 class QueryState:
@@ -46,7 +46,7 @@ class StatLanguageResolver:
 
     def parse_query_state(self, query):
         """Extract conservative typed state without inventing catalog identifiers."""
-        text=self.norm(active_measure_text(query)); compact=text.replace(' ','')
+        text=self.norm(COMBINED_RATE_PATTERN.sub('대출금리와 수신금리', active_measure_text(query))); compact=text.replace(' ','')
         state=QueryState()
         metric_terms=('예금금리','수신금리','대출금리','기준금리','주택담보대출','가계대출','채권','통화량','소비자물가','생산자물가','국내공급물가','수출물량','수입물량','신용카드','지급수단','전자지급결제대행','기업경기','소비자심리','경제심리','금융거래','금융자산부채잔액')
         state.metrics=[term for term in metric_terms if term in compact]
@@ -158,7 +158,7 @@ class StatLanguageResolver:
 
     def _matches_metric_intent(self, query, table):
         """Reject look-alike tables that share broad aliases but measure another concept."""
-        query = active_measure_text(query)
+        query = COMBINED_RATE_PATTERN.sub('대출금리와 수신금리', active_measure_text(query))
         if not measured_intent_matches(query, table):
             return False
         q=self.norm(query); tn=self.norm(table.get('table_name',''))

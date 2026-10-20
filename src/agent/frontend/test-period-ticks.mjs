@@ -1,6 +1,15 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {periodTickUpdate} from './src/periodTicks.ts';
+
+test('publication month labels survive responsive resizing',()=>{
+ for(const meta of [{publicationYoy:true},{publicationAxes:true}]){
+ const figure={layout:{meta,xaxis:{type:'category',categoryarray:['202401','202402','202403','202404','202405','202406','202407'],tickvals:[0,6],ticktext:['24.1','7']}}};
+ const before=JSON.stringify(figure);
+ for(const width of [400,650,1200])assert.deepEqual(periodTickUpdate(figure,width),{});
+ assert.equal(JSON.stringify(figure),before);
+ }
+});
 test('narrow date axes avoid a crowded last tick and keep original observations',()=>{
  const periods=Array.from({length:24},(_,i)=>`${2024+Math.floor(i/12)}${String(i%12+1).padStart(2,'0')}`);
  const figure={layout:{margin:{l:65,r:95},font:{size:13},xaxis:{type:'category',categoryarray:periods,ticktext:['2024-01','2025-12']}}};

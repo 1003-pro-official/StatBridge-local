@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {registerHooks} from 'node:module';
+registerHooks({resolve(specifier,ctx,next){if(specifier==='./tableLayout')return {url:new URL('./src/tableLayout.ts',import.meta.url).href,shortCircuit:true};return next(specifier,ctx);}});
+const {selectionRect,columnName,cellAt}=await import('./src/tableSheetSelection.ts');
+const cells=[{row:0,column:0,rowSpan:2,colSpan:1},{row:0,column:1,rowSpan:1,colSpan:2},{row:1,column:1,rowSpan:1,colSpan:1},{row:1,column:2,rowSpan:1,colSpan:1}];
+const rows=[{cells:cells.filter(c=>c.row===0)},{cells:cells.filter(c=>c.row===1)}];
+test('selection expands to include entire existing merged cells',()=>{assert.deepEqual(selectionRect(rows,{row:1,col:0},{row:1,col:1}),{top:0,bottom:1,left:0,right:2});});
+test('reverse drag and shift selection use the same rectangular bounds',()=>{assert.deepEqual(selectionRect(rows,{row:1,col:2},{row:0,col:1}),{top:0,bottom:1,left:1,right:2});});
+test('covered coordinates resolve to their actual merged anchor',()=>{assert.equal(cellAt(rows,{row:1,col:0}),cells[0]);assert.equal(cellAt(rows,{row:0,col:2}),cells[1]);});
+test('Excel column coordinates support more than 26 columns',()=>{assert.deepEqual([0,25,26,51,52,119].map(columnName),['A','Z','AA','AZ','BA','DP']);});

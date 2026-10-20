@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statbridge_mcp.observability import observed, annotate
 
 import json
 import random
@@ -88,7 +89,9 @@ class KosisClient:
         self.thread_sessions = threading.local()
         self.limiter = RateLimiter(settings.rate_limit_per_minute)
 
+    @observed('kosis.http', 'span')
     def _get(self, url: str, params: dict[str, Any]) -> Any:
+        annotate(table_id=params.get('tblId'),org_id=params.get('orgId'),item_id=params.get('itmId'))
         deadline = getattr(self.thread_sessions, 'deadline', None)
         if deadline is None:
             self.limiter.wait()
@@ -102,6 +105,7 @@ class KosisClient:
         if remaining <= 0:
             raise KosisRequestDeferred(1)
         response = session.get(url, params=params, timeout=min(self.timeout, remaining))
+        annotate(http_status=response.status_code)
         response.raise_for_status()
         # KOSIS may omit charset; preserve both Korean UTF-8 and lenient JSON.
         response.encoding = "utf-8"
@@ -110,6 +114,7 @@ class KosisClient:
             raise KosisApiError(payload.get("err", ""), payload.get("errMsg", ""), payload)
         return payload
 
+    @observed('kosis.metadata', 'span')
     def get_prd_meta(self, org_id: str, table_id: str) -> list[dict[str, Any]]:
         params = {
             "method": "getMeta",
@@ -124,6 +129,7 @@ class KosisClient:
         payload = self._get(META_URL, params)
         return payload if isinstance(payload, list) else []
 
+    @observed('kosis.statistics', 'span')
     def get_statistics(
         self,
         org_id: str,

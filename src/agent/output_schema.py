@@ -26,7 +26,7 @@ class SeriesStyle(StrictStyle):
     width: float | None = Field(default=None, ge=1, le=12)
     opacity: float | None = Field(default=None, ge=0, le=1)
     marker_size: float | None = Field(default=None, ge=2, le=24)
-    marker_symbol: Literal["circle", "square", "diamond", "cross", "triangle-up", "triangle-down"] | None = None
+    marker_symbol: Literal["circle", "square", "diamond", "circle-open", "square-open", "diamond-open", "cross", "triangle-up", "triangle-down"] | None = None
     markers: bool | None = None
     show_values: bool | None = None
     line_shape: Literal["linear", "spline", "hv", "vh", "hvh", "vhv"] | None = None
@@ -79,6 +79,8 @@ class AxisStyle(StrictStyle):
 
 
 class PresentationStyle(StrictStyle):
+    publication_yoy: bool = False
+    publication_axes: bool = False
     design_template: Literal['snapshot','report','stability','outlook','slides','academic','explore'] | None = None
     latest_values: bool = False
     panel_columns: int = Field(default=2,ge=1,le=4)
@@ -89,8 +91,8 @@ class PresentationStyle(StrictStyle):
     font_color: str = Field(default="#263247", pattern=r"^#[0-9a-fA-F]{6}$")
     background: str = Field(default="#ffffff", pattern=r"^#[0-9a-fA-F]{6}$")
     grid_color: str = Field(default="#e5e7eb", pattern=r"^#[0-9a-fA-F]{6}$")
-    height: int | None = Field(default=None, ge=280, le=2400)
-    width: int | None = Field(default=None, ge=400, le=2000)
+    height: int | None = Field(default=None, ge=1, strict=True)
+    width: int | None = Field(default=None, ge=1, strict=True)
     title_x: float = Field(default=0.5, ge=0, le=1)
     title_y: float | None = Field(default=None, ge=0, le=1)
     margin_left: int = Field(default=65, ge=20, le=220)
@@ -110,6 +112,13 @@ class PresentationStyle(StrictStyle):
     show_colorbar: bool = True
 
 
+    @model_validator(mode='after')
+    def output_pixel_budget(self):
+        from output_dimensions import validate_output_dimensions
+        validate_output_dimensions(self.width or 496,self.height or 419)
+        return self
+
+
 class PositionedNote(StrictStyle):
     placement: Literal["inside", "below"] = "inside"
     id: str = Field(default_factory=lambda: uuid4().hex)
@@ -120,6 +129,9 @@ class PositionedNote(StrictStyle):
     y: float = Field(default=0.9, ge=0, le=1)
     ax: float = Field(default=0, ge=-400, le=400)
     ay: float = Field(default=-45, ge=-400, le=400)
+    observation_label: bool = False
+    x_shift: float = Field(default=0,ge=-400,le=400)
+    y_shift: float = Field(default=0,ge=-400,le=400)
     arrow: bool = False
     arrow_width: float = Field(default=2, ge=1, le=12)
     arrow_size: float = Field(default=1, ge=0.3, le=3)

@@ -1,4 +1,5 @@
 """Immutable per-calculation evidence; only explicitly selected safe fields."""
+from statbridge_mcp.observability import observed
 import hashlib
 import json
 import os
@@ -11,6 +12,7 @@ class DerivedIndicatorEvidence:
     def __init__(self, directory):
         self.directory = Path(directory)
 
+    @observed('evidence.save', 'span')
     def save(self, record):
         content = json.dumps(record, ensure_ascii=False, sort_keys=True, allow_nan=False, default=str)
         if len(content.encode()) > 64000000:

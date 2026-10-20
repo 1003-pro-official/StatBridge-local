@@ -107,7 +107,7 @@ class AccountStore:
             db.execute('INSERT INTO graphs VALUES(?,?,?,?,?) ON CONFLICT(user_id,id) DO UPDATE SET title=excluded.title,saved_at=excluded.saved_at,content=excluded.content',(user_id,identifier,title,time.time(),content))
             if commit_file:commit_file()
     def graphs(self,user_id):
-        with self.connect() as db:return [dict(r) for r in db.execute('SELECT id,title,saved_at FROM graphs WHERE user_id=? ORDER BY saved_at DESC',(user_id,))]
+        with self.connect() as db:return [dict(r) for r in db.execute('SELECT id,title,saved_at FROM graphs WHERE user_id=? ORDER BY saved_at DESC,id ASC',(user_id,))]
     def graph_content(self,user_id,identifier):
         with self.connect() as db:row=db.execute('SELECT content FROM graphs WHERE user_id=? AND id=?',(user_id,identifier)).fetchone()
         return row[0] if row else None
@@ -187,7 +187,9 @@ def install(app,root,output_sessions,edit_sessions):
         STORE.logout(request.cookies.get(COOKIE));response.delete_cookie(COOKIE,path='/')
         return {'status':'logged_out'}
     @app.get('/api/account/graphs')
-    def graphs():return {'items':STORE.graphs(current_user()['id']),'limit':5}
+    def graphs():
+        items=STORE.graphs(current_user()['id'])
+        return {'items':items[:5],'olderItems':items[5:],'limit':5}
     @app.delete('/api/account/graphs/{identifier}')
     def delete_graph(identifier:str):
         STORE.delete_graph(current_user()['id'],identifier)

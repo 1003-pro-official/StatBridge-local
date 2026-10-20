@@ -1,3 +1,7 @@
+import ObservationAnnotationEditor from './ObservationAnnotationEditor';
+import OutputSizeControls from './OutputSizeControls';
+import {workspaceHistoryAction} from './workspaceHistory';
+import {tableHistoryAction} from './tableSheetBorders';
 import {withRequestDeadline} from './requestDeadline';
 import {workspacePng,startFileDownload} from './workspaceDownload';
 import {panelGeometry} from './plotPanelLayout';
@@ -29,6 +33,7 @@ import './ChartWorkspace.css';
 
 type Props = {
   preferTable?:boolean;
+  onViewChange?:(view:"graph"|"table")=>void;
   onEvidence?:()=>void;
   children: ReactNode;
   warnings?:string[];
@@ -62,16 +67,20 @@ async function readImage(src: string): Promise<HTMLImageElement> {
   return image;
 }
 
-export default function ChartSketchEditor({ children, series, sessionId, revision, loading, onEdit, model, canUndo, canRedo, warnings=[], onEvidence, preferTable=false }: Props) {
+export default function ChartSketchEditor({ children, series, sessionId, revision, loading, onEdit, model, canUndo, canRedo, warnings=[], onEvidence, preferTable=false, onViewChange }: Props) {
+  const workspace=useRef<HTMLDivElement>(null),historyPending=useRef(false);
   const tableDoc=(revision as {tableDocument?:TableDocument}).tableDocument;
   const [view,setView]=useState<'graph'|'table'>(preferTable?'table':'graph');
   useEffect(()=>setView(preferTable?'table':'graph'),[sessionId,preferTable]);
+  useEffect(()=>onViewChange?.(view),[view,onViewChange]);
   const tableFile=async(format:string)=>{setFileBusy(true);setError('');try{const {blob,filename}=await exportTableFile(sessionId,Number((revision as {editVersion?:number}).editVersion||0),format);const url=URL.createObjectURL(blob);setDownload({url,filename});startFileDownload(url,filename);return true;}catch(err){setError(err instanceof Error?err.message:String(err));return false;}finally{setFileBusy(false);}};
   const figure=(revision as {plotlyFigure?:{data:Array<Record<string,unknown>>;layout:Record<string,unknown>}}).plotlyFigure;
   const minimumWidth=figure?panelGeometry(figure).minWidth:0;
   const state=(revision as {chartState?:Record<string,unknown>}).chartState||{};
   const [selection,setSelection]=useState<GraphSelection>({kind:'chart'});
-  const [dataOpen,setDataOpen]=useState(true),[propertiesOpen,setPropertiesOpen]=useState(true);
+  const [dataOpen,setDataOpen]=useState(!preferTable),[propertiesOpen,setPropertiesOpen]=useState(!preferTable);
+  const [chatOpen,setChatOpen]=useState(!preferTable);
+  useEffect(()=>{if(view==='table'){setDataOpen(false);setPropertiesOpen(false);setChatOpen(false);}else setChatOpen(true);},[view,sessionId]);
   const [fileBusy,setFileBusy]=useState(false);
   const [download,setDownload]=useState<{url:string;filename:string}|null>(null);
   const latestRevision=useRef(revision);latestRevision.current=revision;
@@ -191,7 +200,7 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
       const action=historyIntent(requestedInstruction);
       if(action&&!references.length)return await onEdit({instruction:'',action});
       if(view==='table'){
-        if(references.length)throw new Error('표 편집은 조회 데이터의 배치와 서식만 변경합니다. 참고 이미지 편집은 그래프 화면을 사용해 주세요.');
+        if(references.length)return await onEdit({instruction:requestedInstruction.trim()||'첨부 표의 배치와 서식을 참고해 현재 표를 수정해 주세요. 원자료 수치는 유지해 주세요.',edit_target:'table',reference_files:references,conversation});
         const patch=tableInstruction(requestedInstruction);
         if(!patch)throw new Error('표 수정 예: 소수점 한 자리로 바꿔줘 / 최근 12개월만 보여줘 / 기간을 행으로 바꿔줘. 제목·주석·항목은 왼쪽 표 편집에서 설정해 주세요.');
         const recent=requestedInstruction.match(/최근\s*\d+\s*(?:개\s*)?(개월|월|분기|년)/);
@@ -236,9 +245,28 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
     finally{applying.current=false;setBusy(false);}
   };
   const historyAction = async (action:"undo"|"redo") => {
+    if(historyPending.current||loading||busy||fileBusy||applying.current||!(action==='undo'?canUndo:canRedo))return;
+    historyPending.current=true;
     try { await onEdit({instruction:"",action}); }
     catch(err) { setError(err instanceof Error?err.message:"편집을 되돌리지 못했습니다."); }
+    finally{historyPending.current=false;}
   };
+  useEffect(()=>{
+    if(view==='table'||!workspace.current)return;
+    const root=workspace.current;
+    const handle=(event:KeyboardEvent)=>{const action=workspaceHistoryAction(event,root);if(!action)return;event.preventDefault();void historyAction(action);};
+    root.ownerDocument.addEventListener('keydown',handle);return()=>root.ownerDocument.removeEventListener('keydown',handle);
+  },[view,sessionId,canUndo,canRedo,loading,busy,fileBusy,onEdit]);
+  useEffect(()=>{
+    if(view!=='table')return;
+    const handle=(event:KeyboardEvent)=>{
+      const target=event.target as HTMLElement;if(!target.closest('.chart-workspace,.report-table-dialog'))return;
+      const action=tableHistoryAction(event,!!target.closest('input,textarea,[contenteditable="true"]'));
+      if(!action)return;event.preventDefault();
+      if(loading||busy||(action==='undo'?!canUndo:!canRedo))return;
+      void historyAction(action);
+    };window.addEventListener('keydown',handle);return()=>window.removeEventListener('keydown',handle);
+  },[view,canUndo,canRedo,loading,busy,onEdit]);
   useEffect(()=>{
     const node=stage.current;if(!node)return;
     const select=(event:Event)=>setSelection((event as CustomEvent<GraphSelection>).detail);
@@ -264,8 +292,10 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
       const pending=stickerDraft.current?.revision===revision?stickerDraft.current.items:null;
       if(pending&&JSON.stringify(pending)!==JSON.stringify(state.stickers||[])){if(!await onEdit({instruction:'',stickers:pending}))return false;await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));if(version!==undefined)version+=1;}
 
+      const presentation=(latestRevision.current as {chartState?:{presentation?:{width?:number;height?:number}}}).chartState?.presentation;
+      const exportSize=presentation?.width&&presentation?.height?{width:presentation.width,height:presentation.height}:undefined;
       const csvValue=(value:unknown)=>JSON.stringify(String(value));
-      const blob=format==='csv'?new Blob(['\ufeff'+[['데이터','시점','값','단위'].join(','),...series.flatMap(s=>s.points.map(p=>[s.label,p.date,p.value,s.unit].map(csvValue).join(',')))].join('\r\n')],{type:'text/csv;charset=utf-8'}):format==='png'&&(latestRevision.current as {plotlyFigure?:{data:Record<string,unknown>[];layout:Record<string,unknown>}}).plotlyFigure?await workspacePng((latestRevision.current as {plotlyFigure:{data:Record<string,unknown>[];layout:Record<string,unknown>}}).plotlyFigure):await exportReportFile(sessionId,version,format);
+      const blob=format==='csv'?new Blob(['\ufeff'+[['데이터','시점','값','단위'].join(','),...series.flatMap(s=>s.points.map(p=>[s.label,p.date,p.value,s.unit].map(csvValue).join(',')))].join('\r\n')],{type:'text/csv;charset=utf-8'}):format==='png'&&(latestRevision.current as {plotlyFigure?:{data:Record<string,unknown>[];layout:Record<string,unknown>}}).plotlyFigure?await workspacePng((latestRevision.current as {plotlyFigure:{data:Record<string,unknown>[];layout:Record<string,unknown>}}).plotlyFigure,undefined,exportSize):await exportReportFile(sessionId,version,format);
       if(format==='json')try{localStorage.setItem(accountKey('statbridge.workspace.saved'),await blob.text());}catch{setError('브라우저 저장 공간이 부족합니다. 다운로드한 파일로 복원하세요.');}
       const url=URL.createObjectURL(blob),filename=`statbridge-chart.${format}`;setDownload({url,filename});startFileDownload(url,filename);return true;
     }catch(e){setError(e instanceof Error?e.message:String(e));return false;}finally{setFileBusy(false);}
@@ -303,17 +333,17 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
     {!!marks.length&&<p className="sketch-help">표시를 클릭해 선택한 뒤 끌어서 이동하세요. 파란 모서리 조절점을 끌면 크기를 바꿀 수 있습니다. 이동 후 수정 위치는 다시 확인합니다.</p>}
     <details className="chart-edit-help"><summary>편집 가능한 항목과 예시</summary><p>그림을 그리지 않고 아래 입력칸에 여러 변경을 한 번에 적어도 됩니다. 여러 계열은 계열 이름을, 부분 수정은 실제 날짜나 분기를 함께 적어 주세요. 기존 메모·도형은 내용이나 위치로 지정해 주세요.</p>{editHelp.map(group=><section key={group.title}><strong>{group.title}</strong><ul>{group.examples.map(example=><li key={example}>{example}</li>)}</ul></section>)}</details>
   </>;
-  return <div className="sketch-editor chart-workspace" data-workspace-session={sessionId} aria-label="그래프 편집 워크스페이스">
-    <header className="workspace-top"><div><small>STATBRIDGE 분석 작업{(revision as {cachedSnapshot?:boolean}).cachedSnapshot?' · 저장 당시 자료':''}</small><strong>{String(state.title||'통계 그래프 편집')}</strong></div><div className="workspace-actions">{onEvidence&&<button type="button" onClick={onEvidence}>실행 흐름</button>}<button type="button" disabled={!canUndo||loading} onClick={()=>void historyAction('undo')} title="마지막 편집 되돌리기">↶ 되돌리기</button><button type="button" disabled={!canRedo||loading} onClick={()=>void historyAction('redo')} title="취소한 편집 다시 실행">↷ 다시 실행</button><button type="button" disabled={loading||fileBusy} onClick={()=>window.dispatchEvent(new Event('statbridge:save-chat'))}>분석 저장</button><details name={`workspace-files-${sessionId}`}><summary>파일 내보내기</summary><div>{(view==='table'?['xlsx','csv','png','pdf']:((revision as {exportFormats?:string[]}).exportFormats||['png','csv'])).map(format=><button key={format} type="button" disabled={loading||fileBusy} onClick={()=>void (view==='table'&&format!=='json'?tableFile(format):file(format))}>{format.toUpperCase()} 다운로드</button>)}</div></details><details name={`workspace-files-${sessionId}`}><summary>분석 설정</summary><div><button type="button" disabled={loading||fileBusy} onClick={()=>void file('json')}>설정 JSON 저장</button><label>분석 설정 가져오기<input aria-label="저장한 그래프 열기" type="file" accept=".json" onChange={e=>void restoreFile(e.target.files?.[0])}/></label><button type="button" disabled={loading} onClick={async()=>{try{const saved=localStorage.getItem(accountKey('statbridge.workspace.saved'));if(!saved)throw new Error('저장한 그래프 설정이 없습니다.');await onEdit({instruction:'',document:JSON.parse(saved)});}catch(e){setError(e instanceof Error?e.message:String(e));}}}>최근 저장 설정 열기</button><button type="button" disabled={loading} onClick={()=>{if(window.confirm('처음 그래프로 되돌릴까요? 되돌리기로 취소할 수 있습니다.'))void onEdit({instruction:'',restore_initial:true});}}>처음 상태로 되돌리기</button></div></details></div></header>
+  return <div ref={workspace} className={`sketch-editor chart-workspace ${view==='table'?'table-workspace':''}`} data-workspace-session={sessionId} aria-label="그래프 편집 워크스페이스">
+    <header className="workspace-top"><div><small>STATBRIDGE 분석 작업{(revision as {cachedSnapshot?:boolean}).cachedSnapshot?' · 저장 당시 자료':''}</small><strong>{String(state.title||'통계 그래프 편집')}</strong></div><div className="workspace-actions"><button type="button" disabled={loading||fileBusy} onClick={()=>window.dispatchEvent(new Event('statbridge:save-chat'))}>분석 저장</button><details name={`workspace-files-${sessionId}`}><summary>파일 내보내기</summary><div>{(view==='table'?['xlsx','csv','png','pdf']:((revision as {exportFormats?:string[]}).exportFormats||['png','csv'])).map(format=><button key={format} type="button" disabled={loading||fileBusy} onClick={()=>void (view==='table'&&format!=='json'?tableFile(format):file(format))}>{format.toUpperCase()} 다운로드</button>)}</div></details><details name={`workspace-files-${sessionId}`}><summary>분석 설정</summary><div><button type="button" disabled={loading||fileBusy} onClick={()=>void file('json')}>설정 JSON 저장</button><label>분석 설정 가져오기<input aria-label="저장한 그래프 열기" type="file" accept=".json" onChange={e=>void restoreFile(e.target.files?.[0])}/></label><button type="button" disabled={loading} onClick={async()=>{try{const saved=localStorage.getItem(accountKey('statbridge.workspace.saved'));if(!saved)throw new Error('저장한 그래프 설정이 없습니다.');await onEdit({instruction:'',document:JSON.parse(saved)});}catch(e){setError(e instanceof Error?e.message:String(e));}}}>최근 저장 설정 열기</button><button type="button" disabled={loading} onClick={()=>{if(window.confirm('처음 그래프로 되돌릴까요? 되돌리기로 취소할 수 있습니다.'))void onEdit({instruction:'',restore_initial:true});}}>처음 상태로 되돌리기</button></div></details></div></header>
     {fileBusy&&<p role="status" className="workspace-download-status">파일을 생성하고 있습니다…</p>}
     {download&&<p role="status" className="workspace-download-status">파일 준비가 완료되었습니다. <a href={download.url} download={download.filename}>{download.filename} 다운로드</a></p>}
     {error&&<p role="alert" className="workspace-error">{error}</p>}
     {warnings.length>0&&<details className="workspace-warnings" open><summary>자료·축 범위 안내 ({warnings.length})</summary>{warnings.map((warning,i)=><p key={i}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi,'$1[redacted]')}</p>)}</details>}
-    <div className="workspace-panel-toggles"><div className="workspace-view-tabs" role="group" aria-label="분석 결과 표시"><button type="button" aria-pressed={view==='graph'} onClick={()=>setView('graph')}>그래프</button><button type="button" disabled={!tableDoc} aria-pressed={view==='table'} onClick={()=>{setView('table');setEnabled(false);}}>표</button></div><button type="button" aria-expanded={dataOpen} onClick={()=>setDataOpen(!dataOpen)}>데이터 {dataOpen?'접기':'열기'}</button><button type="button" aria-expanded={propertiesOpen} onClick={()=>setPropertiesOpen(!propertiesOpen)}>속성 {propertiesOpen?'접기':'열기'}</button></div>
-    <div className={`workspace-grid ${!dataOpen?'data-collapsed':''} ${!propertiesOpen?'properties-collapsed':''}`}>
+    <div className="workspace-panel-toggles"><div className="workspace-view-tabs" role="group" aria-label="분석 결과 표시"><button type="button" aria-pressed={view==='graph'} onClick={()=>setView('graph')}>그래프</button><button type="button" disabled={!tableDoc} aria-pressed={view==='table'} onClick={()=>{setView('table');setEnabled(false);}}>표</button></div><button type="button" aria-expanded={dataOpen} onClick={()=>setDataOpen(!dataOpen)}>데이터 {dataOpen?'접기':'열기'}</button><button type="button" aria-expanded={propertiesOpen} onClick={()=>setPropertiesOpen(!propertiesOpen)}>속성 {propertiesOpen?'접기':'열기'}</button><button type="button" aria-expanded={chatOpen} onClick={()=>setChatOpen(!chatOpen)}>편집 대화 {chatOpen?'접기':'열기'}</button></div>
+    <div className={`workspace-grid ${!dataOpen?'data-collapsed':''} ${!propertiesOpen?'properties-collapsed':''} ${!chatOpen?'chat-collapsed':''}`}>
     {(dataOpen||propertiesOpen)&&<aside className="workspace-left">{dataOpen&&<WorkspaceData series={series} hidden={state.hidden_series as string[]||[]} onEdit={editWithDraft} disabled={loading||busy} onSelect={label=>setSelection({kind:'series',label})}/>}
-    {propertiesOpen&&<section className="workspace-edit-controls">{view==='table'&&tableDoc?<TableControls document={tableDoc} series={series} disabled={loading||busy} onEdit={editWithDraft}/>:<><WorkspaceProperties supportedChartTypes={(revision as {visualization?:{editOptions?:{supportedChartTypes?:ChartType[]}}}).visualization?.editOptions?.supportedChartTypes} series={series} state={state} selection={selection} onSelect={setSelection} onEdit={editWithDraft} disabled={loading||busy}/><details><summary>고급 차트 · 인쇄 · 출처</summary><ReportPanel series={series} sessionId={sessionId} revision={revision} disabled={loading||busy} onEdit={editWithDraft}/></details><details><summary>그림판 · 보고서 주석 · 편집 도움말</summary>{controls}</details></>}</section>}</aside>}
-    <section className="workspace-center" aria-label="중앙 분석 결과">{view==='table'&&tableDoc?<ReportTable document={tableDoc}/>:<>{!series.some(s=>s.frequency==='category')&&<QuickPeriodControls state={state} disabled={loading||busy} onEdit={editWithDraft}/>}<div className="workspace-graph-status" role="status">{loading||busy?'변경 내용 적용 중…':`현재 그래프 · 편집 ${Number((revision as {editVersion?:number}).editVersion||0)}회`}<span>선을 클릭하면 해당 데이터의 속성을 편집합니다</span></div><div className="sketch-scroll" tabIndex={0} role="region" aria-label="그래프 패널 스크롤"><div className="sketch-stage" ref={stage} style={minimumWidth?{minWidth:minimumWidth}:undefined}>
+    {propertiesOpen&&<section className="workspace-edit-controls"><OutputSizeControls variant={view} width={view==='table'?tableDoc?.options.export_width:(state.presentation as {width?:number})?.width} height={view==='table'?tableDoc?.options.export_height:(state.presentation as {height?:number})?.height} disabled={loading||busy} onApply={(width,height)=>editWithDraft({instruction:'',commands:[view==='table'?{operation:'set_table',kind:'STYLE_EDIT',params:{patch:{export_width:width,export_height:height}}}:{operation:'set_presentation',kind:'STYLE_EDIT',params:{width,height}}]})}/>{view==='table'&&tableDoc?<TableControls document={tableDoc} series={series} disabled={loading||busy} onEdit={editWithDraft}/>:<><WorkspaceProperties annotationEditor={<ObservationAnnotationEditor stage={stage} series={series} state={state} disabled={loading||busy} onEdit={editWithDraft} onActivate={()=>setEnabled(false)}/>} supportedChartTypes={(revision as {visualization?:{editOptions?:{supportedChartTypes?:ChartType[]}}}).visualization?.editOptions?.supportedChartTypes} series={series} state={state} selection={selection} onSelect={setSelection} onEdit={editWithDraft} disabled={loading||busy}/><details><summary>고급 차트 · 인쇄 · 출처</summary><ReportPanel series={series} sessionId={sessionId} revision={revision} disabled={loading||busy} onEdit={editWithDraft}/></details><details><summary>그림판 · 보고서 주석 · 편집 도움말</summary>{controls}</details></>}</section>}</aside>}
+    <section className={`workspace-center ${view==='table'?'workspace-table-center':''}`} aria-label="중앙 분석 결과">{view==='table'&&tableDoc?<ReportTable document={tableDoc} onEdit={editWithDraft} disabled={loading||busy}/>:<>{!series.some(s=>s.frequency==='category')&&<QuickPeriodControls state={state} disabled={loading||busy} onEdit={editWithDraft}/>}<div className="workspace-graph-status" role="status">{loading||busy?'변경 내용 적용 중…':`현재 그래프 · 편집 ${Number((revision as {editVersion?:number}).editVersion||0)}회`}<span>선을 클릭하면 해당 데이터의 속성을 편집합니다</span></div><div className="sketch-scroll" tabIndex={0} role="region" aria-label="그래프 패널 스크롤"><div className="sketch-stage" ref={stage} style={minimumWidth?{minWidth:minimumWidth}:undefined}>
       {children}
       <svg ref={overlay} className={`sketch-overlay ${enabled?"drawing":""}`} viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-label="그래프 수정 표시 영역"
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{if(transform.current){const original=transform.current.mark;setMarks(current=>current.map(m=>m.id===original.id?original:m));transform.current=null;}active.current=null;setDraft(null);}}>
@@ -328,7 +358,7 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
         })}
       </svg>
     </div></div></>}</section>
-    <aside className="workspace-right workspace-chat"><Sujeongi tableMode={view==='table'} targets={series.map(s=>s.label)} inline revision={revision} sessionId={sessionId} loading={loading||busy} markCount={marks.length} model={model} onEdit={apply} canSubmitMarks={marks.some(m=>m.text.trim())||!!(model?.supportsImages&&marks.length)} markInstructions={marks.map(m=>m.text.trim()).filter(Boolean).join(" / ")}>{null}</Sujeongi></aside>
+    {chatOpen&&<aside className="workspace-right workspace-chat"><Sujeongi tableMode={view==='table'} targets={series.map(s=>s.label)} inline revision={revision} sessionId={sessionId} loading={loading||busy} markCount={marks.length} model={model} onEdit={apply} canSubmitMarks={marks.some(m=>m.text.trim())||!!(model?.supportsImages&&marks.length)} markInstructions={marks.map(m=>m.text.trim()).filter(Boolean).join(" / ")}>{null}</Sujeongi></aside>}
     </div>
 
   </div>;

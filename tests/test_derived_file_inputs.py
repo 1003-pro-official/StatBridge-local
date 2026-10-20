@@ -40,8 +40,11 @@ def test_all_formats_share_calculation_validation_and_raw_file_hash(setup,format
     content,encoding=payload(format);service.upload(1,wid,'cost','source.'+format,content,encoding)
     state=service.load(1,wid);stored=state['files']['cost']
     raw=service.path(1,wid).parent/'files'/(stored['file_id']+'.'+format)
-    assert hashlib.sha256(raw.read_bytes()).hexdigest()==stored['sha256']
+    # Pending raw uploads are memory-only; successful calculations pin the same bytes.
+    assert not raw.exists()
+    assert hashlib.sha256(service.raw_uploads[(1,wid)][raw.name]).hexdigest()==stored['sha256']
     assert service.resume(1,wid)['result']['execution']['rows'][-1]['DT']==pytest.approx(66.55)
+    assert hashlib.sha256(raw.read_bytes()).hexdigest()==stored['sha256']
     assert len(calls)==1
 
 @pytest.mark.parametrize('format',['csv','json','tsv'])

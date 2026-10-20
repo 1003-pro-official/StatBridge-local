@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statbridge_mcp.observability import observed, record_failure
 
 from typing import Any, Literal, TypedDict
 
@@ -90,6 +91,7 @@ class StatBridgeWorkflow:
     def _path(state: StatBridgeGraphState, node: str) -> list[str]:
         return [*(state.get("orchestration_path") or []), node]
 
+    @observed('request.resolve', 'span')
     def _resolve_request(self, state: StatBridgeGraphState) -> dict[str, Any]:
         resolution = state.get("resolution")
         if resolution is None:
@@ -104,6 +106,7 @@ class StatBridgeWorkflow:
             "orchestration_path": self._path(state, "resolve_request"),
         }
 
+    @observed('intent.route', 'span')
     def _route_start(self, state: StatBridgeGraphState):
         if state.get("execution_result") is not None:
             return "output"
@@ -118,6 +121,7 @@ class StatBridgeWorkflow:
         return 'stop' if (state.get('result') or {}).get('derived_blocked') else 'continue'
 
     def _derived_failure(self, state, stage, message):
+        record_failure(message)
         planning = state.get('derived_planning') or {}
         continuation = self._derived_context(state)
         failure_kind = getattr(message, 'failure_kind', 'analysis_error')
@@ -140,6 +144,7 @@ class StatBridgeWorkflow:
                 '_derived_start': state.get('start_period') or prior.get('_derived_start'),
                 '_derived_end': state.get('end_period') or prior.get('_derived_end')}
 
+    @observed('planner.plan', 'span')
     def _plan_derived_indicator(self, state):
         prior = (state.get('conversation_state') or {}).get('_derived_query')
         query = f'{prior}\n추가 조건: {state["query"]}' if prior and prior != state['query'] else state['query']
@@ -157,6 +162,7 @@ class StatBridgeWorkflow:
         except (ValueError, TypeError, KeyError) as exc:
             return self._derived_failure(state, 'plan_derived_indicator', exc)
 
+    @observed('plan.validate', 'span')
     def _validate_derived_plan(self, state):
         try:
             planning = dict(state['derived_planning'])
@@ -174,6 +180,7 @@ class StatBridgeWorkflow:
         except (ValueError, TypeError, KeyError) as exc:
             return self._derived_failure(state, 'validate_derived_plan', exc)
 
+    @observed('sources.fetch', 'span')
     def _execute_derived_sources(self, state):
         try:
             planning = state['derived_planning']
@@ -182,6 +189,7 @@ class StatBridgeWorkflow:
         except (ValueError, TypeError, KeyError) as exc:
             return self._derived_failure(state, 'execute_derived_sources', exc)
 
+    @observed('dag.calculate', 'span')
     def _calculate_derived_indicator(self, state):
         try:
             return {'result': self.derived_runtime.calculate(state['query'], state['derived_planning'], state['derived_responses']),
@@ -207,6 +215,7 @@ class StatBridgeWorkflow:
         request = state.get("output_request") or {}
         return "prepare_output" if execution_status == "success" and request.get("chart_type") else "await_output"
 
+    @observed('request.clarify', 'span')
     def _await_clarification(self, state: StatBridgeGraphState) -> dict[str, Any]:
         return {
             "result": state.get("resolution") or {},
@@ -221,6 +230,7 @@ class StatBridgeWorkflow:
             "orchestration_path": self._path(state, "finish_unresolved"),
         }
 
+    @observed('statistics.execute', 'span')
     def _execute_statistics(self, state: StatBridgeGraphState) -> dict[str, Any]:
         result = self.agent.execute_resolution(
             query=state["query"],
@@ -238,6 +248,7 @@ class StatBridgeWorkflow:
             "orchestration_path": self._path(state, "execute_statistics"),
         }
 
+    @observed('output.prepare', 'span')
     def _prepare_output(self, state: StatBridgeGraphState) -> dict[str, Any]:
         result = dict(state.get("execution_result") or state.get("result") or {})
         execution_status = str((result.get("execution") or {}).get("status") or "")

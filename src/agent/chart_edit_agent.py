@@ -135,6 +135,9 @@ class Hcx007EditModel:
 
 
 class EditState(TypedDict, total=False):
+    prepare_result: Any
+    prepare_reference: Any
+    reference_catalog: list[dict[str, Any]]
     interpretation: str
     result: dict[str, Any]
     current: dict[str, Any]
@@ -277,6 +280,22 @@ class ChartEditAgent:
                    "periods": {s["label"]: [p["date"] for p in s["points"]] for s in displayed},
                    "supportsImages": self.model.supports_images,
                    "parameterSchemas":{cls.__name__:cls.model_json_schema() for cls in [SeriesStyle, AxisStyle, PresentationStyle, PositionedNote, Guide, PaperShape, Highlight]}}
+        if state.get('prepare_reference') and visual.reference_files and not visual.marks:
+            context['referenceCatalog']=state.get('reference_catalog') or []
+            def prepare_reference(proposal, observed_context):
+                nonlocal series, labels, displayed
+                changed=state['prepare_reference'](state['result'],state['current'],proposal.get('reference_style') or {})
+                if changed:
+                    state['result'],state['current']=changed
+                    series=self.output_agent._series(state['result']['execution']['rows'])
+                    labels={s['label'] for s in series}
+                    displayed=self.output_agent._apply_data_edits(series,ChartSpec.model_validate(state['current']['chartState']))
+                    context.update(chartState=state['current']['chartState'],seriesLabels=[s['label'] for s in displayed],
+                        seriesMetadata=[{'label':s['label'],'frequency':s.get('frequency'),'unit':s.get('unit')} for s in displayed],
+                        periods={s['label']:[p['date'] for p in s['points']] for s in displayed},
+                        referenceDataBinding=state['result']['execution']['referenceDataBinding'])
+                return {**observed_context,**{k:v for k,v in context.items() if not k.startswith('_')}}
+            context['_prepare_reference']=prepare_reference
         from advanced_chart_spec import TEMPLATES,ReportOptions
         context['reportTemplates']=TEMPLATES
         from chart_designs import DESIGNS
@@ -480,7 +499,7 @@ class ChartEditAgent:
                     params={"title_x":anchor.x,"title_y":1-anchor.y}))
         if visual.reference_files:
             from chart_reference_policy import validate_reference_style
-            validate_reference_style(commands,state['instruction'],state['current'])
+            validate_reference_style(commands,state['instruction'],state['current'],(proposal.get('reference_style') or {}).get('comparison'))
         missing = [m for m in visual.marks if m.text.strip() and m.id not in handled_marks]
         if missing and not coverage and not state.get("_repairing_marks"):
             # Recover omitted mark instructions separately, then validate the whole
@@ -509,9 +528,12 @@ class ChartEditAgent:
             commands.append(command)
         if len(commands)>12:
             raise ValueError("한 번에 적용할 수정 명령은 12개까지입니다. 요청을 나누어 주세요.")
-        return {"commands": commands, "coverage": coverage, "review_context":context, "review_system":system, "proposal":proposal}
+        return {"commands": commands, "coverage": coverage, "review_context":context, "review_system":system, "proposal":proposal,
+                "result":state['result'],"current":state['current']}
 
     def _render(self, state: EditState) -> dict[str, Any]:
+        if state.get('prepare_result'):
+            state['result']=state['prepare_result'](state['result'],state['commands'])
         try:
             # Style edits already have structured change descriptions. Repeating
             # a statistical narration adds a third provider call, rate pressure
@@ -535,6 +557,7 @@ class ChartEditAgent:
         return {"output": output}
 
     def edit(self, result: dict[str, Any], current: dict[str, Any], instruction: str,
-             visual: dict[str, Any] | None = None) -> dict[str, Any]:
+             visual: dict[str, Any] | None = None, *, prepare_result=None, prepare_reference=None, reference_catalog=None) -> dict[str, Any]:
         return self.graph.invoke({"result": result, "current": current,
-                                  "instruction": instruction, "visual": visual or {}})["output"]
+                                  "instruction": instruction, "visual": visual or {}, "prepare_result":prepare_result,
+                                  "prepare_reference":prepare_reference,"reference_catalog":reference_catalog or []})["output"]
