@@ -1,3 +1,4 @@
+import {bindAnnotationDrag,type DragNote} from './annotationDrag';
 import ObservationAnnotationEditor from './ObservationAnnotationEditor';
 import OutputSizeControls from './OutputSizeControls';
 import {workspaceHistoryAction} from './workspaceHistory';
@@ -123,6 +124,10 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
   const applying = useRef(false);
   const [error,setError] = useState("");
   const stage = useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    if(view!=='graph'||enabled||loading||busy||!stage.current)return;
+    return bindAnnotationDrag(stage.current,(state.notes||[]) as DragNote[],(id,params)=>editWithDraft({instruction:'',commands:[{operation:'update_note',kind:'STYLE_EDIT',value:id,params}]}),setError);
+  },[revision,view,enabled,loading,busy]);
   const overlay = useRef<SVGSVGElement>(null);
   useEffect(() => { setMarks([]);setSelectedMark(null);transform.current=null;setDraft(null);active.current=null;setInstruction("");setNote("");setTextAnchor(null);setTarget("chart");setStart("");setEnd("");setError("");setDownload(null); },[sessionId,revision]);
   useEffect(()=>{if(enabled&&tool==="text")textInput.current?.focus();},[enabled,tool,textAnchor]);

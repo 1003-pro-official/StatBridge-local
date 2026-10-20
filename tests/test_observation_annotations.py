@@ -26,6 +26,7 @@ def test_free_text_escaped_and_position_change_and_remove():
     n=result['chartState']['notes'][-1]
     annotation=next(a for a in result['plotlyFigure']['layout']['annotations'] if a.get('name')==result['chartState']['notes'][-1]['id'])
     assert annotation['xref']=='paper' and annotation['x']==.3 and annotation['y']==.8
+    assert annotation['xanchor']=='center' and annotation['yanchor']=='middle'
     assert '<script>' not in annotation['text'] and '<br>' in annotation['text']
     moved=edit(agent,data,result,'update_note',value=n['id'],params={'x':.6,'y':.5})
     assert next(a for a in moved['plotlyFigure']['layout']['annotations'] if a.get('name')==n['id'])['x']==.6

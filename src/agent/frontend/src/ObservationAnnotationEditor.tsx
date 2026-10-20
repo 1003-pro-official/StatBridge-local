@@ -58,7 +58,7 @@ export default function ObservationAnnotationEditor({stage,series,state,disabled
    <label>글자 크기<input aria-label="주석 글자 크기" type="number" min={8} max={30} value={font} onChange={e=>setFont(Number(e.target.value))}/></label><label>색상<input aria-label="주석 색상" type="color" value={color} onChange={e=>setColor(e.target.value)}/></label>
    <button type="button" onClick={()=>activate(selected?'move':'text')}>그래프에서 위치 지정</button><button type="button" disabled={!text.trim()} onClick={()=>void addText()}>{selected?'선택 텍스트 수정':'텍스트 추가'}</button>{selected&&<button type="button" onClick={()=>{setSelected(null);setText('');}}>새 텍스트 작성</button>}
   </fieldset></div>
-  <p>빈 공간에 새 통계값을 만들지 않습니다. 점은 실제 관측값에 연결되며 직접 입력한 문구는 사용자 주석입니다.</p>
+  <p>텍스트 추가 후 그래프 안의 문구를 마우스로 끌어 이동하세요. 마우스를 놓으면 저장됩니다. Esc로 이동을 취소합니다. 빈 공간에 새 통계값을 만들지 않습니다. 점은 실제 관측값에 연결되며 직접 입력한 문구는 사용자 주석입니다.</p>
   {notes.map(n=><div className="annotation-item" key={n.id}><span>{n.text}</span><button type="button" disabled={disabled||busy} onClick={()=>{setSelected(n.id);setText(n.text);setColor(n.color);setFont(n.font_size);setX(n.x*100);setY(n.y*100);}}>문구·위치 수정</button><button type="button" disabled={disabled||busy} onClick={()=>void command([{operation:'remove_note',kind:'STYLE_EDIT',value:n.id}])}>텍스트 삭제</button></div>)}
   {(state.range_styles||[]).filter(r=>r.scope==='point'&&r.style.markers).map(r=><div className="annotation-item" key={r.id}><span>{r.label} · {r.start}</span><button type="button" disabled={disabled||busy} onClick={()=>void command([{operation:'remove_range_style',kind:'STYLE_EDIT',value:r.id}])}>관측점 표시 삭제</button></div>)}
   {mode&&<button type="button" onClick={()=>setMode(null)}>위치 선택 취소</button>}{notice&&<p role="status">{notice}</p>}
