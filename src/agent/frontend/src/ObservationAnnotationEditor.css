@@ -3,3 +3,9 @@
 .workspace-left .observation-annotation-editor{margin:0;padding:12px 0;border:0;border-bottom:1px solid #dbe5eb;border-radius:0;background:transparent}.workspace-left .annotation-editor-grid{grid-template-columns:minmax(0,1fr);gap:12px}.workspace-left .annotation-editor-grid fieldset{padding:8px}.workspace-left .annotation-editor-grid label{align-items:flex-start;flex-wrap:wrap}.workspace-left .annotation-editor-grid select,.workspace-left .annotation-editor-grid textarea{flex-basis:100%;width:100%;box-sizing:border-box}.workspace-left .annotation-item{flex-wrap:wrap;overflow-wrap:anywhere}.workspace-left .annotation-item span{flex-basis:100%}
 
 .statbridge-note-draggable,.statbridge-note-draggable *{cursor:grab!important;touch-action:none;user-select:none}.statbridge-note-dragging,.statbridge-note-dragging *{cursor:grabbing!important}
+
+/* Read-only hover cards must never intercept annotation input. */
+.sketch-stage .hoverlayer,.sketch-stage .hoverlayer *{pointer-events:none!important}
+.sketch-stage.annotation-note-hover .hoverlayer,.sketch-stage.annotation-drag-active .hoverlayer{visibility:hidden!important;pointer-events:none!important}
+.sketch-stage.annotation-note-hover .modebar-container,.sketch-stage.annotation-drag-active .modebar-container{visibility:hidden!important;pointer-events:none!important}
+.statbridge-note-draggable{pointer-events:all!important}

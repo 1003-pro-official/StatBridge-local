@@ -126,7 +126,7 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
   const stage = useRef<HTMLDivElement>(null);
   useEffect(()=>{
     if(view!=='graph'||enabled||loading||busy||!stage.current)return;
-    return bindAnnotationDrag(stage.current,(state.notes||[]) as DragNote[],(id,params)=>editWithDraft({instruction:'',commands:[{operation:'update_note',kind:'STYLE_EDIT',value:id,params}]}),setError);
+    return bindAnnotationDrag(stage.current,(state.notes||[]) as DragNote[],(id,params)=>editWithDraft({instruction:'',commands:[{operation:'update_note',kind:'STYLE_EDIT',value:id,params}]}),setError,plot=>Plotly.Fx.unhover(plot));
   },[revision,view,enabled,loading,busy]);
   const overlay = useRef<SVGSVGElement>(null);
   useEffect(() => { setMarks([]);setSelectedMark(null);transform.current=null;setDraft(null);active.current=null;setInstruction("");setNote("");setTextAnchor(null);setTarget("chart");setStart("");setEnd("");setError("");setDownload(null); },[sessionId,revision]);
