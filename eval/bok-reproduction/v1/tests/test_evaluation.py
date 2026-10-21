@@ -118,6 +118,7 @@ def test_conflicting_second_review_is_pending_and_not_aggregated():
     first['second_review']=second
     report=score([c],[p],{},[first])
     assert report['quantitative'][0]['status']=='pending_second_review'
+    assert report['quantitative'][0]['response_review_approved'] is False
     assert report['qualitative']['facts']['n']==0
 
 
@@ -155,8 +156,10 @@ def test_compare_cannot_hide_regression_or_mix_source_versions():
     from core import RUBRIC
     from evaluate import compare
     base={'case_contracts_sha256':'same','provider_sha256':['same'],
+          'execution_context':{'environment':'model_fixed','implementation_sha256':{'app.py':'same'},'evaluation_code_sha256':{'core.py':'same'}},
           'categories':{'source_subset':{'attempts':1,'quantitative_pass':1}},
-          'quantitative':[{'id':'C','status':'passed','quantitative_pass':True,'critical_error':False}],
+          'quantitative':[{'id':'C','status':'passed','quantitative_pass':True,'critical_error':False,
+                           'gold_approved':True,'response_review_approved':True}],
           'qualitative':{k:{'mean':2} for k in RUBRIC}}
     candidate=copy.deepcopy(base)
     assert compare(base,candidate)['adoption']=='eligible_for_human_decision'
@@ -179,6 +182,8 @@ def test_mock_model_adapter_gets_input_only_and_actual_model_checked(tmp_path,mo
     case={'id':'C','input':{'query':'q'},'expected':{'private_gold':'not allowed'},'evidence':{'secret':'not allowed'}}
     result=evaluate.run([case],tmp_path/'provider.json','model_fixed',adapter,allow_paid=True)
     assert result[0]['execution_status']=='observed'
+    assert result[0]['implementation_sha256']['src/agent/report_summary.py']
+    assert result[0]['evaluation_code_sha256']['runtime_adapter']==digest_file(adapter)
     adapter.write_text("def run_input(payload, provider, profile):\n    return {'execution_status':'observed','actual_models':[{'purpose':'summary','model':'WRONG'}]}\n")
     result=evaluate.run([case],tmp_path/'provider.json','model_fixed',adapter,allow_paid=True)
     assert result[0]['execution_status']=='unobserved'
@@ -280,3 +285,95 @@ def test_not_executed_cases_do_not_inflate_attempt_count():
         [{'execution_status':'observed'},{'execution_status':'not_executed'}],
         [{'status':'pending_review','quantitative_pass':True},{'status':'not_executed','quantitative_pass':False}])
     assert report['attempted']==1
+
+
+def test_failed_case_still_requires_gold_approval_for_comparison():
+    import copy
+    from core import digest_value, review_packet, RUBRIC
+    from evaluate import score, compare
+    case={'id':'C','group_id':'G','category':'recovery','input':{'query':'q'},
+          'expected':{'decision':'recoverable_failure','requires_numeric':False,'observed_contract':{'input_preserved':True}},
+          'review':{'human_approved':False}}
+    prediction={'id':'C','execution_status':'observed','decision':'recoverable_failure',
+                'input_sha256':digest_value(case['input']),'observed_contract':{'input_preserved':False},
+                'environment':'model_fixed','profile':'baseline','implementation_sha256':{'app.py':'same'},
+                'evaluation_code_sha256':{'core.py':'same'},'provider_sha256':'same'}
+    review=review_packet(case,prediction)
+    review.update(reviewer='first',human_approved=True,scores={k:1 for k in RUBRIC},critical_error=False,
+                  evidence_notes={k:'checked' for k in RUBRIC})
+    review['second_review']={**review,'reviewer':'second','second_review':None}
+    report=score([case],[prediction],{},[review])
+    assert report['quantitative'][0]['status']=='failed'
+    assert compare(report,copy.deepcopy(report))['adoption']=='pending_review_or_execution'
+    case['review']={'human_approved':True,'reviewer':'gold','input_sha256':digest_value(case['input']),
+                    'expected_sha256':digest_value(case['expected'])}
+    approved=score([case],[prediction],{},[review])
+    assert approved['quantitative'][0]['gold_approved'] is True
+    assert compare(approved,copy.deepcopy(approved))['adoption']=='eligible_for_human_decision'
+    approved['quantitative'][0].pop('gold_approved')
+    assert compare(approved,copy.deepcopy(approved))['adoption']=='pending_review_or_execution'
+    case['input']['query']='changed'
+    stale=score([case],[prediction],{},[review])
+    assert stale['quantitative'][0]['gold_approved'] is False
+
+
+@pytest.mark.parametrize('change', ['environment','implementation_sha256','evaluation_code_sha256','missing'])
+def test_comparison_rejects_different_or_missing_execution_context(change):
+    import copy
+    from core import RUBRIC
+    from evaluate import compare
+    report={'case_contracts_sha256':'same','provider_sha256':['same'],
+            'execution_context':{'environment':'model_fixed','implementation_sha256':{'app.py':'same'},
+                                 'evaluation_code_sha256':{'core.py':'same'}},
+            'categories':{'derived':{'attempts':1,'quantitative_pass':1}},
+            'quantitative':[{'id':'C','status':'passed','quantitative_pass':True,'critical_error':False,
+                             'gold_approved':True,'response_review_approved':True}],
+            'qualitative':{k:{'mean':2} for k in RUBRIC}}
+    candidate=copy.deepcopy(report)
+    if change=='missing':
+        report.pop('execution_context');candidate.pop('execution_context')
+    else:
+        candidate['execution_context'][change]='changed'
+    with pytest.raises(ValueError,match='execution context'):
+        compare(report,candidate)
+
+
+def test_numeric_review_packet_includes_values_and_safe_calculation_evidence():
+    from evaluate import blind_packets
+    case={'id':'C','group_id':'G','input':{'query':'q'},'expected':{}}
+    prediction={'id':'C','execution_status':'observed','calculated_points':[{'period':'202606','value':50}],
+                'output_unit':'%','output_frequency':'M','statistics_requests':[{'table_id':'T'}],
+                'controlled_execution_evidence':{'issues':[{'period':'202605','reason':'missing'}],
+                    'calendar_grid':{'202605':None,'202606':50},'actual_models':['hidden-model']}}
+    packet=blind_packets([case],[prediction])[0][0]
+    assert packet['response']['calculated_points']==prediction['calculated_points']
+    assert packet['response']['output_unit']=='%'
+    assert packet['response']['calculation_evidence']['issues']==prediction['controlled_execution_evidence']['issues']
+    assert 'hidden-model' not in str(packet)
+
+
+def test_review_mapping_collision_preserves_existing_file(tmp_path,monkeypatch):
+    import evaluate
+    from core import write_rows
+    monkeypatch.setattr(evaluate,'ROOT',tmp_path)
+    cache=tmp_path/'.venv/cache'
+    cache.mkdir(parents=True)
+    output=cache/'packet.jsonl'
+    mapping=output.with_suffix('.mapping.json')
+    mapping.write_text('existing reviewer mapping')
+    cases=tmp_path/'cases.jsonl';predictions=tmp_path/'predictions.jsonl'
+    write_rows(cases,[]);write_rows(predictions,[])
+    monkeypatch.setattr(sys,'argv',['evaluate.py','review','--cases',str(cases),'--observations',str(predictions),'--output',str(output)])
+    with pytest.raises(ValueError,match='overwrite'):
+        evaluate.main()
+    assert mapping.read_text()=='existing reviewer mapping'
+    assert not output.exists()
+
+
+def test_scoring_rejects_mixed_product_versions():
+    from evaluate import score
+    case={'id':'C','group_id':'G','category':'derived','input':{'query':'q'},'expected':{}}
+    predictions=[{'id':'C','repeat':i,'execution_status':'not_executed','environment':'model_fixed','profile':'sol',
+                  'implementation_sha256':{'app.py':str(i)},'evaluation_code_sha256':{'core.py':'same'}} for i in (0,1)]
+    with pytest.raises(ValueError,match='execution context'):
+        score([case],predictions,{},[])

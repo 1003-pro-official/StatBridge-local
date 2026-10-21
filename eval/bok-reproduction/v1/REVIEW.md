@@ -12,6 +12,8 @@ ai-assisted · 모든 승인·검수자는 실제 수행 후 사람이 기록합
 
 실행별 새 review packet을 생성해 실제 응답과 숫자 근거를 확인합니다. 모델명·프로필은 별도 mapping 파일에만 두며 검수자에게 제공하지 않습니다. 응답 본문이 모델을 자칭하는 등 신원이 노출된 경우 검수자가 표시하고 필요하면 재배정합니다.
 
+파생 계산은 `response.calculated_points`, `output_unit`, `output_frequency`, `statistics_requests`를 확인합니다. 컴포넌트 검사에서는 `calculation_evidence.issues`와 `calendar_grid`로 결측·0 분모·빠진 달을 확인합니다. 근거가 없는 항목은 검수 완료로 표시하지 않습니다. 기존 검수 파일이나 mapping 파일을 재사용하지 말고 새 출력 이름을 사용합니다.
+
 | 항목 | 2점 | 1점 | 0점 |
 |---|---|---|---|
 | facts | 수치·시점·방향·해석이 모두 근거와 일치 | 사실은 맞고 표현만 모호 | 수치·해석 오류 또는 근거 없는 주장 |

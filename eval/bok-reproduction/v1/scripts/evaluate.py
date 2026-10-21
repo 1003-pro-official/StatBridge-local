@@ -17,7 +17,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from core import (BASE, ROOT, RUBRIC, FrozenProvider, compare_series, digest_file, digest_value,
-                  read, review_packet, review_valid, rows, score_case, summary, write, write_rows)
+                  gold_approved, read, review_packet, review_valid, rows, score_case, summary, write, write_rows)
 
 
 def module(path, name):
@@ -177,6 +177,18 @@ def preflight_input(payload, provider_sha256):
             raise ValueError('missing or changed attachment: '+attachment['path'])
 
 
+def implementation_hashes():
+    files=[]
+    for root in (ROOT/'src/backend',ROOT/'src/agent'):
+        for directory,dirs,names in os.walk(root):
+            dirs[:]=[d for d in dirs if d not in ('frontend','__pycache__','node_modules','.venv')]
+            files.extend(Path(directory)/name for name in names if name.endswith('.py'))
+    frontend=ROOT/'src/agent/frontend/src'
+    files.extend(p for p in frontend.rglob('*') if p.is_file() and p.suffix in ('.ts','.tsx','.css','.js'))
+    files.extend(ROOT/p for p in ('src/backend/requirements.txt','src/agent/frontend/pnpm-lock.yaml') if (ROOT/p).is_file())
+    return {p.relative_to(ROOT).as_posix():digest_file(p) for p in sorted(files)}
+
+
 def run(cases, provider_file, run_mode, adapter=None, profile='baseline', repeats=1, allow_paid=False):
     if run_mode not in ('offline','component','model_fixed','live'):
         raise ValueError('unknown execution mode')
@@ -197,6 +209,10 @@ def run(cases, provider_file, run_mode, adapter=None, profile='baseline', repeat
     if profile not in ('baseline','sol','mixed'):
         raise ValueError('unknown model profile')
     provider_sha256=digest_file(provider_file)
+    product_hashes=implementation_hashes()
+    evaluation_hashes={path.name:digest_file(path) for path in (BASE/'scripts').glob('*.py')}
+    if adapter:
+        evaluation_hashes['runtime_adapter']=digest_file(adapter)
     for c in cases:
         preflight_input(c['input'],provider_sha256)
     work=[]
@@ -238,8 +254,11 @@ def run(cases, provider_file, run_mode, adapter=None, profile='baseline', repeat
             p['repeat']=repeat
             p['profile']=profile if run_mode in ('model_fixed','live') else 'disabled'
             p['provider_sha256']=(p.get('live_source_sha256') or 'unobserved') if run_mode=='live' else digest_file(provider_file)
-            p['evaluation_code_sha256']={path.name:digest_file(path) for path in (BASE/'scripts').glob('*.py')}
+            p['evaluation_code_sha256']=copy.deepcopy(evaluation_hashes)
+            p['implementation_sha256']=copy.deepcopy(product_hashes)
         work.extend(predictions)
+    if implementation_hashes()!=product_hashes:
+        raise ValueError('product code changed during execution; run again with a stable checkout')
     return work
 
 
@@ -254,9 +273,17 @@ def blind_packets(cases, predictions):
         token=digest_value({'prediction':p,'index':n})[:20]
         # Allowlist user-facing content; raw traces may contain model/profile names.
         packet.update(review_id=token,group_id=c['group_id'],input=c['input'],
-                      response={k:p.get(k) for k in ('series','explanation','plotly_figure','resolution')},
+                      response={k:p.get(k) for k in ('series','explanation','plotly_figure','resolution',
+                          'calculated_points','output_unit','output_frequency')},
                       required_facts=c.get('required_facts',[]),source=c.get('evidence'),
                       second_review_required=False)
+        evidence=p.get('controlled_execution_evidence') or {}
+        packet['response']['calculation_evidence']={
+            'issues':[{k:issue[k] for k in ('node','period','reason') if k in issue} for issue in evidence.get('issues',[])],
+            'calendar_grid':evidence.get('calendar_grid')}
+        packet['response']['statistics_requests']=[{k:request[k] for k in
+            ('provider','table_id','item_id','classifications','frequency','start_period','end_period') if k in request}
+            for request in p.get('statistics_requests',[])]
         mapping.append({'review_id':token,'id':p['id'],'repeat':p.get('repeat'),'profile':p.get('profile')})
         packets.append(packet)
     groups={}
@@ -275,6 +302,9 @@ def score(cases, predictions, oracle, reviews):
         raise ValueError('unknown prediction case')
     if len({(p.get('environment'),p.get('profile')) for p in predictions})>1:
         raise ValueError('score each environment/profile separately')
+    contexts=[{k:p.get(k) for k in ('environment','implementation_sha256','evaluation_code_sha256')} for p in predictions]
+    if len({digest_value(context) for context in contexts})>1:
+        raise ValueError('score each execution context separately')
     review_map={r['prediction_sha256']:r for r in reviews}
     sample_packets,_=blind_packets(cases,predictions)
     sampled={r['prediction_sha256'] for r in sample_packets if r['second_review_required']}
@@ -282,7 +312,8 @@ def score(cases, predictions, oracle, reviews):
     for c in cases:
         matches=[p for p in predictions if p['id']==c['id']]
         if not matches:
-            scored.append(score_case(c,None))
+            scored.append({**score_case(c,None),'gold_approved':gold_approved(c),'response_review_approved':False,
+                           'category':c['category'],'group_id':c['group_id']})
         for p in matches:
             r=review_map.get(digest_value(p))
             values=oracle.get(c['id'])
@@ -290,6 +321,7 @@ def score(cases, predictions, oracle, reviews):
                 raise ValueError('stale local oracle: '+c['id'])
             result=score_case(c,p,values,r)
             result['critical_error']=None
+            result.update(gold_approved=gold_approved(c),response_review_approved=False)
             if c.get('blockers'):
                 result.update(quantitative_pass=False,blockers=c['blockers'])
                 if p.get('execution_status')=='observed':
@@ -304,6 +336,7 @@ def score(cases, predictions, oracle, reviews):
                     result['qualitative_scores']=None
                 else:
                     result['critical_error']=r.get('critical_error')
+                    result['response_review_approved']=True
                 if r.get('critical_error') is True or any(v==0 for v in r['scores'].values()):
                     result['status']='failed' if agreement else 'pending_second_review'
             result.update(category=c['category'],group_id=c['group_id'],repeat=p.get('repeat'),profile=p.get('profile'))
@@ -316,12 +349,19 @@ def score(cases, predictions, oracle, reviews):
     qualitative={k:{'n':len(v:=[r['qualitative_scores'][k] for r in scored if r.get('qualitative_scores') and r['qualitative_scores'][k] is not None]),
                     'mean':statistics.mean(v) if v else None,'distribution':{str(i):v.count(i) for i in (0,1,2)}} for k in RUBRIC}
     return dict(summary=totals,categories=categories,quantitative=scored,qualitative=qualitative,
+                execution_context=contexts[0] if contexts else None,
                 case_contracts_sha256=digest_value([{k:c[k] for k in ('id','input','expected')} for c in cases]),
                 provider_sha256=sorted({p.get('provider_sha256','unobserved') for p in predictions}),
                 adoption='pending_human_gold_and_response_review',combined_score=None)
 
 
 def compare(baseline,candidate):
+    for report in (baseline,candidate):
+        context=report.get('execution_context') or {}
+        if not context.get('environment') or not context.get('implementation_sha256') or not context.get('evaluation_code_sha256'):
+            raise ValueError('missing execution context; regenerate observations and scores')
+    if baseline['execution_context']!=candidate['execution_context']:
+        raise ValueError('different execution context cannot isolate model effects')
     if baseline['case_contracts_sha256']!=candidate['case_contracts_sha256'] or baseline['provider_sha256']!=candidate['provider_sha256']:
         raise ValueError('different case contracts/source snapshots cannot isolate model effects')
     def indexed(report):
@@ -357,7 +397,8 @@ def compare(baseline,candidate):
             if b and a and (statistics.mean(a)<statistics.mean(b) or (0 in a and 0 not in b)):
                 case_qualitative_drops.append({'id':key,'dimension':dimension})
     critical=any(r.get('critical_error') is True for r in candidate['quantitative'])
-    unreviewed=any(r['status'] in ('pending_review','pending_second_review','not_executed','unobserved') or r.get('critical_error') is None
+    unreviewed=any(r.get('gold_approved') is not True or r.get('response_review_approved') is not True or
+                   r['status'] in ('pending_review','pending_second_review','not_executed','unobserved','error','stale_input','source_vintage_mismatch') or r.get('critical_error') is None
                    for report in (baseline,candidate) for r in report['quantitative'])
     return {'adoption':'blocked_quality_regression' if regressions or category_drops or qualitative_drops or case_qualitative_drops or critical else
             'pending_review_or_execution' if unreviewed else 'eligible_for_human_decision',
@@ -399,6 +440,10 @@ def main():
         raise ValueError('numeric/output/review artifacts must stay in ignored .venv/cache/')
     if output.exists():
         raise ValueError('refusing to overwrite prior run/review: choose a new output')
+    if args.command=='review':
+        mapping=output.with_suffix('.mapping.json')
+        if mapping==output or mapping.exists():
+            raise ValueError('refusing to overwrite prior review mapping: choose a new output')
     if args.command=='compare':
         if not args.baseline or not args.candidate:
             parser.error('--baseline and --candidate score reports are required')

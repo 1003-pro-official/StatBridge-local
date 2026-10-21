@@ -252,6 +252,13 @@ def review_valid(case, prediction, review):
                                     and isinstance(notes.get(k),str) and bool(notes[k].strip())) for k in RUBRIC)
 
 
+def gold_approved(case):
+    review=case.get('review',{})
+    return (review.get('human_approved') is True and bool(str(review.get('reviewer') or '').strip())
+            and review.get('input_sha256')==digest_value(case['input'])
+            and review.get('expected_sha256')==digest_value(case['expected']))
+
+
 def score_case(case, prediction, expected_series=None, review=None):
     if prediction is None:
         return dict(id=case['id'], status='not_executed', quantitative_pass=False)
@@ -288,10 +295,7 @@ def score_case(case, prediction, expected_series=None, review=None):
     if not gold.get('requires_numeric', True) and not gold.get('observed_contract'):
         passed = False
     valid = review_valid(case, prediction, review)
-    gold_review=case.get('review', {})
-    approved = (gold_review.get('human_approved') is True and bool(gold_review.get('reviewer'))
-                and gold_review.get('input_sha256')==digest_value(case['input'])
-                and gold_review.get('expected_sha256')==digest_value(case['expected']))
+    approved = gold_approved(case)
     status = 'failed' if not passed else 'passed' if valid and approved else 'pending_review'
     return dict(id=case['id'], status=status, quantitative_pass=bool(passed), numeric=numeric,
                 qualitative_scores=review['scores'] if valid else None)
