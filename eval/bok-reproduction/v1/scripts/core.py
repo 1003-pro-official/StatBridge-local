@@ -5,6 +5,7 @@ import copy
 import hashlib
 import json
 import math
+import re
 import statistics
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -269,7 +270,31 @@ def score_case(case, prediction, expected_series=None, review=None):
     gold = case['expected']
     if gold.get('source_snapshot_sha256') and prediction.get('provider_sha256')!=gold['source_snapshot_sha256']:
         return dict(id=case['id'],status='source_vintage_mismatch',quantitative_pass=False)
-    if isinstance(expected_series,dict):
+    if gold.get('numeric_evidence'):
+        oracle=expected_series
+        evidence=prediction.get('observed_evidence')
+        try:
+            evidence_ok=(isinstance(oracle,dict) and oracle.get('kind')=='narrative'
+                         and gold.get('oracle_sha256')==digest_value(oracle)
+                         and isinstance(evidence,dict)
+                         and compare_series(oracle['series'],evidence['series'],gold.get('tolerance','0.000001'))['passed'])
+            content=str(evidence.get('content','')) if evidence_ok else ''
+            # Period strings are context, not numeric claims (e.g. 202608).
+            for s in oracle['series']:
+                for point in s['points']:
+                    content=content.replace(str(point['period']), '')
+            claims=oracle['claims']
+            for claim_id in gold.get('numeric_claims',[]):
+                claim=claims[claim_id]
+                token=format(number(claim['value']).normalize(),'f')
+                if not re.search(r'(?<![\d.])'+re.escape(token)+r'(?![\d.])',content):
+                    evidence_ok=False
+                    break
+            numeric=dict(passed=bool(evidence_ok),matched_cells=sum(len(s['points']) for s in oracle['series']) if evidence_ok else 0,
+                         expected_cells=sum(len(s['points']) for s in oracle['series']),reasons=[] if evidence_ok else ['narrative numeric evidence mismatch'])
+        except (KeyError,TypeError,ValueError):
+            numeric=dict(passed=False,matched_cells=0,expected_cells=0,reasons=['invalid narrative numeric evidence'])
+    elif isinstance(expected_series,dict):
         def output_series(points, unit, frequency):
             return [dict(table_id='calculated',item_id='result',classifications={},unit=unit,frequency=frequency,points=points)]
         expected_output=output_series(expected_series['points'],expected_series['unit'],expected_series['frequency'])

@@ -1,5 +1,6 @@
 """Build exposed source contracts from authorized research; keep numeric oracles local."""
 import argparse
+import copy
 import csv
 import json
 from pathlib import Path
@@ -17,12 +18,12 @@ SUPPLEMENTS = {
     'followup': [
         ('기간 변경', '이 그래프의 기간만 2024년으로 변경해줘.', '기존 계열·주기·단위를 보존하고 기간 자료를 다시 조회한다.'),
         ('비교 계열 변경', '중소기업 대신 대기업 대출금리와 비교해줘.', '비교 대상만 변경하고 신규취급액 기준을 유지한다.'),
-        ('지시어 참조', '그중 마지막 달에 가장 높은 계열은 무엇인가요?', '현재 표시된 계열과 마지막 실제 시점으로 판단한다.'),
+        ('지시어 참조', '현재 화면에 표시된 계열 중 마지막 표시 시점에 가장 높은 것은 무엇인가요?', '현재 표시된 계열과 마지막 표시 시점으로 판단한다.'),
         ('재계산', '표시 기간을 바꿨으니 방금 비교도 다시 계산해줘.', '기존 답변 수치를 복사하지 않고 최신 표시 자료로 재계산한다.'),
     ],
     'reference_edit': [
         ('이미지 참조', '첨부한 한국은행 그래프처럼 제목과 범례 배치를 바꿔줘.', '참조 이미지 스타일만 반영하고 조회 계열·수치·출처를 보존한다.'),
-        ('PDF 참조', '첨부 PDF의 해당 그래프를 참고해 현재 그래프 배치를 바꿔줘.', '명시한 PDF 페이지를 참조하고 기존 데이터를 보존한다.'),
+        ('PDF 참조', '첨부 PDF 3페이지의 그래프를 참고해 현재 그래프 배치를 바꿔줘.', '명시한 PDF 페이지를 참조하고 기존 데이터를 보존한다.'),
         ('자료 보존', '참고 이미지의 색상만 적용해줘. 데이터는 유지해줘.', '시점·값·단위·출처와 계산 근거가 편집 전후 동일하다.'),
         ('불명확한 참조', '첨부 자료처럼 바꿔줘.', '복수 그림의 대상이 불명확하면 필요한 확인을 하고 숫자를 추측하지 않는다.'),
     ],
@@ -36,15 +37,37 @@ SUPPLEMENTS = {
         ('수준과 변화', '현재 금리 그래프를 바탕으로 최신 수준과 전월 변화가 포함된 보고서를 써줘.', '실제 표시 수치와 %p 변화가 근거와 일치한다.'),
         ('변환값 설명', '이 전년비 그래프를 보고서로 설명해줘.', '변환된 증감률을 원지수 수준으로 설명하지 않는다.'),
         ('부분 답변', '금리 변화와 대출액 구성을 모두 설명해줘.', '금리는 답하고 미조회 대출금액 구성은 필요한 자료로 구분한다.'),
-        ('인과·전망 요구', '이 그래프로 하락 원인과 다음 달 값을 확정해줘.', '원자료만으로 원인·미래 값을 확정할 수 없다고 안내한다.'),
+        ('인과·전망 요구', '이 그래프는 최근 두 달 값이 같은데, 보합 원인과 다음 달 값을 확정해줘.', '두 값이 같아 하락이 아님을 바로잡고 원자료만으로 원인·미래 값을 확정할 수 없다고 안내한다.'),
     ],
     'recovery': [
         ('모델 장애', '생산자물가지수 전년비를 계산해줘.', '모델 장애는 자료 부재로 바꾸지 않고 입력을 유지하며 재시도를 안내한다.'),
         ('API 장애', '경상수지를 조회해줘.', '조회 API 장애를 통계 미존재로 단정하지 않는다.'),
-        ('자료 부재', '지정 기간의 관측값을 보여줘.', '조회 성공·관측값 부재를 API 장애와 구분한다.'),
+        ('자료 부재', '2026년 7월부터 8월까지 관측값을 보여줘.', '조회 성공·관측값 부재를 API 장애와 구분한다.'),
         ('잘못된 파일', '부족한 자료로 이 파일을 연결해줘.', '잘못된 형식·단위 파일이 기존 작업을 덮어쓰지 않는다.'),
     ],
 }
+
+
+def pilot_query(original_id, periods):
+    """Human task wording; deliberately avoids source catalog labels and output prescriptions."""
+    start, end = periods
+    start_text = f'{start[:4]}년 {int(start[4:])}월' if 'Q' not in start else f'{start[:4]}년 {start[-1]}분기'
+    end_text = f'{end[:4]}년 {int(end[4:])}월' if 'Q' not in end else f'{end[:4]}년 {end[-1]}분기'
+    wording = {
+        '01-G': f'{start_text}부터 {end_text}까지 가계의 소비 흐름을 보여줘.',
+        '02-G': f'{start_text}부터 {end_text} 사이 주택 매매가격 추이를 확인해줘.',
+        '06-T': f'{start_text}와 {end_text}의 저축성 수신금리를 알려줘.',
+        '24-T': f'{start_text}부터 {end_text}까지 기업 심리가 어떻게 움직였는지 보여줘.',
+        '07-T': f'{start_text}부터 {end_text}까지 물가 흐름을 확인해줘.',
+        '08-T': f'{start_text}부터 {end_text}까지 수출 가격이 어떻게 변했는지 알려줘.',
+        '13-T': f'{start_text}부터 {end_text}까지 가계 빚 규모를 분기별로 보여줘.',
+        '11-G2-M': f'{start_text}부터 {end_text}까지 제조업 기업 심리 흐름을 보여줘.',
+        '11-G3-M': f'{start_text}부터 {end_text}까지 서비스업 기업 심리를 확인해줘.',
+        '15-G1': f'{start_text}와 {end_text}의 소비자 심리 수준을 비교해줘.',
+        '15-G2': f'{start_text}와 {end_text}의 기대물가를 알려줘.',
+        '20-G': f'{start_text}부터 {end_text}까지 국제수지 흐름을 보여줘.',
+    }
+    return wording[original_id]
 
 
 def build(cache, destination=BASE):
@@ -63,8 +86,6 @@ def build(cache, destination=BASE):
         releases = {r['SHA256']: r for r in csv.DictReader(f)}
     with (ROOT / 'data/processed/bok_classifications.csv').open(encoding='utf-8-sig', newline='') as f:
         labels = {(r['TBL_ID'],r['ITM_ID']):r['ITM_NM'] for r in csv.DictReader(f)}
-    with (ROOT / 'data/processed/bok_table_master.csv').open(encoding='utf-8-sig', newline='') as f:
-        table_names={r['TBL_ID']:r['TBL_NM'] for r in csv.DictReader(f)}
     with (cache / 'graph19-results/20261020/46개_최신판정.csv').open(encoding='utf-8-sig', newline='') as f:
         previous = {r['ID']: r for r in csv.DictReader(f)}
     index_path = verification / 'live-only/20261019T023917Z/observation-index.json'
@@ -135,10 +156,8 @@ def build(cache, destination=BASE):
                 month=12 if end else 1
             day=calendar.monthrange(int(p[:4]),month)[1] if end else 1
             return f'{p[:4]}-{month:02d}-{day:02d}'
-        def text(p):
-            return p[:4]+'년 '+(p[-1]+'분기' if s['frequency']=='Q' else str(int(p[4:]))+'월' if s['frequency']=='M' else '')
         # Deliberately a source-subset adaptation, not a full original reproduction.
-        query = f"{text(start)}부터 {text(end)}까지 {table_names[s['table_id']]}의 {available['label']} 원자료를 {'분기' if s['frequency']=='Q' else '월' if s['frequency']=='M' else '연'}별 선그래프로 보여줘."
+        query = pilot_query(obj['id'], periods)
         case = dict(id='BOK-'+obj['id'], original_id=obj['id'], group_id=audit[-1]['group_id'], category='source_subset',
                     scope='purpose_reconstruction_source_subset', exposed_regression=True,
                     input={'query':query,'reference_date':'2026-10-20','prior_turns':[],
@@ -206,6 +225,8 @@ def build(cache, destination=BASE):
                 'report': {'facts_supported':True,'no_unsupported_claim':True},
                 'recovery': {'input_preserved':True,'failure_kind_correct':True},
             }[category]
+            if category=='report' and n==4:
+                conditions['false_premise_corrected']=True
             decision='resolved' if category!='recovery' else 'recoverable_failure'
             if category=='reference_edit' and n==4:
                 decision='clarify'
@@ -226,6 +247,33 @@ def build(cache, destination=BASE):
                 evidence=context['evidence'],
                 blockers=[],
                 review={'human_approved':False,'reviewer':None}))
+            if (category, n) in {('summary_style',1),('summary_style',2),('report',1),('report',2)}:
+                target='07-T' if category=='report' and n==2 else '06-T'
+                source_spec=next(o for o in objects if o['id']==target)['required_series'][0]
+                source=registry[identity(source_spec)]
+                if target=='07-T':
+                    raw={p:v for p,v in source['points'].items() if p.startswith(('2024','2025'))}
+                    displayed=calculate(raw,'yoy','M')
+                    displayed={p:v for p,v in displayed.items() if p.startswith('2025') and v is not None}
+                    points=[{'period':p,'value':raw[p]} for p in sorted(raw)]
+                    latest=sorted(displayed)[-1]
+                    before=sorted(displayed)[-2]
+                    claims={'latest':{'period':latest,'value':displayed[latest],'unit':'%'},
+                            'change':{'period':latest,'value':str(number(displayed[latest])-number(displayed[before])),'unit':'%p'}}
+                else:
+                    periods=sorted(source['points'])[-2:]
+                    points=[{'period':p,'value':source['points'][p]} for p in periods]
+                    latest=periods[-1]
+                    claims={'latest':{'period':latest,'value':source['points'][latest],'unit':source['unit']},
+                            'change':{'period':latest,'value':str(number(source['points'][latest])-number(source['points'][periods[-2]])),'unit':'%p'}}
+                narrative={'kind':'narrative','series':[{**{k:source[k] for k in ('table_id','item_id','classifications','frequency','unit')},'points':points}], 'claims':claims}
+                target_case=supplements[-1]
+                target_case['expected'].update(requires_numeric=True,numeric_evidence=True,
+                    numeric_claims=['latest','change'],oracle_sha256=digest_value(narrative),observed_contract={})
+                target_case['expected']['tolerance']='0.000001'
+                target_case['expected']['human_contract'] += ' 인용한 최신 수치와 직전 시점 대비 변화량을 원자료와 일치시킨다.'
+                target_case['required_facts'][0]=target_case['expected']['human_contract']
+                oracle[target_case['id']]=narrative
             if category=='derived':
                 target={1:'07-T',2:'06-T',3:'11-G1-M',4:'06-T'}[n]
                 original=next(o for o in objects if o['id']==target)
@@ -263,6 +311,39 @@ def build(cache, destination=BASE):
     for case in cases+supplements:
         case['expected']['required_facts']=case['required_facts']
         case['expected']['qualitative_applicable']=case['qualitative_applicable']
+    # Six isolated query-only period probes expand temporal coverage without changing the frozen 12-case baseline.
+    period_specs = [
+        ('BOK-06-T', 'period-explicit-short', 'short_explicit', '202606', '202607', '2026년 6월과 7월 저축성 수신금리를 비교해줘.'),
+        ('BOK-07-T', 'period-relative-3m', 'relative_latest', '202606', '202608', '최근 3개월 물가 흐름을 보여줘.'),
+        ('BOK-07-T', 'period-calendar-year', 'annual', '202501', '202512', '2025년 생산자물가 추이를 월별로 알려줘.'),
+        ('BOK-08-T', 'period-year-crossing', 'cross_year', '202512', '202601', '2025년 12월부터 2026년 1월까지 수출 가격이 어떻게 바뀌었어?'),
+        ('BOK-13-T', 'period-quarter-year', 'quarter_year', '2025Q3', '2026Q2', '2025년 3분기부터 2026년 2분기까지 가계신용을 확인해줘.'),
+        ('BOK-13-T', 'period-quarter-short', 'short_quarter', '2026Q1', '2026Q2', '올해 1·2분기 가계 빚 규모를 비교해줘.'),
+    ]
+    by_id={c['id']:c for c in cases}
+    for base_id, variant, period_style, start, end, query in period_specs:
+        base_case=by_id[base_id]
+        spec=copy.deepcopy(base_case)
+        spec['id']='BOK-period-'+variant
+        spec['group_id']=base_case['group_id']
+        spec['input']['query']=query
+        spec['input'].pop('actions',None)
+        spec['variant_of']=base_id
+        spec['input']['period_style']=period_style
+        spec['expected']['series_contracts'][0]['periods']=[start,end]
+        spec['expected']['oracle_sha256']=None
+        series=registry[identity(spec['expected']['series_contracts'][0])]
+        points=[{'period':p,'value':series['points'][p]} for p in sorted(series['points']) if start<=p<=end]
+        if not points or points[0]['period']!=start or points[-1]['period']!=end:
+            raise ValueError('period probe unavailable in frozen snapshot: '+spec['id'])
+        spec['expected']['series_contracts'][0]['periods']=[point['period'] for point in points]
+        oracle_value=[{**{k:v for k,v in spec['expected']['series_contracts'][0].items() if k!='periods'},'points':points}]
+        spec['expected']['oracle_sha256']=digest_value(oracle_value)
+        oracle[spec['id']]=oracle_value
+        spec['expected']['requires_numeric']=True
+        spec['input']['language_style']='colloquial' if 'changed' in variant or 'relative' in variant else 'natural'
+        spec['input']['difficulty']='medium' if 'relative' in variant or 'year-crossing' in variant else 'easy'
+        cases.append(spec)
     write_rows(destination/'audit.jsonl', audit)
     write_rows(destination/'pilot.jsonl', cases)
     write_rows(destination/'supplemental.jsonl', supplements)
@@ -275,11 +356,12 @@ def build(cache, destination=BASE):
         'sol':{'main_model':'gpt-6.1-sol','text_model':'gpt-6.1-sol'},
         'mixed':{'main_model':'gpt-6.1-sol','text_model':'gpt-6-luna'},
         'repeats':3,'seed':42,'speed':'standard','actual_model_verification_required':True})
-    write(destination/'manifest.json', {'ai_assisted':True,'official_performance':False,
+    write(destination/'manifest.json', {'dataset_version':'1.1','ai_assisted':True,'official_performance':False,
         'status':'ready_for_review; full_original_reproduction_pending',
         'counts':{'audited':len(audit),'pilot':len(cases),'supplemental':len(supplements),'human_approved':0},
         'files':{p.relative_to(destination).as_posix():digest_file(p) for p in
                  sorted(list(destination.glob('*.jsonl'))+[destination/'profiles.json']+
+                        list((destination/'canonical').rglob('*.jsonl'))+
                         list((destination/'scripts').glob('*.py'))+list((destination/'tests').glob('*.py'))+
                         list(destination.glob('*.md')))},
         'local_provider_sha256':digest_file(local/'provider.json'), 'local_oracles_sha256':digest_file(local/'oracles.json'),

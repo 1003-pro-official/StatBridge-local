@@ -377,3 +377,65 @@ def test_scoring_rejects_mixed_product_versions():
                   'implementation_sha256':{'app.py':str(i)},'evaluation_code_sha256':{'core.py':'same'}} for i in (0,1)]
     with pytest.raises(ValueError,match='execution context'):
         score([case],predictions,{},[])
+
+
+def test_narrative_numeric_claim_requires_evidence_and_matching_text():
+    from core import digest_value, score_case
+    case={'id':'C','input':{'query':'show latest rate'},'expected':{'decision':'resolved',
+        'requires_numeric':True,'numeric_evidence':True,'numeric_claims':['latest','change'],
+        'observed_contract':{'facts_supported':True,'request_satisfied':True}}}
+    oracle={'kind':'narrative','series':[{'table_id':'T','item_id':'I','classifications':{},'frequency':'M','unit':'%',
+        'points':[{'period':'202607','value':'3.21'},{'period':'202608','value':'3.21'}]}],
+        'claims':{'latest':{'period':'202608','value':'3.21','unit':'%'},
+                  'change':{'period':'202608','value':'0','unit':'%p'}}}
+    case['expected']['oracle_sha256']=digest_value(oracle)
+    prediction={'execution_status':'observed','decision':'resolved','input_sha256':digest_value(case['input']),
+        'facts_supported':True,'request_satisfied':True,
+        'observed_evidence':{'series':oracle['series'],'content':'최신 금리는 3.21%이며 전월과 같았습니다.'}}
+    assert not score_case(case,prediction,oracle)['quantitative_pass']  # missing numeric change
+    prediction['observed_evidence']['content']='최신 금리는 3.21%이며 전월 대비 0%p 변했습니다.'
+    assert score_case(case,prediction,oracle)['quantitative_pass']
+    prediction['observed_contract']={'facts_supported':True,'request_satisfied':True}
+    prediction['observed_evidence']['content']='최신 금리는 9.99%이며 전월 대비 8%p 변했습니다.'
+    assert not score_case(case,prediction,oracle)['quantitative_pass']
+    prediction['observed_evidence']['series']=[]
+    assert not score_case(case,prediction,oracle)['quantitative_pass']
+
+
+def test_pilot_queries_are_natural_and_canonical_gold_is_unchanged():
+    from core import BASE, digest_value, rows
+    from build import pilot_query
+    canonical=rows(BASE/'canonical/v1/pilot.jsonl')
+    active=rows(BASE/'pilot.jsonl')
+    assert len(canonical)==12
+    assert {c['id'] for c in canonical} <= {c['id'] for c in active}
+    active_by_id={c['id']:c for c in active}
+    for old in canonical:
+        current=active_by_id[old['id']]
+        assert digest_value(old['expected'])==digest_value(current['expected'])
+        query=pilot_query(old['original_id'],old['expected']['series_contracts'][0]['periods'])
+        assert query==current['input']['query']
+        assert all(label not in query for label in (old['expected']['series_contracts'][0]['label'],))
+        assert '원자료' not in query and '선그래프' not in query
+
+
+def test_six_period_cases_are_query_only_and_bind_expected_periods():
+    from core import BASE, rows
+    period_cases=[c for c in rows(BASE/'pilot.jsonl') if c['id'].startswith('BOK-period-')]
+    assert len(period_cases)==6
+    assert all(not c['input'].get('actions') for c in period_cases)
+    assert {c['input']['period_style'] for c in period_cases}=={
+        'short_explicit','relative_latest','annual','cross_year','quarter_year','short_quarter'}
+    relative=next(c for c in period_cases if c['input']['period_style']=='relative_latest')
+    assert relative['input']['reference_date']=='2026-10-20'
+    assert relative['expected']['series_contracts'][0]['periods']==['202606','202607','202608']
+
+
+def test_supplemental_prompts_correct_false_premise_and_ambiguity():
+    from core import BASE, rows
+    cases={c['id']:c for c in rows(BASE/'supplemental.jsonl')}
+    assert cases['SUP-report-04']['expected']['observed_contract']['false_premise_corrected'] is True
+    assert '보합' in cases['SUP-report-04']['input']['query']
+    assert '3페이지' in cases['SUP-reference_edit-02']['input']['query']
+    assert '현재 화면' in cases['SUP-followup-03']['input']['query']
+    assert '2026년 7월부터 8월까지' in cases['SUP-recovery-03']['input']['query']

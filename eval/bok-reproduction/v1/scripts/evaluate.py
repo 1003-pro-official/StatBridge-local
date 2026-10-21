@@ -33,8 +33,20 @@ def validate():
         if digest_file(BASE/name) != digest:
             raise ValueError('stale manifest: '+name)
     audit, pilot, supplements = (rows(BASE/name) for name in ('audit.jsonl','pilot.jsonl','supplemental.jsonl'))
-    if len(audit)!=46 or len(pilot)!=12 or len(supplements)!=24:
+    if manifest.get('dataset_version')!='1.1' or len(audit)!=46 or len(pilot)!=18 or len(supplements)!=24:
         raise ValueError('unexpected dataset counts')
+    canonical=rows(BASE/'canonical/v1/pilot.jsonl')
+    active={c['id']:c for c in pilot}
+    if len(canonical)!=12 or any(c['id'] not in active or c['expected']!=active[c['id']]['expected'] for c in canonical):
+        raise ValueError('canonical v1 contracts changed')
+    periods=[c for c in pilot if c['id'].startswith('BOK-period-')]
+    if len(periods)!=6 or any(c['input'].get('actions') for c in periods):
+        raise ValueError('period probes must be query-only')
+    numeric={c['id']:c for c in supplements}
+    for case_id in ('SUP-summary_style-01','SUP-summary_style-02','SUP-report-01','SUP-report-02'):
+        expected=numeric[case_id]['expected']
+        if not expected.get('numeric_evidence') or not expected.get('numeric_claims') or not expected.get('oracle_sha256'):
+            raise ValueError('missing narrative numeric evidence: '+case_id)
     if len({c['id'] for c in audit})!=46:
         raise ValueError('duplicate audit ID')
     all_cases = pilot+supplements
@@ -57,7 +69,7 @@ def validate():
     for kind in ('derived','followup','reference_edit','summary_style','report','recovery'):
         if sum(c['category']==kind for c in supplements)!=4:
             raise ValueError('supplemental strata mismatch')
-    print('VALIDATION OK: audit=46, pilot=12, supplements=24; exposed regression; human approval pending')
+    print('VALIDATION OK: audit=46, pilot=18 (12 canonical + 6 period probes), supplements=24; v1.1; human approval pending')
 
 
 def offline(cases, provider_file):
@@ -425,7 +437,11 @@ def main():
     args=parser.parse_args()
     if args.command=='manifest':
         manifest=read(BASE/'manifest.json')
-        manifest['files']={name:digest_file(BASE/name) for name in manifest['files']}
+        tracked_files=sorted(list(BASE.glob('*.jsonl'))+[BASE/'profiles.json']+
+                             list((BASE/'canonical').rglob('*.jsonl'))+
+                             list((BASE/'scripts').glob('*.py'))+list((BASE/'tests').glob('*.py'))+
+                             list(BASE.glob('*.md')))
+        manifest['files']={p.relative_to(BASE).as_posix():digest_file(p) for p in tracked_files}
         cases=rows(BASE/'pilot.jsonl')+rows(BASE/'supplemental.jsonl')
         manifest['counts']['human_approved']=sum(c['review']['human_approved'] is True for c in cases)
         write(BASE/'manifest.json',manifest)
