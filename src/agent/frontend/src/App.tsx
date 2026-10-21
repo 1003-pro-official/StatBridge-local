@@ -1,4 +1,8 @@
+import RequestExecutionLog from './RequestExecutionLog';
 import ReportDraft from "./ReportDraft";
+import StatisticalQuestion from "./StatisticalQuestion";
+import {publicationImageSize,reportChartSize} from './reportChartSize';
+import {workspacePng,startFileDownload} from './workspaceDownload';
 import SummaryEvidence from "./SummaryEvidence";
 import DerivedEvidence from './DerivedEvidence';
 import {derivedBudget} from './derivedDeadline';
@@ -13,11 +17,10 @@ import QueryRefinementCard from './QueryRefinementCard';
 import exploreExamples from './exploreExamples.json';
 import ExecutionEvidence from './ExecutionEvidence';
 import {panelGeometry,splitPlotAnnotations,resizeVisiblePlot} from './plotPanelLayout';
-import {appendChat,readChat,writeChat,deleteChat,saveChat,savedChats,removeSavedChat,editDescription,type SavedChat} from './graphChat';
+import {appendChat,readChat,writeChat,deleteChat,saveChat,allSavedChats as savedChats,removeSavedChat,editDescription,type SavedChat} from './graphChat';
 import RecoveryPanel from './RecoveryPanel';
 import DerivedSupplementPanel from './DerivedSupplementPanel';
 import DerivedAvailabilityPanel from './DerivedAvailabilityPanel';
-import DerivedUploadRecovery from './DerivedUploadRecovery';
 import {shouldShowDerivedSupplement} from './derivedAvailability';
 import {accountKey,accountRequest} from './accountApi';
 import {ownsHistory} from './accountScope';
@@ -246,6 +249,8 @@ function ChartRenderer({ series, chartType = "line", xAxisLabel, yAxisLabel }: {
 
 export function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Record<string, unknown>>; layout: Record<string, unknown> };heading?:{title:string;subtitle:string} }) {
   const geometry=panelGeometry(figure);
+  const publication=(figure.layout.meta as {publicationYoy?:boolean}|undefined)?.publicationYoy===true;
+  const publicationSize=publicationImageSize(figure.layout);
   const captions=splitPlotAnnotations(figure);
   const host = useRef<HTMLDivElement>(null);
   const renderRevision=useRef(0);
@@ -266,7 +271,7 @@ export function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Recor
       copy.layout.annotations=captions.plot;
       copy.layout.title={text:''};copy.layout.showlegend=false;
       if(geometry.domainChart)copy.layout.uniformtext={minsize:10,mode:'hide'};
-      copy.layout.margin={...(copy.layout.margin as Record<string,number>),t:geometry.titleSpace,b:Math.max(geometry.domainChart?90:120,...captions.plot.filter(a=>String(a.name||'').startsWith('statbridge-axis-title:x')).map(a=>Math.abs(Number(a.yshift)||0)+40))};
+      copy.layout.margin={...(copy.layout.margin as Record<string,number>),t:geometry.titleSpace,b:publication?45:Math.max(geometry.domainChart?90:120,...captions.plot.filter(a=>String(a.name||'').startsWith('statbridge-axis-title:x')).map(a=>Math.abs(Number(a.yshift)||0)+40))};
     }
     const select=(kind:string,label?:string,id?:string)=>element.dispatchEvent(new CustomEvent('statbridge:graph-select',{bubbles:true,detail:{kind,label,id}}));
     const selectText=(event:MouseEvent)=>{const node=event.target as Element;if(node.closest('.gtitle'))select('title');else if(node.closest('.xtick,.xtitle'))select('x');else if(node.closest('.ytick,.ytitle'))select('y');else if(node.closest('.annotation')){const index=Number(node.closest('.annotation')?.getAttribute('data-index'));const annotation=(copy.layout.annotations as Array<{name?:string}>|undefined)?.[index];if(annotation?.name?.startsWith('statbridge-axis-title:'))select(annotation.name.includes('xaxis')?'x':annotation.name.endsWith('yaxis2')?'y2':'y');else if(annotation?.name?.startsWith('statbridge-latest:'))select('series',annotation.name.slice('statbridge-latest:'.length));else if(annotation?.name)select('note',undefined,annotation.name);}};
@@ -295,7 +300,7 @@ export function PlotlyRenderer({ figure,heading }: { figure: { data: Array<Recor
   const plain=(value:string)=>new DOMParser().parseFromString(value,'text/html').body.textContent||'';
   const titleStyle=figure.layout.title as {font?:{size?:number;color?:string;family?:string};x?:number}|undefined;
   const plot=<div ref={host} className="plotly-chart" style={heading?undefined:{height:Math.max(typeof figure.layout.height==='number'?figure.layout.height:580,geometry.minHeight)}} aria-label="통계 그래프"/>;
-  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}{heading?<div className="workspace-plot-frame" style={geometry.minWidth?{minWidth:geometry.minWidth}:undefined}><header className="workspace-plot-heading" onClick={()=>pick('title')}><h4 style={{fontSize:titleStyle?.font?.size??18,color:titleStyle?.font?.color,fontFamily:titleStyle?.font?.family,textAlign:(titleStyle?.x??.5)<.25?'left':(titleStyle?.x??.5)>.75?'right':'center'}}>{heading.title}</h4>{heading.subtitle&&<p>{heading.subtitle}</p>}</header><div className="workspace-plot-legend">{legends.map((trace,i)=><button type="button" key={i} onClick={()=>pick('series',String((trace.meta as {seriesLabel?:string})?.seriesLabel||plain(String(trace.name))))}><i style={{background:typeof (trace.line as {color?:string})?.color==='string'?(trace.line as {color:string}).color:typeof (trace.marker as {color?:string|string[]})?.color==='string'?String((trace.marker as {color:string}).color):Array.isArray((trace.marker as {color?:string[]})?.color)?(trace.marker as {color:string[]}).color[0]:'#4568ff',height:trace.type==='bar'?'10px':'3px'}}/>{plain(String(trace.name))}</button>)}</div><div className={`workspace-plot-body ${geometry.multi?'multi-panel':geometry.expanded?'expanded-plot':''}`} style={geometry.multi||geometry.expanded?{height:geometry.minHeight,minHeight:geometry.minHeight,flex:'none'}:undefined}>{plot}</div>{captions.footer.length>0&&<footer className="workspace-plot-footer" aria-label="그래프 출처와 설명">{captions.footer.map((a,i)=><p key={i}>{plain(String(a.text||'').replace(/<br\s*\/?\s*>/gi,'\n'))}</p>)}</footer>}</div>:plot}</>;
+  return <>{renderError&&<p role="alert" className="error-banner">{renderError}</p>}{heading?<div className="workspace-plot-frame" style={publicationSize?{width:'100%',minWidth:400,maxWidth:650,marginInline:'auto',aspectRatio:`${publicationSize.width}/${publicationSize.height}`,height:'auto',minHeight:0}:geometry.minWidth?{minWidth:geometry.minWidth}:undefined}><header className="workspace-plot-heading" onClick={()=>pick('title')}><h4 style={{fontWeight:publication?700:undefined,fontSize:titleStyle?.font?.size??18,color:titleStyle?.font?.color,fontFamily:titleStyle?.font?.family,textAlign:(titleStyle?.x??.5)<.25?'left':(titleStyle?.x??.5)>.75?'right':'center'}}>{heading.title}</h4>{heading.subtitle&&<p>{heading.subtitle}</p>}</header><div className="workspace-plot-legend" style={publication&&!legends.length?{display:'none'}:undefined}>{legends.map((trace,i)=><button type="button" key={i} onClick={()=>pick('series',String((trace.meta as {seriesLabel?:string})?.seriesLabel||plain(String(trace.name))))}><i style={{background:typeof (trace.line as {color?:string})?.color==='string'?(trace.line as {color:string}).color:typeof (trace.marker as {color?:string|string[]})?.color==='string'?String((trace.marker as {color:string}).color):Array.isArray((trace.marker as {color?:string[]})?.color)?(trace.marker as {color:string[]}).color[0]:'#4568ff',height:trace.type==='bar'?'10px':'3px'}}/>{plain(String(trace.name))}</button>)}</div><div className={`workspace-plot-body ${geometry.multi?'multi-panel':geometry.expanded?'expanded-plot':''}`} style={publicationSize?{height:'auto',minHeight:0,flex:'1 1 0'}:geometry.multi||geometry.expanded?{height:geometry.minHeight,minHeight:geometry.minHeight,flex:'none'}:undefined}>{plot}</div>{captions.footer.length>0&&<footer className="workspace-plot-footer" aria-label="그래프 출처와 설명">{captions.footer.map((a,i)=><p key={i}>{plain(String(a.text||'').replace(/<br\s*\/?\s*>/gi,'\n'))}</p>)}</footer>}</div>:plot}</>;
 
 }
 
@@ -398,6 +403,15 @@ function ClarificationPanel({ result, loading, choose, advance, onResult }: { re
 }
 
 function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (input: ChartEditInput) => Promise<boolean>; loading: boolean }) {
+  const chartPanel=useRef<HTMLElement>(null);
+  const [reportView,setReportView]=useState<"graph"|"table">(wantsReportTable(result.query)?"table":"graph");
+  const reportChartBounds=()=>{
+    const size=result.outputSpec?.chartState?.presentation as {width?:number;height?:number}|undefined;
+    if(size?.width&&size?.height)return {width:size.width,height:size.height};
+    const node=chartPanel.current?.querySelector('.workspace-plot-frame, .plotly-chart');
+    const bounds=node?.getBoundingClientRect();
+    return bounds&&bounds.width>0&&bounds.height>0?{width:bounds.width,height:Math.max(bounds.height,node?.scrollHeight||0)}:undefined;
+  };
   const [lineageOpen, setLineageOpen] = useState(true);
   const [evidenceOpen,setEvidenceOpen]=useState(false);
   const [allDataOpen,setAllDataOpen]=useState(false);
@@ -417,8 +431,12 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
     const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "statbridge-analysis.csv"; a.click(); URL.revokeObjectURL(url);
   };
   const exportPng=async()=>{
+    if(result.outputSpec?.plotlyFigure){
+      const blob=await workspacePng(result.outputSpec.plotlyFigure);
+      const url=URL.createObjectURL(blob);startFileDownload(url,'statbridge-chart.png');window.setTimeout(()=>URL.revokeObjectURL(url),60_000);return;
+    }
     const plotlyChart=document.querySelector<HTMLElement>(".chart-panel .plotly-chart");
-    if(plotlyChart){await Plotly.downloadImage(plotlyChart,{format:"png",filename:"statbridge-chart",width:1400,height:800});return;}
+    if(plotlyChart){await Plotly.downloadImage(plotlyChart,{format:"png",filename:"statbridge-chart",...reportChartSize({},plotlyChart.getBoundingClientRect())});return;}
     const svgs=Array.from(document.querySelectorAll<SVGSVGElement>(".chart-panel .chart-wrap svg"));
     if(!svgs.length)return;
     const width=1400,chartHeight=500,gap=28;
@@ -444,21 +462,21 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
   return <section className={`results ${result.editSessionId?'has-workspace':''}`} id="analysis-result">
     <div className="section-heading"><div><span className="eyebrow">ANALYSIS RESULT</span><h2>질문에서 근거까지, 한눈에</h2></div>{noMatch?<span className="unavailable-badge">지원 데이터 없음</span>:<span className="verified-badge"><Icon name="check" size={15}/> 검증된 데이터</span>}</div>
     <div className="result-grid">
-      <article className="panel chart-panel">
+      <article ref={chartPanel} className="panel chart-panel">
         <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length>0&&<button onClick={exportPng}><Icon name="chart" size={17}/> PNG</button>}<button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button><button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
         {result.chart.length>0?<section className="result-conditions" aria-label="현재 그래프 조회 조건"><div><small>표시된 관측 기간</small><strong>{actualPeriod.start||result.period.start} ~ {actualPeriod.end||result.period.end}</strong></div><div><small>주기 · 계열</small><strong>{[...new Set(result.chart.map(series=>({M:'월별',Q:'분기별',A:'연별',Y:'연별',D:'일별',category:'항목별 비교'} as Record<string,string>)[series.frequency||'']||series.frequency||result.frequency))].join(' / ')} · {result.chart.length}개</strong></div><div><small>자료 출처</small><strong>{resultSourceLabel(result)}</strong></div>{titlePeriodMismatch(String(result.outputSpec?.chartState?.title||editOptions?.title||""),actualPeriod)&&<p role="status">제목에 적힌 기간과 현재 관측 기간이 다릅니다. 현재 자료는 위 관측 기간을 기준으로 확인하고, 필요하면 왼쪽에서 제목을 수정해 주세요.</p>}{result.outputSpec?.cachedSnapshot&&<p>저장 당시 자료를 표시합니다. 최신 관측값은 새로 조회해 주세요.</p>}</section>:<PeriodConfirmation result={result}/>}
         {result.outputSpec?.editChanges?.length ? <div className="setup-block" role="status"><strong>수정이 적용되었습니다</strong><ul>{result.outputSpec.editChanges.map((change,index)=><li key={index}>{change}</li>)}</ul></div> : null}
         {!result.editSessionId&&result.warnings?.map((warning, index) => <div className="error-banner" role="status" key={index}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi, "$1[redacted]")}</div>)}
         {!result.editSessionId&&<div className="chart-header"><div><h3>{editOptions?.title||(result.chart.length ? `${chartLabels[result.chartType||'line']} 분석 결과` : "MCP 통계표 탐색 결과")}</h3>{result.chart.length > 0 && editOptions?.showLegend!==false && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>}
-        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor preferTable={wantsReportTable(result.query)} onEvidence={()=>setEvidenceOpen(true)} warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
+        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor onViewChange={setReportView} preferTable={wantsReportTable(result.query)} onEvidence={()=>setEvidenceOpen(true)} warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
         {insights.observations.length>0&&<div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{insights.observations.map((x,index) => <li key={`${index}-${x}`}>{x}</li>)}</ul></div>}
         <DerivedEvidence key={result.derivedEvidence?.calculationId} result={result}/>
-        <details className="workspace-analysis-summary" open><summary>관측 요약</summary><div className="answer-summary"><span><Icon name="sparkle" size={16}/></span><p>{result.summary}</p></div><SummaryEvidence result={result}/>{result.editSessionId&&<ReportDraft key={`${result.editSessionId}-${result.outputSpec?.editVersion??0}`} sessionId={result.editSessionId} revision={result.outputSpec?.editVersion??0}/>}</details>
+        <details className="workspace-analysis-summary" open><summary>보고서 작성하기</summary><StatisticalQuestion displayMode={reportView} sessionId={result.editSessionId} revision={result.outputSpec?.editVersion??0} summary={result.summary} disabled={loading}/><SummaryEvidence result={result}/>{result.editSessionId&&<ReportDraft key={`${result.editSessionId}-${result.outputSpec?.editVersion??0}`} sessionId={result.editSessionId} revision={result.outputSpec?.editVersion??0} getChartSize={reportChartBounds}/>}</details>
         {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><div><h3>{allDataOpen?"전체 데이터":"주요 데이터 예시"}</h3><p>{allDataOpen?"조회된 모든 관측치를 표시합니다.":"각 계열의 시작과 최근 값을 간략히 보여줍니다."}</p></div><span>전체 {allRows.length}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{visibleRows.map(({series,point}) => <tr key={`${series.id}-${point.date}`}><td>{series.label}</td><td>{point.date}</td><td>{point.value.toLocaleString()} {series.unit}</td></tr>)}</tbody></table>{allRows.length>previewRows.length&&<div className="data-more"><span>{allDataOpen?`전체 ${allRows.length}개를 표시 중입니다.`:`${previewRows.length}개 예시만 표시 중입니다.`}</span><button type="button" aria-expanded={allDataOpen} onClick={()=>setAllDataOpen((current)=>!current)}>{allDataOpen?"간략히 보기":`전체 데이터 더 보기 (${allRows.length}개)`}<Icon name="chevron" size={14}/></button></div>}</div>}
       </article>
       <aside className="evidence-column">
         <article className="panel evidence-panel"><div className="aside-title"><span><Icon name="database" size={18}/></span><div><span className="eyebrow">DATA SOURCES</span><h3>사용한 통계</h3></div></div>{sources.map((t) => <div className="source-card" key={t.tableId}><div><span className="table-id">{t.tableId}</span><span className="source-check"><Icon name="check" size={12}/></span></div><strong>{t.name}</strong><p>{t.item} · {t.unit}</p><small>{t.source}</small></div>)}</article>
-        <article className="panel lineage-panel"><button className="lineage-toggle" onClick={() => setLineageOpen(!lineageOpen)} aria-expanded={lineageOpen}><div className="aside-title"><span><Icon name="lineage" size={18}/></span><div><span className="eyebrow">DATA LINEAGE</span><h3>데이터 선택 과정</h3></div></div><Icon name="chevron" size={17}/></button>{lineageOpen && <div className="timeline">{result.lineage.map((step, i) => <div className="timeline-row" key={step.id}><div className="timeline-marker"><span><Icon name="check" size={12}/></span>{i < result.lineage.length - 1 && <i/>}</div><div><strong>{step.title}</strong><p>{step.description}</p></div></div>)}</div>}<button className="detail-link" onClick={()=>setEvidenceOpen(true)}>전체 실행 근거 보기 <Icon name="arrow" size={16}/></button></article>
+        <article className="panel lineage-panel"><button className="lineage-toggle" onClick={() => setLineageOpen(!lineageOpen)} aria-expanded={lineageOpen}><div className="aside-title"><span><Icon name="lineage" size={18}/></span><div><span className="eyebrow">DATA LINEAGE</span><h3>데이터 선택 과정</h3></div></div><Icon name="chevron" size={17}/></button><button type="button" className="lineage-log-button" onClick={()=>setEvidenceOpen(true)}>실행 로그 · Langfuse</button>{lineageOpen && <div className="timeline">{result.lineage.map((step, i) => <div className="timeline-row" key={step.id}><div className="timeline-marker"><span><Icon name="check" size={12}/></span>{i < result.lineage.length - 1 && <i/>}</div><div><strong>{step.title}</strong><p>{step.description}</p></div></div>)}</div>}</article>
       </aside>
     </div>
   <ExecutionEvidence result={result} open={evidenceOpen} onClose={()=>setEvidenceOpen(false)}/></section>;
@@ -515,13 +533,8 @@ export default function App() {
       if(saved?.editSessionId)void fetchWorkspace(saved.editSessionId).then(data=>{if(liveResult.current?.editSessionId!==saved.editSessionId)return;liveResult.current=data;setResult(data);}).catch(e=>{if(liveResult.current?.editSessionId===saved.editSessionId)setError(e.message);});
       window.setTimeout(()=>window.scrollTo({top:state.result?document.body.scrollHeight:0,behavior:"smooth"}),20);
     };
-    // A page load starts a new analysis. Keep the previous conversation in the
-    // archive, but never restore a graph automatically on reload.
-    try{
-      const saved=JSON.parse(localStorage.getItem(accountKey('statbridge.workspace.current'))||'null');
-      if(saved?.account===accountKey('history')&&saved?.result?.editSessionId)saveChat(saved.result);
-      localStorage.removeItem(accountKey('statbridge.workspace.current'));
-    }catch{setChatNotice('이전 대화의 자동 보관을 완료하지 못했습니다. 저장한 대화 목록을 확인해 주세요.');}
+    // Retire automatic snapshots and overflow caches; explicit saved analyses remain.
+    try{savedChats();}catch{setChatNotice('브라우저 보관 기록을 정리하지 못했습니다. 브라우저 저장소 권한을 확인해 주세요.');}
     history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:'',result:null},'',location.pathname);
     history.scrollRestoration='manual';
     window.scrollTo({top:0,behavior:'instant'});
@@ -535,19 +548,16 @@ export default function App() {
   const showResult = (data: QueryResponse, editing=false, approved=false) => {
     const previous=liveResult.current;
     if(data.status==="need_output_config"&&data.warnings?.length&&previous?.editSessionId){setFailedQuery(null);setError("");setPendingOutput(data);return;}
-    if(!editing&&!approved&&previous?.editSessionId&&previous.editSessionId!==data.editSessionId&&!['need_details','no_match','data_unavailable','request_failed'].includes(data.status||'')){
-      try{saveChat(previous);setChatNotice('이전 분석과 대화는 분석 보관함에 임시 보관했습니다.');}catch{setChatTransition({data});setChatNotice('이전 대화를 보관하지 못해 현재 분석을 유지했습니다.');return;}
-    }
     if(['need_details','no_match','data_unavailable','request_failed'].includes(data.status||'')){setFailedQuery(data);return;}
     setFailedQuery(null);setError("");liveResult.current=data;setResult(data);if(!editing){setPendingOutput(null);setQuery(data.query);}
     if(data.editSessionId&&!readChat(data.editSessionId).length)appendChat(data.editSessionId,{role:'assistant',kind:'edit',text:`그래프를 조회했습니다.\n${data.query}\n조회 기간: ${data.period.start} ~ ${data.period.end}`});
-    if(data.editSessionId)try{localStorage.setItem(accountKey('statbridge.workspace.current'),JSON.stringify({statbridge:true,account:accountKey('history'),view:'home',query:data.query,result:data}));}catch{/* Saved JSON files remain available. */}
+
     if(editing)history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:data.query||query,result:data},'',historyUrl('home',data.query||query));
     else {pushUiState("home",data,data.query||query);window.setTimeout(() => (document.querySelector(".chart-workspace")||document.getElementById("analysis-result"))?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);}
   };
 
   const goHome=()=>{
-    try{if(liveResult.current?.editSessionId)saveChat(liveResult.current);localStorage.removeItem(accountKey('statbridge.workspace.current'));}catch{setChatNotice('이전 대화를 보관하지 못해 현재 화면을 유지했습니다.');return;}
+    try{localStorage.removeItem(accountKey('statbridge.workspace.current'));}catch{setChatNotice('이전 대화를 보관하지 못해 현재 화면을 유지했습니다.');return;}
     liveResult.current=null;setResult(null);setPendingOutput(null);setQuery('');setView('home');setError('');setFailedQuery(null);setChatTransition(null);setChatArchive(null);lastQueryRequest.current=null;retryAction.current=null;
     history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:'',result:null},'',location.pathname);
     window.scrollTo({top:0,behavior:'smooth'});
@@ -660,7 +670,7 @@ export default function App() {
   useEffect(()=>{
     const save=async()=>{const current=liveResult.current;if(!current?.editSessionId||chatSaving.current)return;chatSaving.current=true;setChatNotice('분석을 보관하고 있습니다…');try{if(await persistChat(current))setChatNotice('분석과 대화·편집 기록을 보관했습니다. 그래프는 계정에, 대화는 이 브라우저에 저장됩니다.');}catch{setChatNotice('대화를 저장하지 못했습니다. 브라우저 저장 공간을 확인해 주세요.');}finally{chatSaving.current=false;}};
     const fresh=()=>goHome();
-    const list=()=>{setChatArchive(savedChats());setArchiveBusy(true);setArchiveError('');setAccountAnalyses([]);accountRequest('/account/graphs').then(data=>setAccountAnalyses(data.items)).catch(()=>setArchiveError('계정 저장 목록을 불러오지 못했습니다. 이 브라우저의 임시 분석은 열 수 있습니다.')).finally(()=>setArchiveBusy(false));};
+    const list=()=>{setChatArchive(savedChats());setArchiveBusy(true);setArchiveError('');setAccountAnalyses([]);accountRequest('/account/graphs').then(data=>setAccountAnalyses([...data.items,...([])])).catch(()=>setArchiveError('계정 저장 목록을 불러오지 못했습니다. 이 브라우저의 임시 분석은 열 수 있습니다.')).finally(()=>setArchiveBusy(false));};
     const failure=()=>setChatNotice('대화는 화면에 유지되지만 브라우저에 저장하지 못했습니다.');
     window.addEventListener('statbridge:save-chat',save);window.addEventListener('statbridge:new-chat',fresh);window.addEventListener('statbridge:show-chats',list);window.addEventListener('statbridge:chat-storage-error',failure);
     return()=>{window.removeEventListener('statbridge:save-chat',save);window.removeEventListener('statbridge:new-chat',fresh);window.removeEventListener('statbridge:show-chats',list);window.removeEventListener('statbridge:chat-storage-error',failure);};
@@ -682,7 +692,6 @@ export default function App() {
   },[chatTransition,chatArchive,chatBusy]);
   const reopenChat=async(chat:SavedChat)=>{
     setLoading(true);try{
-      const current=liveResult.current;if(current?.editSessionId&&current.editSessionId!==chat.id)saveChat(current);
       let data:QueryResponse;try{data=await fetchWorkspace(chat.id);}catch{data={...chat.result,outputSpec:chat.result.outputSpec?{...chat.result.outputSpec,cachedSnapshot:true,chatReadOnly:true}:undefined};setChatNotice('저장 당시 그래프와 대화를 열었습니다. 서버 세션이 만료되어 편집하려면 그래프를 다시 조회해 주세요.');}
       const existing=readChat(chat.id);writeChat(chat.id,existing.length>=chat.messages.length?existing:chat.messages);showResult(data,true,true);setQuery(data.query);setView('home');setChatArchive(null);
       requestAnimationFrame(()=>document.getElementById('analysis-result')?.scrollIntoView({block:'start'}));
@@ -693,19 +702,19 @@ export default function App() {
     <div className="main-shell">
       {chatNotice&&<p className="chat-notice" role="status">{chatNotice}<button onClick={()=>setChatNotice('')}>알림 닫기</button></p>}
       {chatTransition&&<div className="chat-modal-backdrop"><section role="dialog" aria-modal="true" aria-label="이전 그래프 대화 처리" className="chat-modal"><h2>새 그래프 대화를 시작할까요?</h2><p>현재 그래프의 대화와 편집 기록을 저장하거나 삭제한 뒤 새 대화를 시작합니다. 저장한 대화는 이 브라우저의 내 계정에서 다시 볼 수 있습니다.</p><button disabled={chatBusy} onClick={()=>void finishChatTransition(true)}>이전 대화 저장 후 시작</button><button disabled={chatBusy} onClick={()=>void finishChatTransition(false)}>이전 대화 삭제 후 시작</button><button disabled={chatBusy} onClick={()=>setChatTransition(null)}>취소 · 현재 대화 유지</button></section></div>}
-      {chatArchive&&<div className="chat-modal-backdrop"><section role="dialog" aria-modal="true" aria-label="분석 보관함" className="chat-modal"><h2>분석 보관함</h2><p>그래프와 대화·편집 기록을 함께 관리합니다. 대화와 임시 분석은 이 브라우저에 보관됩니다.</p>{archiveBusy&&<p role="status">계정 저장 목록을 확인하고 있습니다.</p>}{archiveError&&<p role="alert">{archiveError}</p>}{!chatArchive.length&&!accountAnalyses.length&&!archiveBusy&&<p>보관한 분석이 없습니다.</p>}{analysisEntries(chatArchive,accountAnalyses).map(entry=><article key={entry.id}><strong>{entry.title}</strong><small>{new Date(entry.savedAt).toLocaleString('ko-KR')} · {entry.account?'계정에 그래프 저장':'이 브라우저에 임시 보관'}{entry.local?` · 대화·편집 기록 ${entry.local.messages.length}개`:''}</small><button disabled={loading} onClick={()=>{if(entry.local)void reopenChat(entry.local);else{window.dispatchEvent(new CustomEvent('statbridge:open-saved',{detail:entry.id}));setChatArchive(null);}}}>분석 열기</button><button className="control-danger" disabled={loading||archiveBusy} onClick={async()=>{if(!window.confirm('이 분석의 보관된 대화·편집 기록과 계정 저장 그래프를 삭제할까요? 다운로드한 파일과 현재 화면은 유지됩니다.'))return;setArchiveBusy(true);try{if(entry.account){await accountRequest('/account/graphs/'+encodeURIComponent(entry.id),undefined,'DELETE');window.dispatchEvent(new Event('statbridge:graph-saved'));}if(entry.local)removeSavedChat(entry.id);setChatArchive(savedChats());setAccountAnalyses(items=>items.filter(item=>item.id!==entry.id));}catch{setArchiveError('삭제하지 못한 기록이 있습니다. 보관함을 다시 열어 상태를 확인해 주세요.');}finally{setArchiveBusy(false);}}}>보관 삭제</button></article>)}<button onClick={()=>setChatArchive(null)}>닫기</button></section></div>}
+      {chatArchive&&<div className="chat-modal-backdrop"><section role="dialog" aria-modal="true" aria-label="분석 보관함" className="chat-modal"><h2>분석 보관함</h2><p>저장한 최신 분석 5개를 표시합니다. 분석은 자동으로 임시 보관하지 않습니다.</p>{archiveBusy&&<p role="status">계정 저장 목록을 확인하고 있습니다.</p>}{archiveError&&<p role="alert">{archiveError}</p>}{!chatArchive.length&&!accountAnalyses.length&&!archiveBusy&&<p>보관한 분석이 없습니다.</p>}{analysisEntries(chatArchive,accountAnalyses).map(entry=><article key={entry.id}><strong>{entry.title}</strong><small>{new Date(entry.savedAt).toLocaleString('ko-KR')} · {entry.account?'계정에 그래프 저장':'이 브라우저에 임시 보관'}{entry.local?` · 대화·편집 기록 ${entry.local.messages.length}개`:''}</small><button disabled={loading} onClick={()=>{if(entry.local)void reopenChat(entry.local);else{window.dispatchEvent(new CustomEvent('statbridge:open-saved',{detail:entry.id}));setChatArchive(null);}}}>분석 열기</button><button className="control-danger" disabled={loading||archiveBusy} onClick={async()=>{if(!window.confirm('이 분석의 보관된 대화·편집 기록과 계정 저장 그래프를 삭제할까요? 다운로드한 파일과 현재 화면은 유지됩니다.'))return;setArchiveBusy(true);try{if(entry.account){await accountRequest('/account/graphs/'+encodeURIComponent(entry.id),undefined,'DELETE');window.dispatchEvent(new Event('statbridge:graph-saved'));}if(entry.local)removeSavedChat(entry.id);setChatArchive(savedChats());setAccountAnalyses(items=>items.filter(item=>item.id!==entry.id));}catch{setArchiveError('삭제하지 못한 기록이 있습니다. 보관함을 다시 열어 상태를 확인해 주세요.');}finally{setArchiveBusy(false);}}}>보관 삭제</button></article>)}<button onClick={()=>setChatArchive(null)}>닫기</button></section></div>}
       <Header view={view} goHome={goHome} selectView={navigateView} busy={loading}/>
       {view === "lineage" ? <DataCatalog onQuery={queryCatalogTable} loading={loading}/> : <main id="main-content" tabIndex={-1}>
         <Hero query={query} setQuery={setQuery} submit={onSubmit} loading={loading}/>
         {(error||failedQuery)&&!failedQuery?.availability&& !(failedQuery?.supplement&&(failedQuery.supplement.missing.length>0||failedQuery.supplement.uploaded.length>0))&& (failedQuery?.requiresQueryRefinement?<QueryRefinementCard result={failedQuery} busy={loading} onSubmit={text=>{setQuery(text);void runQuery(initialQueryRequest(text));}}/>:<RecoveryPanel message={error||failedQuery?.summary||''} result={failedQuery||result} busy={loading} retry={()=>{if(retryAction.current)retryAction.current();else void runQuery(initialQueryRequest(result?.query||query));}} onRevise={()=>document.getElementById('statistics-query')?.focus()} selectPeriod={(start,end)=>{const last=lastQueryRequest.current;void runQuery({...last||initialQueryRequest(result?.query||query),period_start:start,period_end:end,execute:true});}} selectTable={table=>{const last=lastQueryRequest.current;const next={query:`${table.tableId} ${table.name}`,execute:true,...(/^\d{4}-\d{2}-\d{2}$/.test(last?.period_start||failedQuery?.period?.start||'')?{period_start:last?.period_start||failedQuery?.period?.start,period_end:last?.period_end||failedQuery?.period?.end}:{})};setQuery(next.query);void runQuery(next);}}/>)}
-        {!failedQuery&&!result&&<DerivedUploadRecovery open={showResult}/>}
         {shouldShowDerivedSupplement(failedQuery)&&failedQuery&&<DerivedSupplementPanel key={failedQuery.supplement?.workspaceId||failedQuery.query} result={failedQuery} onResult={async data=>{const output=automaticOutput(data);showResult(output?await submitOutput(output):data);}}/>}
         {failedQuery?.availability&&<DerivedAvailabilityPanel key={failedQuery.query} result={failedQuery} onResult={async data=>{showResult(data);window.setTimeout(()=>document.querySelector('.ds-panel')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}} busy={loading} retry={()=>void runQuery(initialQueryRequest(failedQuery.query))} confirm={answer=>{const next=failedQuery.query+'\n추가 조건: '+answer+'\n아직 계산하지 말고 원자료 확인만 이어가 주세요.';setQuery(next);void runQuery(initialQueryRequest(next));}}/>}
+        {failedQuery&&<RequestExecutionLog result={failedQuery}/>}
+        {!failedQuery&&result&&["need_clarification","need_period","need_output_config"].includes(result.status||"")&&<RequestExecutionLog result={result}/>}
         {result?.status === "need_clarification" && <ClarificationPanel result={result} loading={loading} choose={chooseClarification} advance={trackedQuery} onResult={showResult}/>}
         {result?.status === "need_period" && <PeriodPanel result={result} loading={loading} submit={submitPeriod}/>}
         {(pendingOutput||result?.status === "need_output_config") && <OutputConfigPanel result={pendingOutput||result!} loading={loading} submit={renderSelectedOutput}/>}
         {result && !["need_clarification","need_period","need_output_config"].includes(result.status || "") && <Results result={result} onEdit={editSelectedOutput} loading={loading}/>}
-        <section className="example-footer"><div><Icon name="history"/><span>다른 질문도 탐색해보세요</span></div>{examples.map((x) => <button key={x.label} title={x.query} onClick={() => { setQuery(x.query);  window.scrollTo({ top: 0, behavior: "smooth" }); }}>{x.label}</button>)}</section>
         <UsageGuide/>
       </main>}
       <footer><span>© 2026 StatBridge</span><span>경제통계 탐색 · 시각화 · 출처 확인</span></footer>

@@ -13,18 +13,37 @@ export function readChat(id:string):ChatMessage[]{
 function notify(id:string){window.dispatchEvent(new CustomEvent('statbridge:chat-updated',{detail:id}));}
 export function writeChat(id:string,messages:ChatMessage[]){
  const k=key(id);memory.set(k,messages);
- try{localStorage.setItem(k,JSON.stringify(messages));}catch{window.dispatchEvent(new Event('statbridge:chat-storage-error'));}
+ try{if(storedChats('statbridge.saved-chats').some(x=>x.id===id))localStorage.setItem(k,JSON.stringify(messages));else localStorage.removeItem(k);}catch{window.dispatchEvent(new Event('statbridge:chat-storage-error'));}
  notify(id);
 }
 export function appendChat(id:string,message:ChatMessage){writeChat(id,[...readChat(id),{...message,time:Date.now()}]);}
 export function deleteChat(id:string){localStorage.removeItem(key(id));sessionStorage.removeItem(`statbridge.sujeongi.chat.${id}`);memory.delete(key(id));notify(id);}
-export function savedChats():SavedChat[]{try{const x=JSON.parse(localStorage.getItem(accountKey('statbridge.saved-chats'))||'[]');return Array.isArray(x)?x:[];}catch{return [];}}
+function storedChats(name:string):SavedChat[]{try{const x=JSON.parse(localStorage.getItem(accountKey(name))||'[]');return Array.isArray(x)?x:[];}catch{return [];}}
+export function allSavedChats():SavedChat[]{
+ const rows=storedChats('statbridge.saved-chats').sort((a,b)=>b.savedAt-a.savedAt).slice(0,5);
+ const keep=new Set(rows.map(x=>x.id));
+ for(const old of storedChats('statbridge.saved-chats.archive'))if(!keep.has(old.id))deleteChat(old.id);
+ localStorage.removeItem(accountKey('statbridge.saved-chats.archive'));
+ localStorage.removeItem(accountKey('statbridge.workspace.current'));
+ const raw=storedChats('statbridge.saved-chats');
+ for(const old of raw.slice().sort((a,b)=>b.savedAt-a.savedAt).slice(5))deleteChat(old.id);
+ if(raw.length>5)localStorage.setItem(accountKey('statbridge.saved-chats'),JSON.stringify(rows));
+ return rows;
+}
+export function savedChats():SavedChat[]{return allSavedChats();}
+function storeChats(rows:SavedChat[]){
+ const kept=rows.slice(0,5);
+ localStorage.setItem(accountKey('statbridge.saved-chats'),JSON.stringify(kept));
+ localStorage.removeItem(accountKey('statbridge.saved-chats.archive'));
+ for(const old of rows.slice(5))deleteChat(old.id);
+}
 export function saveChat(result:QueryResponse){
  const id=result.editSessionId;if(!id)return;
  const entry:SavedChat={id,title:String(result.outputSpec?.chartState?.title||result.query),savedAt:Date.now(),result,messages:readChat(id)};
- localStorage.setItem(accountKey('statbridge.saved-chats'),JSON.stringify([entry,...savedChats().filter(x=>x.id!==id)]));
+ storeChats([entry,...allSavedChats().filter(x=>x.id!==id)]);
+ writeChat(id,entry.messages);
 }
-export function removeSavedChat(id:string){localStorage.setItem(accountKey('statbridge.saved-chats'),JSON.stringify(savedChats().filter(x=>x.id!==id)));deleteChat(id);}
+export function removeSavedChat(id:string){storeChats(allSavedChats().filter(x=>x.id!==id));deleteChat(id);}
 export function editDescription(before:QueryResponse,after:QueryResponse,action?:string):string{
  if(action==='undo')return '직전 그래프 편집을 되돌렸습니다.';
  if(action==='redo')return '취소한 그래프 편집을 다시 적용했습니다.';

@@ -22,7 +22,7 @@ def period_redraw(instruction,latest=None):
     return {**period,"only_period":not style}
 
 
-def revise_period(session,instruction,output_agent,execute,availability,api_period):
+def revise_period(session,instruction,output_agent,execute,availability,api_period,comparison_service=None):
     if not TOKEN.search(instruction) or not re.search(r"날짜|기간|그려|그리|보여|조회",instruction): return None
     original=session["result"]
     plans=original.get("api_plans") or [original.get("api_plan")]
@@ -51,6 +51,9 @@ def revise_period(session,instruction,output_agent,execute,availability,api_peri
     if execution.get("status")!="success" or not execution.get("rows"):
         raise ValueError("수정할 기간의 원자료를 조회하지 못했습니다. "+str(execution.get("error") or "조회된 데이터가 없습니다.")+" 기존 그래프는 유지됩니다.")
     spec=ChartSpec.model_validate(session["output"]["chartState"])
+    if spec.transform == 'year_over_year' and comparison_service is not None:
+        from chart_comparison_history import ensure_comparison_history
+        refreshed=ensure_comparison_history(refreshed,comparison_service)
     # All selected plans are queried at the same UI boundaries. Period filtering
     # is reset because those exact boundaries are now owned by the source plans.
     updated=spec.model_copy(update={"period_start":None,"period_end":None})

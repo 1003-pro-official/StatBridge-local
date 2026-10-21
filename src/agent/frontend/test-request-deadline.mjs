@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {withRequestDeadline,RequestTimeoutError} from './src/requestDeadline.ts';
+import {withRequestDeadline,RequestTimeoutError,EDIT_TIMEOUT_MS} from './src/requestDeadline.ts';
 import {recoveryFor} from './src/recoveryActions.ts';
 test('stalled editing, saving and downloads release their queue with recovery choices',async()=>{
  for(const label of ['편집 요청','계정 저장 요청','표 다운로드 요청']){
@@ -29,4 +29,15 @@ test('an invalid server body becomes an actionable retry instead of parser code'
 test('rate-limit guidance wins over a legacy generic input recovery',()=>{
  const result={recovery:{issue:'input',question:'입력 수정',choices:[{id:'revise',label:'수정'}]}};
  assert(recoveryFor(result,'KOSIS 호출 제한으로 대기 중입니다. 31초 후 다시 시도해 주세요.').choices.some(c=>c.id==='retry'));
+});
+
+test('image editing and its nested fetch share a longer budget, including body decoding',async()=>{
+ assert.equal(EDIT_TIMEOUT_MS,180_000);
+ // Scale seconds to milliseconds; cross the old 20 ms limit in both stages.
+ const answer=await withRequestDeadline(async signal=>{
+  const response=await withRequestDeadline(async()=>{await new Promise(r=>setTimeout(r,35));return {json:async()=>{await new Promise(r=>setTimeout(r,35));return 'applied';}};},'fetch',signal,180);
+  return response.json();
+ },'image edit',undefined,180);
+ assert.equal(answer,'applied');
+ assert.match(new RequestTimeoutError('image edit',EDIT_TIMEOUT_MS).message,/180초/);
 });

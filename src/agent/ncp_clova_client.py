@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statbridge_mcp.observability import observed, annotate, generation_usage, generation_started
 
 import json
 import os
@@ -91,17 +92,25 @@ class NcpClovaClient:
         except Exception as exc:
             raise NcpClovaError(f"CLOVA 응답에서 message.content를 찾지 못했습니다: {payload}") from exc
 
+    @observed('model.ncp', 'generation')
     def _post(self, url: str, body: dict[str, Any]) -> tuple[str, dict[str, Any]]:
         try:
-            response = self.session.post(url, headers=self._headers(), json=body, timeout=self.settings.timeout)
+            headers=self._headers()
+            model_match=re.search(r'/chat-completions/([A-Za-z0-9_.-]+)$',url)
+            generation_started(model_match.group(1) if model_match else None)
+            response = self.session.post(url, headers=headers, json=body, timeout=self.settings.timeout)
         except requests.RequestException as exc:
             raise NcpClovaError(f"CLOVA 요청 실패: {exc}") from exc
+        annotate(http_status=response.status_code)
         if response.status_code >= 400:
             raise NcpClovaError(f"CLOVA HTTP {response.status_code}: {response.text[:1200]}")
         try:
             payload = response.json()
         except ValueError as exc:
             raise NcpClovaError(f"CLOVA JSON 응답 파싱 실패: {response.text[:1200]}") from exc
+        model_match=re.search(r'/chat-completions/([A-Za-z0-9_.-]+)$',url)
+        usage=payload.get('usage') or (payload.get('result') or {}).get('usage') or {}
+        generation_usage(model_match.group(1) if model_match else None,{target:usage[source] for source,target in [('inputTokens','input_tokens'),('outputTokens','output_tokens'),('totalTokens','total_tokens')] if isinstance(usage.get(source),int)})
         return self._content(payload), payload
 
     @staticmethod
@@ -129,6 +138,7 @@ class NcpClovaClient:
         """
         cache_key=str(query).strip()
         if cache_key in self._classification_cache:
+            annotate(cache_hit=True)
             self._classification_cache.move_to_end(cache_key)
             return copy.deepcopy(self._classification_cache[cache_key])
         system = (

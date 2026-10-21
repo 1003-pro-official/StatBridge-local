@@ -5,6 +5,9 @@ import re
 import unicodedata
 
 
+COMBINED_RATE_PATTERN = re.compile(r'여\s*[·ㆍ・/／‧]?\s*수신\s*금리')
+
+
 def compact(value):
     return re.sub(r"[^0-9a-z가-힣]", "", unicodedata.normalize("NFKC", str(value or "")).lower())
 
@@ -59,15 +62,19 @@ def measured_intent_matches(query, table):
 
 
 def catalog_mentions(query, tables):
-    """Longest canonical-name spans. A suffix-free name retains ALL basis variants."""
+    """Longest name spans; omitted bases honor explicit IDs and basis qualifiers."""
     q = compact(active_measure_text(query))
+    explicit_ids={tid.upper() for tid in re.findall(r'\bDT_[0-9A-Za-z]+\b',str(query),re.I)}
     spans = {}
     for table in tables:
         title = str(table.get("table_name") or "")
         names = {compact(title)}
         base = compact(title.split("(", 1)[0])
         closed_vintage=bool(re.search(r'(?:19|20)\d{2}\s*[~∼-]\s*(?:19|20)\d{2}',title))
-        if len(base) >= 4 and not closed_vintage:
+        implicit_basis_matches=not any(wanted in q and opposite not in q and opposite in compact(title)
+                                       for wanted,opposite in [('원계열','계절조정'),('계절조정','원계열')])
+        implicit_id_matches=not explicit_ids or str(table['table_id']).upper() in explicit_ids
+        if len(base) >= 4 and not closed_vintage and implicit_basis_matches and implicit_id_matches:
             names.add(base)
         for name in names:
             if len(name) < 3:
@@ -133,7 +140,7 @@ def unsupported_quantity_terms(query, tables):
     catalog=' '.join(compact(value) for t in tables for value in
                      [t.get('table_name',''),*t.get('aliases',[]),*t.get('public_query_terms',[]),*[v.get('value_name','') for d in t.get('dimensions',[]) for v in d.get('values',[])]])
     unknown=[]
-    for word in re.findall(r'[가-힣a-zA-Z]+',str(query)):
+    for word in re.findall(r'[가-힣a-zA-Z]+', COMBINED_RATE_PATTERN.sub('대출금리와 수신금리', str(query))):
         term=re.sub(r'(?:으로|까지|부터|에서|을|를|은|는|의|와|과)$','',word)
         if len(term)>=3 and term.endswith(('지수','금리','물가','사용량','발전량','생산량','소비량','실업률','전세가율','연체율')) and compact(term) not in catalog:
             unknown.append(term)
@@ -174,7 +181,8 @@ QUALIFIERS = ("지역별", "국가별", "나라별", "산업별", "기관별", "
 
 
 def structure_request(query):
-    q=compact(query)
+    # 여수신 is a compound request, even without an explicit conjunction.
+    q=compact(COMBINED_RATE_PATTERN.sub('대출금리와 수신금리', str(query)))
     # Institution names are qualifiers, not requests for deposit statistics.
     metric_q=q.replace("예금은행", "은행").replace("비은행예금취급기관", "기관")
     matches=[(name,triggers,terms) for name,triggers,terms in FAMILIES if any(compact(t) in metric_q for t in triggers)]
@@ -188,7 +196,7 @@ def structure_request(query):
             "qualifiers":[term for term in QUALIFIERS if term in q],
             "years":re.findall(r"(?<!\d)(?:19|20)\d{2}(?!\d)",str(query)),
             "explicit_ids":re.findall(r"\bDT_[0-9A-Za-z]+\b",str(query),re.I),
-            "comparison":bool(re.search(r"비교|같이|함께|나란히|그리고|및|와|과|,",str(query)))}
+            "comparison":bool(COMBINED_RATE_PATTERN.search(str(query)) or re.search(r"비교|같이|함께|나란히|그리고|및|와|과|,",str(query)))}
 
 
 def table_evidence(query, table):

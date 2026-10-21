@@ -20,3 +20,19 @@ def year_over_year(points,frequency):
         if previous in by_period and by_period[previous]!=0:
             result.append({'date':point['date'],'value':(point['value']/by_period[previous]-1)*100})
     return result
+
+
+def annual_index_growth(points, start, end):
+    """Growth of published annual indices; monthly indices are not annual means."""
+    values = {p['date']: p['value'] for p in points}
+    result = []
+    for year in range(int(start[:4]), int(end[:4]) + 1):
+        current, prior = str(year), str(year-1)
+        if current+'01' < start or current+'12' > end or current not in values or prior not in values:
+            continue
+        base = values[prior]
+        if base == 0:
+            continue
+        result.append({'year': year, 'value': (values[current] / base - 1) * 100,
+                       'formula': '(published_annual_index / previous_published_annual_index - 1) * 100'})
+    return result

@@ -1,4 +1,4 @@
-import {withRequestDeadline} from '../requestDeadline';
+import {withRequestDeadline,EDIT_TIMEOUT_MS} from '../requestDeadline';
 import {apiFetch,accountKey} from '../accountApi';
 import {queryFailure,analysisTimedOut} from "./queryFailure";
 import {withAnalysisDeadline,AnalysisTimeoutError} from '../analysisDeadline';
@@ -115,7 +115,7 @@ export async function inspectOutputOptions(session_ids:string[]):Promise<NonNull
 }
 
 export async function submitOutputEdit(payload: OutputEditRequest,derived=false): Promise<QueryResponse> {
- const budget=derived?DERIVED_TIMEOUT_MS:derivedBudget(payload.instruction);
+ const budget=Math.max(EDIT_TIMEOUT_MS,derived?DERIVED_TIMEOUT_MS:derivedBudget(payload.instruction));
  return withRequestDeadline(async signal=>{
   const response = await apiFetch(`${API_BASE_URL}/output/edit`,{signal,
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),

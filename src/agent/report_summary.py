@@ -2,6 +2,7 @@
 from decimal import Decimal
 import json
 import re
+from narrative_labels import narrative_name
 
 
 def difference_unit(unit):
@@ -44,7 +45,7 @@ def facts_for(series):
         points = item.get('points') or []
         if not points:
             continue
-        label, unit, frequency = item['label'], item.get('unit') or '', item.get('frequency') or ''
+        label, unit, frequency = narrative_name(item['label'], table_name=item.get('tableName', '')), item.get('unit') or '', item.get('frequency') or ''
         ending = label[-1:]
         subject = label + ('은' if ending and '가' <= ending <= '힣' and (ord(ending) - ord('가')) % 28 else '는')
         first, last = points[0], points[-1]
@@ -57,7 +58,7 @@ def facts_for(series):
         def add(kind, text, evidence):
             facts.append({'id': f's{index}-{kind}', 'kind': kind, 'series': index,
                           'text': text, 'observations': evidence, 'sourceId': item.get('sourceId'),
-                          'label': label, 'unit': unit, 'frequency': frequency})
+                          'label': item['label'], 'unit': unit, 'frequency': frequency})
         add('latest', f'{label}의 {date(last)} 관측값은 {value(last)}입니다.', [last])
         def change(previous, name, kind):
             delta = Decimal(str(last['value'])) - Decimal(str(previous['value']))
@@ -174,7 +175,7 @@ def explain(series, client=None, *, query=''):
                 gap = Decimal(str(a['value'])) - Decimal(str(b['value']))
                 unit = difference_unit(left.get('unit', ''))
                 evidence = [a, b]
-                text = f"{period(a['date'], left.get('frequency'))} {left['label']}에서 {right['label']}을 뺀 격차는 {number(gap)} {unit}입니다."
+                text = f"{period(a['date'], left.get('frequency'))} {narrative_name(left['label'])}에서 {narrative_name(right['label'])}을 뺀 격차는 {number(gap)} {unit}입니다."
                 previous = ordinal(a['date'], left.get('frequency'))
                 if previous is not None:
                     la = {ordinal(p['date'], left.get('frequency')): p for p in left['points']}

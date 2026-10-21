@@ -33,7 +33,7 @@ export default function StickerEditor({stage,items,initialDraft,revision,disable
     fetch("/stickers/catalog.json",{signal:controller.signal}).then(r=>{if(!r.ok)throw new Error("주석 기호 목록을 불러오지 못했습니다.");return r.json();}).then(setCatalog).catch(e=>{if(!controller.signal.aborted)setError(String(e.message));});
     return()=>controller.abort();
   },[]);
-  useEffect(()=>{if(lastRevision.current===revision)return;lastRevision.current=revision;if(!auto.pending('stickers')&&JSON.stringify(items)!==JSON.stringify(draft)){setDraft(items);setSelected(null);setActive(false);gesture.current=null;}setError("");},[revision]);
+  useEffect(()=>{if(lastRevision.current===revision&&!auto.settled)return;lastRevision.current=revision;if(!auto.pending('stickers')&&JSON.stringify(items)!==JSON.stringify(draft)){setDraft(items);setSelected(null);setActive(false);gesture.current=null;}setError("");},[revision,auto.settled]);
   useEffect(()=>{if(drawing)setActive(false);},[drawing]);
   useEffect(()=>{
     const host=stage.current,plot=host?.querySelector<Plot>(".plotly-chart");

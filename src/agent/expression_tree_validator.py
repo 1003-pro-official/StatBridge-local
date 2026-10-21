@@ -1,4 +1,5 @@
 """Server-owned source, structure, calendar and dimensional checks."""
+from statbridge_mcp.observability import observed
 import re
 from datetime import date
 from expression_tree_schema import ExpressionPlan, MAX_SOURCES, MAX_OUTPUTS
@@ -69,6 +70,7 @@ def prior_year_period(period, frequency):
     except ValueError: return None  # Feb 29 has no same-date prior-year observation.
 
 
+@observed('dag.validate', 'span')
 def validate_plan(plan: ExpressionPlan, catalog):
     if not 1 <= len(plan.sources) <= MAX_SOURCES or not 1 <= len(plan.outputs) <= MAX_OUTPUTS:
         raise DerivedValidationError(f'입력 및 출력 시계열은 각각 최대 {MAX_SOURCES}개입니다.')

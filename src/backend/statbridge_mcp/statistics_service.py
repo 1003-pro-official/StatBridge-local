@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statbridge_mcp.observability import observed
 
 from glob import glob
 from pathlib import Path
@@ -91,6 +92,7 @@ class _MissingKeyClient:
     def get_prd_meta(self, *args: Any, **kwargs: Any) -> list[dict[str, Any]]:
         raise RuntimeError("KOSIS_API_KEY가 설정되지 않았습니다.")
 
+    @observed('source.fetch', 'span')
     def get_statistics(self, *args: Any, **kwargs: Any) -> list[dict[str, Any]]:
         raise RuntimeError("KOSIS_API_KEY가 설정되지 않았습니다.")
 
@@ -120,6 +122,7 @@ class StatisticsService:
     # SEARCH
     # ========================================================
 
+    @observed('catalog.search', 'span')
     def search_tables(
         self,
         query: str,
@@ -336,6 +339,7 @@ class StatisticsService:
     # GET TABLE METADATA
     # ========================================================
 
+    @observed('catalog.metadata', 'span')
     def get_table_metadata(
         self,
         table_id: str,
@@ -1023,6 +1027,7 @@ class StatisticsService:
     # GET STATISTICS
     # ========================================================
 
+    @observed('source.fetch', 'span')
     def get_statistics(
         self,
         table_id: str,

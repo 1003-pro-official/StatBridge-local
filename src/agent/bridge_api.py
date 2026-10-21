@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statbridge_mcp.observability import observed
 from execution_trace import initial_traces, edit_trace
 
 import os
@@ -151,6 +152,7 @@ class EditConversationMessage(BaseModel):
 
 
 class OutputEditRequest(BaseModel):
+    edit_target: Literal["graph", "table"] = "graph"
     derived_node_patch: dict[str, Any] | None = None
     reference_files: list[ChartReference] = Field(default_factory=list, max_length=3)
     edit_session_id: str
@@ -263,6 +265,188 @@ class ReportInterpretRequest(BaseModel):
     edit_session_id: str
     revision: int = Field(ge=0)
     as_of: str | None = Field(default=None, pattern=r'^\d{4}-\d{2}-\d{2}$')
+    mode: Literal['evidence', 'chart_brief'] = 'evidence'
+
+
+class StatisticalQuestionRequest(BaseModel):
+    edit_session_id: str = Field(min_length=1, max_length=128)
+    revision: int = Field(ge=0, strict=True)
+    question: str = Field(min_length=1, max_length=1000)
+    conversational: bool = False
+    display_mode: Literal['graph','table'] = 'graph'
+    conversation_version: int | None = Field(default=None,ge=0,strict=True)
+
+
+def _report_displayed_series(snapshot,display_mode='graph'):
+    spec=ChartSpec.model_validate(snapshot['output']['chartState'])
+    displayed=agent.output_agent._display_series(snapshot['result'],spec)
+    if spec.report_table and display_mode=='table':
+        labels=spec.report_table.labels
+        displayed=[s for s in displayed if not labels or s['label'] in labels]
+        if spec.report_table.recent_periods:
+            displayed=[{**s,'points':s['points'][-spec.report_table.recent_periods:]} for s in displayed]
+    if len(displayed)>40:raise HTTPException(422,'현재 자료 대화는 최대 40개 계열을 지원합니다.')
+    return displayed
+
+
+@app.get('/api/report/conversation/{edit_session_id}')
+@observed('report.conversation.refresh','span')
+def report_conversation_history(edit_session_id: str,display_mode: Literal['graph','table']='graph'):
+    from report_conversation import refresh,public_state
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(edit_session_id)
+        user=account_auth.USER.get() or {}
+        if not session or session.get('account_id')!=user.get('id') or not user.get('id'):
+            raise HTTPException(404,'분석 대화를 찾을 수 없습니다.')
+        snapshot=copy.deepcopy(session);revision=snapshot['output'].get('editVersion',0)
+        version=snapshot.get('report_conversation',{}).get('version',0)
+    updated=refresh(snapshot.get('report_conversation'),_report_displayed_series(snapshot,display_mode),revision,display_mode)
+    with EDIT_LOCK:
+        if session['output'].get('editVersion',0)!=revision or session.get('report_conversation',{}).get('version',0)!=version:
+            raise HTTPException(409,'분석이나 대화가 변경되었습니다. 다시 불러와 주세요.')
+        updated['markdown_entries']=copy.deepcopy(session.get('report_conversation',{}).get('markdown_entries',[]))
+        session['report_conversation']=updated
+    return public_state(updated)
+
+
+class ReportMarkdownRequest(BaseModel):
+    edit_session_id: str = Field(min_length=1,max_length=128)
+    revision: int = Field(ge=0,strict=True)
+    turn_id: int | None = Field(default=None,ge=1,strict=True)
+
+
+@app.post('/api/report/markdown/append')
+@observed('report.markdown.append','span')
+def append_report_markdown(payload: ReportMarkdownRequest):
+    from report_markdown import append_answer
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(payload.edit_session_id)
+        if not session:raise HTTPException(404,'분석 세션이 없습니다.')
+        if payload.revision!=session['output'].get('editVersion',0):raise HTTPException(409,'최신 자료의 검산이 끝난 뒤 추가해 주세요.')
+        if payload.turn_id is None:raise HTTPException(422,'추가할 답변을 선택해 주세요.')
+        conversation=session.get('report_conversation',{})
+        try:entries=append_answer(conversation,payload.turn_id,payload.revision)
+        except ValueError as exc:raise HTTPException(422,str(exc)) from exc
+        conversation['markdown_entries']=entries
+        session['report_conversation']=conversation
+    return {'entries':entries}
+
+
+@app.post('/api/report/markdown/export')
+@observed('report.markdown.export','span')
+def export_report_markdown(payload: ReportMarkdownRequest):
+    from report_markdown import markdown
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(payload.edit_session_id)
+        if not session:raise HTTPException(404,'분석 세션이 없습니다.')
+        entries=copy.deepcopy(session.get('report_conversation',{}).get('markdown_entries',[]))
+    if not entries:raise HTTPException(422,'저장할 답변의 MD에 추가 버튼을 먼저 눌러 주세요.')
+    return Response(markdown(entries).encode('utf-8'),media_type='text/markdown; charset=utf-8',headers={'Content-Disposition':'attachment; filename="statbridge-report.md"'})
+
+
+@app.post('/api/report/question')
+@observed('report.question', 'span')
+def statistical_question(payload: StatisticalQuestionRequest):
+    from statistical_question import answer_question
+    question = payload.question.strip()
+    if not question:
+        raise HTTPException(status_code=422, detail='분석할 질문을 입력해 주세요.')
+    with EDIT_LOCK:
+        session = EDIT_SESSIONS.get(payload.edit_session_id)
+        if not session:
+            raise HTTPException(status_code=404, detail='분석 편집 세션이 없습니다. 자료를 다시 조회해 주세요.')
+        if payload.revision != session['output'].get('editVersion', 0):
+            raise HTTPException(status_code=409, detail='그래프가 변경되었습니다. 최신 자료에서 다시 질문해 주세요.')
+        snapshot = copy.deepcopy(session)
+    if payload.conversational:
+        from report_conversation import reply,public_state
+        before_version=snapshot.get('report_conversation',{}).get('version',0)
+        if payload.conversation_version is not None and payload.conversation_version!=before_version:
+            raise HTTPException(409,'다른 질문이 먼저 처리됐어. 대화를 다시 불러온 뒤 이어서 질문해 줘.')
+        try:
+            answer,conversation=reply(question,_report_displayed_series(snapshot,payload.display_mode),snapshot.get('report_conversation'),payload.revision,agent.output_agent.ncp_client,payload.display_mode)
+        except RuntimeError as exc:
+            raise HTTPException(503,str(exc)) from exc
+        with EDIT_LOCK:
+            live=EDIT_SESSIONS.get(payload.edit_session_id)
+            if not live or payload.revision!=live['output'].get('editVersion',0) or live.get('report_conversation',{}).get('version',0)!=before_version:
+                raise HTTPException(409,'답변 중 분석이나 대화가 변경됐어. 최신 대화에서 다시 질문해 줘.')
+            conversation['markdown_entries']=copy.deepcopy(live.get('report_conversation',{}).get('markdown_entries',[]))
+            live['report_conversation']=conversation
+        return {**answer,'conversation':public_state(conversation)}
+    try:
+        output = snapshot['output']
+        spec = ChartSpec.model_validate(output['chartState'])
+        # Display transformations and aliases must not alter statistical evidence.
+        visible = {s['label'] for s in agent.output_agent._display_series(snapshot['result'], spec)}
+        series = agent.output_agent._series(snapshot['result'].get('execution', {}).get('rows', []))
+        plans = snapshot['result'].get('api_plans') or [snapshot['result'].get('api_plan')]
+        for item in series:
+            matching = [p for p in plans if p and str(p.get('table_id')) == item.get('sourceId')]
+            if len(matching) == 1:
+                item['tableName'] = matching[0].get('table_name', '')
+            if not item.get('frequency') and len(matching) == 1:
+                item['frequency'] = matching[0].get('frequency', '')
+        raw_spec = spec.model_copy(update={'transform': 'raw', 'top_n': None})
+        series = [s for s in agent.output_agent._apply_data_edits(series, raw_spec) if s['label'] in visible]
+        if len(series) > 40:
+            raise ValueError('too many series')
+        from visible_chart_commentary import refers_to_visible_chart,describe_visible_chart
+        if refers_to_visible_chart(question):
+            displayed=agent.output_agent._display_series(snapshot['result'],spec)
+            if re.search(r'표',question) and spec.report_table:
+                selected=spec.report_table.labels
+                displayed=[s for s in displayed if not selected or s['label'] in selected]
+                if spec.report_table.recent_periods:
+                    displayed=[{**s,'points':s['points'][-spec.report_table.recent_periods:]} for s in displayed]
+            answer=describe_visible_chart(question,displayed)
+        else:
+            answer = answer_question(question, series, agent.output_agent.ncp_client)
+    except (ValueError, TypeError, KeyError) as exc:
+        raise HTTPException(status_code=422, detail='현재 조회 자료와 비교 조건을 확인해 주세요.') from exc
+    with EDIT_LOCK:
+        live = EDIT_SESSIONS.get(payload.edit_session_id)
+        if not live or payload.revision != live['output'].get('editVersion', 0):
+            raise HTTPException(status_code=409, detail='답변 작성 중 그래프가 변경되었습니다. 최신 자료에서 다시 질문해 주세요.')
+    from focused_question_answer import focused_answer
+    if answer.get('method')!='displayed_data_server_calculated':answer=focused_answer(answer)
+    return {**answer, 'revision': payload.revision, 'sources': copy.deepcopy(output.get('evidence', []))}
+
+
+class ReportDraftExportRequest(BaseModel):
+    edit_session_id: str
+    revision: int = Field(ge=0)
+    draft_id: str = Field(min_length=1,max_length=64)
+    image_data_url: str = Field(max_length=11_000_000)
+    image_width: int | None = Field(default=None,ge=1,strict=True)
+    image_height: int | None = Field(default=None,ge=1,strict=True)
+
+
+@app.post('/api/report/draft/export')
+@observed('report.draft_export', 'span')
+def export_report_draft(payload: ReportDraftExportRequest):
+    from fastapi.responses import Response
+    from report_draft_export import render_draft_pdf
+    with EDIT_LOCK:
+        session=EDIT_SESSIONS.get(payload.edit_session_id)
+        if not session:raise HTTPException(status_code=404,detail='분석 편집 세션이 없습니다.')
+        if payload.revision!=session['output'].get('editVersion',0):
+            raise HTTPException(status_code=409,detail='최신 그래프에서 보고서 초안을 다시 작성해 주세요.')
+        draft=(session.get('report_drafts') or {}).get(payload.draft_id)
+        if not draft or draft.get('revision')!=payload.revision:
+            raise HTTPException(status_code=409,detail='저장할 보고서 초안을 다시 작성해 주세요.')
+        draft=copy.deepcopy(draft)
+    try:
+        content=render_draft_pdf(draft,payload.image_data_url,image_width=payload.image_width,image_height=payload.image_height)
+    except (ValueError,TypeError,KeyError) as exc:
+        raise HTTPException(status_code=422,detail=str(exc)) from exc
+    with EDIT_LOCK:
+        live=EDIT_SESSIONS.get(payload.edit_session_id)
+        if not live or payload.revision!=live['output'].get('editVersion',0):
+            raise HTTPException(status_code=409,detail='분석이 변경되었습니다. 최신 그래프에서 보고서 초안을 다시 작성해 주세요.')
+    return Response(content,media_type='application/pdf',headers={
+        'Content-Disposition':'attachment; filename="statbridge-report-draft.pdf"',
+        'X-Chart-Version':str(payload.revision)})
 
 
 @app.post('/api/report/interpret')
@@ -282,20 +466,40 @@ def interpret_report(payload: ReportInterpretRequest):
     cutoff=payload.as_of or end
     try:
         date.fromisoformat(cutoff)
-        from runtime_paths import layout as runtime_layout
-        evidence_path=os.getenv('STATBRIDGE_REPORT_PASSAGES','').strip() or str(runtime_layout()['root']/'.venv/cache/report-evidence/reviewed.jsonl')
-        passages=retrieve_passages(evidence_path,snapshot['result'].get('query',''),start=start,end=end,as_of=cutoff)
-        draft=build_draft(snapshot['output'].get('explanation',{}),snapshot['result'].get('query',''),passages,
-                          agent.output_agent.ncp_client,as_of=cutoff)
+        if payload.mode == 'chart_brief':
+            from report_caption import build_caption
+            output=snapshot['output']
+            spec=ChartSpec.model_validate(output['chartState'])
+            displayed=agent.output_agent._display_series(snapshot['result'],spec)
+            displayed=[{**s,'label':spec.display_names.get(s['label'],s['label'])} for s in displayed]
+            draft=build_caption(displayed,agent.output_agent.ncp_client,transform=spec.transform)
+            draft.update(title=spec.title,plotlyFigure=copy.deepcopy(output.get('plotlyFigure')),
+                         sources=copy.deepcopy(output.get('evidence',[])))
+            if not draft['plotlyFigure']:
+                raise ValueError('그래프 출력이 없습니다.')
+        else:
+            from runtime_paths import layout as runtime_layout
+            evidence_path=os.getenv('STATBRIDGE_REPORT_PASSAGES','').strip() or str(runtime_layout()['root']/'.venv/cache/report-evidence/reviewed.jsonl')
+            passages=retrieve_passages(evidence_path,snapshot['result'].get('query',''),start=start,end=end,as_of=cutoff)
+            draft=build_draft(snapshot['output'].get('explanation',{}),snapshot['result'].get('query',''),passages,
+                              agent.output_agent.ncp_client,as_of=cutoff)
     except (ValueError,TypeError,KeyError) as exc:
-        raise HTTPException(status_code=422,detail='검수 원문 인덱스 또는 분석 기간을 확인해 주세요.') from exc
+        detail='보고서에 사용할 표시 자료 또는 그래프를 확인해 주세요.' if payload.mode=='chart_brief' else '검수 원문 인덱스 또는 분석 기간을 확인해 주세요.'
+        raise HTTPException(status_code=422,detail=detail) from exc
     with EDIT_LOCK:
         live=EDIT_SESSIONS.get(payload.edit_session_id)
         if not live or payload.revision!=live['output'].get('editVersion',0):raise HTTPException(status_code=409,detail='분석이 변경되었습니다. 최신 분석에서 초안을 다시 작성해 주세요.')
+        if payload.mode=='chart_brief':
+            draft.update(draftId=uuid4().hex,revision=payload.revision)
+            drafts={key:value for key,value in (live.get('report_drafts') or {}).items() if value.get('revision')==payload.revision}
+            while len(drafts)>=3:drafts.pop(next(iter(drafts)))
+            drafts[draft['draftId']]=copy.deepcopy(draft)
+            live['report_drafts']=drafts
     return {**draft,'revision':payload.revision,'retrospective':cutoff>end}
 
 
 @app.post('/api/table/export')
+@observed('export.table', 'span')
 def export_table(payload: TableExportRequest):
     from fastapi.responses import Response
     from report_table import build_table, render_table_file
@@ -309,7 +513,7 @@ def export_table(payload: TableExportRequest):
         displayed_document = copy.deepcopy(session['output'].get('tableDocument'))
     try:
         spec = ChartSpec.model_validate(state)
-        series = agent.output_agent._apply_data_edits(agent.output_agent._series(result.get('execution', {}).get('rows', [])), spec)
+        series = agent.output_agent._display_series(result, spec)
         doc = displayed_document or build_table(series, spec.report_table, title=spec.title, sources=agent.output_agent._evidence(result), display_names=spec.display_names)
         content = render_table_file(doc, payload.format)
     except (ValueError, TypeError) as error:
@@ -335,6 +539,7 @@ def recommend_current_report(payload:ReportExportRequest):
 
 
 @app.post('/api/report/export')
+@observed('export.report', 'span')
 def export_report(payload: ReportExportRequest):
     from fastapi.responses import Response
     from report_export import document,render_file
@@ -352,8 +557,7 @@ def export_report(payload: ReportExportRequest):
             content=json.dumps(document(result,spec),ensure_ascii=False,allow_nan=False,indent=2).encode('utf-8')
             if len(content)>8_000_000:raise ValueError('복원 가능한 JSON 크기 제한 8MB를 초과했습니다. 표시 기간·계열 수를 줄여 주세요.')
         else:
-            original=agent.output_agent._series(result.get('execution',{}).get('rows',[]))
-            series=agent.output_agent._apply_data_edits(original,spec)
+            series=agent.output_agent._display_series(result,spec)
             content=render_file(series,spec,result,payload.format)
     except (ValueError,TypeError) as error:
         raise HTTPException(status_code=422,detail=str(error)) from error
@@ -365,6 +569,10 @@ OUTPUT_SESSIONS: dict[str, dict[str, Any]] = {}
 EDIT_SESSIONS: dict[str, dict[str, Any]] = {}
 MAX_EDIT_SESSIONS = 100
 import account_auth
+from observability_middleware import ObservabilityMiddleware, get_trace as get_observation_trace, install_shutdown
+from statbridge_mcp.observability import shutdown_exporter
+app.add_middleware(ObservabilityMiddleware,owner=lambda:account_auth.USER.get(),sessions=EDIT_SESSIONS,session_lock=lambda:EDIT_LOCK)
+install_shutdown(app,shutdown_exporter)
 account_auth.install(app,ROOT,OUTPUT_SESSIONS,EDIT_SESSIONS)
 app.add_middleware(
     CORSMiddleware,
@@ -372,6 +580,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-StatBridge-Trace-Id"],
 )
 
 
@@ -795,13 +1004,9 @@ def start_derived_supplement(payload:SupplementStartRequest):
 
 @app.get('/api/derived/supplement')
 def list_derived_upload_workspaces():
-    owner=account_auth.current_user()['id'];parent=derived_supplements.directory/('user-'+str(owner))
-    workspaces=[]
-    for path in sorted(parent.glob('*/workspace.json'),key=lambda p:p.stat().st_mtime,reverse=True)[:20]:
-        w=derived_supplements.load(owner,path.parent.name)
-        if w.get('prefetched') and (w.get('files') or w.get('missing')):
-            workspaces.append({'workspaceId':w['id'],'query':w['query'],'uploaded':len(w['files']),'missing':len(w['missing'])})
-    return {'items':workspaces}
+    # Pending uploads are session-only and never advertised on the home screen.
+    account_auth.current_user()
+    return {'items':[]}
 
 
 @app.get('/api/derived/supplement/{identifier}')
@@ -870,6 +1075,7 @@ def _derived_output_spec(original, revised, previous):
 
 
 @app.post("/api/query")
+@observed('query.handle', 'span')
 def query(payload: QueryRequest) -> dict[str, Any]:
     request_started = time.perf_counter()
     q = payload.query.strip()
@@ -1362,6 +1568,7 @@ def render_output(payload: OutputRenderRequest) -> dict[str, Any]:
 
 
 @app.post("/api/output/edit")
+@observed('edit.validate_apply', 'span')
 def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
     session = EDIT_SESSIONS.get(payload.edit_session_id)
     if session is None:
@@ -1371,6 +1578,7 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
     if payload.revision is not None and payload.revision != revision:
         raise HTTPException(status_code=409, detail="그래프가 변경되었습니다. 최신 그래프에서 다시 수정해 주세요.")
     used_edit_graph=False
+    reference_data_update=False
     candidate_result=session["result"]
     candidate_sessions=session["sessions"]
     if payload.visual and payload.visual.reference_files:
@@ -1454,6 +1662,9 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
             output=agent.output_agent._build(candidate_result,restored,generate_explanation=False)
             output['editCapabilities']=previous.get('editCapabilities',{})
         elif direct:
+            if any(c.operation == 'set_transform' and c.value == 'year_over_year' for c in direct):
+                from chart_comparison_history import ensure_comparison_history
+                candidate_result = ensure_comparison_history(candidate_result, agent.service)
             if payload.stickers is not None:
                 direct.append(ChartEditCommand(operation='set_stickers',kind='STYLE_EDIT',params={'items':[s.model_dump() for s in payload.stickers]}))
             output=agent.output_agent.apply_edits(candidate_result,previous,direct,generate_explanation=False)
@@ -1463,6 +1674,9 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
                 [ChartEditCommand(operation="set_stickers", kind="STYLE_EDIT",
                     params={"items": [s.model_dump() for s in payload.stickers]})], generate_explanation=False)
             output["editCapabilities"] = previous.get("editCapabilities", {})
+        elif payload.action == 'edit' and payload.edit_target=='table' and payload.reference_files:
+            from table_reference_edit import edit_table_reference
+            output=edit_table_reference(edit_agent,candidate_result,previous,payload.instruction,payload.visual.model_dump(),[m.model_dump() for m in payload.conversation])
         elif payload.action == "edit" and candidate_result.get('_derived') and (
                 payload.derived_node_patch or is_calculation_edit(payload.instruction)):
             if payload.reference_files or (payload.visual and (payload.visual.marks or payload.visual.reference_files or
@@ -1479,7 +1693,7 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
             candidate_sessions = [{**s, 'result': revised, 'period': {'start': _ui_period(plan['start_period'], plan['sources'][0]['frequency']), 'end': _ui_period(plan['end_period'], plan['sources'][0]['frequency'], end=True)},
                                    'table_name': plan['indicator_name'], 'frequency': plan['sources'][0]['frequency']} for s in session['sessions']]
         elif payload.action == "edit":
-            period_update=revise_period(session,payload.instruction,agent.output_agent,agent.execute_resolution,_availability_from_plans,_api_period)
+            period_update=revise_period(session,payload.instruction,agent.output_agent,agent.execute_resolution,_availability_from_plans,_api_period,agent.service)
             if period_update:
                 candidate_result=period_update["result"]
                 candidate_sessions=period_update["sessions"]
@@ -1494,8 +1708,31 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
             else:
                 try:
                     used_edit_graph=True
+                    def prepare_comparison(result, commands):
+                        nonlocal candidate_result
+                        if any(c.operation=='set_transform' and c.value=='year_over_year' for c in commands):
+                            from chart_comparison_history import ensure_comparison_history
+                            result=ensure_comparison_history(result,agent.service)
+                        candidate_result=result
+                        return result
+                    edit_options={}
+                    if payload.reference_files:
+                        from chart_reference_data import reference_catalog, prepare_reference_data
+                        catalog=reference_catalog(candidate_result,agent)
+                        def prepare_reference(result,current,appearance):
+                            nonlocal candidate_result,candidate_sessions,reference_data_update
+                            prepared=prepare_reference_data(result,current,appearance,catalog,agent)
+                            if prepared:
+                                candidate_result,baseline,candidate_sessions=prepared
+                                reference_data_update=True
+                                return candidate_result,baseline
+                            return None
+                        edit_options={'prepare_result':prepare_comparison,'prepare_reference':prepare_reference,'reference_catalog':catalog}
                     output = edit_agent.edit(candidate_result, {**baseline, "editConversation": [m.model_dump() for m in payload.conversation[-40:]]}, payload.instruction,
-                                         payload.visual.model_dump() if payload.visual else None)
+                                         payload.visual.model_dump() if payload.visual else None, **edit_options)
+                    if reference_data_update:
+                        output['editChanges']=[*[f'참고 범례 {b["reference"]} → 실제 조회: {b["table"]} · {b["category"]}'
+                            for b in candidate_result['execution']['referenceDataBinding']],*output.get('editChanges',[])]
                 except ValueError as error:
                     if period_update and "변경된 내용이 없습니다" in str(error):
                         output=baseline;used_edit_graph=False
@@ -1528,10 +1765,10 @@ def edit_output(payload: OutputEditRequest) -> dict[str, Any]:
         session["result"] = candidate_result
         session["sessions"] = candidate_sessions
         session["executionRuns"]=[*session.get("executionRuns",[]),edit_trace(payload,output,used_edit_graph=used_edit_graph,period_update=bool(period_update))][-200:]
-    return workspace_response(session,payload,period_update)
+    return workspace_response(session,payload,period_update,reference_data_update)
 
 
-def workspace_response(session,payload,period_update=None):
+def workspace_response(session,payload,period_update=None,reference_data_update=False):
     output={**session["output"], 'editCapabilities':{
         'model':getattr(getattr(edit_agent,'model',None),'model_name','configured-editor'),
         'supportsImages':getattr(getattr(edit_agent,'model',None),'supports_images',False)}}
@@ -1561,7 +1798,7 @@ def workspace_response(session,payload,period_update=None):
         "tables": [_table_card(str(plan["table_id"])) for plan in plans],
         "insights": output.get("editChanges") or ["편집 취소" if payload.action == "undo" else "편집 다시 적용"],
         "lineage": [
-            {"id": "mcp", "title": "MCP 통계 서비스", "description": "변경 기간의 원자료 재조회" if period_update else "기존 조회 데이터 사용", "status": "complete"},
+            {"id": "mcp", "title": "MCP 통계 서비스", "description": "참고 범례의 실제 통계 조회" if reference_data_update else "변경 기간의 원자료 재조회" if period_update else "기존 조회 데이터 사용", "status": "complete"},
             {"id": "edit", "title": "수정 Agent", "description": "텍스트·그림 표시를 검증 가능한 명령으로 해석", "status": "complete"},
             {"id": "output", "title": "출력 Agent", "description": "수정 명령 적용 및 그래프 렌더링", "status": "complete"},
         ],
@@ -1599,6 +1836,7 @@ def _load_saved_workspace(identifier):
 
 
 @app.post('/api/workspace/{edit_session_id}/save')
+@observed('analysis.save', 'span')
 def save_workspace(edit_session_id: str,payload:ReportExportRequest):
     import gzip
     import re
@@ -1630,9 +1868,17 @@ def save_workspace(edit_session_id: str,payload:ReportExportRequest):
 
 
 @app.get("/api/workspace/{edit_session_id}")
+@observed('analysis.restore', 'span')
 def read_workspace(edit_session_id: str):
     with EDIT_LOCK:
         session=EDIT_SESSIONS.get(edit_session_id) or _load_saved_workspace(edit_session_id)
         if not session:raise HTTPException(status_code=404,detail="편집 세션이 만료되었습니다. 같은 데이터를 다시 조회한 뒤 저장한 설정을 열어 주세요.")
         snapshot=copy.deepcopy(session)
     return workspace_response(snapshot,OutputEditRequest(edit_session_id=edit_session_id))
+
+
+@app.get('/api/observability/{trace_id}')
+def read_observation_trace(trace_id: str):
+    value=get_observation_trace(trace_id,account_auth.current_user()['id'])
+    if value is None:raise HTTPException(status_code=404,detail='실행 기록을 찾을 수 없습니다.')
+    return value

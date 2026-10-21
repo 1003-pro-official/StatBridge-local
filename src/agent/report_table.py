@@ -1,5 +1,6 @@
 """Observation-bound report tables. No model, interpolation or implicit aggregation."""
 from __future__ import annotations
+from statbridge_mcp.observability import observed
 from level_yoy_comparison import CALCULATION_NOTE
 
 import csv
@@ -12,8 +13,9 @@ import unicodedata
 from decimal import Decimal, ROUND_HALF_UP, localcontext
 from xml.sax.saxutils import escape
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing import Literal
+from table_layout import TableLayout, apply_layout
 
 
 class TableOptions(BaseModel):
@@ -21,6 +23,8 @@ class TableOptions(BaseModel):
     orientation: Literal['indicators', 'periods'] = 'indicators'
     decimals: int | None = Field(default=None, ge=0, le=6)
     table_number: str = Field(default="1", max_length=20, pattern=r"^[0-9A-Za-z가-힣.\-]+$")
+    export_width: int | None = Field(default=None, ge=1, strict=True)
+    export_height: int | None = Field(default=None, ge=1, strict=True)
     print_preset: Literal["auto", "a4_portrait", "a4_landscape"] = "auto"
     comparison: Literal['none', 'previous_change', 'yearly_change', 'period_change', 'period_growth'] = 'none'
     recent_periods: int | None = Field(default=None, ge=1, le=600)
@@ -30,6 +34,15 @@ class TableOptions(BaseModel):
     note: str = Field(default='', max_length=500)
     template: Literal['default', 'BOK-T01', 'BOK-T02', 'BOK-T03', 'BOK-T04', 'BOK-T05', 'BOK-T06'] = 'default'
     emphasized_labels: list[str] = Field(default_factory=list, max_length=100)
+    layout: TableLayout = Field(default_factory=TableLayout)
+
+
+    @model_validator(mode='after')
+    def output_pixel_budget(self):
+        if self.export_width or self.export_height:
+            from output_dimensions import validate_output_dimensions
+            validate_output_dimensions(self.export_width or 379,self.export_height or 614)
+        return self
 
 
 def header_groups(headers, options):
@@ -55,9 +68,12 @@ def period_label(value, frequency=''):
         return f'{s[:4]}-{s[4:]}'
     if re.fullmatch(r'\d{4}Q[1-4]', s):
         return f'{s[:4]}년 {s[-1]}분기'
+    if re.fullmatch(r'\d{4}S[12]', s):
+        return f'{s[:4]}년 {"상반기" if s[-1]=="1" else "하반기"}'
     return s
 
 
+@observed('table.build', 'span')
 def build_table(series, options=None, *, title='', sources=None, display_names=None):
     options = options or TableOptions()
     if options.comparison != 'none' and options.orientation != 'indicators':
@@ -143,13 +159,14 @@ def build_table(series, options=None, *, title='', sources=None, display_names=N
                                  'reason':None if value is not None else '비교에 필요한 관측값이 없거나 증가율 기준값이 0 이하입니다.' })
         emphasized = [i for i, item in enumerate(items) if item['label'] in options.emphasized_labels] if options.orientation == 'indicators' else []
         sections.append({'frequency': frequency, 'periods': periods, 'periodCaption': f'{period_label(periods[0], frequency)} ~ {period_label(periods[-1], frequency)}' if periods else '관측값 없음', 'headers': headers, 'rows': rows, 'headerGroups': header_groups(headers, options.model_dump()), 'emphasizedRows': emphasized, 'computedCells': computed})
-    return {'title': options.title or title or '통계 비교표', 'options': options.model_dump(),
+    doc = {'title': options.title or title or '통계 비교표', 'options': options.model_dump(),
             'caption': f"표 {options.table_number}. {options.title or title or '통계 비교표'}",
             'sections': sections, 'sources': sources or [],
             'notes': ['—: 해당 시점의 관측값이 없습니다. 원자료 주기를 유지하며 합산·평균·보간하지 않았습니다.',
                       *(['그래프에서 제외되거나 변경된 항목은 표 선택에서도 제외했습니다.'] if removed else []),
                       *([options.note] if options.note else []),
                       *([CALCULATION_NOTE] if any(s.get('calculation') in {'year_over_year','year_over_year_difference'} for s in series) else [])]}
+    return apply_layout(doc, selected, options.layout)
 
 
 def text_value(value, decimals):
@@ -278,7 +295,11 @@ def render_xlsx(doc):
     return out.getvalue()
 
 
-def render_table_file(doc, format):
+@observed('export.table', 'span')
+def _render_table_file(doc, format):
+    if doc.get('layoutSections'):
+        from table_layout_export import render_layout
+        return render_layout(doc, format)
     if format == 'csv': return render_csv(doc)
     if format == 'xlsx': return render_xlsx(doc)
     from report_export import EXPORT_LOCK, _font
@@ -409,3 +430,33 @@ def render_table_file(doc, format):
     with zipfile.ZipFile(zipped, 'w', zipfile.ZIP_DEFLATED) as archive:
         for i, content in enumerate(images, 1): archive.writestr(f'statbridge-table-{i:03}.png', content)
     return zipped.getvalue()
+
+
+def render_table_file(doc, format):
+    """Apply the same bounded page dimensions to legacy and cell-grid exports."""
+    content=_render_table_file(doc,format)
+    width=doc['options'].get('export_width');height=doc['options'].get('export_height')
+    if not width and not height or format not in {'png','pdf'}:return content
+    TableOptions.model_validate(doc['options'])
+    from output_dimensions import validate_output_dimensions
+    validate_output_dimensions(width,height)
+    if not width or not height:raise ValueError('출력 너비와 높이를 함께 지정해 주세요.')
+    if format=='pdf':
+        from pypdf import PdfReader,PdfWriter,Transformation
+        reader=PdfReader(io.BytesIO(content));writer=PdfWriter();w,h=width*.72,height*.72
+        for source in reader.pages:
+            sw,sh=float(source.mediabox.width),float(source.mediabox.height)
+            scale=min(w/sw,h/sh);page=writer.add_blank_page(w,h)
+            page.merge_transformed_page(source,Transformation().scale(scale).translate((w-sw*scale)/2,(h-sh*scale)/2))
+        out=io.BytesIO();writer.write(out);return out.getvalue()
+    from PIL import Image,ImageOps
+    def fit(data):
+        with Image.open(io.BytesIO(data)) as image:
+            target=(width,height if image.height<=height else height*max(1,round(image.height/height))) if doc.get('layoutSections') else (width,height)
+            fitted=ImageOps.pad(image.convert('RGB'),target,color='white')
+        out=io.BytesIO();fitted.save(out,format='PNG');fitted.close();return out.getvalue()
+    if content[:2]!=b'PK':return fit(content)
+    out=io.BytesIO()
+    with zipfile.ZipFile(io.BytesIO(content)) as source,zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as target:
+        for entry in source.infolist():target.writestr(entry.filename,fit(source.read(entry)))
+    return out.getvalue()

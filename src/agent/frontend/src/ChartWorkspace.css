@@ -150,7 +150,53 @@
 .report-table-dialog-header h2{margin:0;font-size:17px;line-height:1.4}
 .report-table-dialog-header button{flex:none;min-height:40px;padding:8px 16px;border:1px solid #b6cfdf;border-radius:8px;background:#fff;color:#16466b;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .report-table-dialog-header button:hover{background:#eaf2f8}.report-table-dialog-header button:focus-visible{outline:2px solid #1d75ad;outline-offset:2px}
+.workspace-properties>details{margin:0;padding:0;border-top:1px solid #dce5ec}
+.workspace-properties>details>summary{padding:13px 4px;line-height:1.5;overflow-wrap:anywhere}
+.workspace-properties>details>summary:hover{background:#edf3f7}
+.workspace-properties>details[open]>summary{color:#005f8f}
+.workspace-properties>details>fieldset{margin:0;padding:0 4px 12px;border:0}
+.workspace-properties>details>fieldset>label:first-child{margin-top:0}
+
+.report-draft-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.report-draft-page{margin:16px 0;padding:22px;border:1px solid #dce5ec;background:#fff;line-height:1.8}
+.report-draft-page h3{margin:0 0 10px;font-size:18px;color:#16324c}
+.report-draft-page>small,.report-draft-page figcaption{display:block;color:#60798c;font-size:11px;overflow-wrap:anywhere}
+.report-draft-page figure{margin:16px 0}
+.report-draft-page img{display:block;width:auto;height:auto;max-width:100%;max-height:800px;object-fit:contain;margin:auto}
+.report-draft-caption p{margin:12px 0;font-size:14px;line-height:1.9;overflow-wrap:anywhere}
+.report-draft>details small{display:block}
+.report-chart-size{display:flex;flex-wrap:wrap;align-items:end;gap:10px 14px;margin:14px 0;padding:12px;border:1px solid #dce5ec;border-radius:6px;background:#f7f9fb}
+.report-chart-size legend{font-size:13px;font-weight:600;padding:0 4px}.report-chart-size label{display:grid;gap:5px;font-size:12px;color:#38516a}
+.report-chart-size input[type=number]{width:120px;padding:7px;border:1px solid #cedbe5;border-radius:4px;font:inherit}.report-chart-size .report-ratio-lock{display:flex;align-items:center;align-self:center;gap:6px}
+.report-chart-size small{flex-basis:100%;color:#60798c;font-size:11px}.report-chart-size button{min-height:34px}
+
 .report-table-dialog-content{flex:1;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain}
 .report-table-dialog .report-table-document{height:auto;max-height:none;overflow:visible}
 .report-table-dialog .report-table-scroll{max-height:65dvh;overscroll-behavior:contain}
 @media(max-width:700px){.report-table-dialog{width:calc(100vw - 16px);height:calc(100dvh - 16px);border-radius:10px}.report-table-dialog-header{padding:10px 12px;gap:8px}.report-table-dialog-header h2{font-size:15px}}
+/* Table editing keeps the sheet wide; either side panel can be reopened. */
+.workspace-grid.chat-collapsed{grid-template-columns:minmax(170px,18fr) minmax(390px,82fr)}
+.workspace-grid.data-collapsed:not(.properties-collapsed):not(.chat-collapsed),.workspace-grid.properties-collapsed:not(.data-collapsed):not(.chat-collapsed){grid-template-columns:minmax(170px,18fr) minmax(390px,57fr) minmax(235px,25fr)}
+.workspace-grid.data-collapsed.properties-collapsed:not(.chat-collapsed){grid-template-columns:minmax(390px,75fr) minmax(235px,25fr)}
+.workspace-grid.data-collapsed.properties-collapsed.chat-collapsed{grid-template-columns:minmax(0,1fr)}
+.workspace-panel-toggles{flex-wrap:wrap}
+@media(max-width:1000px){.workspace-grid.chat-collapsed,.workspace-grid.data-collapsed:not(.properties-collapsed):not(.chat-collapsed),.workspace-grid.properties-collapsed:not(.data-collapsed):not(.chat-collapsed),.workspace-grid.data-collapsed.properties-collapsed:not(.chat-collapsed){grid-template-columns:minmax(0,1fr)}}
+/* Table documents grow in normal flow; graph-only viewport caps must not clip them. */
+#root .chart-workspace.table-workspace{display:block!important;height:auto!important;max-height:none!important;min-height:0!important;overflow:visible;contain:none}
+#root .chart-workspace.table-workspace .workspace-grid{height:auto!important;max-height:none!important;min-height:0!important;flex:none;grid-template-rows:auto;align-items:start;overflow:visible;contain:none}
+#root .chart-workspace.table-workspace .workspace-table-center{display:block;height:auto!important;max-height:none!important;min-height:0;flex:none;overflow:visible;contain:none}
+#root .chart-workspace.table-workspace .report-table-document{display:flow-root;height:auto!important;max-height:none!important;min-height:0;overflow:visible;contain:none}
+#root .chart-workspace.table-workspace .workspace-left{height:auto;max-height:70dvh;align-self:start}
+#root .chart-workspace.table-workspace .workspace-chat{height:clamp(480px,70dvh,760px);max-height:760px;position:sticky;top:125px;align-self:start}
+#root .table-workspace .workspace-grid.chat-collapsed.data-collapsed.properties-collapsed{grid-template-columns:minmax(0,1fr)}
+.has-workspace .workspace-analysis-summary{clear:both;position:relative;margin-top:20px}
+.report-table-reading{display:flow-root;min-width:0}.report-table-reading .report-table-scroll{max-height:none;overflow:auto;min-width:0}.table-reading-grid{table-layout:fixed}.report-table-reading footer{display:block;position:static;clear:both;background:white}
+.report-table-dialog .report-table-reading{padding:0}.report-table-reading .table-reading-grid td{position:static!important}
+.sheet-formula{flex-wrap:wrap;align-items:center}.sheet-formula>button{flex:none}
+#root .table-workspace .workspace-grid{grid-template-columns:minmax(220px,24fr) minmax(0,49fr) minmax(260px,27fr)}
+#root .table-workspace .workspace-grid.chat-collapsed{grid-template-columns:minmax(220px,24fr) minmax(0,76fr)}
+#root .table-workspace .workspace-grid.data-collapsed.properties-collapsed{grid-template-columns:minmax(0,72fr) minmax(260px,28fr)}
+#root .table-workspace .workspace-grid.chat-collapsed.data-collapsed.properties-collapsed{grid-template-columns:minmax(0,1fr)}
+@media(max-width:850px){#root .chart-workspace.table-workspace .workspace-grid{display:flex;flex-direction:column}#root .table-workspace .workspace-chat{position:static;width:100%}}
+
+.lineage-log-button{margin:14px 0;padding:10px 16px;border:1px solid #b8cfe0;border-radius:7px;background:#edf6fb;color:#075780;cursor:pointer;font-weight:700}

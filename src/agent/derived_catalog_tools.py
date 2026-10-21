@@ -1,4 +1,5 @@
 """Search only the checked-in Bank of Korea KOSIS catalog."""
+from statbridge_mcp.observability import observed
 import hashlib
 import json
 import re
@@ -15,6 +16,7 @@ class DerivedCatalogTools:
         content = [store.get(t).canonical_dict() for t in sorted(self.approved)]
         self.version = hashlib.sha256(json.dumps(content, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
+    @observed('catalog.metadata', 'span')
     def get_table_metadata(self, table_id):
         if table_id not in self.approved:
             raise DerivedValidationError(f'승인 목록 밖의 통계표: {table_id}')
@@ -22,6 +24,7 @@ class DerivedCatalogTools:
         # Avoid sending contact details to the model.
         return {k: meta[k] for k in ('table_id', 'table_name', 'frequencies', 'periods', 'items', 'dimensions', 'comments')}
 
+    @observed('catalog.search', 'span')
     def search_approved_tables(self, query, limit=6):
         words = re.findall(r'[가-힣A-Za-z]+', query.lower())
         terms = {re.sub(r'(?:으로|부터|까지|에서|기준으로|의|와|과|로|를|을|은|는|에)$', '', word) for word in words}
@@ -45,6 +48,7 @@ class DerivedCatalogTools:
         return [{'table_id': tid, 'table_name': self.store.get(tid).table_name, 'score': score}
                 for score, tid in scored[:min(limit, 10)]]
 
+    @observed('source.validate', 'span')
     def validate_source_selection(self, source):
         meta = self.get_table_metadata(source.table_id)
         if source.item_id not in {str(i['item_id']) for i in meta['items']}:

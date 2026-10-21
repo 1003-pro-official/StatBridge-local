@@ -74,7 +74,22 @@ def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list
         from report_table import TableOptions
         if command.kind != 'STYLE_EDIT' or value is not None or set(params) != {'patch'} or not isinstance(params['patch'], dict):
             raise ValueError('표 설정은 STYLE_EDIT params.patch로 지정해 주세요.')
-        options = TableOptions.model_validate({**(spec.report_table.model_dump() if spec.report_table else {}), **params['patch']})
+        current = spec.report_table.model_dump() if spec.report_table else {}
+        patch = dict(params['patch'])
+        axes_changed = patch.get('orientation', current.get('orientation', 'indicators')) != current.get('orientation', 'indicators')
+        selection_changed = any(key in patch and patch[key] != current.get(key, default)
+                                for key, default in [('labels', []), ('recent_periods', None)])
+        if axes_changed or selection_changed:
+            # Positional cell IDs and fixed matrices belong to the old axes.
+            # Keep global typography; history retains the complete previous layout.
+            from table_layout import TableLayout
+            previous = current.get('layout') or {}
+            patch['layout'] = TableLayout(enabled=previous.get('enabled', False),
+                                        base=previous.get('base', {}),
+                                        show_gridlines=previous.get('show_gridlines', True)).model_dump()
+            if axes_changed:
+                patch['comparison'] = 'none'
+        options = TableOptions.model_validate({**current, **patch})
         if options.labels and (set(options.labels) - set(labels) or len(options.labels) != len(set(options.labels))):
             raise ValueError('표 항목은 현재 데이터에서 중복 없이 선택해 주세요.')
         if set(options.emphasized_labels) - set(labels):
@@ -148,6 +163,8 @@ def apply_research_edit(spec: ChartSpec, command: ChartEditCommand, labels: list
         if params.get('design_template'):
             from chart_designs import apply_design
             spec=apply_design(spec,params['design_template'])
+            if 'publication_yoy' not in params:
+                params={**params,'publication_yoy':False}
         updates["presentation"] = _patch(spec.presentation, params)
     elif op == "set_stickers":
         if set(params) != {"items"} or not isinstance(params["items"], list):
@@ -237,6 +254,7 @@ def validate_research_spec(series: list[dict[str, Any]], spec: ChartSpec) -> Non
         if chart_type in {"scatter", "bubble"} and style.label != series[0]["label"]:
             raise ValueError("산점도의 점 선택은 첫 번째 좌표 계열을 사용해 주세요.")
     for note in spec.notes:
+        if note.observation_label and not note.label:raise ValueError("자동 관측값 라벨에는 실제 계열과 시점이 필요합니다.")
         if bool(note.label) != bool(note.period):
             raise ValueError("관측점 주석에는 계열과 시점을 함께 지정해야 합니다.")
         if note.label in spec.hidden_series:
