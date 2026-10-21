@@ -122,10 +122,8 @@
 .summary-evidence{padding:0 18px 14px;font-size:12px;color:#526d80;line-height:1.7}
 .summary-evidence details{border:1px solid #dce7ef;border-radius:8px;padding:10px 12px;background:#f8fbfd}
 .summary-evidence summary{cursor:pointer;color:#23516e;font-weight:600}
-.summary-evidence article{border-top:1px solid #e2ebf1;padding:8px 0;margin-top:8px;overflow-wrap:anywhere}
 
 
-.report-draft{margin:0 18px 16px;padding:12px;border:1px solid #dce7ef;border-radius:9px;font-size:12px;line-height:1.7}.report-draft summary{font-weight:600;cursor:pointer}.report-draft article{border-top:1px solid #dce7ef;margin-top:12px;padding-top:8px}.report-draft input{display:block;border:1px solid #cbdde9;border-radius:6px;padding:7px;margin:6px 0 12px}.report-draft small{overflow-wrap:anywhere;color:#557084}
 
 
 
@@ -157,18 +155,6 @@
 .workspace-properties>details>fieldset{margin:0;padding:0 4px 12px;border:0}
 .workspace-properties>details>fieldset>label:first-child{margin-top:0}
 
-.report-draft-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.report-draft-page{margin:16px 0;padding:22px;border:1px solid #dce5ec;background:#fff;line-height:1.8}
-.report-draft-page h3{margin:0 0 10px;font-size:18px;color:#16324c}
-.report-draft-page>small,.report-draft-page figcaption{display:block;color:#60798c;font-size:11px;overflow-wrap:anywhere}
-.report-draft-page figure{margin:16px 0}
-.report-draft-page img{display:block;width:auto;height:auto;max-width:100%;max-height:800px;object-fit:contain;margin:auto}
-.report-draft-caption p{margin:12px 0;font-size:14px;line-height:1.9;overflow-wrap:anywhere}
-.report-draft>details small{display:block}
-.report-chart-size{display:flex;flex-wrap:wrap;align-items:end;gap:10px 14px;margin:14px 0;padding:12px;border:1px solid #dce5ec;border-radius:6px;background:#f7f9fb}
-.report-chart-size legend{font-size:13px;font-weight:600;padding:0 4px}.report-chart-size label{display:grid;gap:5px;font-size:12px;color:#38516a}
-.report-chart-size input[type=number]{width:120px;padding:7px;border:1px solid #cedbe5;border-radius:4px;font:inherit}.report-chart-size .report-ratio-lock{display:flex;align-items:center;align-self:center;gap:6px}
-.report-chart-size small{flex-basis:100%;color:#60798c;font-size:11px}.report-chart-size button{min-height:34px}
 
 .report-table-dialog-content{flex:1;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain}
 .report-table-dialog .report-table-document{height:auto;max-height:none;overflow:visible}
@@ -200,3 +186,5 @@
 @media(max-width:850px){#root .chart-workspace.table-workspace .workspace-grid{display:flex;flex-direction:column}#root .table-workspace .workspace-chat{position:static;width:100%}}
 
 .lineage-log-button{margin:14px 0;padding:10px 16px;border:1px solid #b8cfe0;border-radius:7px;background:#edf6fb;color:#075780;cursor:pointer;font-weight:700}
+
+.workspace-chart-type{padding:12px 0;border-bottom:1px solid #dce7ef;margin-bottom:10px}.workspace-chart-type h4{margin:0 0 8px;color:#174b68;font-size:13px}.workspace-chart-type fieldset{border:0;padding:0;margin:0;min-width:0}.workspace-chart-type label{display:flex;flex-direction:column;gap:6px}

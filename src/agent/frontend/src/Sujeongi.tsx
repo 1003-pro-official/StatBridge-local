@@ -20,7 +20,6 @@ type Props = {
   revision: object;
   loading: boolean;
   markCount: number;
-  model?: {model:string;supportsImages:boolean};
   children: ReactNode;
   onEdit: (instruction: string, conversation: Array<{role:"user"|"assistant";text:string}>,references?:ChartReference[]) => Promise<boolean>;
   canSubmitMarks: boolean;
@@ -30,7 +29,7 @@ type Props = {
 type Message = {role:"user"|"assistant";text:string};
 function savedConversation(sessionId:string): Message[] {return readChat(sessionId);}
 
-export function Sujeongi({sessionId,revision,loading,markCount,model,onEdit,canSubmitMarks,markInstructions,children,inline=false,targets=[],tableMode=false}: Props) {
+export function Sujeongi({sessionId,revision,loading,markCount,onEdit,canSubmitMarks,markInstructions,children,inline=false,targets=[],tableMode=false}: Props) {
   const [open,setOpen]=useState(false);
   useEffect(()=>{setOpen(false);},[revision]);
   const [draft,setDraft]=useState("");

@@ -51,10 +51,26 @@ def value_terms(name):
     return {s for s in terms if len(s)>=1}
 
 
+def dimension_query(query,table):
+    base=table['table_name'].split('(')[0].strip()
+    if len(norm(base))>=4:
+        pattern=r'(?<![가-힣a-zA-Z0-9])'+r'\s*'.join(re.escape(c) for c in base if not c.isspace())+r'(?![가-힣a-zA-Z0-9])'
+        return re.sub(pattern,' ',query,count=1,flags=re.I)
+    return query
+
+
+def dimension_matches(query,table,dimension):
+    # A title may also be the aggregate classification. Suppress title-owned
+    # values only when the user named a more specific value in this dimension.
+    return matches(dimension_query(query,table),dimension) or matches(query,dimension)
+
+
 def matches(query,dimension):
     query=re.sub(r'([가-힣]+)\([A-Za-z0-9]+\)',r'\1',query)
     query=query.replace('어음부도율','부도율')
-    query=re.sub(r'(?:19|20)\d{2}\s*년(?!\s*기준)', ' ', query)
+    # Calendar bounds are not numeric classification names (12월 != 1~2%).
+    # Keep named forecast horizons such as 향후1년 intact.
+    query=re.sub(r'(?:19|20)\d{2}\s*년(?!\s*기준)(?:\s*\d{1,2}\s*월(?:\s*\d{1,2}\s*일)?|\s*[1-4]\s*분기)?', ' ', query)
     q=norm(query);hits=[];exclusions={}
     # Shared modifiers in coordinated phrases own every listed member.
     query=re.sub(r'([가-힣A-Za-z]+)[·,]([가-힣A-Za-z]+)\s*(이용금액|이용건수|현금흐름)',r'\1\3 · \2\3',query)
@@ -107,6 +123,8 @@ def matches(query,dimension):
             hits.append((0,0,v,norm(v['value_name'])))
     kept=[h for h in hits if not any(h[0]>=0 and n[0]>=0 and n[0]<=h[0] and n[1]>=h[1] and n[1]-n[0]>h[1]-h[0] for n in hits)]
     found=list({h[2]['value_id']:h[2] for h in kept}.values())
+    preferred={v['value_name'] for v in found if v.get('_language_index_preferred')}
+    found=[v for v in found if v['value_name'] not in preferred or v.get('_language_index_preferred')]
     if exclusions:
         best=max(exclusions.values());found=[v for v in found if exclusions.get(v['value_id'])==best]
     if '원계열' in q or '순환변동치' in q:found=[v for v in found if not any(b in v['value_name'] for b in ['원계열','순환변동치']) or any(b in q and b in v['value_name'] for b in ['원계열','순환변동치'])]
@@ -130,6 +148,8 @@ def matches(query,dimension):
 
 def family(q,title,table):
     """A measured family is stronger evidence than generic dimension words."""
+    if '경상수지' in q and '국제수지' not in q and '원계열' not in q and not any(w in q for w in ['상품수지','서비스수지','본원소득수지','자본수지','금융계정']):
+        return '경상수지' if '경상수지' in title else None
     if any(x in q for x in ['상품수지','서비스수지','상품수출','상품수입','경상수지','본원소득수지','자본수지','금융계정']):
         if '지역' in title:return '금융계정' if '금융계정' in title and '금융계정' in q else '국제수지' if '경상수지' in title and '경상수지' in q else None
         if '계절조정' in q:return '국제수지' if '경상수지' in title and '계절조정' in title else None
@@ -216,7 +236,7 @@ def selections(query,tables,debug=None):
             path=norm(paths.get(table['table_id'],''))
             if '잔액' in q and '신규취급액' not in q and '신규취급액' in path:continue
             if '신규취급액' in q and '잔액' not in q and '잔액' in path:continue
-        groups=[matches(query,d) for d in table.get('dimensions',[])]
+        groups=[dimension_matches(query,table,d) for d in table.get('dimensions',[])]
         scoped_table={**table,'item_names':table.get('item_names',[])+[v['value_name'] for vs in groups for v in vs]}
         if f=='경영애로' and '%' in table.get('units',[]):scoped_table['item_names']+=['응답 비중']
         measure_query=' '.join(v['value_name'] for v in (groups[-1] if groups else [])) if f=='corporate_measure' else query

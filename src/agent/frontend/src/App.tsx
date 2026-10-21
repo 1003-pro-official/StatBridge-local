@@ -1,9 +1,7 @@
 import RequestExecutionLog from './RequestExecutionLog';
-import ReportDraft from "./ReportDraft";
 import StatisticalQuestion from "./StatisticalQuestion";
 import {publicationImageSize,reportChartSize} from './reportChartSize';
 import {workspacePng,startFileDownload} from './workspaceDownload';
-import SummaryEvidence from "./SummaryEvidence";
 import DerivedEvidence from './DerivedEvidence';
 import {derivedBudget} from './derivedDeadline';
 import {periodTickUpdate} from './periodTicks';
@@ -17,14 +15,14 @@ import QueryRefinementCard from './QueryRefinementCard';
 import exploreExamples from './exploreExamples.json';
 import ExecutionEvidence from './ExecutionEvidence';
 import {panelGeometry,splitPlotAnnotations,resizeVisiblePlot} from './plotPanelLayout';
-import {appendChat,readChat,writeChat,deleteChat,saveChat,allSavedChats as savedChats,removeSavedChat,editDescription,type SavedChat} from './graphChat';
+import {appendChat,readChat,writeChat,saveChat,allSavedChats as savedChats,removeSavedChat,editDescription,type SavedChat} from './graphChat';
 import RecoveryPanel from './RecoveryPanel';
 import DerivedSupplementPanel from './DerivedSupplementPanel';
 import DerivedAvailabilityPanel from './DerivedAvailabilityPanel';
 import {shouldShowDerivedSupplement} from './derivedAvailability';
 import {accountKey,accountRequest} from './accountApi';
 import {ownsHistory} from './accountScope';
-import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import Plotly from "plotly.js-dist-min";
 import ChartSketchEditor from "./ChartSketchEditor";
 import { EditConflictError, fetchCatalog, fetchWorkspace, submitOutput, submitOutputEdit, submitQuery } from "./api/client";
@@ -308,7 +306,7 @@ function LayoutChoice({ mode, setMode, reason }: { mode: "combined"|"separate"; 
   return <div className="setup-block"><strong>그래프 표시 방식</strong><div className="clarification-options">{!reason&&<button type="button" className={mode==="combined"&&!reason?"selected":""} onClick={()=>setMode("combined")}><span className="multi-check">{mode==="combined"&&!reason&&<Icon name="check" size={13}/>}</span>여러 계열을 한 그래프에</button>}<button type="button" className={mode==="separate"?"selected":""} onClick={()=>setMode("separate")}><span className="multi-check">{mode==="separate"&&<Icon name="check" size={13}/>}</span>계열별 그래프 여러 개</button></div>{reason&&<div className="chart-blocker" role="status"><strong>한 그래프로 합칠 수 없는 이유</strong><p>{reason}</p><p>현재는 계열별 그래프로 표시합니다. 산점도는 각 지표를 서로 다른 X·Y축에 놓는 별도 방식입니다.</p></div>}</div>;
 }
 
-function ChartTypeChoice({ value, onChange, available, loading, reasons }: { value: "auto"|ChartType; onChange:(value:"auto"|ChartType)=>void;available:ChartType[];loading:boolean;reasons?:Partial<Record<ChartType,string>> }) {
+function ChartTypeChoice({ value, onChange, available, loading }: { value: "auto"|ChartType; onChange:(value:"auto"|ChartType)=>void;available:ChartType[];loading:boolean }) {
   const choices:Array<'auto'|ChartType>=available.length?['auto',...available]:[];
   return <div className="setup-block"><strong>현재 데이터로 그릴 수 있는 그래프</strong><p>조회된 지표 수, 공통 시점, 단위와 값의 조건을 확인했습니다.</p><div className="clarification-options">{choices.map(type=><button type="button" disabled={loading} key={type} className={value===type?"selected":""} onClick={()=>onChange(type)}><strong>{type==="auto"?"자동 선택":chartLabels[type]}</strong><small>{type==="auto"?'현재 데이터에 맞는 기본 그래프':chartDescriptions[type]}</small></button>)}</div>{!choices.length&&<p role="alert">그릴 수 있는 그래프가 없습니다. 데이터 조회 결과를 확인해 주세요.</p>}</div>;
 }
@@ -339,7 +337,7 @@ function OutputConfigPanel({ result, loading, submit }: { result: QueryResponse;
     <PeriodConfirmation result={result}/>
     {result.warnings?.map((message,index)=><p className="error-banner" role="alert" key={index}>{message}</p>)}
     <div className="clarification-title"><span><Icon name="chart" size={19}/></span><div><h2>조회한 데이터를 어떤 그래프로 보여드릴까요?</h2><p>{result.seriesCount||0}개 계열의 조회가 끝났습니다. 지금 선택해도 데이터를 다시 조회하지 않습니다.</p></div></div>
-    <ChartTypeChoice value={chartType} onChange={setChartType} available={available} loading={loading} reasons={result.outputOptions?.unavailableChartTypes}/>
+    <ChartTypeChoice value={chartType} onChange={setChartType} available={available} loading={loading}/>
     {(result.seriesCount||0)>1&&supportsPanels&&<LayoutChoice mode={mode} setMode={setMode} reason={combinedReason}/>}
     <div className="setup-block"><strong>그래프 편집</strong><div className="period-form"><label>제목<input value={title} placeholder="자동 제목" onChange={(e)=>setTitle(e.target.value)}/></label><label>X축 이름<input value={xAxisLabel} onChange={(e)=>setXAxisLabel(e.target.value)}/></label><label>Y축 이름<input value={yAxisLabel} onChange={(e)=>setYAxisLabel(e.target.value)}/></label></div><label><input type="checkbox" checked={showLegend} onChange={(e)=>setShowLegend(e.target.checked)}/> 범례 표시</label></div>
     <div className="clarification-submit"><span>선택한 설정으로 그래프를 만듭니다.</span><button disabled={loading||!available.length||(!!combinedReason&&mode==='combined')||(chartType!=='auto'&&!available.includes(chartType))} onClick={()=>submit({chartType,mode:supportsPanels?mode:'combined',title,showLegend,xAxisLabel,yAxisLabel,naturalLanguage})}>그래프 생성 <Icon name="arrow" size={15}/></button></div>
@@ -403,15 +401,7 @@ function ClarificationPanel({ result, loading, choose, advance, onResult }: { re
 }
 
 function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (input: ChartEditInput) => Promise<boolean>; loading: boolean }) {
-  const chartPanel=useRef<HTMLElement>(null);
   const [reportView,setReportView]=useState<"graph"|"table">(wantsReportTable(result.query)?"table":"graph");
-  const reportChartBounds=()=>{
-    const size=result.outputSpec?.chartState?.presentation as {width?:number;height?:number}|undefined;
-    if(size?.width&&size?.height)return {width:size.width,height:size.height};
-    const node=chartPanel.current?.querySelector('.workspace-plot-frame, .plotly-chart');
-    const bounds=node?.getBoundingClientRect();
-    return bounds&&bounds.width>0&&bounds.height>0?{width:bounds.width,height:Math.max(bounds.height,node?.scrollHeight||0)}:undefined;
-  };
   const [lineageOpen, setLineageOpen] = useState(true);
   const [evidenceOpen,setEvidenceOpen]=useState(false);
   const [allDataOpen,setAllDataOpen]=useState(false);
@@ -462,16 +452,16 @@ function Results({ result, onEdit, loading }: { result: QueryResponse; onEdit: (
   return <section className={`results ${result.editSessionId?'has-workspace':''}`} id="analysis-result">
     <div className="section-heading"><div><span className="eyebrow">ANALYSIS RESULT</span><h2>질문에서 근거까지, 한눈에</h2></div>{noMatch?<span className="unavailable-badge">지원 데이터 없음</span>:<span className="verified-badge"><Icon name="check" size={15}/> 검증된 데이터</span>}</div>
     <div className="result-grid">
-      <article ref={chartPanel} className="panel chart-panel">
+      <article className="panel chart-panel">
         <div className="panel-top"><div><span className="question-label">분석한 질문</span><h3>“{result.query}”</h3></div><div className="panel-actions">{result.chart.length>0&&<button onClick={exportPng}><Icon name="chart" size={17}/> PNG</button>}<button onClick={exportCsv}><Icon name="download" size={17}/> CSV</button><button onClick={() => navigator.clipboard?.writeText(location.href)}><Icon name="share" size={17}/> 공유</button></div></div>
         {result.chart.length>0?<section className="result-conditions" aria-label="현재 그래프 조회 조건"><div><small>표시된 관측 기간</small><strong>{actualPeriod.start||result.period.start} ~ {actualPeriod.end||result.period.end}</strong></div><div><small>주기 · 계열</small><strong>{[...new Set(result.chart.map(series=>({M:'월별',Q:'분기별',A:'연별',Y:'연별',D:'일별',category:'항목별 비교'} as Record<string,string>)[series.frequency||'']||series.frequency||result.frequency))].join(' / ')} · {result.chart.length}개</strong></div><div><small>자료 출처</small><strong>{resultSourceLabel(result)}</strong></div>{titlePeriodMismatch(String(result.outputSpec?.chartState?.title||editOptions?.title||""),actualPeriod)&&<p role="status">제목에 적힌 기간과 현재 관측 기간이 다릅니다. 현재 자료는 위 관측 기간을 기준으로 확인하고, 필요하면 왼쪽에서 제목을 수정해 주세요.</p>}{result.outputSpec?.cachedSnapshot&&<p>저장 당시 자료를 표시합니다. 최신 관측값은 새로 조회해 주세요.</p>}</section>:<PeriodConfirmation result={result}/>}
         {result.outputSpec?.editChanges?.length ? <div className="setup-block" role="status"><strong>수정이 적용되었습니다</strong><ul>{result.outputSpec.editChanges.map((change,index)=><li key={index}>{change}</li>)}</ul></div> : null}
         {!result.editSessionId&&result.warnings?.map((warning, index) => <div className="error-banner" role="status" key={index}>{warning.replace(/([?&](?:apiKey|api_key|access_token)=)[^&\s)]+/gi, "$1[redacted]")}</div>)}
         {!result.editSessionId&&<div className="chart-header"><div><h3>{editOptions?.title||(result.chart.length ? `${chartLabels[result.chartType||'line']} 분석 결과` : "MCP 통계표 탐색 결과")}</h3>{result.chart.length > 0 && editOptions?.showLegend!==false && <div className="legend">{result.chart.map((s) => <span key={s.id}><i style={{background:s.color}}/> {s.label}{s.unit ? ` (${s.unit})` : ""}</span>)}</div>}</div>{result.chart.length>0&&<div className="filter-pills"><span>{result.period.start}–{result.period.end}</span><span>{result.frequency} <Icon name="chevron" size={13}/></span></div>}</div>}
-        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor onViewChange={setReportView} preferTable={wantsReportTable(result.query)} onEvidence={()=>setEvidenceOpen(true)} warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
+        {result.outputSpec?.plotlyFigure ? result.editSessionId ? <ChartSketchEditor onViewChange={setReportView} preferTable={wantsReportTable(result.query)} warnings={result.warnings} series={result.chart} sessionId={result.editSessionId} revision={result.outputSpec} model={result.outputSpec.editCapabilities} canUndo={result.outputSpec.canUndo} canRedo={result.outputSpec.canRedo} loading={loading} onEdit={onEdit}><PlotlyRenderer figure={result.outputSpec.plotlyFigure} heading={{title:String(result.outputSpec.chartState?.title||''),subtitle:String(result.outputSpec.chartState?.subtitle||'')}}/></ChartSketchEditor> : <PlotlyRenderer figure={result.outputSpec.plotlyFigure}/> : result.chartMode === "separate" ? <div className="separate-charts">{result.chart.map((s) => <div className="single-chart" key={s.id}><h4>{s.label} <small>{s.unit}</small></h4><ChartRenderer series={[s]} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/></div>)}</div> : <ChartRenderer series={result.chart} chartType={result.chartType} xAxisLabel={editOptions?.xAxisLabel} yAxisLabel={editOptions?.yAxisLabel}/>}
         {insights.observations.length>0&&<div className="insight-box"><div className="insight-title"><span><Icon name="sparkle" size={17}/></span><strong>핵심 인사이트</strong></div><ul>{insights.observations.map((x,index) => <li key={`${index}-${x}`}>{x}</li>)}</ul></div>}
         <DerivedEvidence key={result.derivedEvidence?.calculationId} result={result}/>
-        <details className="workspace-analysis-summary" open><summary>보고서 작성하기</summary><StatisticalQuestion displayMode={reportView} sessionId={result.editSessionId} revision={result.outputSpec?.editVersion??0} summary={result.summary} disabled={loading}/><SummaryEvidence result={result}/>{result.editSessionId&&<ReportDraft key={`${result.editSessionId}-${result.outputSpec?.editVersion??0}`} sessionId={result.editSessionId} revision={result.outputSpec?.editVersion??0} getChartSize={reportChartBounds}/>}</details>
+        <details className="workspace-analysis-summary" open><summary>보고서 작성하기</summary><StatisticalQuestion displayMode={reportView} sessionId={result.editSessionId} revision={result.outputSpec?.editVersion??0} summary={result.summary} disabled={loading}/></details>
         {result.chart.length > 0 && <div className="data-table-wrap"><div className="subsection-title"><div><h3>{allDataOpen?"전체 데이터":"주요 데이터 예시"}</h3><p>{allDataOpen?"조회된 모든 관측치를 표시합니다.":"각 계열의 시작과 최근 값을 간략히 보여줍니다."}</p></div><span>전체 {allRows.length}개 관측치</span></div><table><thead><tr><th>계열</th><th>시점</th><th>값</th></tr></thead><tbody>{visibleRows.map(({series,point}) => <tr key={`${series.id}-${point.date}`}><td>{series.label}</td><td>{point.date}</td><td>{point.value.toLocaleString()} {series.unit}</td></tr>)}</tbody></table>{allRows.length>previewRows.length&&<div className="data-more"><span>{allDataOpen?`전체 ${allRows.length}개를 표시 중입니다.`:`${previewRows.length}개 예시만 표시 중입니다.`}</span><button type="button" aria-expanded={allDataOpen} onClick={()=>setAllDataOpen((current)=>!current)}>{allDataOpen?"간략히 보기":`전체 데이터 더 보기 (${allRows.length}개)`}<Icon name="chevron" size={14}/></button></div>}</div>}
       </article>
       <aside className="evidence-column">
@@ -520,7 +510,6 @@ export default function App() {
   };
   const runQuery=async(payload:QueryRequest)=>{setLoading(true);setError('');try{showResult(await trackedQuery(payload));}catch(e){setError(e instanceof Error?e.message:String(e));}finally{setLoading(false);}};
 
-  const examples = exploreExamples;
 
   useEffect(()=>{
     const restore=(state:Record<string,unknown>|null)=>{
@@ -545,7 +534,7 @@ export default function App() {
   const historyUrl=(nextView:"home"|"lineage",nextQuery=query)=>nextView==="lineage"?`${location.pathname}?view=lineage`:`${location.pathname}${nextQuery?`?q=${encodeURIComponent(nextQuery)}`:""}`;
   const pushUiState=(nextView:"home"|"lineage",nextResult:QueryResponse|null,nextQuery=query)=>history.pushState({statbridge:true,account:accountKey('history'),view:nextView,query:nextQuery,result:nextResult},"",historyUrl(nextView,nextQuery));
 
-  const showResult = (data: QueryResponse, editing=false, approved=false) => {
+  const showResult = (data: QueryResponse, editing=false) => {
     const previous=liveResult.current;
     if(data.status==="need_output_config"&&data.warnings?.length&&previous?.editSessionId){setFailedQuery(null);setError("");setPendingOutput(data);return;}
     if(['need_details','no_match','data_unavailable','request_failed'].includes(data.status||'')){setFailedQuery(data);return;}
@@ -663,7 +652,7 @@ export default function App() {
       const next=chatTransition?.data;setChatTransition(null);
       localStorage.removeItem(accountKey('statbridge.workspace.current'));
       liveResult.current=null;setResult(null);setFailedQuery(null);setError('');
-      if(next)showResult(next,false,true);
+      if(next)showResult(next,false);
       else{setQuery('');setView('home');history.replaceState({statbridge:true,account:accountKey('history'),view:'home',query:'',result:null},'',location.pathname);requestAnimationFrame(()=>document.getElementById('statistics-query')?.focus());window.scrollTo({top:0,behavior:'smooth'});}
     }catch{setChatNotice('저장 공간이 부족하거나 사용할 수 없습니다. 대화를 유지했습니다. 브라우저 저장 공간을 확인해 주세요.');}finally{chatSaving.current=false;setChatBusy(false);}
   };
@@ -693,7 +682,7 @@ export default function App() {
   const reopenChat=async(chat:SavedChat)=>{
     setLoading(true);try{
       let data:QueryResponse;try{data=await fetchWorkspace(chat.id);}catch{data={...chat.result,outputSpec:chat.result.outputSpec?{...chat.result.outputSpec,cachedSnapshot:true,chatReadOnly:true}:undefined};setChatNotice('저장 당시 그래프와 대화를 열었습니다. 서버 세션이 만료되어 편집하려면 그래프를 다시 조회해 주세요.');}
-      const existing=readChat(chat.id);writeChat(chat.id,existing.length>=chat.messages.length?existing:chat.messages);showResult(data,true,true);setQuery(data.query);setView('home');setChatArchive(null);
+      const existing=readChat(chat.id);writeChat(chat.id,existing.length>=chat.messages.length?existing:chat.messages);showResult(data,true);setQuery(data.query);setView('home');setChatArchive(null);
       requestAnimationFrame(()=>document.getElementById('analysis-result')?.scrollIntoView({block:'start'}));
     }catch{setChatNotice('현재 대화를 저장하지 못해 이전 대화를 열지 않았습니다.');}finally{setLoading(false);}
   };

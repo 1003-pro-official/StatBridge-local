@@ -6,15 +6,15 @@ import {tableHistoryAction} from './tableSheetBorders';
 import {withRequestDeadline} from './requestDeadline';
 import {workspacePng,startFileDownload} from './workspaceDownload';
 import {panelGeometry} from './plotPanelLayout';
-import {apiFetch,accountKey} from './accountApi';
+import {accountKey} from './accountApi';
 import { PointerEvent, ReactNode, useEffect, useRef, useState } from "react";
 import Plotly from "plotly.js-dist-min";
 import type { ChartReference, ChartEditInput, ChartSeries, ChartType, SketchMark, EditSelection } from "./api/types";
 import { graphHitPoints, resolveMarkSelection, resolveMarkRegion } from "./chartSelection";
-import { isDrawingStroke, periodLabel, sketchLabel } from "./sketchLabels";
+import { isDrawingStroke } from "./sketchLabels";
 import { markBounds,moveMark,resizeMark } from "./sketchTransform";
 import type { EditableMark,Corner } from "./sketchTransform";
-import { bindMarks, changeMarkTarget, elementTargets, inferMarkTarget } from "./sketchRequest";
+import { bindMarks, elementTargets, inferMarkTarget } from "./sketchRequest";
 import { Sujeongi } from "./Sujeongi";
 import editHelp from "./chartEditHelp.json";
 import StickerEditor from "./StickerEditor";
@@ -35,7 +35,6 @@ import './ChartWorkspace.css';
 type Props = {
   preferTable?:boolean;
   onViewChange?:(view:"graph"|"table")=>void;
-  onEvidence?:()=>void;
   children: ReactNode;
   warnings?:string[];
   series: ChartSeries[];
@@ -68,7 +67,7 @@ async function readImage(src: string): Promise<HTMLImageElement> {
   return image;
 }
 
-export default function ChartSketchEditor({ children, series, sessionId, revision, loading, onEdit, model, canUndo, canRedo, warnings=[], onEvidence, preferTable=false, onViewChange }: Props) {
+export default function ChartSketchEditor({ children, series, sessionId, revision, loading, onEdit, model, canUndo, canRedo, warnings=[], preferTable=false, onViewChange }: Props) {
   const workspace=useRef<HTMLDivElement>(null),historyPending=useRef(false);
   const tableDoc=(revision as {tableDocument?:TableDocument}).tableDocument;
   const [view,setView]=useState<'graph'|'table'>(preferTable?'table':'graph');
@@ -117,7 +116,6 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
   const manual:EditSelection|undefined=chosen&&scope==="series" ? {label:target,scope} : chosen&&start&&(scope==="point"||end) ? {label:target,scope,start,end:scope==="point"?start:end} : undefined;
   const [note,setNote] = useState("");
   const [textAnchor,setTextAnchor] = useState<SketchMark["points"][number]|null>(null);
-  const [editingMark,setEditingMark] = useState<string|null>(null);
   const textInput = useRef<HTMLTextAreaElement>(null);
   const [instruction,setInstruction] = useState("");
   const [busy,setBusy] = useState(false);
@@ -363,7 +361,7 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
         })}
       </svg>
     </div></div></>}</section>
-    {chatOpen&&<aside className="workspace-right workspace-chat"><Sujeongi tableMode={view==='table'} targets={series.map(s=>s.label)} inline revision={revision} sessionId={sessionId} loading={loading||busy} markCount={marks.length} model={model} onEdit={apply} canSubmitMarks={marks.some(m=>m.text.trim())||!!(model?.supportsImages&&marks.length)} markInstructions={marks.map(m=>m.text.trim()).filter(Boolean).join(" / ")}>{null}</Sujeongi></aside>}
+    {chatOpen&&<aside className="workspace-right workspace-chat"><Sujeongi tableMode={view==='table'} targets={series.map(s=>s.label)} inline revision={revision} sessionId={sessionId} loading={loading||busy} markCount={marks.length} onEdit={apply} canSubmitMarks={marks.some(m=>m.text.trim())||!!(model?.supportsImages&&marks.length)} markInstructions={marks.map(m=>m.text.trim()).filter(Boolean).join(" / ")}>{null}</Sujeongi></aside>}
     </div>
 
   </div>;

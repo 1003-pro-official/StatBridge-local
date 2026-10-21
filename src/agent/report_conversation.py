@@ -6,7 +6,7 @@ import hashlib,json,re
 from typing import Literal
 from pydantic import BaseModel,ConfigDict,Field,model_validator
 from visible_chart_commentary import describe_visible_chart,refers_to_visible_chart,report_names
-from report_caption import display_number
+from report_summary import display_number
 
 MAX_TURNS=20
 
@@ -94,7 +94,7 @@ def plan_question(question,series,turns,cache,client):
     if stamp in cache:return ReportPlan.model_validate(cache[stamp]),'plan_cache',0
     if not client or not client.configured:return ReportPlan(operation='clarify',reason='scope'),'model_unavailable',0
     history=[{'question':t['question'],'plan':t['plan'],'context':t.get('context',{}),'answer':{'status':t['answer']['status'],'summary':' '.join(t['answer']['paragraphs'])[:700]}} for t in turns[-4:]]
-    raw,_=client.request(SYSTEM,json.dumps({'question':question,'history':history,'series':meta},ensure_ascii=False),max_tokens=1100,json_mode=True)
+    raw,_=client.request(SYSTEM,json.dumps({'question':question,'history':history,'series':meta,'schema':ReportPlan.model_json_schema()},ensure_ascii=False),max_tokens=1100,json_mode=True)
     plan=ReportPlan.model_validate_json(raw)
     known={m['key'] for m in meta}
     if not set(plan.keys)<=known or len(set(plan.keys))!=len(plan.keys):raise ValueError('model selected unknown series')
