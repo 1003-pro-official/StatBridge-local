@@ -10,40 +10,40 @@ from core import BASE, ROOT, RUBRIC, FrozenProvider, calculate, number, digest_v
 
 SUPPLEMENTS = {
     'derived': [
-        ('전년비 선행기간', '2025년 생산자물가지수 총지수의 월별 전년동월비를 계산해줘.', '12개월 전 같은 달의 실제 관측값을 사용하고 선행기간은 표시하지 않는다.'),
-        ('금리차', '2025년 신규취급액 기준 대출평균 금리에서 저축성수신 금리를 뺀 월별 금리차를 보여줘.', '같은 기간의 대출금리-수신금리이며 단위는 %p이다.'),
-        ('단위 변환', '2025년 국제수지 경상수지를 월별 억달러 단위로 보여줘.', '백만달러 원자료를 100으로 나누고 기간·출처를 유지한다.'),
-        ('결측과 0 분모', '첨부한 검증용 시계열의 전기비를 계산하고 결측과 0 분모를 설명해줘.', '별도 합성 입력에서 결측·0 분모 결과는 null이며 임의 보간하지 않는다.'),
+        ('전년비 선행기간', '생산자물가 보도자료 갱신용으로 2025년 총지수 전년동월비를 확인해줘.', '12개월 전 같은 달의 실제 관측값을 사용하고 선행기간은 표시하지 않는다.'),
+        ('금리차', '금융기관 가중평균금리 표에 넣을 수 있도록 2025년 신규취급액 기준 대출금리와 저축성 수신금리의 월별 차이를 계산해줘.', '같은 기간의 대출금리-수신금리이며 단위는 %p이다.'),
+        ('단위 변환', '국제수지 보도자료에 반영할 2025년 경상수지를 월별 억달러로 정리해줘.', '백만달러 원자료를 100으로 나누고 기간·출처를 유지한다.'),
+        ('결측과 0 분모', '첨부한 검증용 시계열의 전기비를 계산해 표에 반영하고, 결측과 0 분모는 구분해줘.', '별도 합성 입력에서 결측·0 분모 결과는 null이며 임의 보간하지 않는다.'),
     ],
     'followup': [
-        ('기간 변경', '이 그래프의 기간만 2024년으로 변경해줘.', '기존 계열·주기·단위를 보존하고 기간 자료를 다시 조회한다.'),
-        ('비교 계열 변경', '중소기업 대신 대기업 대출금리와 비교해줘.', '비교 대상만 변경하고 신규취급액 기준을 유지한다.'),
-        ('지시어 참조', '현재 화면에 표시된 계열 중 마지막 표시 시점에 가장 높은 것은 무엇인가요?', '현재 표시된 계열과 마지막 표시 시점으로 판단한다.'),
-        ('재계산', '표시 기간을 바꿨으니 방금 비교도 다시 계산해줘.', '기존 답변 수치를 복사하지 않고 최신 표시 자료로 재계산한다.'),
+        ('기간 변경', '이 그림의 계열과 단위는 유지하고 기간만 2024년으로 바꿔서 자료를 다시 반영해줘.', '기존 계열·주기·단위를 보존하고 기간 자료를 다시 조회한다.'),
+        ('비교 계열 변경', '대출금리 비교표에서 중소기업 대신 대기업 금리를 넣어 비교해줘.', '비교 대상만 변경하고 신규취급액 기준을 유지한다.'),
+        ('지시어 참조', '보고서 설명에 넣으려는데, 현재 그림에 표시된 계열 가운데 마지막 표시 시점의 값이 가장 높은 항목을 알려줘.', '현재 표시된 계열과 마지막 표시 시점으로 판단한다.'),
+        ('재계산', '표시 기간을 바꿨어. 방금 비교한 금리 차이도 바뀐 기간 기준으로 다시 계산해줘.', '기존 답변 수치를 복사하지 않고 최신 표시 자료로 재계산한다.'),
     ],
     'reference_edit': [
-        ('이미지 참조', '첨부한 한국은행 그래프처럼 제목과 범례 배치를 바꿔줘.', '참조 이미지 스타일만 반영하고 조회 계열·수치·출처를 보존한다.'),
-        ('PDF 참조', '첨부 PDF 3페이지의 그래프를 참고해 현재 그래프 배치를 바꿔줘.', '명시한 PDF 페이지를 참조하고 기존 데이터를 보존한다.'),
-        ('자료 보존', '참고 이미지의 색상만 적용해줘. 데이터는 유지해줘.', '시점·값·단위·출처와 계산 근거가 편집 전후 동일하다.'),
-        ('불명확한 참조', '첨부 자료처럼 바꿔줘.', '복수 그림의 대상이 불명확하면 필요한 확인을 하고 숫자를 추측하지 않는다.'),
+        ('이미지 참조', '첨부한 한국은행 그림을 이번 보도자료 도표 서식 참고로 삼아 제목과 범례 위치를 맞춰줘.', '참조 이미지 스타일만 반영하고 조회 계열·수치·출처를 보존한다.'),
+        ('PDF 참조', '첨부 PDF 3페이지의 그림을 참고해 현재 보도자료용 그래프 배치를 정리해줘.', '명시한 PDF 페이지를 참조하고 기존 데이터를 보존한다.'),
+        ('자료 보존', '참고 이미지의 색상 체계만 적용해줘. 발표 자료에 쓸 수치와 출처는 그대로 유지해줘.', '시점·값·단위·출처와 계산 근거가 편집 전후 동일하다.'),
+        ('불명확한 참조', '첨부한 자료와 같은 형식으로 바꿔서 보고서에 넣어줘.', '복수 그림의 대상이 불명확하면 필요한 확인을 하고 숫자를 추측하지 않는다.'),
     ],
     'summary_style': [
-        ('단일 사실 선택', '표시된 금리의 최신 수준과 전월 변화를 요약해줘.', '독립 계산으로 확인한 최신 수치와 변화만 설명한다.'),
-        ('복수 사실 선택', '표시된 대기업과 중소기업 금리의 차이를 요약해줘.', '모든 요청 계열과 같은 시점의 차이를 설명한다.'),
-        ('스타일 지정', '제목은 금리 비교로 하고 범례를 아래쪽에 배치해줘.', '제목·범례 요구를 반영하고 수치를 바꾸지 않는다.'),
-        ('안전한 폴백', '현재 자료의 관측 사실을 요약해줘.', '모델이 유효하지 않은 fact ID를 반환해도 검증된 기본 요약을 사용한다.'),
+        ('단일 사실 선택', '보도자료 문안 검토용으로 현재 금리 그림의 최신 수준과 전월 대비 변화를 요약해줘.', '독립 계산으로 확인한 최신 수치와 변화만 설명한다.'),
+        ('복수 사실 선택', '금융기관 가중평균금리 자료 설명에 쓰게 대기업과 중소기업 대출금리의 최신 수준 및 같은 달 차이를 요약해줘.', '두 대출금리 계열의 같은 시점 수치와 대기업-중소기업 차이를 설명한다.'),
+        ('스타일 지정', '금리 비교 그림을 보도자료에 넣으려고 해. 제목은 금리 비교로 하고 범례는 아래쪽에 배치해줘.', '제목·범례 요구를 반영하고 수치를 바꾸지 않는다.'),
+        ('안전한 폴백', '보고서 초안에 넣을 수 있도록 현재 자료에서 확인되는 사실만 요약해줘.', '모델이 유효하지 않은 fact ID를 반환해도 검증된 기본 요약을 사용한다.'),
     ],
     'report': [
-        ('수준과 변화', '현재 금리 그래프를 바탕으로 최신 수준과 전월 변화가 포함된 보고서를 써줘.', '실제 표시 수치와 %p 변화가 근거와 일치한다.'),
-        ('변환값 설명', '이 전년비 그래프를 보고서로 설명해줘.', '변환된 증감률을 원지수 수준으로 설명하지 않는다.'),
-        ('부분 답변', '금리 변화와 대출액 구성을 모두 설명해줘.', '금리는 답하고 미조회 대출금액 구성은 필요한 자료로 구분한다.'),
-        ('인과·전망 요구', '이 그래프는 최근 두 달 값이 같은데, 보합 원인과 다음 달 값을 확정해줘.', '두 값이 같아 하락이 아님을 바로잡고 원자료만으로 원인·미래 값을 확정할 수 없다고 안내한다.'),
+        ('수준과 변화', '금리 동향 보도자료 초안에 쓸 수 있게 현재 그림의 최신 수준과 전월 대비 변화를 포함해 설명문을 작성해줘.', '실제 표시 수치와 %p 변화가 근거와 일치한다.'),
+        ('변환값 설명', '생산자물가 전년동월비 그림을 보고서에 설명할 문장으로 정리해줘.', '변환된 증감률을 원지수 수준으로 설명하지 않는다.'),
+        ('부분 답변', '금리 동향 보고서에 넣을 금리 변화와 대출액 구성을 각각 설명해줘.', '금리는 답하고 미조회 대출금액 구성은 필요한 자료로 구분한다.'),
+        ('인과·전망 요구', '최근 두 달 값이 같은데 하락 원인과 다음 달 값을 보도자료에 확정적으로 써줘.', '두 값이 같아 하락이 아님을 바로잡고 원자료만으로 원인·미래 값을 확정할 수 없다고 안내한다.'),
     ],
     'recovery': [
-        ('모델 장애', '생산자물가지수 전년비를 계산해줘.', '모델 장애는 자료 부재로 바꾸지 않고 입력을 유지하며 재시도를 안내한다.'),
-        ('API 장애', '경상수지를 조회해줘.', '조회 API 장애를 통계 미존재로 단정하지 않는다.'),
-        ('자료 부재', '2026년 7월부터 8월까지 관측값을 보여줘.', '조회 성공·관측값 부재를 API 장애와 구분한다.'),
-        ('잘못된 파일', '부족한 자료로 이 파일을 연결해줘.', '잘못된 형식·단위 파일이 기존 작업을 덮어쓰지 않는다.'),
+        ('모델 장애', '생산자물가 보도자료 갱신에 필요한 전년동월비 계산을 이어서 진행해줘.', '모델 장애는 자료 부재로 바꾸지 않고 입력을 유지하며 재시도를 안내한다.'),
+        ('API 장애', '국제수지 보도자료 표에 넣을 경상수지를 조회해줘.', '조회 API 장애를 통계 미존재로 단정하지 않는다.'),
+        ('자료 부재', '표의 누락 여부를 확인하려고 합니다. 저축성 수신금리의 2026년 7~8월 관측값을 보여줘.', '조회 성공·관측값 부재를 API 장애와 구분한다.'),
+        ('잘못된 파일', '보고서에 반영할 자료인데 형식과 단위를 확인해 이 파일을 연결해줘.', '잘못된 형식·단위 파일이 기존 작업을 덮어쓰지 않는다.'),
     ],
 }
 
@@ -54,18 +54,18 @@ def pilot_query(original_id, periods):
     start_text = f'{start[:4]}년 {int(start[4:])}월' if 'Q' not in start else f'{start[:4]}년 {start[-1]}분기'
     end_text = f'{end[:4]}년 {int(end[4:])}월' if 'Q' not in end else f'{end[:4]}년 {end[-1]}분기'
     wording = {
-        '01-G': f'{start_text}부터 {end_text}까지 가계의 소비 흐름을 보여줘.',
-        '02-G': f'{start_text}부터 {end_text} 사이 주택 매매가격 추이를 확인해줘.',
-        '06-T': f'{start_text}와 {end_text}의 저축성 수신금리를 알려줘.',
-        '24-T': f'{start_text}부터 {end_text}까지 기업 심리가 어떻게 움직였는지 보여줘.',
-        '07-T': f'{start_text}부터 {end_text}까지 물가 흐름을 확인해줘.',
-        '08-T': f'{start_text}부터 {end_text}까지 수출 가격이 어떻게 변했는지 알려줘.',
-        '13-T': f'{start_text}부터 {end_text}까지 가계 빚 규모를 분기별로 보여줘.',
-        '11-G2-M': f'{start_text}부터 {end_text}까지 제조업 기업 심리 흐름을 보여줘.',
-        '11-G3-M': f'{start_text}부터 {end_text}까지 서비스업 기업 심리를 확인해줘.',
-        '15-G1': f'{start_text}와 {end_text}의 소비자 심리 수준을 비교해줘.',
-        '15-G2': f'{start_text}와 {end_text}의 기대물가를 알려줘.',
-        '20-G': f'{start_text}부터 {end_text}까지 국제수지 흐름을 보여줘.',
+        '01-G': f'원계열 경제심리지수 보도자료 그림을 갱신하려고 합니다. {start_text}부터 {end_text}까지 흐름을 확인해줘.',
+        '02-G': f'전체 소비자심리지수 표 검토용으로 {start_text} 대비 {end_text} 수치를 비교해줘.',
+        '06-T': f'금리 동향 보도자료 갱신을 위해 {start_text}부터 {end_text}까지 저축성 수신금리를 확인해줘.',
+        '24-T': f'금융기관 가중평균금리 표에 반영할 대출금리를 {start_text}부터 {end_text}까지 확인해줘.',
+        '07-T': f'생산자물가 보도자료 갱신용으로 {start_text}부터 {end_text}까지 흐름을 확인해줘.',
+        '08-T': f'원화 기준 수출물가 보도자료 그림을 갱신하려고 합니다. {start_text}부터 {end_text}까지 변화를 확인해줘.',
+        '13-T': f'가계신용 동향 표 검토용으로 {start_text}부터 {end_text}까지 규모를 확인해줘.',
+        '11-G2-M': f'월중 국제수지 보도자료 그림에 넣을 상품 수출 흐름을 {start_text}부터 {end_text}까지 확인해줘.',
+        '11-G3-M': f'국제수지 보고서 설명을 위해 {start_text}부터 {end_text}까지 증권투자 자산 흐름을 확인해줘.',
+        '15-G1': f'금융기관 대출행태 자료의 대기업 대출태도 표를 갱신하려고 합니다. {start_text} 대비 {end_text} 수준을 비교해줘.',
+        '15-G2': f'금융기관 대출행태 표 갱신용으로 가계 주택대출 태도를 확인하려고 합니다. {start_text}부터 {end_text}까지 비교해줘.',
+        '20-G': f'기업경기 조사 보도자료 그림 갱신용으로 제조업 경기 흐름을 {start_text}부터 {end_text}까지 확인해줘.',
     }
     return wording[original_id]
 
@@ -183,10 +183,18 @@ def build(cache, destination=BASE):
             setup = {'initial_query':context['input']['query'],
                      'source_snapshot_sha256':digest_file(local/'provider.json'),
                      'display':'graph', 'fresh_account':True, 'fresh_session':True}
+            if category=='derived':
+                setup['initial_query']={
+                    1:'2025년 생산자물가 보도자료 그림을 갱신해줘.',
+                    2:'2025년 신규취급액 기준 대출금리와 저축성 수신금리를 비교해줘.',
+                    3:'국제수지 보고서에 넣을 경상수지 흐름을 확인해줘.',
+                    4:'첨부한 검증용 시계열의 전기비를 계산해줘.'}[n]
             if category=='followup' and n==2:
                 setup['initial_query']='2026년 7월부터 8월까지 신규취급액 기준 저축성수신 금리와 중소기업 대출금리를 월별로 비교해줘.'
             if (category=='followup' and n==3) or (category=='summary_style' and n==2):
                 setup['initial_query']='2026년 7월부터 8월까지 신규취급액 기준 대기업과 중소기업 대출금리를 월별로 비교해줘.'
+            if category=='summary_style' and n==3:
+                setup['initial_query']='2026년 7~8월 신규취급액 기준 대기업·중소기업 대출금리를 비교해줘.'
             if category=='report' and n==2:
                 setup['initial_query']='2025년 생산자물가지수 총지수의 월별 전년동월 상승률을 계산해 그래프로 보여줘.'
             if category=='reference_edit':
@@ -203,7 +211,8 @@ def build(cache, destination=BASE):
                                     {'period':'202403','value':None},{'period':'202405','value':20},
                                     {'period':'202406','value':30}]
             if category=='followup' and n==4:
-                setup['prior_question']='현재 표시 기간의 마지막 값과 첫 값을 비교해줘.'
+                setup['initial_query']='2026년 7~8월 신규취급액 기준 대기업·중소기업 대출금리를 비교해줘.'
+                setup['prior_question']='현재 표시된 대기업·중소기업 대출금리의 차이를 비교해줘.'
                 setup['intervening_instruction']='표시 기간을 2024년으로 바꿔줘.'
             if category=='summary_style' and n==4:
                 setup['fault']={'boundary':'report_summary.model_response','kind':'invalid_fact_ids',
@@ -212,6 +221,11 @@ def build(cache, destination=BASE):
                 setup['summary_sources']=[{**{k:ref[k] for k in ('table_id','item_id','classifications','frequency')},
                     'start_period':ref['periods'][0],'end_period':ref['periods'][-1]}]
             if category=='recovery':
+                setup['initial_query']={
+                    1:'생산자물가 보도자료 갱신에 필요한 전년동월비를 계산해줘.',
+                    2:'국제수지 보도자료 표에 넣을 경상수지를 조회해줘.',
+                    3:'저축성 수신금리의 2026년 7~8월 관측값을 확인해줘.',
+                    4:'보고서에 반영할 자료를 첨부했으니 형식과 단위를 확인해줘.'}[n]
                 setup['fault']={1:{'boundary':'planner.model_request','kind':'timeout'},
                                 2:{'boundary':'statistics_request','kind':'timeout'},
                                 3:{'boundary':'statistics_request','kind':'empty_success','rows':[]},
@@ -248,6 +262,29 @@ def build(cache, destination=BASE):
                 blockers=[],
                 review={'human_approved':False,'reviewer':None}))
             if (category, n) in {('summary_style',1),('summary_style',2),('report',1),('report',2)}:
+                if category=='summary_style' and n==2:
+                    rate_specs=next(o for o in objects if o['id']=='06-T')['required_series'][5:7]
+                    rate_sources=[registry[identity(s)] for s in rate_specs]
+                    common=sorted(set(rate_sources[0]['points'])&set(rate_sources[1]['points']))
+                    latest=common[-1]
+                    points=[{'period':latest,'value':s['points'][latest]} for s in rate_sources]
+                    spread=str(number(points[0]['value'])-number(points[1]['value']))
+                    narrative={'kind':'narrative','series':[
+                        {**{k:s[k] for k in ('table_id','item_id','classifications','frequency','unit')},
+                         'points':[{'period':latest,'value':s['points'][latest]}]} for s in rate_sources],
+                        'claims':{'large_latest':{'period':latest,'value':points[0]['value'],'unit':rate_sources[0]['unit']},
+                                  'small_latest':{'period':latest,'value':points[1]['value'],'unit':rate_sources[1]['unit']},
+                                  'spread':{'period':latest,'value':spread,'unit':'%p'}}}
+                    target_case=supplements[-1]
+                    contracts=[{k:s[k] for k in ('table_id','item_id','classifications','frequency')} for s in rate_sources]
+                    target_case['expected'].update(requires_numeric=True,numeric_evidence=True,
+                        numeric_claims=['large_latest','small_latest','spread'],numeric_series_contracts=contracts,
+                        oracle_sha256=digest_value(narrative),observed_contract={})
+                    target_case['expected']['tolerance']='0.000001'
+                    target_case['expected']['human_contract'] += ' 같은 최신 월의 대기업·중소기업 대출금리와 대기업-중소기업 차이를 원자료와 일치시킨다.'
+                    target_case['required_facts'][0]=target_case['expected']['human_contract']
+                    oracle[target_case['id']]=narrative
+                    continue
                 target='07-T' if category=='report' and n==2 else '06-T'
                 source_spec=next(o for o in objects if o['id']==target)['required_series'][0]
                 source=registry[identity(source_spec)]
@@ -287,10 +324,12 @@ def build(cache, destination=BASE):
                     formula='(현재/전년동월-1)*100; 정확한 달력 시차 12개월'
                 elif n==2:
                     lending=registry[identity(source_specs[3])]
-                    common=sorted(set(source['points'])&set(lending['points']))[-2:]
+                    common=sorted(p for p in set(source['points'])&set(lending['points']) if p.startswith('2025'))[-2:]
+                    if len(common)!=2:
+                        raise ValueError('two common 2025 interest-rate observations required')
                     calculated={p:str(number(lending['points'][p])-number(source['points'][p])) for p in common}
                     selected_sources.append({k:lending[k] for k in ('table_id','item_id','classifications','frequency')})
-                    supplements[-1]['input']['query']=f"{common[0][:4]}년 {int(common[0][4:])}월부터 {common[-1][:4]}년 {int(common[-1][4:])}월까지 신규취급액 기준 대출평균에서 저축성수신 금리를 뺀 월별 금리차를 %p로 보여줘."
+                    supplements[-1]['input']['query']=f"{common[0][:4]}년 {int(common[0][4:])}월부터 {common[-1][:4]}년 {int(common[-1][4:])}월까지 신규취급액 기준 대출금리에서 저축성 수신금리를 뺀 월별 차이를 %p로 보여줘."
                     formula='대출평균 금리-저축성수신 금리'
                 elif n==3:
                     calculated={p:v for p,v in calculate(source['points'],'scale','M','0.01').items() if p.startswith('2025')}
@@ -313,12 +352,12 @@ def build(cache, destination=BASE):
         case['expected']['qualitative_applicable']=case['qualitative_applicable']
     # Six isolated query-only period probes expand temporal coverage without changing the frozen 12-case baseline.
     period_specs = [
-        ('BOK-06-T', 'period-explicit-short', 'short_explicit', '202606', '202607', '2026년 6월과 7월 저축성 수신금리를 비교해줘.'),
-        ('BOK-07-T', 'period-relative-3m', 'relative_latest', '202606', '202608', '최근 3개월 물가 흐름을 보여줘.'),
-        ('BOK-07-T', 'period-calendar-year', 'annual', '202501', '202512', '2025년 생산자물가 추이를 월별로 알려줘.'),
-        ('BOK-08-T', 'period-year-crossing', 'cross_year', '202512', '202601', '2025년 12월부터 2026년 1월까지 수출 가격이 어떻게 바뀌었어?'),
-        ('BOK-13-T', 'period-quarter-year', 'quarter_year', '2025Q3', '2026Q2', '2025년 3분기부터 2026년 2분기까지 가계신용을 확인해줘.'),
-        ('BOK-13-T', 'period-quarter-short', 'short_quarter', '2026Q1', '2026Q2', '올해 1·2분기 가계 빚 규모를 비교해줘.'),
+        ('BOK-06-T', 'period-explicit-short', 'short_explicit', '202606', '202607', '금리 동향 표 검토용으로 2026년 6월과 7월 저축성 수신금리를 비교해줘.'),
+        ('BOK-07-T', 'period-relative-3m', 'relative_latest', '202606', '202608', '생산자물가 보도자료 갱신용으로 이용 가능한 최신 3개 관측월 추이를 확인해줘.'),
+        ('BOK-07-T', 'period-calendar-year', 'annual', '202501', '202512', '2025년 생산자물가 보도자료 그림 갱신용으로 월별 추이를 확인해줘.'),
+        ('BOK-08-T', 'period-year-crossing', 'cross_year', '202512', '202601', '수출물가 표 갱신용으로 2025년 12월부터 2026년 1월까지 변화를 확인해줘.'),
+        ('BOK-13-T', 'period-quarter-year', 'quarter_year', '2025Q3', '2026Q2', '가계신용 동향 보고서에 반영하려고 합니다. 2025년 3분기부터 2026년 2분기까지 확인해줘.'),
+        ('BOK-13-T', 'period-quarter-short', 'short_quarter', '2026Q1', '2026Q2', '가계신용 표 검토용으로 올해 1·2분기 규모를 비교해줘.'),
     ]
     by_id={c['id']:c for c in cases}
     for base_id, variant, period_style, start, end, query in period_specs:

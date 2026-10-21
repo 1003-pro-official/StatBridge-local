@@ -415,7 +415,10 @@ def test_pilot_queries_are_natural_and_canonical_gold_is_unchanged():
         assert digest_value(old['expected'])==digest_value(current['expected'])
         query=pilot_query(old['original_id'],old['expected']['series_contracts'][0]['periods'])
         assert query==current['input']['query']
-        assert all(label not in query for label in (old['expected']['series_contracts'][0]['label'],))
+        # Ordinary statistical concepts can be named; catalog artifacts and item-form labels must not leak.
+        label=old['expected']['series_contracts'][0]['label']
+        if label in ('국내은행-대기업','제 조 업 / 기업심리지수실적','대출평균 1)'):
+            assert label not in query
         assert '원자료' not in query and '선그래프' not in query
 
 
@@ -435,7 +438,54 @@ def test_supplemental_prompts_correct_false_premise_and_ambiguity():
     from core import BASE, rows
     cases={c['id']:c for c in rows(BASE/'supplemental.jsonl')}
     assert cases['SUP-report-04']['expected']['observed_contract']['false_premise_corrected'] is True
-    assert '보합' in cases['SUP-report-04']['input']['query']
+    assert '값이 같은데 하락 원인' in cases['SUP-report-04']['input']['query']
     assert '3페이지' in cases['SUP-reference_edit-02']['input']['query']
-    assert '현재 화면' in cases['SUP-followup-03']['input']['query']
-    assert '2026년 7월부터 8월까지' in cases['SUP-recovery-03']['input']['query']
+    assert '현재 그림에 표시된 계열' in cases['SUP-followup-03']['input']['query']
+    assert '마지막 표시 시점' in cases['SUP-followup-03']['input']['query']
+    assert '2026년 7~8월' in cases['SUP-recovery-03']['input']['query']
+    assert '저축성 수신금리' in cases['SUP-recovery-03']['input']['query']
+
+
+def test_pilot_work_queries_match_their_research_series():
+    from core import BASE, rows
+    expected_topics={
+        'BOK-01-G':('경제심리',('가계 소비','주택')),
+        'BOK-02-G':('소비자심리',('주택 매매','국제수지')),
+        'BOK-06-T':('수신금리',('기업 심리','기대물가')),
+        'BOK-07-T':('생산자물가',('소비자심리','국제수지')),
+        'BOK-08-T':('수출물가',('생산자물가','가계신용')),
+        'BOK-11-G2-M':('상품 수출',('제조업 기업 심리','국제수지 흐름')),
+        'BOK-11-G3-M':('증권투자',('서비스업 기업 심리','소비자 심리')),
+        'BOK-13-T':('가계신용',('기대물가','주택 매매')),
+        'BOK-15-G1':('대기업 대출태도',('소비자 심리','주택 매매')),
+        'BOK-15-G2':('가계 주택대출 태도',('기대물가','국제수지')),
+        'BOK-20-G':('제조업 경기',('국제수지','상품 수출')),
+        'BOK-24-T':('대출금리',('기업 심리','서비스업')),
+    }
+    active={c['id']:c for c in rows(BASE/'pilot.jsonl')}
+    assert all(topic in active[case_id]['input']['query'] for case_id,(topic,_) in expected_topics.items())
+    assert all(not any(wrong in active[case_id]['input']['query'] for wrong in wrong_topics)
+               for case_id,(_,wrong_topics) in expected_topics.items())
+    assert all(any(term in active[case_id]['input']['query'] for term in ('보도자료','표','그림','보고서'))
+               for case_id in expected_topics)
+    assert all('월와' not in c['input']['query'] for c in active.values())
+
+
+def test_summary_comparison_uses_two_requested_lending_rates():
+    from core import BASE, rows
+    case=next(c for c in rows(BASE/'supplemental.jsonl') if c['id']=='SUP-summary_style-02')
+    query=case['input']['query']
+    context=case['input']['setup']['initial_query']
+    assert '대기업' in query and '중소기업' in query and '대출금리' in query
+    assert '대기업' in context and '중소기업' in context and '대출금리' in context
+    assert set(case['expected']['numeric_claims'])=={'large_latest','small_latest','spread'}
+    assert len(case['expected']['numeric_series_contracts'])==2
+
+
+def test_relative_period_and_empty_data_prompts_define_the_requested_series():
+    from core import BASE, rows
+    cases={c['id']:c for c in rows(BASE/'pilot.jsonl')+rows(BASE/'supplemental.jsonl')}
+    relative=cases['BOK-period-period-relative-3m']['input']['query']
+    assert '이용 가능한 최신 3개 관측월' in relative
+    recovery=cases['SUP-recovery-03']['input']['query']
+    assert '생산자물가' in recovery or '저축성 수신금리' in recovery
