@@ -162,10 +162,27 @@ def offline(cases, provider_file):
     return predictions
 
 
+def preflight_input(payload, provider_sha256):
+    setup=payload.get('setup',{})
+    if setup.get('source_snapshot_sha256',provider_sha256)!=provider_sha256:
+        raise ValueError('setup source snapshot differs from provider')
+    attachments=list(setup.get('attachments',[]))
+    if setup.get('attachment'):
+        attachments.append(setup['attachment'])
+    for attachment in attachments:
+        path=(ROOT/attachment['path']).resolve()
+        if not path.is_relative_to((ROOT/'.venv/cache').resolve()):
+            raise ValueError('attachment must stay in authorized cache')
+        if not path.is_file() or digest_file(path)!=attachment.get('sha256'):
+            raise ValueError('missing or changed attachment: '+attachment['path'])
+
+
 def run(cases, provider_file, run_mode, adapter=None, profile='baseline', repeats=1, allow_paid=False):
-    if run_mode!='offline' and (not allow_paid or not adapter):
+    if run_mode not in ('offline','component','model_fixed','live'):
+        raise ValueError('unknown execution mode')
+    if run_mode in ('model_fixed','live') and (not allow_paid or not adapter):
         raise ValueError('model/live execution requires explicit --allow-paid and --adapter; never falls back to offline')
-    if run_mode=='offline' and adapter:
+    if run_mode in ('offline','component') and adapter:
         raise ValueError('custom adapters require model_fixed/live mode')
     profiles=read(BASE/'profiles.json')
     manifest=read(BASE/'manifest.json')
@@ -179,6 +196,9 @@ def run(cases, provider_file, run_mode, adapter=None, profile='baseline', repeat
         raise ValueError('source snapshot differs from the fixed dataset manifest')
     if profile not in ('baseline','sol','mixed'):
         raise ValueError('unknown model profile')
+    provider_sha256=digest_file(provider_file)
+    for c in cases:
+        preflight_input(c['input'],provider_sha256)
     work=[]
     for repeat in range(repeats):
         batch=copy.deepcopy(cases)
@@ -188,20 +208,26 @@ def run(cases, provider_file, run_mode, adapter=None, profile='baseline', repeat
         if run_mode=='offline':
             predictions=offline(executable,provider_file) if executable else []
         else:
-            implementation=module(adapter,'bok_explicit_adapter')
+            implementation=module(BASE/'scripts/component_adapter.py' if run_mode=='component' else adapter,'bok_explicit_adapter')
             predictions=[]
             for c in executable:
                 start=time.perf_counter()
-                p=implementation.run_input(copy.deepcopy(c['input']),
-                    FrozenProvider(read(provider_file)['series']) if run_mode=='model_fixed' else None,
-                    copy.deepcopy(profiles[profile]))
+                try:
+                    p=implementation.run_input(copy.deepcopy(c['input']),
+                        FrozenProvider(read(provider_file)['series']) if run_mode in ('model_fixed','component') else None,
+                        copy.deepcopy(profiles[profile]))
+                    if not isinstance(p,dict) or p.get('execution_status') not in ('observed','unobserved','error','not_executed'):
+                        raise ValueError('invalid adapter observation')
+                    digest_value(p)  # Reject unserializable/non-finite observations before the batch is saved.
+                except Exception as exc:
+                    p={'execution_status':'error','error_type':type(exc).__name__,'error':'adapter execution failed; exception message omitted to avoid credential leakage'}
                 p.update(id=c['id'],input_sha256=digest_value(c['input']),elapsed_ms=(time.perf_counter()-start)*1000)
                 actual=p.get('actual_models')
                 controlled=bool(c['input'].get('fault_injection') or c['input'].get('setup',{}).get('component_boundary'))
                 verified_control=controlled and p.get('model_called') is False and bool(p.get('controlled_execution_evidence'))
                 model_verified=isinstance(actual,list) and bool(actual) and all(isinstance(m,dict) and m.get('purpose') and
                     m.get('model') == profiles[profile]['text_model' if m.get('purpose') in ('summary','style') else 'main_model'] for m in actual)
-                if not model_verified and not verified_control:
+                if p['execution_status']=='observed' and not model_verified and not verified_control:
                     p.update(execution_status='unobserved',error='actual model/purpose evidence missing')
                 p['environment']=run_mode
                 predictions.append(p)
@@ -210,7 +236,7 @@ def run(cases, provider_file, run_mode, adapter=None, profile='baseline', repeat
                                     error='offline does not emulate natural-language/model or fault adapters',environment=run_mode))
         for p in predictions:
             p['repeat']=repeat
-            p['profile']=profile if run_mode!='offline' else 'disabled'
+            p['profile']=profile if run_mode in ('model_fixed','live') else 'disabled'
             p['provider_sha256']=(p.get('live_source_sha256') or 'unobserved') if run_mode=='live' else digest_file(provider_file)
             p['evaluation_code_sha256']={path.name:digest_file(path) for path in (BASE/'scripts').glob('*.py')}
         work.extend(predictions)
@@ -348,7 +374,7 @@ def main():
     parser.add_argument('--observations',type=Path)
     parser.add_argument('--reviews',type=Path)
     parser.add_argument('--output',type=Path)
-    parser.add_argument('--mode',choices=['offline','model_fixed','live'],default='offline')
+    parser.add_argument('--mode',choices=['offline','component','model_fixed','live'],default='offline')
     parser.add_argument('--profile',choices=['baseline','sol','mixed'],default='baseline')
     parser.add_argument('--repeats',type=int,choices=[1,3],default=1)
     parser.add_argument('--adapter',type=Path)

@@ -9,18 +9,19 @@
     "human_approved": 0
   },
   "files": {
-    "README.md": "6bfb08c69ed7ece0e7028b176a0f892b62ba937bf685cec2d89084cfcf39f35c",
+    "README.md": "3e2f18955482609a7081ff75f77cadfc1a7727d88fd7a1ea855b7bebd2dac6f4",
     "REVIEW.md": "80ea1806e73d26a04b44e3ce2dd10f4955e1ef33fec6c4cec6da9be2e2a754d3",
-    "VALIDATION.md": "dad2c2669c30ccd79bba80ee282a78e3fd1924a89f18b8922ee583c52577dcd3",
+    "VALIDATION.md": "71f3541bf38205d1e53f9bfe74ebdd9339444cd03c1eaed9b1047dce3bbe41c5",
     "audit.jsonl": "ede9299b87c30fcd11ac2092210b1e7b7ea39fbf6f7f55d0ca5dab1fa65f8df6",
-    "gold-review-template.jsonl": "8c20e0f69e6b53dcc7879612f62902ddeddfd5a1a2f05a9ab7b9492f8f3e24c6",
+    "gold-review-template.jsonl": "2d45b7b9c0b2eec104e36fdae8fa50f71f8b7f91779aad6a42695205acd972ef",
     "pilot.jsonl": "3e170082bbafda77210f046be2590e364e646fae7ca1ca955e54b6c4c83b2b18",
     "profiles.json": "444bd2f781885e1a23f80579608fcd9f2d7b285cf25b017c3baefb6054eab961",
-    "scripts/build.py": "2a0df9eca83b061ccc5e76df110ccf62ed32d31409dc6cc0c9feb18b17a40a85",
-    "scripts/core.py": "39082fbf5e00cc9a19719931e9aadc0e9800e65331d8d5fb35cc4607364a8127",
-    "scripts/evaluate.py": "056463555eb351882c46b36b99eefabfc854747855598976816913d1fa910dc3",
-    "supplemental.jsonl": "3781d2b8e12d2597ed8e1f84f77c334597f637c3761a48059c4a2210e1e5088a",
-    "tests/test_evaluation.py": "b5839260ae8b5274c46c19ca0707e049272700c863964fe3e77c4afe91be69f9"
+    "scripts/build.py": "5ebf7c075ba6c0ad56ac71cbe5bff1752185050d7a903d68cc9f059db834af21",
+    "scripts/component_adapter.py": "9f89ecac1e432e42e1d8b96cf9b3f911d6d653c29de92619a809ee4628582804",
+    "scripts/core.py": "828df8739d43ddda415d4fc7379f1479f3b5635e7b5431ede1904e5ea1ef26e0",
+    "scripts/evaluate.py": "6e17631f9a1b8f8d1cffeb570ab07000dfb85c254d1eb20fea102cb3c9e34b29",
+    "supplemental.jsonl": "51f013ce2b7807470954a73f8e46ac97b9263d233dfb0468b551e36560b14951",
+    "tests/test_evaluation.py": "080e2201759c6519ee93b68fa88a4a5fbdafb34d4091b6a943482b2ad58db345"
   },
   "local_provider_sha256": "92243524acdeea8d1a0d79dde1e4c003c01c2e9793d734ecb85a631b227162e5",
   "local_oracles_sha256": "3a4d62a50d1a35a695973755997f886216447db28f3a4c9f69f01d6216f015c2",

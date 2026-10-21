@@ -182,3 +182,101 @@ def test_mock_model_adapter_gets_input_only_and_actual_model_checked(tmp_path,mo
     adapter.write_text("def run_input(payload, provider, profile):\n    return {'execution_status':'observed','actual_models':[{'purpose':'summary','model':'WRONG'}]}\n")
     result=evaluate.run([case],tmp_path/'provider.json','model_fixed',adapter,allow_paid=True)
     assert result[0]['execution_status']=='unobserved'
+
+
+def test_adapter_failure_preserves_other_cases(tmp_path, monkeypatch):
+    import evaluate
+    from core import digest_file, write
+    write(tmp_path/'profiles.json', {'seed':42,'baseline':{'main_model':'main','text_model':'cheap'}})
+    write(tmp_path/'provider.json', {'series':[]})
+    write(tmp_path/'manifest.json', {'local_provider_sha256':digest_file(tmp_path/'provider.json')})
+    monkeypatch.setattr(evaluate, 'BASE', tmp_path)
+    adapter=tmp_path/'adapter.py'
+    adapter.write_text("def run_input(payload, provider, profile):\n    if payload['query']=='bad': raise TimeoutError('request timed out')\n    return {'execution_status':'observed','actual_models':[{'purpose':'summary','model':'cheap'}]}\n")
+    cases=[{'id':q,'input':{'query':q}} for q in ('bad','good')]
+    result=evaluate.run(cases,tmp_path/'provider.json','model_fixed',adapter,allow_paid=True)
+    by_id={p['id']:p for p in result}
+    assert by_id['bad']['execution_status']=='error'
+    assert by_id['bad']['error_type']=='TimeoutError'
+    assert by_id['good']['execution_status']=='observed'
+
+
+def test_preflight_rejects_changed_or_escaped_attachment(tmp_path, monkeypatch):
+    import evaluate
+    from core import digest_file
+    monkeypatch.setattr(evaluate, 'ROOT', tmp_path)
+    attachment=tmp_path/'.venv/cache/reference.png'
+    attachment.parent.mkdir(parents=True)
+    attachment.write_bytes(b'fixture')
+    payload={'setup':{'source_snapshot_sha256':'snapshot','attachment':{
+        'path':'.venv/cache/reference.png','sha256':digest_file(attachment)}}}
+    evaluate.preflight_input(payload,'snapshot')
+    attachment.write_bytes(b'changed')
+    with pytest.raises(ValueError,match='attachment'):
+        evaluate.preflight_input(payload,'snapshot')
+    payload['setup']['attachment']['path']='../../outside.png'
+    with pytest.raises(ValueError,match='attachment'):
+        evaluate.preflight_input(payload,'snapshot')
+
+
+def test_component_executes_product_calculator_without_model():
+    from component_adapter import run_input
+    payload={'query':'전기비', 'setup':{'component_boundary':'synthetic calculator boundary, not standalone supported product analysis',
+        'user_rows':[{'period':'202401','value':0},{'period':'202402','value':10},
+                     {'period':'202403','value':None},{'period':'202405','value':20},{'period':'202406','value':30}]}}
+    result=run_input(payload, None, {})
+    assert result['execution_status']=='observed'
+    assert result['model_called'] is False
+    assert result['controlled_execution_evidence']['implementation_sha256']
+    assert result['calculated_points']==[{'period':p,'value':v} for p,v in
+        [('202401',None),('202402',None),('202403',None),('202405',None),('202406',50.0)]]
+    assert result['statistics_requests']==[]
+    assert run_input({'query':'unsupported'},None,{})['execution_status']=='not_executed'
+
+
+def test_component_injects_invalid_fact_ids_into_product_summary():
+    from component_adapter import run_input
+    from core import FrozenProvider
+    source={'table_id':'T','item_id':'I','classifications':{},'frequency':'M','unit':'연%',
+            'label':'금리','points':[{'period':'202607','value':'3'},{'period':'202608','value':'2.5'}]}
+    provider=FrozenProvider([source])
+    payload={'query':'현재 자료의 관측 사실을 요약해줘.', 'setup':{
+        'fault':{'boundary':'report_summary.model_response','kind':'invalid_fact_ids','response':{'fact_ids':['unknown']}},
+        'summary_sources':[{'table_id':'T','item_id':'I','classifications':{},'frequency':'M',
+                            'start_period':'202607','end_period':'202608'}]}}
+    result=run_input(payload,provider,{})
+    assert result['execution_status']=='observed'
+    assert result['observed_contract']=={'facts_supported':True,'request_satisfied':True}
+    assert result['controlled_execution_evidence']['injection_calls']==1
+    assert result['controlled_execution_evidence']['summary']['source']=='rules'
+    assert '0.5 %p' in result['explanation']
+    assert len(result['statistics_requests'])==1
+
+
+def test_supplemental_contexts_include_requested_comparisons():
+    from core import BASE, rows
+    cases={c['id']:c for c in rows(BASE/'supplemental.jsonl')}
+    assert '중소기업' in cases['SUP-followup-02']['input']['setup']['initial_query']
+    for case_id in ('SUP-followup-03','SUP-summary_style-02'):
+        query=cases[case_id]['input']['setup']['initial_query']
+        assert '대기업' in query and '중소기업' in query
+    assert '전년동월' in cases['SUP-report-02']['input']['setup']['initial_query']
+
+
+def test_nested_adapter_contract_is_scored_and_false_is_not_overridden():
+    from core import score_case, digest_value
+    case={'id':'C','input':{'query':'q'},'expected':{'decision':'resolved','requires_numeric':False,
+        'observed_contract':{'facts_supported':True}}}
+    prediction={'execution_status':'observed','decision':'resolved','input_sha256':digest_value(case['input']),
+                'observed_contract':{'facts_supported':True}}
+    assert score_case(case,prediction)['quantitative_pass']
+    prediction.update(facts_supported=True,observed_contract={'facts_supported':False})
+    assert not score_case(case,prediction)['quantitative_pass']
+
+
+def test_not_executed_cases_do_not_inflate_attempt_count():
+    from core import summary
+    report=summary([{'id':'A'},{'id':'B'}],
+        [{'execution_status':'observed'},{'execution_status':'not_executed'}],
+        [{'status':'pending_review','quantitative_pass':True},{'status':'not_executed','quantitative_pass':False}])
+    assert report['attempted']==1

@@ -51,6 +51,19 @@ python eval/bok-reproduction/v1/scripts/evaluate.py review --observations .venv/
 
 이는 실제 모델 어댑터를 꽂는 계약이며, 이번 제작에서 24개 행동별 앱 어댑터와 3개 모델 라우팅의 실제 동작을 검증하지 않았습니다. 현재 기본 실행기는 파일럿의 실제 오프라인 질의/출력 경로입니다.
 
+### 유료 호출 없는 컴포넌트 실행
+
+`--mode component --cases eval/bok-reproduction/v1/supplemental.jsonl`은 제품의 `DynamicExpressionExecutor`에서 합성 결측·0분모 계산을 실행하고, `report_summary.explain`에 잘못된 fact ID 응답을 주입해 기본 요약 복구를 확인합니다. 정답 계산기를 제품 출력 생성에 사용하지 않습니다. 실행 근거에 실제 제품 코드 SHA, 계산 이슈와 달력 격자, 폴백 호출 횟수를 남깁니다. 이 두 건은 컴포넌트 검사이며 자연어 모델·전체 앱 경로 평가가 아닙니다. 지원하지 않는 22건은 `not_executed`로 남습니다.
+
+```bash
+python eval/bok-reproduction/v1/scripts/evaluate.py run --mode component --cases eval/bok-reproduction/v1/supplemental.jsonl --output .venv/cache/kosis-bok-reproduction/evaluation-v1/components-run01.jsonl
+python eval/bok-reproduction/v1/scripts/evaluate.py score --cases eval/bok-reproduction/v1/supplemental.jsonl --observations .venv/cache/kosis-bok-reproduction/evaluation-v1/components-run01.jsonl --output .venv/cache/kosis-bok-reproduction/evaluation-v1/components-score01.json
+```
+
+모든 실행 전에 초기 자료와 첨부 해시·캐시 경계를 검사합니다. 어댑터의 개별 예외와 잘못된 관측 객체는 해당 사례의 오류로 기록하고 나머지 사례를 계속 실행합니다. 예외 메시지의 키·응답 유출을 피하기 위해 공개 관측에는 예외 종류만 남깁니다. 어댑터가 반환하지 않는 무한 대기는 외부 실행 시간 제한으로 중단해야 합니다.
+
+비교 계열과 전년비 보고서의 초기 질문을 보완한 개정이므로 기존 실행·사람 검수를 재사용하지 않습니다. 입력/정답 해시가 바뀌면 검수는 다시 받아야 합니다.
+
 ## 정량·정성 판정
 
 숫자 정답은 로컬 `oracles.json`에 두고 공개 기대 계약의 SHA로 검증합니다. Decimal 계산은 제품 계산기를 호출하지 않습니다. 월/분기/연의 달력 시차, 결측, 0 분모, 단위·추가·누락·중복 시점과 계열을 검사합니다. 숫자 허용 오차는 기본 `0.000001`이고 자료 단위 변경 허용치가 아닙니다. 역사적 원본 표시값 비교는 원본별 반올림 계약이 확정된 후 채택합니다.

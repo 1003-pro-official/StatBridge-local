@@ -282,8 +282,9 @@ def score_case(case, prediction, expected_series=None, review=None):
         passed = passed and numeric['passed']
     if gold.get('chart_kind')=='line':
         passed = passed and figure_consistent(prediction)
+    observed_contract=prediction.get('observed_contract',prediction)
     for k, v in gold.get('observed_contract', {}).items():
-        passed = passed and prediction.get(k) == v
+        passed = passed and isinstance(observed_contract,dict) and observed_contract.get(k) == v
     if not gold.get('requires_numeric', True) and not gold.get('observed_contract'):
         passed = False
     valid = review_valid(case, prediction, review)
@@ -307,7 +308,7 @@ def summary(cases, predictions, scores):
     cost=measured_total('cost') if all(p.get('cost_currency')=='USD' for p in attempts) else None
     quantitative_success=sum(s['quantitative_pass'] for s in scores)
     return dict(cases=len(cases), observed=sum(p.get('execution_status')=='observed' for p in predictions),
-                attempted=len(predictions),passed=sum(s['status']=='passed' for s in scores),
+                attempted=len(attempts),passed=sum(s['status']=='passed' for s in scores),
                 quantitative_pass=sum(s['quantitative_pass'] for s in scores),
                 pending_review=sum(s['status']=='pending_review' for s in scores),
                 not_executed=sum(s['status']=='not_executed' for s in scores),

@@ -164,6 +164,12 @@ def build(cache, destination=BASE):
             setup = {'initial_query':context['input']['query'],
                      'source_snapshot_sha256':digest_file(local/'provider.json'),
                      'display':'graph', 'fresh_account':True, 'fresh_session':True}
+            if category=='followup' and n==2:
+                setup['initial_query']='2026년 7월부터 8월까지 신규취급액 기준 저축성수신 금리와 중소기업 대출금리를 월별로 비교해줘.'
+            if (category=='followup' and n==3) or (category=='summary_style' and n==2):
+                setup['initial_query']='2026년 7월부터 8월까지 신규취급액 기준 대기업과 중소기업 대출금리를 월별로 비교해줘.'
+            if category=='report' and n==2:
+                setup['initial_query']='2025년 생산자물가지수 총지수의 월별 전년동월 상승률을 계산해 그래프로 보여줘.'
             if category=='reference_edit':
                 image=cache/'original-gallery'/sources[6]['rendered_image']
                 pdf=ROOT/sources[6]['original_pdf']
@@ -183,6 +189,9 @@ def build(cache, destination=BASE):
             if category=='summary_style' and n==4:
                 setup['fault']={'boundary':'report_summary.model_response','kind':'invalid_fact_ids',
                                 'response':{'fact_ids':['unknown-fact-id']}}
+                ref=context['expected']['series_contracts'][0]
+                setup['summary_sources']=[{**{k:ref[k] for k in ('table_id','item_id','classifications','frequency')},
+                    'start_period':ref['periods'][0],'end_period':ref['periods'][-1]}]
             if category=='recovery':
                 setup['fault']={1:{'boundary':'planner.model_request','kind':'timeout'},
                                 2:{'boundary':'statistics_request','kind':'timeout'},
