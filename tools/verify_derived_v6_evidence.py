@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 IDS = ['34584431a69f4b26a3dc6f7322dcef5c', 'c0a39a7c2b424b8b8c0c8f11e4865703']
 
-def main():
+def main(expected_model='gpt-5.4'):
     folder = ROOT / 'eval/derived_v6_ui_records'
     folder.mkdir(exist_ok=True)
     workspace_path = next((ROOT / '.venv/cache/derived-v6/live-supplements/user-1').glob('*/workspace.json'))
@@ -38,7 +38,7 @@ def main():
             checked += 1
         assert checked == (4 if index == 0 else 3)
         assert e['previous'] == (None if index == 0 else IDS[0])
-        assert all(u['model'] == 'gpt-5.4' for u in e['usage'])
+        assert all(u['model'] == expected_model for u in e['usage'])
         assert len(e['usage']) == (3 if index == 0 else 0)
         shutil.copy2(path, folder / path.name)
         records.append({'calculation_id': cid, 'sha256': payload['sha256'], 'checked_Decimal_points': checked,
@@ -56,4 +56,8 @@ def main():
     (ROOT / 'eval/derived_v6_ui_evidence.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     print(json.dumps(result, ensure_ascii=False))
 
-if __name__ == '__main__': main()
+if __name__ == '__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--expected-model',default='gpt-5.4',help='Historical evidence defaults to its original model; never rewrites evidence.')
+    main(parser.parse_args().expected_model)
