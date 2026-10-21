@@ -1,3 +1,4 @@
+import type {ObservationTrace} from '../executionObservations';
 export type ExecutionRun={id:string;kind:string;engine:string;path:string[];stage:string;revision?:number;time?:string;changes:string[]};
 export type ChartPoint = {
   date: string;
@@ -54,6 +55,7 @@ export type QueryState = {
 };
 
 export type QueryResponse = {
+  observability?:ObservationTrace[];
   availability?:{status:string;checkId?:string;calculationGuide?:string;checkedAt?:string;checkedTables:number;requiredTables:number;origin?:string;sha256?:string;calculationExecuted?:boolean;
     questions:string[];sources:Array<{name:string;status:string;reason:string;unit:string;quotation:string;
       periods:Array<{label:string;start:string;end:string;frequency:string}>;
@@ -208,7 +210,7 @@ export type VisualEditContext = {
 export type ChartSticker = {id:string;asset_id:string;x:number;y:number;size:number;angle:number;opacity:number};
 export type ChartReference = {name:string;mime:string;data_url:string};
 export type StickerAsset = {id:string;name:string;category:string;file:string;width:number;height:number};
-export type ChartEditInput = { reference_files?:ChartReference[]; undo_property?:'title'|'subtitle'|'legend_position'|'series_color'; property_label?:string; append_session_ids?:string[]; replace_session_ids?:string[]; restore_initial?:boolean; instruction: string; stickers?: ChartSticker[]; report?:Record<string,unknown>; clear_report?:boolean; document?:Record<string,unknown>; commands?:Array<{operation:string;kind:"STYLE_EDIT"|"DATA_EDIT";value?:unknown;params?:Record<string,unknown>;label?:string;start?:string;end?:string;x_axis_label?:string;y_axis_label?:string}>; conversation?: Array<{role:"user"|"assistant";text:string}>; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
+export type ChartEditInput = { edit_target?:'graph'|'table'; reference_files?:ChartReference[]; undo_property?:'title'|'subtitle'|'legend_position'|'series_color'; property_label?:string; append_session_ids?:string[]; replace_session_ids?:string[]; restore_initial?:boolean; instruction: string; stickers?: ChartSticker[]; report?:Record<string,unknown>; clear_report?:boolean; document?:Record<string,unknown>; commands?:Array<{operation:string;kind:"STYLE_EDIT"|"DATA_EDIT";value?:unknown;params?:Record<string,unknown>;label?:string;start?:string;end?:string;x_axis_label?:string;y_axis_label?:string}>; conversation?: Array<{role:"user"|"assistant";text:string}>; visual?: VisualEditContext; action?:"edit"|"undo"|"redo"; revision?:number };
 export type OutputEditRequest = ChartEditInput & { edit_session_id: string };
 
 export type QueryRequest = {

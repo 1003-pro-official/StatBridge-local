@@ -1,4 +1,5 @@
 """Bounded, ordered multi-query execution; no implicit replacement or data cache."""
+from contextvars import copy_context
 from concurrent.futures import ThreadPoolExecutor,wait,FIRST_COMPLETED
 from threading import BoundedSemaphore
 import copy,json,re,time
@@ -72,7 +73,7 @@ def get_statistics_batch(service,requests:list[dict[str,Any]],timeout_seconds:fl
     while queue or any(f is not None and not f.done() for f in futures.values()):
         while queue and SLOTS.acquire(blocking=False):
             key=next(iter(queue));args=queue.pop(key)
-            try:future=POOL.submit(execute,args)
+            try:future=POOL.submit(copy_context().run,execute,args)
             except Exception:SLOTS.release();raise
             future.add_done_callback(lambda _:SLOTS.release());futures[key]=future
         remaining=deadline-time.monotonic()

@@ -1,4 +1,5 @@
 """Coordinates planning, the existing KOSIS service, calculation and lineage."""
+from statbridge_mcp.observability import observed
 import copy
 from expression_tree_schema import ExpressionPlan
 from expression_tree_validator import DerivedValidationError, validate_plan, canonical_bound, shift_period
@@ -29,8 +30,59 @@ class DerivedIndicatorRuntime:
         self.planner = DerivedIndicatorPlanner(client, self.catalog)
         self.evidence = DerivedIndicatorEvidence(evidence_directory)
         self.engine = DynamicExpressionExecutor()
+        from derived_plan_cache import VerifiedPlanCache, fingerprint
+        from pathlib import Path
+        # Any deployed planner, schema or validation change invalidates reuse.
+        files = ('derived_indicator_planner.py', 'expression_tree_schema.py',
+                 'expression_tree_validator.py', 'derived_support_policy.py',
+                 'derived_indicator_runtime.py', 'derived_plan_cache.py')
+        self.plan_policy_hash = fingerprint([Path(__file__).with_name(f).read_text(encoding='utf-8') for f in files])
+        self.plan_cache = VerifiedPlanCache()
 
     def plan(self, query, **kwargs):
+        from derived_plan_cache import fingerprint
+        from statbridge_mcp.observability import annotate
+        import sys
+        # The authenticated request context supplies ownership, never user input.
+        auth = sys.modules.get('account_auth')
+        user = auth.USER.get() if auth else None
+        eligible = bool(user and not kwargs.get('previous') and not getattr(self.catalog, 'allow_file_inputs', False))
+        if not eligible:
+            return self._plan_uncached(query, **kwargs)
+        key = fingerprint({'owner': user['id'], 'query': query, 'arguments': kwargs,
+                           'catalog': self.catalog.version, 'policy': self.plan_policy_hash,
+                           'model': getattr(getattr(self.planner.client, 'settings', None), 'main_model', None)})
+        entry = self.plan_cache.get(key)
+        if entry:
+            result = entry['result']
+            try:
+                bounds = self.validate(result['plan'])
+                current = self._plan_metadata_hash(result['plan'])
+                valid = current == entry['metadata_hash'] and result['semantic_review'].get('approved') is True
+            except (ValueError, TypeError, KeyError):
+                valid = False
+            if valid:
+                annotate(plan_cache_hit=True, semantic_review_reused=True)
+                return {**result, 'bounds': bounds, 'usage': [], 'seconds': 0,
+                        'plan_cache_hit': True,
+                        'plan_reuse': {'metadata_sha256': current, 'policy_sha256': self.plan_policy_hash,
+                                       'reviewed_plan_sha256': fingerprint(result['plan'].model_dump()),
+                                       'semantic_review_sha256': fingerprint(result['semantic_review']),
+                                       'semantic_review_reused': True}}
+            self.plan_cache.discard(key)
+        result = self._plan_uncached(query, **kwargs)
+        if (result.get('status') == 'planned' and result.get('semantic_review', {}).get('approved') is True
+                and all(s.table_id in self.catalog.approved for s in result['plan'].sources)):
+            self.validate(result['plan'])
+            self.plan_cache.put(key, result, self._plan_metadata_hash(result['plan']))
+        annotate(plan_cache_hit=False)
+        return result
+
+    def _plan_metadata_hash(self, plan):
+        from derived_plan_cache import fingerprint
+        return fingerprint([self.catalog.get_table_metadata(t) for t in sorted({s.table_id for s in plan.sources})])
+
+    def _plan_uncached(self, query, **kwargs):
         from derived_private_inputs import private_metric
         if private_metric(query):
             return self.planner.plan(query, **kwargs)
@@ -74,6 +126,7 @@ class DerivedIndicatorRuntime:
     def source_origin(self, source):
         return 'kosis_api'
 
+    @observed('plan.validate', 'span')
     def validate(self, plan):
         bounds = validate_plan(plan, self.catalog)
         from derived_support_policy import require_api_dependency
@@ -90,6 +143,7 @@ class DerivedIndicatorRuntime:
                 raise DerivedValidationError('소비자물가 원자료를 다른 지표로 대체할 수 없습니다.')
         return bounds
 
+    @observed('sources.fetch', 'span')
     def fetch(self, plan, bounds):
         # Validate before crossing the IO boundary, including direct callers.
         bounds = self.validate(plan)
@@ -120,6 +174,7 @@ class DerivedIndicatorRuntime:
             responses[source.alias] = response
         return responses
 
+    @observed('dag.calculate', 'span')
     def calculate(self, query, planning, responses, *, previous=None, cached=None, changed=None):
         planning = dict(planning)
         plan = planning['plan']
@@ -156,6 +211,7 @@ class DerivedIndicatorRuntime:
                   'source_preflight':planning.get('source_preflight'),
                   'comparison_settings':planning.get('comparison_settings'),
                   'plan_cache_hit':planning.get('plan_cache_hit',False)}
+        record['plan_reuse'] = planning.get('plan_reuse')
         from derived_period_comparison import average_receipt
         record['category_averages']=average_receipt(plan,computed['series'])
         receipt = self.evidence.save(record)
@@ -184,6 +240,7 @@ class DerivedIndicatorRuntime:
                 'derivedEvidence': public,
                 '_derived': {'record': record, 'responses': safe_responses, 'series': serialized, 'coverage': coverage}}
 
+    @observed('dag.revise', 'span')
     def revise(self, result, instruction=None, *, node_patch=None, start=None, end=None):
         old = result['_derived']
         prior = old['record']

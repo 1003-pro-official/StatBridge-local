@@ -1,5 +1,6 @@
 """Owner-scoped, explicit user-file inputs alongside approved KOSIS API data."""
-import copy,csv,hashlib,io,json,re,time
+from statbridge_mcp.observability import observed
+import copy,csv,hashlib,io,json,re,time,shutil
 from pathlib import Path
 from threading import RLock
 from uuid import uuid4
@@ -109,6 +110,24 @@ class SupplementalRuntime(DerivedIndicatorRuntime):
 class DerivedSupplementService:
     def __init__(self,base_runtime,directory):
         self.base=base_runtime;self.directory=Path(directory);self.lock=RLock()
+        self.pending={};self.raw_uploads={}
+        self.clear_legacy_pending()
+
+    def clear_legacy_pending(self):
+        """Discard only unfinished upload caches; completed evidence remains durable."""
+        root=self.directory.resolve()
+        for path in self.directory.glob('user-*/*/workspace.json'):
+            if not re.fullmatch(r'user-\d+',path.parent.parent.name) or not re.fullmatch(r'[a-f0-9]{32}',path.parent.name):continue
+            if path.is_symlink() or path.parent.is_symlink() or path.parent.parent.is_symlink():continue
+            if not path.parent.resolve().is_relative_to(root):continue
+            try:w=json.loads(path.read_text(encoding='utf8'))
+            except (OSError,ValueError):continue
+            if not w.get('calculation_id'):shutil.rmtree(path.parent)
+
+    def expire_pending(self):
+        for key,w in list(self.pending.items()):
+            if time.time()-w['created']>12*3600:
+                self.pending.pop(key,None);self.raw_uploads.pop(key,None)
 
     def path(self,owner,identifier):
         if not re.fullmatch(r'[a-f0-9]{32}',identifier) or not re.fullmatch(r'\d+',str(owner)):raise KeyError('자료 보완 작업을 찾을 수 없습니다.')
@@ -116,20 +135,34 @@ class DerivedSupplementService:
 
     def load(self,owner,identifier):
         path=self.path(owner,identifier)
+        self.expire_pending()
+        if (owner,identifier) in self.pending:return copy.deepcopy(self.pending[(owner,identifier)])
         if not path.exists():raise KeyError('자료 보완 작업을 찾을 수 없습니다.')
         if path.stat().st_size>20_000_000:raise DerivedValidationError('보완 작업 저장 한도를 초과했습니다.')
         w=json.loads(path.read_text(encoding='utf8'))
+        if not w.get('calculation_id'):raise KeyError('자료 보완 작업이 만료됐습니다. 질문을 다시 입력해 주세요.')
         if w['owner']!=owner:raise KeyError('자료 보완 작업을 찾을 수 없습니다.')
         return w
 
     def save(self,w):
-        path=self.path(w['owner'],w['id']);path.parent.mkdir(parents=True,exist_ok=True)
+        path=self.path(w['owner'],w['id'])
         w['revision']=w.get('revision',0)+1
         content=json.dumps(w,ensure_ascii=False,allow_nan=False)
         if len(content.encode())>20_000_000:raise DerivedValidationError('보완 작업 저장 한도를 초과했습니다.')
+        key=(w['owner'],w['id'])
+        if not w.get('calculation_id'):
+            self.expire_pending();self.pending[key]=json.loads(content)
+            return
+        # Completed calculations retain reproducible inputs for saved analyses.
+        path.parent.mkdir(parents=True,exist_ok=True)
+        for filename,raw_bytes in self.raw_uploads.get(key,{}).items():
+            folder=path.parent/'files';folder.mkdir(exist_ok=True)
+            target=folder/filename
+            if not target.exists():target.write_bytes(raw_bytes)
         revision=path.with_name(f"revision-{w['revision']}-{uuid4().hex}.json")
         with revision.open('x',encoding='utf8') as f:f.write(content)
         temporary=path.with_suffix('.tmp');temporary.write_text(content,encoding='utf8');temporary.replace(path)
+        self.pending.pop(key,None);self.raw_uploads.pop(key,None)
 
     def runtime(self,w):
         catalog=SupplementalCatalog(self.base.catalog,w['files'])
@@ -140,8 +173,8 @@ class DerivedSupplementService:
         if private_metric(query):
             raise DerivedValidationError('회사·개인 원자료는 지원하지 않습니다. KOSIS 제공 자료로 질문을 다시 작성해 주세요.')
         if len(query)>8000:raise DerivedValidationError('질문 길이 한도를 초과했습니다.')
-        parent=self.directory/('user-'+str(owner))
-        if parent.exists() and len(list(parent.glob('*/workspace.json')))>=20:raise DerivedValidationError('자료 보완 작업은 계정당 최대 20개입니다.')
+        self.expire_pending()
+        if sum(key[0]==owner for key in self.pending)>=20:raise DerivedValidationError('자료 보완 작업은 계정당 최대 20개입니다.')
         w={'id':uuid4().hex,'owner':owner,'query':query,'files':{},'prefetched':{},'missing':[],'input_slots':{},
            'start':start,'end':end,'created':time.time(),'revision':0,'attempts':[]}
         return self.advance(w,planning=planning)
@@ -178,6 +211,7 @@ class DerivedSupplementService:
                   'calculation_guide':assessment.get('calculationGuide','')+' 실제 DAG 검증에서 시차·이동평균 이력이 필요하면 과거 자료를 추가로 요청합니다.'}
         return self.start(owner,query,planning=planning)
 
+    @observed('file.configure', 'span')
     def configure_comparison(self,owner,identifier,settings):
         from expression_tree_schema import ComparisonPeriod
         from calendar import monthrange
@@ -218,6 +252,7 @@ class DerivedSupplementService:
         w['start']=min(p.start for p in periods);w['end']=max(p.end for p in periods)
         self.save(w);return self.public(w)
 
+    @observed('file.validate', 'span')
     def advance(self,w,*,planning=None):
         query=w['query']
         if w.get('comparison_required') and not w.get('prefetched'):
@@ -354,6 +389,7 @@ class DerivedSupplementService:
         stream=io.StringIO(newline='');writer=csv.DictWriter(stream,fieldnames=FIELDS,delimiter='\t' if format=='tsv' else ',');writer.writeheader();writer.writerows(rows)
         return stream.getvalue()
 
+    @observed('file.upload', 'span')
     def upload(self,owner,identifier,alias,filename,content,encoding='utf8'):
         with self.lock:
             w=self.load(owner,identifier);slot=next((x for x in w['missing'] if x['alias']==alias),None)
@@ -382,11 +418,11 @@ class DerivedSupplementService:
             w['files'][alias]['file_format']=file_format
             w.pop('comparison_settings',None)
             raw_path=self.path(owner,identifier).parent/'files'/(w['files'][alias]['file_id']+'.'+file_format)
-            raw_path.parent.mkdir(exist_ok=True)
-            with raw_path.open('xb') as raw:raw.write(raw_bytes)
+            self.raw_uploads.setdefault((owner,identifier),{})[raw_path.name]=raw_bytes
             w['missing']=[s for s in w['missing'] if s['alias']!=alias];w.pop('question',None);self.save(w)
             return self.public(w)
 
+    @observed('file.resume', 'span')
     def resume(self,owner,identifier):
         with self.lock:
             w=self.load(owner,identifier)

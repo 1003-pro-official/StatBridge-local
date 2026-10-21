@@ -19,7 +19,7 @@ EXPORT_LOCK=RLock()  # Matplotlib font/rc state is shared between request thread
 def document(result, spec, chart_id=None):
     from output_agent import OutputAgent
     original=OutputAgent()._series(result.get('execution',{}).get('rows',[]))
-    displayed=OutputAgent()._apply_data_edits(original,spec)
+    displayed=OutputAgent()._display_series(result,spec)
     from chart_designs import palette
     colors=palette(spec) or (PALETTE if spec.report else None)
     if colors:displayed=[{**s,'color':spec.series_colors.get(s['label'],colors[i%len(colors)])} for i,s in enumerate(displayed)]
@@ -50,7 +50,11 @@ def restore_document(result, payload):
     payload=copy.deepcopy(payload)
     for field in ('typography',):
         payload[field].setdefault('latest_values',False)
+        payload[field].setdefault('publication_yoy',False)
+        payload[field].setdefault('publication_axes',False)
     payload['state'].setdefault('presentation',{}).setdefault('latest_values',False)
+    payload['state']['presentation'].setdefault('publication_yoy',False)
+    payload['state']['presentation'].setdefault('publication_axes',False)
     # Additive optional presentation field for documents saved before designs.
     if 'design_template' not in payload.get('typography',{}) and 'design_template' not in payload.get('state',{}).get('presentation',{}):
         payload['typography']['design_template']=None
@@ -85,6 +89,8 @@ def _font():
 
 
 def export_preflight(series,spec,result,format):
+    if spec.presentation.publication_yoy or spec.presentation.publication_axes:
+        raise ValueError('양쪽 동일 눈금 그래프는 화면과 동일한 Plotly PNG 또는 CSV로 내보내 주세요.')
     from chart_designs import materialize,palette
     spec=materialize(spec,[s['label'] for s in series])
     colors=palette(spec) or PALETTE
@@ -102,7 +108,12 @@ def export_preflight(series,spec,result,format):
         height=spec.presentation.height or min(2000,max(720,rows*320+280))
         spec=spec.model_copy(update={'report':ReportOptions(kind='dual_axis' if right else 'panels' if spec.layout!='combined' else kinds[legacy],right_axis=right,columns=columns,height=height,contribution_confirmed=legacy=='stacked_bar'),
             'secondary_axis_series':[], 'series_chart_types':{**spec.series_chart_types,**{label:spec.series_chart_types.get(label,spec.chart_type) for label in right}}})
-    o=spec.report;periods=validate_report(series,o)
+    if spec.presentation.width is not None and spec.presentation.height is not None:
+        spec=spec.model_copy(update={'report':spec.report.model_copy(update={'width':spec.presentation.width,'height':spec.presentation.height,'dpi':100})})
+    o=spec.report
+    from output_dimensions import validate_output_dimensions
+    validate_output_dimensions(o.width,o.height)
+    periods=validate_report(series,o)
     if o.kind=='dual_axis' and set(spec.secondary_axis_series)==set(o.right_axis):
         # The editor mirrors report assignments for its controls. Consume the
         # report assignment once without treating that mirror as a conflict.

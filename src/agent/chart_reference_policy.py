@@ -4,14 +4,15 @@ REFERENCE_STYLE_POLICY='''스냅샷과 같은 경제 통계 그래프는 set_pre
 
 def generic_reference_style(instruction):
     text=re.sub(r'\s+','',instruction).rstrip('.!?。')
-    return bool(re.fullmatch(r'(?:이렇게|이(?:그림|그래프|이미지)(?:처럼|같이)|(?:첨부한?|참고)(?:파일|그림|그래프|이미지)(?:처럼|같이))(?:그려|만들어|바꿔|변경해)(?:줘|주세요)?',text))
+    return bool(re.fullmatch(r'(?:이렇게|이(?:그림|그래프|이미지)(?:처럼|같이)|(?:이|참고|첨부한?)(?:파일|그림|그래프|이미지)?(?:형식|스타일)(?:으로|로|처럼)|(?:첨부한?|참고)(?:파일|그림|그래프|이미지)(?:처럼|같이)|참고파일의형식으로현재실제데이터를)(?:그려|만들어|바꿔|변경해|수정해)(?:줘|주세요)?',text))
 
-def validate_reference_style(commands,instruction,current):
+def validate_reference_style(commands,instruction,current,comparison=None):
     if not generic_reference_style(instruction):return
     state=current.get('chartState') or {}
     names={'set_title':'title','set_subtitle':'subtitle','rename_series':'display_names'}
     for command in commands:
-        if command.kind=='DATA_EDIT':raise ValueError('참고 그래프의 형식 적용 중 조회 수치·기간·데이터를 변경하려는 명령을 제외해야 합니다. 기존 그래프를 유지했습니다.')
+        if command.kind=='DATA_EDIT' and not (comparison=='year_over_year' and command.operation=='set_transform' and command.value=='year_over_year'):
+            raise ValueError('참고 그래프의 형식 적용 중 조회 수치·기간·데이터를 변경하려는 명령을 제외해야 합니다. 기존 그래프를 유지했습니다.')
         if command.operation in names:
             old=(state.get('display_names') or {}).get(command.label,command.label) if command.operation=='rename_series' else state.get(names[command.operation])
             if command.value!=old:raise ValueError('참고 이미지의 제목·지표 이름을 현재 통계에 복사하지 않습니다. 현재 이름을 유지해 형식을 다시 적용해 주세요.')
@@ -52,6 +53,7 @@ def bind_reference_structure(proposal,context):
     """Bind observed geometry to supported operations; never synthesize series."""
     from pydantic import BaseModel,ConfigDict,Field,StrictInt
     from chart_availability import CHART_TYPES
+    from typing import Literal
     class Appearance(BaseModel):
         model_config=ConfigDict(extra='forbid')
         chart_type:str
@@ -59,6 +61,13 @@ def bind_reference_structure(proposal,context):
         columns:int=Field(ge=1,le=4)
         series_types:list[str]=Field(default_factory=list,max_length=50)
         secondary_axis_indices:list[StrictInt]=Field(default_factory=list,max_length=20)
+        comparison:Literal['none','year_over_year']='none'
+        comparison_label:str=Field(default='',max_length=100)
+        data_series:list[dict]=Field(default_factory=list,max_length=6)
+        display_period:dict|None=None
+        emphasis:list[dict]=Field(default_factory=list,max_length=5)
+        mirror_y_axis:bool=False
+        legend_position:Literal['top','bottom','left','right','top-left','top-right','bottom-left','bottom-right']|None=None
     if proposal.get('clarification'):return proposal
     try:
         appearance=Appearance.model_validate(proposal.get('reference_style'))
@@ -66,6 +75,20 @@ def bind_reference_structure(proposal,context):
         raise ValueError('참고 그래프의 종류·분할 구조를 판독하지 못했습니다. 더 선명한 파일 또는 원하는 그래프 종류를 알려 주세요.') from error
     if appearance.chart_type not in CHART_TYPES:raise ValueError('참고 그림의 종류를 현재 통계 데이터로 표현할 수 없습니다. 지원되는 그래프 형식을 지정해 주세요.')
     count=len(context.get('seriesLabels') or [])
+    if context.get('referenceCatalog') and not appearance.series_types:
+        raise ValueError('참고 그림의 실제 선·막대 개수를 확인하지 못했습니다. 원본 파일을 다시 적용해 주세요.')
+    if appearance.series_types and len(appearance.series_types)!=count:
+        raise ValueError(f'참고 그래프는 {len(appearance.series_types)}개 계열이며 현재는 {count}개입니다. 참고 범례에 대응하는 실제 지표를 조회해야 합니다. 선 색만 변경하지 않았습니다.')
+    comparison=appearance.comparison=='year_over_year'
+    if comparison:
+        if not re.search(r'전년\s*(동기|동월|동분기)?\s*(대비|비)',appearance.comparison_label) or not re.search(r'[%％]',appearance.comparison_label):
+            raise ValueError('참고 그래프의 전년동기 대비 % 표기를 확인하지 못했습니다.')
+        metadata=context.get('seriesMetadata') or []
+        already=(context.get('chartState') or {}).get('transform')=='year_over_year'
+        if not already and (len(metadata)!=count or any(s.get('frequency') not in {'M','Q','Y','A'} or any(c in str(s.get('unit','')) for c in ('%','％')) for s in metadata)):
+            raise ValueError('전년동기 대비를 계산할 수준 자료와 주기를 확인해 주세요. 비율 자료는 중복 변환하지 않습니다.')
+        # A single bar with matching scales on both sides has one data axis.
+        if count==1 and appearance.chart_type=='bar':appearance.secondary_axis_indices=[]
     if any(t not in {'line','bar','area'} for t in appearance.series_types):raise ValueError('참고 그림의 복합 계열 종류를 지원하지 않습니다.')
     mixed=len(set(appearance.series_types))>1 or bool(appearance.secondary_axis_indices)
     if mixed and len(appearance.series_types)!=count:
@@ -78,6 +101,21 @@ def bind_reference_structure(proposal,context):
         raise ValueError(f'참고 그림은 {appearance.panel_count}개 비교 영역이며 현재 데이터는 {count}개 계열입니다. 각 영역에 넣을 지표의 그룹을 지정해 주세요. 데이터는 복제하지 않습니다.')
     commands=[]
     raw_commands=proposal.get('commands') or []
+    normalized=[]
+    for raw in raw_commands:
+        if isinstance(raw,dict) and 'command' in raw:
+            if 'operation' in raw and raw['operation']!=raw['command']:
+                raise ValueError('참고 형식 명령의 operation과 command가 다릅니다.')
+            raw={**raw,'operation':raw['command']}
+            raw.pop('command')
+        normalized.append(raw)
+    raw_commands=normalized
+    bindings=context.get('referenceDataBinding') or []
+    if bindings:
+        # Commands created for the aggregate are not commands for its members.
+        raw_commands=[c for c in raw_commands if c.get('operation') in {'set_presentation','set_axis_style','set_legend'}]
+        if not any(c.get('operation')=='set_presentation' and (c.get('params') or {}).get('design_template') for c in raw_commands):
+            raw_commands.insert(0,{'operation':'set_presentation','params':{'design_template':'snapshot','latest_values':False}})
     if len(raw_commands)>36:raise ValueError('참고 형식의 설정이 너무 많습니다. 설정을 나누어 주세요.')
     for raw in compact_reference_settings(raw_commands):
         command=dict(raw)
@@ -126,6 +164,40 @@ def bind_reference_structure(proposal,context):
         commands.insert(0,{'operation':'set_chart_type','value':appearance.chart_type,'params':{}})
     layout='combined' if appearance.panel_count==1 else 'horizontal' if appearance.columns>=count else 'grid'
     commands.append({'operation':'set_layout','value':layout,'params':{}})
+    if bindings:
+        from chart_reference_data import ReferenceSeries
+        observed=[ReferenceSeries.model_validate(s) for s in appearance.data_series]
+        if len(observed)!=count or len(bindings)!=count:
+            raise ValueError('참고 범례와 조회된 계열의 개수가 다릅니다.')
+        for item,binding in zip(observed,bindings):
+            style=item.style.model_dump(exclude_none=True)
+            if style.get('markers'):
+                style.setdefault('marker_symbol','circle')
+            if style:
+                commands.append({'operation':'set_series_style','label':binding['label'],'params':style})
+        # These are image annotations bound to the newly resolved source dates.
+        from output_schema import Highlight
+        periods=sorted({p for values in context.get('periods',{}).values() for p in values})
+        for raw in appearance.emphasis:
+            highlight=Highlight.model_validate(raw)
+            if not periods or not periods[0]<=highlight.start<=highlight.end<=periods[-1]:
+                raise ValueError('참고 강조 구간을 실제 조회 기간에 연결하지 못했습니다.')
+            commands.append({'operation':'highlight_period','start':highlight.start,'end':highlight.end,
+                'label':highlight.label,'params':{'color':highlight.color,'opacity':highlight.opacity}})
+    if appearance.mirror_y_axis and appearance.panel_count==1 and not appearance.secondary_axis_indices:
+        commands.append({'operation':'set_presentation','params':{'publication_axes':True,'latest_values':False}})
+    if appearance.legend_position:
+        commands=[c for c in commands if c.get('operation')!='set_legend']
+        commands.append({'operation':'set_legend','value':appearance.legend_position,'params':{}})
+    if comparison:
+        commands=[c for c in commands if c.get('operation')!='set_transform']
+        commands.insert(0,{'operation':'set_transform','kind':'DATA_EDIT','value':'year_over_year','params':{}})
+        if count==1 and appearance.chart_type=='bar':
+            commands.append({'operation':'set_presentation','params':{'publication_yoy':True,'latest_values':False}})
+            if not any(c.get('operation')=='set_series_color' or
+                (c.get('operation')=='set_series_style' and (c.get('params') or {}).get('color')) for c in commands):
+                commands.append({'operation':'set_series_color','label':context['seriesLabels'][0],'value':'#8eace1','params':{}})
+    commands=compact_reference_settings(commands)
     if len(commands)>12:raise ValueError('참고 형식의 설정이 너무 많습니다. 데이터별 색상 설정을 줄이거나 변경을 나눠 주세요.')
     # The only current source is the user's single whole-format request. All
     # style commands belong to it; explicit multi-clause/sketch paths are unchanged.

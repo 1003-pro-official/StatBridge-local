@@ -3,6 +3,23 @@ from chart_reference_policy import generic_reference_style,validate_reference_st
 from edit_request_coverage import normalize_parameter_names
 from output_schema import ChartEditCommand
 
+@pytest.mark.parametrize('instruction',['이 형식으로 수정해줘','이 스타일로 바꿔줘','참고 파일의 형식으로 현재 실제 데이터를 그려 주세요.'])
+def test_whole_reference_wording(instruction):
+ assert generic_reference_style(instruction)
+
+def test_yoy_reference_requires_observed_label_and_level_metadata():
+ from chart_reference_policy import bind_reference_structure
+ context={'seriesLabels':['실제 지수'],'seriesMetadata':[{'frequency':'M','unit':'2020=100'}],'chartState':{'transform':'raw'}}
+ style={'chart_type':'bar','panel_count':1,'columns':1,'comparison':'year_over_year','comparison_label':'전년동기대비, %','secondary_axis_indices':[0]}
+ proposal={'commands':[],'reference_style':style}
+ result=bind_reference_structure(proposal,context)
+ commands=[ChartEditCommand.model_validate({'kind':'STYLE_EDIT',**c}) for c in result['commands']]
+ validate_reference_style(commands,'이 형식으로 수정해줘',context,'year_over_year')
+ assert commands[0].operation=='set_transform' and commands[0].value=='year_over_year'
+ assert any(c.params.get('publication_yoy') for c in commands)
+ with pytest.raises(ValueError,match='표기'):bind_reference_structure({**proposal,'reference_style':{**style,'comparison_label':'%'}},context)
+ with pytest.raises(ValueError,match='중복'):bind_reference_structure(proposal,{**context,'seriesMetadata':[{'frequency':'M','unit':'%'}]})
+
 def test_observed_mixed_geometry_binds_real_series_and_right_axis():
  from chart_reference_policy import bind_reference_structure
  proposal={'reference_style':{'chart_type':'bar','panel_count':1,'columns':1,'series_types':['line','line','bar'],'secondary_axis_indices':[2]},'commands':[{'operation':'set_presentation','params':{'design_template':'snapshot'}}]}

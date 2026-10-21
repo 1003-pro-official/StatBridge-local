@@ -1,0 +1,27 @@
+.statistical-question{margin-top:18px;min-width:0;color:#33576c}
+.statistical-question form>label{display:block;font-size:14px;font-weight:700;color:#154e70}
+.statistical-question form>p,.statistical-question form>small{font-size:12px;line-height:1.7;color:#698294}
+.statistical-question-input{display:flex;gap:10px;align-items:stretch}
+.statistical-question-input textarea{flex:1;min-width:0;box-sizing:border-box;resize:vertical;border:1px solid #b9ccda;border-radius:8px;background:white;padding:12px;color:#234e68;font:inherit;font-size:14px;line-height:1.7}
+.statistical-question-input textarea:focus-visible{outline:2px solid #006699;outline-offset:2px}
+.statistical-question-input button{flex:none;align-self:stretch;padding:12px 20px;border:1px solid #006699;border-radius:8px;background:#006699;color:white;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.statistical-question-input button:disabled{opacity:.5;cursor:default}
+.statistical-question .answer-summary>div{min-width:0;flex:1}
+.statistical-question .answer-summary p+p{margin-top:9px}
+.statistical-question .answer-summary strong{display:block;margin-bottom:8px;font-size:13px;color:#154e70}
+.statistical-question-section+.statistical-question-section{margin-top:18px;padding-top:14px;border-top:1px solid #d9e6ee}
+.statistical-question form [role=alert]{color:#a22d3a}
+.initial-graph-summary{margin-top:12px;padding:12px 16px;border:1px solid #d9e6ee;border-radius:8px;font-size:13px;line-height:1.8}
+.initial-graph-summary summary{cursor:pointer;color:#285c79;font-weight:700}
+.initial-graph-summary summary:focus-visible{outline:2px solid #006699;outline-offset:3px}
+.initial-graph-summary p{margin:10px 0 0;white-space:pre-line;overflow-wrap:anywhere}
+.statistical-question-evidence{font-size:12px;line-height:1.8;color:#607b8d;overflow-wrap:anywhere}
+.statistical-question-evidence details{padding:12px 16px;border:1px solid #d9e6ee;border-radius:8px}
+.statistical-question-evidence summary{cursor:pointer;color:#285c79;font-weight:700}
+.statistical-question-evidence section{margin-top:14px;padding-top:10px;border-top:1px solid #e3ecf2}
+.statistical-question-evidence ul{padding-left:20px}
+@media(max-width:600px){.statistical-question-input{flex-direction:column}.statistical-question-input button{min-height:44px}}
+
+.report-conversation{padding:18px;border:1px solid #dce5eb;border-radius:12px;background:#fff}.report-chat-heading{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.report-chat-heading strong{color:#163f57}.report-chat-heading span,.report-conversation>p{font-size:12px;color:#728592;line-height:1.7}.report-chat-messages{display:grid;gap:20px;margin:18px 0;max-height:680px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}.report-chat-turn{display:grid;gap:10px}.report-chat-user{justify-self:end;max-width:88%;padding:10px 15px;background:#edf4f8;border-radius:12px 12px 2px 12px}.report-chat-user span{font-size:10px;color:#6c8391}.report-chat-user p{margin:3px 0!important;font-size:13px;white-space:pre-wrap}.report-chat-assistant{border-left:2px solid #d7e6ec;padding:6px 15px;color:#304f61;line-height:1.85}.report-chat-assistant>strong{font-size:12px;color:#076b8f}.report-chat-assistant>small{display:block;font-size:10px;color:#82949f;margin-bottom:10px}.report-chat-assistant p{font-size:13px;margin:8px 0;white-space:pre-wrap}.report-chat-assistant .report-chat-note{font-size:11px;color:#7d6c45}.report-chat-table{overflow:auto;max-width:100%}.report-chat-table table{border-collapse:collapse;font-size:12px;min-width:480px;width:100%}.report-chat-table th,.report-chat-table td{border:1px solid #dbe5eb;padding:7px 10px;text-align:left}.report-chat-table th{background:#f1f6f9}.report-conversation .report-chat-input-label{font-size:12px;margin-bottom:7px}.report-conversation [role=alert] span{font-size:11px;margin-left:8px}
+
+.report-md-add{margin-top:10px!important;padding:5px 11px!important;font-size:12px!important}.report-md-collection{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0;padding:12px;background:#f5f8fa;border:1px solid #dbe5eb;border-radius:8px}.report-md-collection strong{font-size:12px}.report-md-collection span{font-size:11px;color:#6d8190}.report-md-collection p{width:100%;font-size:12px;margin:0}.report-md-actions{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.report-md-collection .report-md-actions button{margin:0;font-size:12px!important}

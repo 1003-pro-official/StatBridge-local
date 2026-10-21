@@ -1,4 +1,5 @@
 """Bounded, non-executable tabular file decoding into one shared input contract."""
+from statbridge_mcp.observability import observed
 import base64, csv, io, json, zipfile, zlib, re
 from pathlib import Path
 from expression_tree_validator import DerivedValidationError
@@ -14,6 +15,7 @@ def unique_object(pairs):
         result[k] = v
     return result
 
+@observed('file.parse', 'span')
 def decode_file(filename, content, encoding='utf8'):
     suffix = Path(filename).suffix.lower()[1:]
     if suffix not in FORMATS or len(filename)>120 or any(c in filename for c in '/\\\x00'):

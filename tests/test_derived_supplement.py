@@ -108,3 +108,45 @@ def test_zero_denominator_can_be_corrected_in_same_workspace(setup):
     assert result['execution']['rows'][-1]['DT']==pytest.approx(66.55) and len(calls)==1
     folder=service.path(1,wid).parent/'files'
     assert len(list(folder.glob('*.csv')))==2
+
+
+def test_pending_upload_is_session_only_and_not_written_to_disk(setup):
+    service,_,_,_=setup
+    wid=service.start(1,'2020년 1월부터 4월까지 경제심리지수와 추가 비용지수 비율')['supplement']['workspaceId']
+    assert not service.path(1,wid).exists()
+    service.upload(1,wid,'cost','cost.csv',csv_text())
+    assert service.load(1,wid)['files']['cost']['rows']
+    assert not list(service.directory.rglob('*'))
+    restarted=DerivedSupplementService(service.base,service.directory)
+    with pytest.raises(KeyError):restarted.load(1,wid)
+
+
+def test_completed_upload_keeps_reproducible_inputs_after_restart(setup):
+    service,_,_,_=setup
+    wid=service.start(1,'2020년 1월부터 4월까지 경제심리지수와 추가 비용지수 비율')['supplement']['workspaceId']
+    service.upload(1,wid,'cost','cost.csv',csv_text())
+    service.resume(1,wid)
+    restarted=DerivedSupplementService(service.base,service.directory)
+    assert restarted.load(1,wid)['calculation_id']
+    assert len(list((service.path(1,wid).parent/'files').glob('*.csv')))==1
+
+
+def test_legacy_cleanup_only_removes_unfinished_workspace_cache(tmp_path):
+    pending=tmp_path/'user-1'/('a'*32);pending.mkdir(parents=True)
+    (pending/'workspace.json').write_text(json.dumps({'owner':1,'id':'a'*32}),encoding='utf8')
+    (pending/'revision-1.json').write_text('{}')
+    completed=tmp_path/'user-1'/('b'*32);completed.mkdir()
+    (completed/'workspace.json').write_text(json.dumps({'owner':1,'id':'b'*32,'calculation_id':'saved'}),encoding='utf8')
+    unrelated=tmp_path/'original.csv';unrelated.write_text('keep')
+    DerivedSupplementService(None,tmp_path)
+    assert not pending.exists() and completed.exists() and unrelated.read_text()=='keep'
+
+
+def test_pending_expiration_discards_in_memory_uploads(setup,monkeypatch):
+    import derived_supplement as module
+    service,_,_,_=setup
+    wid=service.start(1,'2020년 1월부터 4월까지 경제심리지수와 추가 비용지수 비율')['supplement']['workspaceId']
+    service.upload(1,wid,'cost','cost.csv',csv_text())
+    now=module.time.time();monkeypatch.setattr(module.time,'time',lambda:now+12*3600+1)
+    with pytest.raises(KeyError):service.load(1,wid)
+    assert not service.pending and not service.raw_uploads

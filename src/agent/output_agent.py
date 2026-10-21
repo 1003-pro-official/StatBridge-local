@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statbridge_mcp.observability import observed
 
 from dataclasses import dataclass
 from typing import Any
@@ -224,7 +225,13 @@ class OutputAgent:
             elif spec.transform in {"growth_rate", "year_over_year"}:
                 if spec.transform == "year_over_year":
                     from chart_data_transforms import year_over_year
-                    points=year_over_year(points,item.get('frequency'))
+                    if item.get('calculation') or '%' in item['unit'] or '％' in item['unit']:
+                        raise ValueError('이미 비율·증감률인 자료입니다. 원지수·금액 등 수준 자료에서 전년동기 대비를 선택해 주세요.')
+                    transformed=year_over_year(item['points'],item.get('frequency'))
+                    visible={p['date'] for p in points}
+                    points=[p for p in transformed if p['date'] in visible]
+                    if not points:
+                        raise ValueError('전년 같은 시점의 값이 없거나 0이어서 증가율을 계산할 수 없습니다.')
                 else:
                     lag = 1
                     points = [{"date": points[i]["date"], "value": (points[i]["value"] / points[i-lag]["value"] - 1) * 100}
@@ -237,6 +244,43 @@ class OutputAgent:
             shaped.sort(key=lambda s: spec.series_order.index(s["label"]))
         return shaped
 
+    def _display_series(self, result, spec, source_series=None):
+        if source_series is None:
+            source_series = self._series((result.get('execution') or {}).get('rows') or [])
+            plans = result.get('api_plans') or [result.get('api_plan')]
+            for item in source_series:
+                matching = [p for p in plans if p and (str(p.get('table_id')) == item.get('sourceId') or len(plans) == 1)]
+                if spec.transform == 'year_over_year' and not item.get('frequency') and matching:
+                    item['frequency'] = matching[0].get('frequency', '')
+        transform_series = source_series
+        if spec.transform == 'year_over_year':
+            history = self._series((result.get('execution') or {}).get('chartComparisonHistory') or [])
+            by_key = {(s['sourceId'], s['label'], s['unit']): s for s in history}
+            annual = self._series((result.get('execution') or {}).get('chartAnnualIndices') or [])
+            annual_by_key = {(s['sourceId'], s['label'], s['unit']): s for s in annual}
+            transform_series = []
+            for item in source_series:
+                prior = by_key.get((item['sourceId'], item['label'], item['unit']), {})
+                lookup = {p['date']: p for p in prior.get('points', [])}
+                lookup.update({p['date']: p for p in item['points']})
+                # Display bounds belong to the original observations, not the warmup fetch.
+                first, last = item['points'][0]['date'], item['points'][-1]['date']
+                bounded = spec.model_copy(update={'period_start': max(first, spec.period_start or first),
+                                                  'period_end': min(last, spec.period_end or last)})
+                combined = {**item, 'points': [lookup[d] for d in sorted(lookup)]}
+                shaped = self._apply_data_edits([combined], bounded.model_copy(update={'series_order': [], 'top_n': None}))
+                if spec.presentation.publication_yoy and item.get('frequency') == 'M' and '=100' in item['unit'].replace(' ', '').replace('＝', '='):
+                    from chart_data_transforms import annual_index_growth
+                    for s in shaped:
+                        annual_points = annual_by_key.get((item['sourceId'], item['label'], item['unit']), {}).get('points', [])
+                        s['annualGrowth'] = annual_index_growth(annual_points, bounded.period_start, bounded.period_end)
+                transform_series.extend(shaped)
+            series = self._apply_data_edits(transform_series, spec.model_copy(update={'transform': 'raw'}))
+        else:
+            series = self._apply_data_edits(source_series, spec)
+        return series
+
+    @observed('output.build', 'span')
     def _build(self, result: dict[str, Any], spec: ChartSpec, generate_explanation: bool = True) -> dict[str, Any]:
         if result.get('derivedEvidence') and spec.transform != 'raw':
             raise ValueError('파생지표의 계산 조건은 자연어 요청 또는 계산 트리에서 수정해 주세요.')
@@ -270,7 +314,7 @@ class OutputAgent:
         summary_series = [{**item, 'points': [p for p in item['points']
             if (not spec.period_start or p['date'] >= spec.period_start)
             and (not spec.period_end or p['date'] <= spec.period_end)]} for item in source_series]
-        series = self._apply_data_edits(source_series, spec)
+        series = self._display_series(result, spec, source_series)
         visible_labels = {s['label'] for s in series}
         summary_series = [s for s in summary_series if s['label'] in visible_labels]
         series = [{**s, "color": spec.series_colors.get(s["label"], s["color"])} for s in series]
@@ -319,7 +363,17 @@ class OutputAgent:
                 from types import SimpleNamespace
                 native=go.Figure(figure)
                 native.add_annotation(name='statbridge-footer:source',x=0,y=-.1,xref='paper',yref='paper',text=source_caption(result,SimpleNamespace(source_note='')),showarrow=False,font=dict(size=11,color='#657586'))
-                arrange_bottom_captions(native,series,spec)
+                if spec.presentation.publication_yoy or spec.presentation.publication_axes:
+                    native.layout.annotations[-1].update(y=0, yshift=-45, yanchor='top', xanchor='left', font=dict(size=13, color='#111111'))
+                    if plans and all(str(p.get('org_id')) == '301' for p in plans):
+                        native.layout.annotations[-1].text = native.layout.annotations[-1].text.replace('자료: ', '자료: 한국은행 · ', 1)
+                    if any(s.get('annualGrowth') for s in series):
+                        native.add_annotation(name='statbridge-footer:annual-method', x=0, y=0, xref='paper', yref='paper',
+                            yshift=-65, yanchor='top', xanchor='left', showarrow=False,
+                            text='주: 점선은 공표 연간지수의 전년 대비 증가율', font=dict(size=11, color='#666666'))
+                        native.update_layout(margin=dict(b=max(native.layout.margin.b or 0,95)))
+                else:
+                    arrange_bottom_captions(native,series,spec)
                 figure=json.loads(native.to_json())
         figure=decorate_figure(result,figure,series)
         from level_yoy_comparison import CALCULATION_NOTE
@@ -330,6 +384,12 @@ class OutputAgent:
             renderer_info.setdefault('warnings',[]).append(note)
             if any(s.get('source')=='user_file' for s in (result.get('execution') or {}).get('sources',[])):
                 renderer_info['warnings'][-1]='파생지표에 사용자 제공 파일이 포함되어 있습니다. API 자료와 파일의 단위·출처·해시는 계산 근거에서 확인해 주세요.'
+        if spec.transform == 'year_over_year':
+            renderer_info.setdefault('warnings', []).append(CALCULATION_NOTE)
+            raw_count=sum(len(s['points']) for s in summary_series)
+            shown_count=sum(len(s['points']) for s in series)
+            if shown_count < raw_count:
+                renderer_info['warnings'].append(f'전년도 비교값이 없거나 0인 {raw_count-shown_count}개 관측값은 표시하지 않았습니다.')
         from report_summary import explain
         from report_export import export_formats
         explanation = {'text':summary,'facts':[]} if comparison else (self._explain(summary_series, spec, summary, query=str(result.get("query") or "")) if generate_explanation else explain(summary_series, query=str(result.get('query') or '')))
@@ -339,6 +399,8 @@ class OutputAgent:
             table_document['notes']=['사용자 파일의 실제 관측값으로 계산한 기간별 변화율(%)입니다. 월평균은 선택한 시작 월·종료 월의 관측값 평균 후 계산했습니다. 휴일·결측값은 보간하지 않았습니다.',
                 '계산 기간·원자료 표시 방향·평균 구성·출처·파일 해시는 계산 근거에서 확인해 주세요.']
         explanation['calculations']=calculations
+        if spec.transform == 'year_over_year':
+            explanation['comparisonSources'] = (result.get('execution') or {}).get('chartComparisonSources', [])
         if calculations:explanation['scope']['basis']='source_observations_and_server_calculations'
         return {
             "status": "ready" if any(s["points"] for s in series) else "empty",
@@ -363,6 +425,7 @@ class OutputAgent:
             },
         }
 
+    @observed('output.prepare', 'span')
     def prepare(self, result: dict[str, Any], request: dict[str, Any] | None = None) -> dict[str, Any]:
         raw = dict(request or {})
         series = self._series((result.get("execution") or {}).get("rows") or [])
@@ -486,6 +549,7 @@ class OutputAgent:
             model = InjectedModel()
         return ChartEditAgent(model, self).edit(result, current_output, instruction)
 
+    @observed('edit.apply', 'span')
     def apply_edits(self, result: dict[str, Any], current_output: dict[str, Any], commands: list[ChartEditCommand], *, generate_explanation: bool = True) -> dict[str, Any]:
         """Apply a validated batch atomically, then render exactly once."""
         labels = [s["label"] for s in self._series((result.get("execution") or {}).get("rows") or [])]
@@ -553,6 +617,10 @@ class OutputAgent:
             updates.update(x_axis_label=current.x_axis_label if command.x_axis_label is None else command.x_axis_label,
                            y_axis_label=current.y_axis_label if command.y_axis_label is None else command.y_axis_label)
         elif command.operation == "set_chart_type":
+            if value not in {'line','bar','stacked_bar','area'}:
+                updates['presentation']=current.presentation.model_copy(update={'publication_yoy':False,'publication_axes':False})
+            if value != 'bar':
+                updates['presentation'] = current.presentation.model_copy(update={'publication_yoy': False})
             # An explicit legacy type selection takes precedence over a report
             # renderer's kind; do not leave a hidden report kind drawing lines.
             updates['report']=None
@@ -567,9 +635,10 @@ class OutputAgent:
                     for label,style in current.series_styles.items()
                     if value != 'heatmap' and (value not in {'scatter','bubble'} or label == labels[0])})
                 if value not in {'bar','stacked_bar'}:
-                    updates['presentation'] = current.presentation.model_copy(update={'bar_orientation':'vertical'})
+                    updates['presentation'] = current.presentation.model_copy(update={'bar_orientation':'vertical', 'publication_yoy':False})
                 if value not in {'line','bar','stacked_bar','area'}:
                     updates.update(guides=[], notes=[note for note in current.notes if not note.label])
+                    updates['presentation']=updates.get('presentation',current.presentation).model_copy(update={'publication_axes':False})
             if value not in {"line", "bar", "stacked_bar", "area"}:
                 updates["secondary_axis_series"] = []
             if (value=='stacked_bar' and (value!=current.chart_type or current.series_chart_types)) or (current.series_chart_types and current.presentation.bar_mode in {'stack','relative'}):
@@ -577,6 +646,8 @@ class OutputAgent:
                 updates['presentation']=presentation.model_copy(update={'bar_mode':'relative' if value=='stacked_bar' else 'group'})
         elif command.operation == "set_layout":
             updates['layout']=value
+            if value!='combined':
+                updates['presentation']=current.presentation.model_copy(update={'publication_yoy':False,'publication_axes':False})
             if current.report and value!='combined':
                 updates['report']=current.report.model_copy(update={'kind':'panels','columns':len(labels) if value=='horizontal' else 2 if value=='grid' else 1})
             elif current.report and current.report.kind=='panels':
@@ -596,7 +667,13 @@ class OutputAgent:
             updates["hidden_series"] = [*current.hidden_series, str(value)]
         elif command.operation == "filter_period": updates.update(period_start=command.start, period_end=command.end,period_window_years=command.params.get("years"))
         elif command.operation == "set_top_n": updates["top_n"] = value
-        elif command.operation == "set_transform": updates["transform"] = value
+        elif command.operation == "set_transform":
+            updates['transform'] = value
+            if value != current.transform:
+                updates['y_axis_label'] = '전년동기 대비 (%)' if value == 'year_over_year' else ''
+                updates['axes'] = {k: v for k, v in current.axes.items() if k == 'x'}
+                if value != 'year_over_year':
+                    updates['presentation'] = current.presentation.model_copy(update={'publication_yoy': False})
         elif command.operation == "set_series_chart_type":
             if command.label not in labels: raise ValueError("선택한 계열이 조회 결과에 없습니다.")
             updates["series_chart_types"] = {**current.series_chart_types, command.label: value}
@@ -604,6 +681,7 @@ class OutputAgent:
             if value not in labels: raise ValueError("보조축에 표시할 계열이 조회 결과에 없습니다.")
             updates["secondary_axis_series"] = list(dict.fromkeys([*current.secondary_axis_series, str(value)]))
             updates["layout"] = "combined"
+            updates['presentation']=current.presentation.model_copy(update={'publication_yoy':False,'publication_axes':False})
             if current.report:
                 updates["report"]=current.report.model_copy(update={"kind":"dual_axis","right_axis":updates["secondary_axis_series"]})
         elif command.operation in {"set_series_color", "set_series_dash"}:

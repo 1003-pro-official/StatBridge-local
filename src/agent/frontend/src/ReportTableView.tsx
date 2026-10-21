@@ -1,3 +1,5 @@
+import ReportTablePreview from './ReportTablePreview';
+import RichTableEditor from './RichTableEditor';
 import {useAutoEdit} from './useAutoEdit';
 import {useEffect,useId,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
@@ -8,7 +10,7 @@ import {tableCell,tableFrequency,tableTemplates} from './reportTable';
 export function TableControls({document,series,disabled,onEdit}:{document:TableDocument;series:ChartSeries[];disabled:boolean;onEdit:(input:ChartEditInput)=>Promise<boolean>}){
  const [draft,setDraft]=useState<TableOptions>(document.options);
  const auto=useAutoEdit(onEdit),draftRef=useRef(document.options);
- useEffect(()=>{if(auto.pending('settings'))return;draftRef.current=document.options;setDraft(document.options);},[document]);
+ useEffect(()=>{if(auto.pending('settings'))return;draftRef.current=document.options;setDraft(document.options);},[document,auto.error,auto.settled]);
  const update=(patch:Partial<TableOptions>)=>{const next={...draftRef.current,...patch};draftRef.current=next;setDraft(next);if(next.recent_periods!=null&&(!Number.isInteger(next.recent_periods)||next.recent_periods<1||next.recent_periods>600)){auto.cancel('settings');return;}auto.schedule({instruction:'',commands:[{operation:'set_table',kind:'STYLE_EDIT',params:{patch:next}}]});};
  const chosen=draft.labels.length?draft.labels:series.map(s=>s.label);
  const toggle=(label:string)=>update({labels:chosen.includes(label)?chosen.filter(x=>x!==label):[...chosen,label]});
@@ -22,12 +24,12 @@ export function TableControls({document,series,disabled,onEdit}:{document:TableD
  <label>최근 시점 수<input type="number" min={1} max={600} placeholder="전체 기간" value={draft.recent_periods??''} onChange={e=>update({recent_periods:e.target.value?Number(e.target.value):null})}/></label><small>각 자료 주기의 최근 시점을 표시합니다. 월→연 변환은 하지 않습니다.</small>
  <label className="table-check"><input type="checkbox" checked={draft.highlight_latest} onChange={e=>update({highlight_latest:e.target.checked})}/>최신 시점 강조</label>
  <details open><summary>표 항목 · 순서</summary>{series.map(s=><label className="table-check" key={s.label}><input type="checkbox" checked={chosen.includes(s.label)} disabled={chosen.length===1&&chosen.includes(s.label)} onChange={()=>toggle(s.label)}/>{s.label}</label>)}{chosen.map((label,i)=><div className="table-order" key={label}><span>{i+1}. {label}</span><button type="button" disabled={i===0} aria-label={`${label} 앞으로 이동`} onClick={()=>{const next=[...chosen];[next[i-1],next[i]]=[next[i],next[i-1]];update({labels:next});}}>↑</button></div>)}</details>
- <label>추가 주석<textarea maxLength={500} value={draft.note} onChange={e=>update({note:e.target.value})}/></label><small>출처는 조회 결과에서 자동 표시됩니다. 수치는 편집할 수 없습니다.</small>
+ <label>추가 주석<textarea maxLength={500} value={draft.note} onChange={e=>update({note:e.target.value})}/></label><small>출처는 조회 결과에서 자동 표시됩니다. 수치는 편집할 수 없습니다. 행·열·기간·항목 변경 시 위치에 종속된 병합·셀 서식·맞춤 배치를 초기화합니다. Ctrl+Z로 이전 배치와 서식을 복원할 수 있습니다.</small>
  <small role="status">설정을 변경하면 자동 반영됩니다.</small>{auto.error&&<p role="alert">{auto.error}</p>}
  </fieldset>;
 }
 
-export default function ReportTable({document}:{document:TableDocument}){
+export default function ReportTable({document,onEdit,disabled=false}:{document:TableDocument;onEdit?:(input:ChartEditInput)=>Promise<boolean>;disabled?:boolean}){
  const [expanded,setExpanded]=useState(false);
  const dialog=useRef<HTMLDialogElement>(null),opener=useRef<HTMLButtonElement>(null),heading=useId();
  useEffect(()=>{
@@ -38,7 +40,7 @@ export default function ReportTable({document}:{document:TableDocument}){
   return()=>{modal.close();window.document.body.style.overflow=previousOverflow;opener.current?.focus({preventScroll:true});};
  },[expanded]);
  const content=<><h3>{document.caption??`표 1. ${document.title}`}</h3><p className="table-data-notice">조회 관측값 · 단위는 각 지표에 표시 · 소수점 {document.options.decimals}자리</p>
- {document.sections.map((section,index)=><section key={`${section.frequency}-${index}`}><h4>{tableFrequency(section.frequency)} · {section.periodCaption}</h4><div className="report-table-scroll" tabIndex={0} role="region" aria-label={`${tableFrequency(section.frequency)} 표 스크롤`}><table><thead>{!!section.headerGroups?.length&&<tr className="table-year-groups"><th scope="col">구분</th>{section.headerGroups.map(g=><th key={g.start} scope="colgroup" colSpan={g.span}>{g.label}</th>)}</tr>}<tr>{section.headers.map((h,i)=><th key={i} scope="col">{h}</th>)}</tr></thead><tbody>{section.rows.map((row,r)=><tr key={r} className={document.options.template==='BOK-T05'&&section.emphasizedRows?.includes(r)?'table-emphasized':''}>{row.map((cell,c)=>c===0?<th key={c} scope="row">{String(cell)}</th>:<td key={c} className={document.options.highlight_latest&&(document.options.orientation==='indicators'?c===section.periods.length:r===section.rows.length-1)?'table-latest':''}>{tableCell(cell,document.options.decimals)}</td>)}</tr>)}</tbody></table></div>{!!section.computedCells?.length&&<details><summary>비교 셀의 산식·관측 근거</summary>{section.computedCells.map((cell,i)=><p key={i}>{cell.label}: {cell.formula} · {cell.unit} · {cell.observations.map(p=>`${p.date}: ${p.value}`).join(" / ")} {cell.reason}</p>)}</details>}</section>)}
+ <RichTableEditor document={document} onEdit={onEdit} disabled={disabled}/>{!document.layoutSections&&document.sections.map((section,index)=><section key={`${section.frequency}-${index}`}><h4>{tableFrequency(section.frequency)} · {section.periodCaption}</h4><div className="report-table-scroll" tabIndex={0} role="region" aria-label={`${tableFrequency(section.frequency)} 표 스크롤`}><table><thead>{!!section.headerGroups?.length&&<tr className="table-year-groups"><th scope="col">구분</th>{section.headerGroups.map(g=><th key={g.start} scope="colgroup" colSpan={g.span}>{g.label}</th>)}</tr>}<tr>{section.headers.map((h,i)=><th key={i} scope="col">{h}</th>)}</tr></thead><tbody>{section.rows.map((row,r)=><tr key={r} className={document.options.template==='BOK-T05'&&section.emphasizedRows?.includes(r)?'table-emphasized':''}>{row.map((cell,c)=>c===0?<th key={c} scope="row">{String(cell)}</th>:<td key={c} className={document.options.highlight_latest&&(document.options.orientation==='indicators'?c===section.periods.length:r===section.rows.length-1)?'table-latest':''}>{tableCell(cell,document.options.decimals)}</td>)}</tr>)}</tbody></table></div>{!!section.computedCells?.length&&<details><summary>비교 셀의 산식·관측 근거</summary>{section.computedCells.map((cell,i)=><p key={i}>{cell.label}: {cell.formula} · {cell.unit} · {cell.observations.map(p=>`${p.date}: ${p.value}`).join(" / ")} {cell.reason}</p>)}</details>}</section>)}
  <footer>{document.notes.map((note,i)=><p key={i}>주: {note}</p>)}{document.sources.map((source,i)=><p key={i}>자료: {source.displaySource??"KOSIS"} · {source.tableName}</p>)}<details><summary>상세 데이터 계보</summary>{document.sources.map((source,i)=><p key={i}>{source.tableId} · {source.source}</p>)}</details><p>변화는 반올림 전 원자료로 계산합니다. CSV는 화면에 표시된 값으로 저장합니다. Excel은 조회 수치의 원래 정밀도를 유지합니다.</p></footer></>;
  return <>
   <article className="report-table-document" data-template={document.options.template??'default'} aria-label="보고서 표">
@@ -46,7 +48,7 @@ export default function ReportTable({document}:{document:TableDocument}){
   </article>
   {expanded&&createPortal(<dialog ref={dialog} className="report-table-dialog" aria-labelledby={heading} onCancel={e=>{e.preventDefault();setExpanded(false);}} onClose={()=>setExpanded(false)}>
    <header className="report-table-dialog-header"><h2 id={heading}>표 확대 보기</h2><button type="button" autoFocus onClick={()=>setExpanded(false)}>확대 중지 ✕</button></header>
-   <div className="report-table-dialog-content"><article className="report-table-document" data-template={document.options.template??'default'} aria-label="확대된 보고서 표">{content}</article></div>
+   <div className="report-table-dialog-content"><article className="report-table-document" data-template={document.options.template??'default'} aria-label="확대된 보고서 표"><ReportTablePreview document={document}/></article></div>
   </dialog>,window.document.body)}
  </>;
 }

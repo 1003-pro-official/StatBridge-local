@@ -24,3 +24,5 @@
  #root .execution-layout>nav { flex-direction:row; overflow-x:auto; overflow-y:hidden; scrollbar-gutter:auto; }
  #root .execution-layout>nav>button { flex:0 0 190px; width:190px; min-height:84px; align-self:stretch; }
 }
+
+.execution-timing-list{list-style:none;padding:0;margin:16px 0}.execution-timing-list>li{border:1px solid #d5e4ee;border-left:3px solid #3689aa;border-radius:8px;padding:12px;margin:9px 0;background:#f8fbfd}.execution-timing-list>li[data-status=failed],.execution-timing-list>li[data-status=timeout]{border-left-color:#c54343;background:#fff7f5}.execution-timing-list>li>div{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.execution-timing-list strong{font-size:12px}.execution-timing-list span,.execution-timing-list small{font-size:11px;color:#58778b}.execution-timing-list code,.execution-timing-list small{display:block;overflow-wrap:anywhere;margin-top:4px}.execution-timing-list dl>div{display:flex;gap:12px}.execution-timing-list dd{margin:0}.execution-step-error{color:#a83939}.execution-trace-id{display:block;font-size:10px;overflow-wrap:anywhere;color:#607e90}
