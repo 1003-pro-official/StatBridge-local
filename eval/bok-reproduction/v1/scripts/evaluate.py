@@ -33,14 +33,14 @@ def validate():
         if digest_file(BASE/name) != digest:
             raise ValueError('stale manifest: '+name)
     audit, pilot, supplements = (rows(BASE/name) for name in ('audit.jsonl','pilot.jsonl','supplemental.jsonl'))
-    if manifest.get('dataset_version')!='1.1' or len(audit)!=46 or len(pilot)!=18 or len(supplements)!=24:
+    if manifest.get('dataset_version')!='1.2' or len(audit)!=46 or len(pilot)!=22 or len(supplements)!=24:
         raise ValueError('unexpected dataset counts')
     canonical=rows(BASE/'canonical/v1/pilot.jsonl')
     active={c['id']:c for c in pilot}
     if len(canonical)!=12 or any(c['id'] not in active or c['expected']!=active[c['id']]['expected'] for c in canonical):
         raise ValueError('canonical v1 contracts changed')
     periods=[c for c in pilot if c['id'].startswith('BOK-period-')]
-    if len(periods)!=6 or any(c['input'].get('actions') for c in periods):
+    if len(periods)!=10 or any(c['input'].get('actions') for c in periods):
         raise ValueError('period probes must be query-only')
     numeric={c['id']:c for c in supplements}
     for case_id in ('SUP-summary_style-01','SUP-summary_style-02','SUP-report-01','SUP-report-02'):
@@ -69,7 +69,7 @@ def validate():
     for kind in ('derived','followup','reference_edit','summary_style','report','recovery'):
         if sum(c['category']==kind for c in supplements)!=4:
             raise ValueError('supplemental strata mismatch')
-    print('VALIDATION OK: audit=46, pilot=18 (12 canonical + 6 period probes), supplements=24; v1.1; human approval pending')
+    print('VALIDATION OK: audit=46, pilot=22 (12 canonical + 10 period probes), supplements=24; v1.2; human approval pending')
 
 
 def offline(cases, provider_file):

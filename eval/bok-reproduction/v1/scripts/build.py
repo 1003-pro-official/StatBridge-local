@@ -350,7 +350,7 @@ def build(cache, destination=BASE):
     for case in cases+supplements:
         case['expected']['required_facts']=case['required_facts']
         case['expected']['qualitative_applicable']=case['qualitative_applicable']
-    # Six isolated query-only period probes expand temporal coverage without changing the frozen 12-case baseline.
+    # Query-only period probes expand temporal coverage without changing the frozen 12-case baseline.
     period_specs = [
         ('BOK-06-T', 'period-explicit-short', 'short_explicit', '202606', '202607', '금리 동향 표 검토용으로 2026년 6월과 7월 저축성 수신금리를 비교해줘.'),
         ('BOK-07-T', 'period-relative-3m', 'relative_latest', '202606', '202608', '생산자물가 보도자료 갱신용으로 이용 가능한 최신 3개 관측월 추이를 확인해줘.'),
@@ -358,8 +358,13 @@ def build(cache, destination=BASE):
         ('BOK-08-T', 'period-year-crossing', 'cross_year', '202512', '202601', '수출물가 표 갱신용으로 2025년 12월부터 2026년 1월까지 변화를 확인해줘.'),
         ('BOK-13-T', 'period-quarter-year', 'quarter_year', '2025Q3', '2026Q2', '가계신용 동향 보고서에 반영하려고 합니다. 2025년 3분기부터 2026년 2분기까지 확인해줘.'),
         ('BOK-13-T', 'period-quarter-short', 'short_quarter', '2026Q1', '2026Q2', '가계신용 표 검토용으로 올해 1·2분기 규모를 비교해줘.'),
+        ('BOK-07-T', 'month-36m', 'long_monthly', '202309', '202608', '생산자물가 보도자료의 3년 추이를 점검하려고 해. 2023년 9월부터 2026년 8월까지 월별 자료를 정리해줘.'),
+        ('BOK-08-T', 'month-24m-export', 'long_monthly', '202410', '202609', '수출물가 표 개정용으로 최근 2년 흐름을 비교해줘. 2024년 10월부터 2026년 9월까지 월별로 부탁해.'),
+        ('BOK-13-T', 'quarter-8q', 'long_quarterly', '2024Q3', '2026Q2', '가계신용 보고서에 쓸 8개 분기 추이를 보여줘. 2024년 3분기부터 2026년 2분기까지야.'),
+        ('BOK-07-T', 'annual-5y', 'long_annual', '2021', '2025', '생산자물가 연간 표를 갱신하려고 해. 2021년부터 2025년까지 연도별 흐름을 정리해줘.'),
     ]
     by_id={c['id']:c for c in cases}
+    expected_counts={'month-36m':36,'month-24m-export':24,'quarter-8q':8,'annual-5y':5}
     for base_id, variant, period_style, start, end, query in period_specs:
         base_case=by_id[base_id]
         spec=copy.deepcopy(base_case)
@@ -369,14 +374,21 @@ def build(cache, destination=BASE):
         spec['input'].pop('actions',None)
         spec['variant_of']=base_id
         spec['input']['period_style']=period_style
-        spec['expected']['series_contracts'][0]['periods']=[start,end]
+        contract=spec['expected']['series_contracts'][0]
+        if period_style=='long_annual':
+            annual=next((s for s in registry.values() if s['table_id']==contract['table_id'] and
+                         s['frequency']=='A' and s['classifications']==contract['classifications']),None)
+            if annual is None:
+                raise ValueError('annual equivalent unavailable in frozen snapshot: '+spec['id'])
+            contract.update({k:annual[k] for k in ('table_id','item_id','classifications','frequency','unit','label')})
+        contract['periods']=[start,end]
         spec['expected']['oracle_sha256']=None
-        series=registry[identity(spec['expected']['series_contracts'][0])]
+        series=registry[identity(contract)]
         points=[{'period':p,'value':series['points'][p]} for p in sorted(series['points']) if start<=p<=end]
-        if not points or points[0]['period']!=start or points[-1]['period']!=end:
-            raise ValueError('period probe unavailable in frozen snapshot: '+spec['id'])
-        spec['expected']['series_contracts'][0]['periods']=[point['period'] for point in points]
-        oracle_value=[{**{k:v for k,v in spec['expected']['series_contracts'][0].items() if k!='periods'},'points':points}]
+        if not points or points[0]['period']!=start or points[-1]['period']!=end or (variant in expected_counts and len(points)!=expected_counts[variant]):
+            raise ValueError(f"period probe unavailable in frozen snapshot: {spec['id']} ({len(points)} points, {points[0]['period'] if points else 'none'}–{points[-1]['period'] if points else 'none'})")
+        contract['periods']=[point['period'] for point in points]
+        oracle_value=[{**{k:v for k,v in contract.items() if k!='periods'},'points':points}]
         spec['expected']['oracle_sha256']=digest_value(oracle_value)
         oracle[spec['id']]=oracle_value
         spec['expected']['requires_numeric']=True
@@ -395,7 +407,7 @@ def build(cache, destination=BASE):
         'sol':{'main_model':'gpt-6.1-sol','text_model':'gpt-6.1-sol'},
         'mixed':{'main_model':'gpt-6.1-sol','text_model':'gpt-6-luna'},
         'repeats':3,'seed':42,'speed':'standard','actual_model_verification_required':True})
-    write(destination/'manifest.json', {'dataset_version':'1.1','ai_assisted':True,'official_performance':False,
+    write(destination/'manifest.json', {'dataset_version':'1.2','ai_assisted':True,'official_performance':False,
         'status':'ready_for_review; full_original_reproduction_pending',
         'counts':{'audited':len(audit),'pilot':len(cases),'supplemental':len(supplements),'human_approved':0},
         'files':{p.relative_to(destination).as_posix():digest_file(p) for p in

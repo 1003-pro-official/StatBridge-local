@@ -422,16 +422,34 @@ def test_pilot_queries_are_natural_and_canonical_gold_is_unchanged():
         assert '원자료' not in query and '선그래프' not in query
 
 
-def test_six_period_cases_are_query_only_and_bind_expected_periods():
+def test_period_cases_are_query_only_and_bind_expected_periods():
     from core import BASE, rows
     period_cases=[c for c in rows(BASE/'pilot.jsonl') if c['id'].startswith('BOK-period-')]
-    assert len(period_cases)==6
+    assert len(period_cases)==10
     assert all(not c['input'].get('actions') for c in period_cases)
     assert {c['input']['period_style'] for c in period_cases}=={
-        'short_explicit','relative_latest','annual','cross_year','quarter_year','short_quarter'}
+        'short_explicit','relative_latest','annual','cross_year','quarter_year','short_quarter',
+        'long_monthly','long_quarterly','long_annual'}
     relative=next(c for c in period_cases if c['input']['period_style']=='relative_latest')
     assert relative['input']['reference_date']=='2026-10-20'
     assert relative['expected']['series_contracts'][0]['periods']==['202606','202607','202608']
+
+
+def test_long_period_probes_cover_monthly_quarterly_and_annual_ranges():
+    from core import BASE, rows
+    cases={c['id']:c for c in rows(BASE/'pilot.jsonl')}
+    expected={
+        'BOK-period-month-36m':(36,'202309','202608'),
+        'BOK-period-month-24m-export':(24,'202410','202609'),
+        'BOK-period-quarter-8q':(8,'2024Q3','2026Q2'),
+        'BOK-period-annual-5y':(5,'2021','2025'),
+    }
+    for case_id,(count,start,end) in expected.items():
+        case=cases[case_id]
+        periods=case['expected']['series_contracts'][0]['periods']
+        assert len(periods)==count and periods[0]==start and periods[-1]==end
+        assert not case['input'].get('actions')
+        assert case['expected']['requires_numeric'] is True
 
 
 def test_supplemental_prompts_correct_false_premise_and_ambiguity():

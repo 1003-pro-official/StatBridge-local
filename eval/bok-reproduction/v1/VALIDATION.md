@@ -98,3 +98,11 @@ cd src/agent/frontend && pnpm build
 | 유료 모델·실제 KOSIS | 미실행, 0회 |
 
 Pytest는 Windows `.venv` 대신 기존 임시 Linux 인터프리터 `/tmp/statbridge-bok-venv/bin/python`으로 실행했습니다. pytest 캐시 쓰기는 `-p no:cacheprovider`로 끄고, 생성된 평가 오라클·산출물은 허용된 `.venv/cache/kosis-bok-reproduction/evaluation-v1/` 경로에만 기록했습니다.
+
+## v1.2 기간 범위 확장 (2026-10-21)
+
+기존 12개 canonical 사례와 v1.1의 6개 기간 사례를 보존하고, 고정 스냅샷에서 연속성이 확인된 기간 질의 4개를 추가했습니다. 추가 범위는 생산자물가 월별 36개월(2023-09~2026-08), 수출물가 월별 24개월(2024-10~2026-09), 가계신용 8분기(2024Q3~2026Q2), 생산자물가 연간 5개 연도(2021~2025)입니다. 연간 사례는 월간과 같은 총지수 분류에 해당하는 실제 연간 계열을 사용합니다. 생성기는 각 관측 기간의 개수와 양 끝 시점을 검사하며, 누락이 있으면 실패합니다.
+
+v1.2 파일럿은 22건(12 canonical + 10 기간 사례)이며 활성 질의와 보완 사례를 합친 검수 양식은 46건입니다. 새 기간 사례에 추가된 정답 관측값은 73개(36+24+8+5)이며 숫자 정답은 기존 제한에 따라 로컬 `.venv/cache/kosis-bok-reproduction/evaluation-v1/oracles.json`에만 저장됩니다. 기존 계약을 바꾸지 않았고 canonical 정답 해시는 검증기가 계속 비교합니다. 새 사례는 모두 미승인 상태이며, 공식 점수는 담당자 승인을 받은 뒤에만 산출할 수 있습니다.
+
+검증 결과: v1 평가 테스트 `38 passed`; `evaluate.py manifest`가 해시 갱신과 v1.2 validate를 마쳤습니다. v4.1 공개 평가 validate도 통과했고, 프런트엔드 `pnpm build`가 성공했습니다(기존 5.17 MB 청크 경고). 전체 Python 회귀는 실행하지 않았습니다. 유료 모델 호출과 실제 KOSIS 호출은 0회입니다.
