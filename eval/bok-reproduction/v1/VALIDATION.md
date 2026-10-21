@@ -1,0 +1,45 @@
+# 제작·검증 기록
+
+2026-10-21 · ai-assisted · 사람 승인 대기 · 유료 모델 전체 평가 미실행.
+
+## 변경 범위
+
+기존 연구 브랜치의 커밋 `596936547b550d515121ab09d64a746b6a039f1c`에서 `eval/bok-reproduction-v1` 기능 브랜치를 분기했습니다. 기존 수정·미추적 파일은 보존했고 새 평가 계열만 작성했습니다. 원본·원자료·실행 결과·검수 결과·임시 계정은 공개 변경에 포함하지 않았습니다. 커밋·푸시·PR·머지는 하지 않았습니다.
+
+원본 46개 심사 기록, 일부 원자료를 확인하는 파일럿 12건, 기능 보완 24건, 골든 정답 승인 양식 36건을 작성했습니다. 46개 원본 전체 재현은 모두 독립 사람 검수 대기이며 파일럿은 전체 재현을 대체하지 않습니다. 보완 사례의 실제 모델/장애 실행에는 런타임 어댑터가 필요합니다. 합성 결측·0분모 사례는 계산기 컴포넌트 경계입니다.
+
+## 실제 확인
+
+| 검사 | 관측 결과 |
+|---|---|
+| 신규 도구 테스트 | 15 passed |
+| 신규 manifest·계약 검증 | VALIDATION OK: 46 / 12 / 24 |
+| 기존 공개 v4.1 검증 | VALIDATION OK, 50/70/30 |
+| 프런트엔드 `pnpm build` | 성공, 기존 큰 청크 경고 |
+| 전체 Python 회귀 | 미완료: 기존 미추적 `tests/test_report_calculations.py`가 없는 `convert_unit`을 import하여 수집 오류 |
+| 해당 파일 하나 제외한 회귀 | 실패들이 관측됐고 약 69%에서 1,000초 시간 초과. 최종 성공 개수는 확정하지 않음 |
+| 첫 실패 제한 진단 | 한글 인쇄 폰트 부재로 `test_advanced_reports.py` 실패. 1 failed, 12 passed, 355 subtests passed |
+| 파일럿 실제 오프라인 경로 | 12건 시도, 관측 응답 11건·요청 오류 1건. 정량 통과 1건은 검수 대기, 공식 성공 0건 |
+
+최종 파일럿 채점 상태는 정량 통과/검수 대기 1건, 실패 5건, 원천 단위 미확정으로 관측 불가 5건, 요청 오류 1건입니다. 기간 끝 관측값 누락, 추가 조건 요구, 원천 단위 부재 등은 제품·명세 검토 대상으로 남겼습니다. 실패를 없애려고 기간·정답 수치를 제품 출력에 맞추지 않았습니다. 이는 모델 비활성 상태의 도구 파일럿이며 모델 성능이나 블라인드 점수가 아닙니다.
+
+원래 Windows `.venv/Scripts/python.exe`는 이 WSL 샌드박스에서 vsock 오류가 나 사용하지 못했습니다. `/tmp/statbridge-bok-venv`에 저장소의 고정 Python 의존성을 설치했고 기존 Windows 가상환경은 변경하지 않았습니다. 샌드박스 안 첫 파일럿은 180초 시간 초과였으며, 외부 키·HTTP 호출 차단과 임시 계정을 유지한 별도 실행에서 실제 경로를 확인했습니다.
+
+## 명령과 로컬 증거
+
+```bash
+python -m pytest -q -p no:cacheprovider eval/bok-reproduction/v1/tests
+python eval/bok-reproduction/v1/scripts/evaluate.py validate
+python eval/table-discovery/v4.1/scripts/validate_v41.py
+cd src/agent/frontend && pnpm build
+```
+
+전체 Python 검사는 `PYTHONPATH=src/backend:src/agent`, `PYTHON_DOTENV_DISABLED=1`, 외부 공급자·Langfuse 키 공백, 하이브리드 검색·Jev 비활성, 임시 테스트 DB와 Matplotlib 캐시를 사용했습니다. `/tmp/statbridge-bok-full-tests.log`, `/tmp/statbridge-bok-regression.log`에 수집 오류 및 시간 초과 실행을 보존했습니다.
+
+파일럿 실행·채점·응답 검수 양식은 `.venv/cache/kosis-bok-reproduction/evaluation-v1/pilot-final*`에 있습니다. 중간 실패 실행도 별도 파일로 보존했습니다. 실제 숫자·예측·검수 파일은 커밋하지 않습니다.
+
+읽기 전용 코드 검토에서 발견한 이중 검수 불일치 무시, 미해결 정성 점수의 평균 포함, 미실행 건의 관측 집계를 수정하고 회귀 테스트로 확인했습니다.
+
+## 남은 조건
+
+실제 모델·KOSIS 연결, 보완 24건의 행동별 어댑터 실행, 원본 전체 수치·산식·자료 버전 검수, 골든 정답·응답의 사람 승인, 전체 회귀 통과는 확인하지 못했습니다. 전체 회귀에는 한글 인쇄 폰트 준비와 기존 연구 테스트/앱 구현의 정합성 확인이 필요합니다. 이 상태를 공식 평가 준비 완료나 모델 채택 근거로 표시하지 않습니다.
