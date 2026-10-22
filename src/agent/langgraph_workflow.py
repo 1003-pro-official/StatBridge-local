@@ -130,7 +130,9 @@ class StatBridgeWorkflow:
             'error': str(message), 'plan': planning['plan'].model_dump() if planning.get('plan') else None,
             'catalog_version': self.derived_runtime.catalog.version, 'planner_trace': getattr(message, 'evidence', None),
             'usage': planning.get('usage')})
-        return {'result': {'status': 'data_unavailable', 'query': state['query'], 'derived_blocked': True,
+        status = ('need_details' if failure_kind == 'validation_error' and stage in
+                  {'validate_derived_plan', 'calculate_derived_indicator'} else 'data_unavailable')
+        return {'result': {'status': status, 'query': state['query'], 'derived_blocked': True,
                            'failure_kind': failure_kind, 'failure_stage': stage,
                            'question': str(message), 'state': continuation},
                 'orchestration_stage': stage, 'orchestration_path': self._path(state, stage)}

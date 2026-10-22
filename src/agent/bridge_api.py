@@ -770,6 +770,12 @@ def _query_derived(payload):
     result = agent.workflow.invoke(query=q, conversation_state=payload.state, execute=payload.execute,
         start_period=payload.period_start, end_period=payload.period_end,
         generate_answer=False, output_request=None)
+    # A fetch/response validation error is not proof of unavailable data. Keep
+    # its precise diagnosis and the user's context; replanning the same source
+    # cannot repair an API outage, missing unit, or invalid response identity.
+    if (result.get('failure_stage') == 'execute_derived_sources'
+            and result.get('failure_kind') != 'source_data_absent'):
+        return _derived_query_response(payload, result)
     from derived_support_policy import assessment_scope
     assessment=result.get('availability') or {}
     if (not is_availability_check(q) and assessment_scope(assessment)=='mixed'
@@ -836,6 +842,13 @@ def _derived_query_response(payload,result):
                 'failure_kind':result['failure_kind'],'failure_stage':result.get('failure_stage'),
                 'recovery':{'issue':'model','question':'원자료가 없다는 판정이 아니라 분석 모델의 응답 처리 문제입니다. 입력과 현재 작업을 유지했으니 같은 요청을 다시 시도해 주세요.',
                             'choices':[{'id':'retry','label':'같은 요청 다시 시도'},{'id':'revise','label':'질문 수정'}],'preserveState':True}}
+        if result.get('failure_stage') == 'execute_derived_sources':
+            return {**common, 'status':'data_unavailable', 'summary':question,
+                'failure_kind':result.get('failure_kind'), 'failure_stage':result['failure_stage'],
+                'recovery':{'issue':'source_metadata' if result.get('failure_kind') == 'source_metadata_incomplete' else 'source_verification',
+                    'question':question, 'choices':[{'id':'retry','label':'자료 확인 다시 시도'},
+                                                   {'id':'revise','label':'계산 조건 입력'}],
+                    'preserveState':True}}
         return {**common, 'status': 'data_unavailable' if result.get('status') == 'data_unavailable' else 'need_details',
                 'summary': question, 'missingData': result.get('missing', []), 'catalogSearches': result.get('searches', []),
                 'recovery': {'issue': 'derived_data', 'question': question,
@@ -1265,6 +1278,7 @@ def query(payload: QueryRequest) -> dict[str, Any]:
         return {
             "status": "need_output_config",
             "periodSelection": period_selection,
+            "state": result.get("state") or payload.state or {},
             "query": q,
             "interpretedQuery": table_name,
             "summary": "MCP 데이터 조회가 끝났습니다. 출력할 그래프 종류와 편집 옵션을 선택해 주세요.",

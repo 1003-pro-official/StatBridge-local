@@ -55,8 +55,13 @@ def source_series(source, response):
         units.add(str(row.get('UNIT_NM') or '').strip())
     if not values or not any(v is not None for v in values.values()):
         raise DerivedValidationError(f'{source.required_data}: 요청 기간의 실제 관측값이 없습니다.', failure_kind='source_data_absent')
+    if units == {''}:
+        from verified_source_units import unit_resolution
+        resolution=unit_resolution(source,response)
+        if resolution:units={resolution['unit']}
     if len(units) != 1 or not next(iter(units)):
-        raise DerivedValidationError(f'{source.required_data}: 원자료 단위를 확정할 수 없습니다.')
+        raise DerivedValidationError(f'{source.required_data}: 원자료 단위를 확정할 수 없습니다. 자료 제공기관의 단위 메타데이터를 확인한 뒤 같은 요청을 다시 시도해 주세요.',
+                                     failure_kind='source_metadata_incomplete')
     return Series(values, next(iter(units)), source.frequency, [source.alias])
 
 

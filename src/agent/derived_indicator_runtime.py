@@ -35,7 +35,7 @@ class DerivedIndicatorRuntime:
         # Any deployed planner, schema or validation change invalidates reuse.
         files = ('derived_indicator_planner.py', 'expression_tree_schema.py',
                  'expression_tree_validator.py', 'derived_support_policy.py',
-                 'derived_indicator_runtime.py', 'derived_plan_cache.py')
+                 'derived_indicator_runtime.py', 'derived_plan_cache.py', 'verified_source_units.py')
         self.plan_policy_hash = fingerprint([Path(__file__).with_name(f).read_text(encoding='utf-8') for f in files])
         self.plan_cache = VerifiedPlanCache()
 
@@ -182,6 +182,9 @@ class DerivedIndicatorRuntime:
         require_private_input(query, plan, self.catalog)
         planning['bounds'] = self.validate(plan)
         inputs = {s.alias: self.input_series(s, responses[s.alias]) for s in plan.sources}
+        from verified_source_units import unit_resolution
+        unit_resolutions = {s.alias: resolved for s in plan.sources
+                            if (resolved := unit_resolution(s, responses[s.alias]))}
         computed = self.engine.execute(plan, inputs, cached=cached, changed=changed)
         if cached:
             # Retain missing-value evidence for untouched cached subtrees.
@@ -212,6 +215,7 @@ class DerivedIndicatorRuntime:
                   'comparison_settings':planning.get('comparison_settings'),
                   'plan_cache_hit':planning.get('plan_cache_hit',False)}
         record['plan_reuse'] = planning.get('plan_reuse')
+        record['unit_resolutions'] = unit_resolutions
         from derived_period_comparison import average_receipt
         record['category_averages']=average_receipt(plan,computed['series'])
         receipt = self.evidence.save(record)
@@ -222,8 +226,10 @@ class DerivedIndicatorRuntime:
                   'sourceSelections': [{'alias': s.alias, 'selection': self.catalog.selection_text(s),
                                         'tableId': s.table_id, 'itemId': s.item_id, 'frequency': s.frequency,
                                         'classifications': s.classifications, 'origin':self.source_origin(s),
+                                        **({'unitResolution':unit_resolutions[s.alias]} if s.alias in unit_resolutions else {}),
                                         **({k:responses[s.alias].get(k) for k in ('sha256','filename','provenance')} if self.source_origin(s)=='user_file' else {})} for s in plan.sources],
-                  'limitations': ['경제학적 의미는 모델 검토와 서버 규칙으로 확인하며 일반적인 수학적 증명은 아닙니다.'],
+                  'limitations': ['경제학적 의미는 모델 검토와 서버 규칙으로 확인하며 일반적인 수학적 증명은 아닙니다.',
+                                  *dict.fromkeys(r['limitation'] for r in unit_resolutions.values())],
                   'missingPolicy': '결측 및 계산 불가능한 값은 0으로 채우지 않고 제외하며 해당 시점을 기록합니다.'}
         plans = []
         for source in plan.sources:

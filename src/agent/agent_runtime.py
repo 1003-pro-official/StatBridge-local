@@ -360,7 +360,7 @@ class StatBridgeAgent:
     @staticmethod
     def _period_only_followup(query: str) -> bool:
         request = structure_request(query)
-        period_intent = bool(re.search(r"(조회\s*기간|기간을|조회\s*범위)", query))
+        period_intent = bool(re.search(r"(조회\s*기간|기간(?:을|으로|만|은)|조회\s*범위)", query))
         has_boundary = bool(re.search(r"(?:부터|이후|까지|~|～|–|—)", query))
         return (not request["metrics"] and not request["explicit_ids"] and period_intent
                 and has_boundary and explicit_period(query) is not None)
@@ -910,8 +910,14 @@ class StatBridgeAgent:
         # only the byte-for-byte plans that revalidate against the saved original
         # request; the bridge API performs this validation again at its boundary.
         carried = self._validated_followup_plans(resolution.get("state"))
+        carried_plans = copy.deepcopy(carried[1]) if carried else []
+        for prior in carried_plans:
+            period = (confirmed_periods or {}).get(str(prior['table_id']))
+            if period:
+                prior.update(start_period=period[0], end_period=period[1])
+                prior['exact_params'].update(startPrdDe=period[0], endPrdDe=period[1])
         if (carried and self._period_only_followup(query)
-                and canonical(observed) == canonical(carried[1])):
+                and canonical(observed) == canonical(carried_plans)):
             return {**resolution, 'request_query': query, 'request_validation': {
                 'valid': True, 'errors': [], 'table_ids': [p['table_id'] for p in observed],
                 'evidence': 'catalog_revalidated_prior_plan_for_period_followup',
