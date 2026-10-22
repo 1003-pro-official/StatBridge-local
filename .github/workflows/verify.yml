@@ -49,6 +49,11 @@ jobs:
           python -m pytest -q eval/bok-reproduction/v1/tests
           python eval/bok-reproduction/v1/scripts/evaluate.py validate
 
+      - name: Verify E2E workflow evaluation contracts
+        run: |
+          python -m pytest -q eval/statbridge-e2e/v1/tests
+          python eval/statbridge-e2e/v1/scripts/validate.py --no-oracles
+
       - uses: pnpm/action-setup@v4
         with:
           version: 10
