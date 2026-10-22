@@ -12,7 +12,7 @@ def setup(monkeypatch,tmp_path):
     class NoModel:
         configured=True
         def request(self,*a,**k):raise AssertionError('unnecessary GPT')
-    monkeypatch.setattr(api.agent.output_agent,'ncp_client',NoModel())
+    monkeypatch.setattr(api,'report_client',NoModel())
     return client,session,store
 
 

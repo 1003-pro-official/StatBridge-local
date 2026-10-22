@@ -194,7 +194,7 @@ def decorate(fig: Any, series: list[dict], spec: ChartSpec, dual_axis: bool) -> 
         text=note.text
         if note.observation_label:
             from report_summary import period as display_period
-            from report_caption import display_number
+            from report_summary import display_number
             text=display_period(note.period,by_label[note.label].get('frequency'))+'\n'+display_number(point['value'])
         fig.add_annotation(name=note.id, captureevents=True, x=x, y=y, xref=xref, yref=yref, text=escape(text).replace("\n","<br>"),
             xanchor="center", yanchor="middle", showarrow=note.arrow, ax=note.ax, ay=note.ay, xshift=note.x_shift,yshift=note.y_shift, arrowhead=2, arrowcolor=note.color, arrowwidth=note.arrow_width, arrowsize=note.arrow_size, opacity=note.opacity,

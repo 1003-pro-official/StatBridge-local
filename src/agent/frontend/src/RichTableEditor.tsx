@@ -3,7 +3,7 @@ import {useEffect,useState} from 'react';
 import type {ChartEditInput} from './api/types';
 import type {TableDocument} from './reportTable';
 import {tableTemplates} from './reportTable';
-import {cellStyle,type TableLayout,type CellFormat} from './tableLayout';
+import {type TableLayout,type CellFormat} from './tableLayout';
 import './tableLayout.css';
 
 export default function RichTableEditor({document:doc,onEdit,disabled}:{document:TableDocument;onEdit?:(input:ChartEditInput)=>Promise<boolean>;disabled:boolean}){

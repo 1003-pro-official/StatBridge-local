@@ -150,7 +150,7 @@ def test_endpoint_auth_revision_scope_and_race(monkeypatch, tmp_path):
     client, user = login('test1')
     session = fixture_graph(monkeypatch, store, user, 'question-test')
     session['output']['chartState'].update(transform='cumulative', period_start='202601', period_end='202602', display_names={'계열0': '표시 별명'})
-    monkeypatch.setattr(api.agent.output_agent, 'ncp_client', Planner())
+    monkeypatch.setattr(api, 'report_client', Planner())
     payload = dict(edit_session_id='question-test', revision=0, question='현재 자료의 변화는?')
     assert TestClient(api.app).post('/api/report/question', json=payload).status_code == 401
     other, _ = login('test2')

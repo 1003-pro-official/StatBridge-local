@@ -10,7 +10,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
-from report_caption import display_number
+from report_summary import display_number
 from report_summary import difference_unit, ordinal, period
 from narrative_labels import narrative_name
 

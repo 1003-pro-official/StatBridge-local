@@ -3,15 +3,32 @@ from statbridge_mcp.observability import observed
 import json
 import re
 import time
+from functools import lru_cache
+from pathlib import Path
 from expression_tree_schema import ExpressionPlan, MAX_SOURCES
 from expression_tree_validator import DerivedValidationError, validate_plan, canonical_bound
 from derived_request_period import requested_display_period, requested_period_edit
+
+
+@lru_cache(maxsize=1)
+def _published_measure_names():
+    data=json.loads((Path(__file__).parent/'stat_dictionary/stat_language_dictionary.json').read_text(encoding='utf-8'))
+    names={t['table_name'].split('(')[0].strip() for t in data['tables']}
+    names.update(v['value_name'] for t in data['tables'] for d in t.get('dimensions',[]) for v in d.get('values',[]))
+    return sorted((name for name in names if len(name)>=5 and re.search(r'증가율|감소율|기여도|기여율|교역조건',name)),key=len,reverse=True)
 
 
 def is_derived_request(query):
     from derived_private_inputs import private_metric
     if private_metric(query):
         return True
+    query=re.sub(r'\[?\bDT_[0-9A-Za-z]+\b\]?', ' ',query,flags=re.I)
+    # Published rates/indices are source measures, not requests to calculate
+    # those operations anew. Explicit arithmetic outside the name still routes.
+    for name in _published_measure_names():
+        query=query.replace(name,'자료')
+    if re.search(r'자료|통계|지수|금리|이용금액',query) and not re.search(r'합계\s*(?:계산|구해|산출)|두.*합계',query):
+        query=re.sub(r'합계(?=\s*(?:자료|통계|[를을]?\s*(?:월별|분기별|연도별|표|선그래프)))','',query)
     return bool(re.search(r'계산|산출|증감률|증가율|감소율|증감액|증가분|감소분|상승폭|하락폭|격차|스프레드|점유율|구성비|배율|배수|정규화|표준화|재지수|누적|가중.*평균|평균.*가중|명목.*실질|실질.*명목|연율화|수익률|상관계수|상관관계|회귀분석|변동성|표준편차|중앙값|기여도|기여율|파생|구매력|통화\s*가치|실질\s*(?:가치|비용|매출|소득|금액|원가)|물가.*조정|교역조건|상승률.*차이|변화율.*차이|'
                           r'(?:비율|비중).*(?:계산|구해|산출|만들)|나누|나눈|나눠|나눗|곱하|곱한|곱해|곱셈|더해|더한|합계|합산|차이|빼고|빼서|빼면|역수|로그|거듭제곱|누적합|이동\s*평균|'
                           r'기준.*100|기준\s*연도|100.*지수|지수화|두.*(?:차이|비율)|실질화|'

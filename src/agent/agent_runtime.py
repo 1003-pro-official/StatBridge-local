@@ -5,6 +5,8 @@ import copy
 import json
 import os
 import re
+import hashlib
+from threading import RLock
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -65,7 +67,15 @@ class StatBridgeAgent:
         base = Path(__file__).resolve().parent
         self.dictionary_path = Path(dictionary_path or base / "stat_dictionary" / "stat_language_dictionary.json")
         self.resolver = StatLanguageResolver(self.dictionary_path)
+        if dictionary_path is None:
+            from statbridge_mcp.metadata_store import MetadataStore
+            from catalog_classifications import refresh_classifications
+            store=getattr(getattr(service,'service',service),'store',None)
+            if isinstance(store,MetadataStore):
+                refresh_classifications(self.resolver.tables,store)
         self.tables_by_id = {str(t["table_id"]): t for t in self.resolver.tables}
+        self._catalog_selection_cache = {}
+        self._catalog_selection_lock = RLock()
         self.ncp = ncp_client or NcpClovaClient()
         self.jev = jev_client or JevSeriesClient()
         self.hybrid = HybridStatRetriever(self.resolver)
@@ -75,6 +85,21 @@ class StatBridgeAgent:
             self.hybrid.enabled = False
         self.output_agent = OutputAgent(self.ncp)
         self.workflow = StatBridgeWorkflow(self, self.output_agent)
+
+    def _catalog_candidates(self, query):
+        # Reuse only metadata-owned selections, never observations or user state.
+        # Bind to the full current catalog so in-process metadata edits invalidate.
+        stamp=hashlib.sha256(json.dumps(self.resolver.tables,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
+        key=(query,stamp)
+        with self._catalog_selection_lock:
+            if key in self._catalog_selection_cache:
+                return copy.deepcopy(self._catalog_selection_cache[key])
+        selected=catalog_selections(query,self.resolver.tables)
+        with self._catalog_selection_lock:
+            self._catalog_selection_cache[key]=copy.deepcopy(selected)
+            while len(self._catalog_selection_cache)>64:
+                self._catalog_selection_cache.pop(next(iter(self._catalog_selection_cache)))
+        return selected
 
     @staticmethod
     def _subtract_months(yyyymm: str, months: int) -> str:
@@ -548,7 +573,7 @@ class StatBridgeAgent:
             part=re.sub(r'신규\s*대출','신규취급액',part)
             prefix=f'comparison:{index}:'
             local={k[len(prefix):]:v for k,v in confirmed.items() if k.startswith(prefix)}
-            scoped_catalog=catalog_selections(part+period,self.resolver.tables) if not local else []
+            scoped_catalog=self._catalog_candidates(part+period) if not local else []
             if scoped_catalog and all(not c.get('_missing_dimensions') and viable(c) for c in scoped_catalog):
                 selected.extend(scoped_catalog)
                 plans.extend(self.build_api_plan(part+period,c).as_dict() for c in scoped_catalog)
@@ -676,7 +701,7 @@ class StatBridgeAgent:
                     scoped=self._scoped_comparison(query,state,clarification)
                     if scoped is not None:return scoped
                     return preflight
-            selected = catalog_selections(query, self.resolver.tables)
+            selected = self._catalog_candidates(query)
             if selected:
                 plans = [self.build_api_plan(query, item).as_dict() for item in selected]
                 return self.validate_resolution(query, {
@@ -866,7 +891,7 @@ class StatBridgeAgent:
     def validate_resolution(self, query: str, resolution: dict[str, Any], *,
                             confirmed_periods: dict[str, tuple[str, str]] | None = None) -> dict[str, Any]:
         """Check original intent and canonical IDs again after model/vector ranking."""
-        grounded = catalog_selections(query, self.resolver.tables)
+        grounded = self._catalog_candidates(query)
         grounded_plans = [self.build_api_plan(query, item).as_dict() for item in grounded]
         # Only a server-owned output session supplies these boundaries. All
         # table, item, classification and non-period parameters stay canonical.

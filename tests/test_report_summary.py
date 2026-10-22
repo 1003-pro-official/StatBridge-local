@@ -104,3 +104,10 @@ def test_kosis_annual_frequency():
     text = explain(series([10, 12, 15], ['2023', '2024', '2025'], 'Y'))['text']
     assert '전년(2024년' in text
     assert '상승폭은 직전 기간보다 확대되었습니다.' in text
+
+
+def test_shared_number_formatter_preserves_small_nonzero_changes():
+    from report_summary import display_number
+    assert display_number(-8.036809815950907) == "-8.04"
+    assert display_number(4.665283251760233) == "4.67"
+    assert display_number(0.001) == "0.001"

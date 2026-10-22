@@ -4,7 +4,6 @@ import copy
 import pytest
 
 from narrative_labels import narrative_name
-from report_caption import build_caption
 from report_summary import explain
 from statistical_question import answer_question
 
@@ -34,14 +33,13 @@ def assert_short(text):
     assert all(value not in text for value in ['신규취급액', 'DT_', '대출평균', '저축성수신', '1)'])
 
 
-def test_summary_caption_and_question_only_shorten_the_prose():
+def test_summary_and_question_only_shorten_the_prose():
     series = data()
     before = copy.deepcopy(series)
     summary = explain(series)
-    caption = build_caption(series)
     answer = answer_question('대출금리와 수신금리의 하락 속도가 같은가?', series)
     assert answer['status'] == 'answered'
-    for text in [summary['text'], ' '.join(caption['paragraphs']), ' '.join(answer['paragraphs'])]:
+    for text in [summary['text'], ' '.join(answer['paragraphs'])]:
         assert_short(text)
     assert series == before
     assert summary['facts'][0]['label'] == LOAN

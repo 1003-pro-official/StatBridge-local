@@ -138,3 +138,15 @@ def test_paragraph_style_and_simple_style_are_natural_and_preserve_figures():
     assert len(a['paragraphs'])==1 and '0.5%p' in a['paragraphs'][0]
     b,_=execute('쉽게',ReportPlan(style='simple'),data(),{})
     assert '하락하였다' in ' '.join(b['paragraphs']) and '내려감했어' not in ' '.join(b['paragraphs'])
+
+
+def test_freeform_planner_receives_the_actual_schema():
+    class Planner:
+        configured=True
+        def request(self,system,user,**kwargs):
+            payload=json.loads(user)
+            assert payload["schema"] == ReportPlan.model_json_schema()
+            assert "keys" in payload["schema"]["properties"]
+            return ReportPlan().model_dump_json(), {}
+    answer,state=talk("표시된 두 금융 지표를 보고서 문장으로 정돈해줘",client=Planner())
+    assert answer["modelCalls"]==1 and state["turns"][-1]["plan"]["operation"]=="changes"

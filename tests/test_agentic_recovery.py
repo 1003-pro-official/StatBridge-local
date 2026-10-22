@@ -57,7 +57,7 @@ def test_responses_image_is_multimodal_and_current_values_are_preserved():
     model.review=None
     output=ChartEditAgent(model,api.agent.output_agent).edit(session['result'],session['output'],'참고 형식으로',{'reference_files':[reference()]})
     body=transport.calls[0][1]['json']
-    assert body['model']=='gpt-5.4' and body['store'] is False
+    assert body['model']==client.settings.main_model and body['store'] is False
     assert body['input'][0]['content'][1]['type']=='input_image'
     assert 'base64' not in body['input'][0]['content'][0]['text']
     assert output['chartState']['title']=='참고 형식 제목'

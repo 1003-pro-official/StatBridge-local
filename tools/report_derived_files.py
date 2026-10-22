@@ -13,7 +13,7 @@ def read(p):return json.loads(p.read_text(encoding='utf8'))
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def dump(p,value):p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
 
-def main():
+def main(expected_model='gpt-5.4'):
     folder=OUT/'derived_files_v8_evidence';folder.mkdir(exist_ok=True)
     workspaces=[(p,read(p)) for p in (SOURCE/'.venv/cache/derived-files-v8/supplements/user-1').glob('*/workspace.json')]
     path,w=next((p,w) for p,w in workspaces if w.get('calculation_id') and any(f['filename'].endswith('.json') for f in w['files'].values()))
@@ -35,7 +35,7 @@ def main():
         expected=Decimal(str(row['DT']))/costs[row['PRD_DE']]
         actual=Decimal(str(e['node_results'][node['id']]['values'][row['PRD_DE']]))
         assert abs(expected-actual)<=Decimal('1e-12');checked.append({'period':row['PRD_DE'],'expected':str(expected),'actual':str(actual)})
-    assert len(checked)==4 and e['semantic_review']['approved'] is True and all(u['model']=='gpt-5.4' for u in e['usage'])
+    assert len(checked)==4 and e['semantic_review']['approved'] is True and all(u['model']==expected_model for u in e['usage'])
     source_state=(OUT/'derived_files_v8_sources_ui_state.txt').read_text(encoding='utf8')
     assert 'kosis.kr/' in source_state and 'ecos.bok.or.kr/' in source_state and 'CSV · JSON · TSV · XLSX' in source_state
     table_state=(OUT/'derived_files_v8_json_table_state.txt').read_text(encoding='utf8');assert '1.166900' in table_state and '1.169600' in table_state
@@ -59,7 +59,7 @@ def main():
             'source_guidance':'curated official portal search candidates, not verified dataset downloads; synthetic/company inputs distinguished',
             'checkouts':checks,'full_regression_local1':full,
             'full_regression_scope':'Full suite ran after the initial four-format implementation; final supplemental-review followup and parser hardening covered by final affected-file tests on both checkouts.',
-            'actual_provider_UI':{'status':'PASS','GPT':'actual gpt-5.4','KOSIS':'actual org 301 DT_404Y014 observations',
+            'actual_provider_UI':{'status':'PASS','GPT':'actual '+expected_model,'KOSIS':'actual org 301 DT_404Y014 observations',
                 'user_file':'explicitly synthetic JSON, NOT official KOSIS data','calculation_id':cid,'evidence_sha256':receipt['sha256'],
                 'original_JSON_sha256':uploaded['sha256'],'independent_Decimal':checked,
                 'verified':['official portal links and search terms','synthetic-data own-input guidance','JSON template download','JSON paste/upload','table','graph'],
@@ -85,4 +85,8 @@ def main():
     (OUT/'derived_files_v8_report.md').write_text(text+'\n',encoding='utf8')
     print(json.dumps({'checks':checks,'full_passed':full['passed'],'actual_UI':'PASS','Decimal_points':4},ensure_ascii=False))
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--expected-model',default='gpt-5.4',help='Historical evidence model; does not rewrite records.')
+    main(parser.parse_args().expected_model)

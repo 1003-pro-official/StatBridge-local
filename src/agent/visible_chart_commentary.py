@@ -2,7 +2,7 @@
 from decimal import Decimal,InvalidOperation
 import re
 from report_summary import difference_unit,period
-from report_caption import display_number
+from report_summary import display_number
 from narrative_labels import narrative_name
 from datetime import datetime,timedelta
 
