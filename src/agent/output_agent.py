@@ -75,9 +75,22 @@ class OutputAgent:
         return source_id, " · ".join(x for x in labels if x) or "통계값", str(row.get("UNIT_NM") or "")
 
     def _series(self, rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        # Display names are not identities: different classification codes may
+        # legitimately have the same label (or arrive without dimension names).
+        identities = {}
+        row_identities = {}
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            identity = (str(row.get('TBL_ID') or row.get('_SOURCE_SERIES_ID') or ''),
+                        str(row.get('ITM_ID') or ''),
+                        tuple((f'C{i}', str(row.get(f'C{i}') or '')) for i in range(1, 9)))
+            row_identities[id(row)] = identity
+            identities.setdefault(self._series_key(row), set()).add(identity)
         grouped: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
         frequencies: dict[tuple[str, str, str], str] = {}
         calculations: dict[tuple[str,str,str],str] = {}
+        source_identities = {}
         for row in rows:
             if not isinstance(row, dict):
                 continue
@@ -90,7 +103,20 @@ class OutputAgent:
             period = str(row.get("PRD_DE") or "").strip()
             if period:
                 key = self._series_key(row)
+                if len(identities[key]) > 1:
+                    identity = row_identities[id(row)]
+                    suffix = ' · '.join([identity[1], *(v for _, v in identity[2] if v)])
+                    key = (key[0], key[1] + ' [' + suffix + ']', key[2])
                 grouped.setdefault(key, []).append({"date": period, "value": value})
+                if (row.get('TBL_ID') and row.get('ITM_ID')
+                        and not row.get('_DERIVED_CALCULATION')
+                        and str(row.get('_SOURCE_SERIES_ID') or row['TBL_ID']) == str(row['TBL_ID'])):
+                    source_identities[key] = {
+                        'provider': 'kosis', 'table_id': str(row['TBL_ID']),
+                        'item_id': str(row['ITM_ID']),
+                        'classifications': {f'objL{i}': str(row[f'C{i}']) for i in range(1, 9) if row.get(f'C{i}')},
+                        'frequency': str(row.get('_FREQUENCY') or row.get('PRD_SE') or ''),
+                    }
                 frequencies[key] = str(row.get("_FREQUENCY") or "")
                 if row.get("_DERIVED_CALCULATION"):calculations[key]=row["_DERIVED_CALCULATION"]
         result = []
@@ -107,6 +133,7 @@ class OutputAgent:
                 "label": label,
                 "unit": unit,
                 "sourceId": source_id,
+                **({'sourceIdentity': source_identities[(source_id,label,unit)]} if (source_id,label,unit) in source_identities else {}),
                 "frequency": frequencies[(source_id, label, unit)],
                 "color": self.palette[index % len(self.palette)],
                 "points": [unique[key] for key in sorted(unique)],

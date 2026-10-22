@@ -83,6 +83,45 @@ def test_source_failure_kinds(catalog):
         assert caught.value.failure_kind==kind
 
 
+def test_missing_unit_has_precise_source_failure(catalog):
+    p=plan(catalog,'inverse');data=response(p)
+    for row in data['rows']:row['UNIT_NM']=''
+    with pytest.raises(ValueError,match='단위') as caught:source_series(p.sources[0],data)
+    assert caught.value.failure_kind=='source_metadata_incomplete'
+
+
+@pytest.mark.parametrize('kind',['source_metadata_incomplete','source_api_error','validation_error'])
+def test_source_failure_does_not_replan_or_offer_unverified_upload(monkeypatch,kind):
+    import bridge_api as api
+    context={'_derived_query':'합성 지수 증감률','_derived_start':'2024-01-01'}
+    calls=[]
+    def invoke(**kwargs):
+        calls.append(kwargs)
+        return {'status':'data_unavailable','failure_stage':'execute_derived_sources',
+                'failure_kind':kind,'question':'합성 원자료 단위를 확인해 주세요.','state':context}
+    monkeypatch.setattr(api.agent.workflow,'invoke',invoke)
+    def forbidden(*args,**kwargs):raise AssertionError('source failure must not trigger another planner')
+    monkeypatch.setattr(api.derived_supplements,'start',forbidden)
+    result=api._query_derived(api.QueryRequest(query='합성 지수 증감률'))
+    assert len(calls)==1 and result['state']==context
+    assert result['status']=='data_unavailable' and result['failure_kind']==kind
+    assert '단위' in result['summary'] and 'supplement' not in result
+    assert result['recovery']['choices'][0]['id']=='retry'
+
+
+def test_economic_formula_ambiguity_requests_conditions_not_missing_data(tmp_path):
+    from langgraph_workflow import StatBridgeWorkflow
+    from expression_tree_validator import DerivedValidationError
+    workflow=object.__new__(StatBridgeWorkflow)
+    records=[]
+    workflow.derived_runtime=SimpleNamespace(catalog=SimpleNamespace(version='synthetic'),
+                                           evidence=SimpleNamespace(save=records.append))
+    result=workflow._derived_failure({'query':'합성 비율의 증감률'},'calculate_derived_indicator',
+                                    DerivedValidationError('상대 변화율인지 차이(%p)인지 확인해 주세요.'))['result']
+    assert result['status']=='need_details' and '차이' in result['question']
+    assert records[0]['failure_kind']=='validation_error'
+
+
 def test_kosis_annual_frequency_alias(catalog):
     p=plan(catalog,'inverse');p.sources[0].frequency='Y';data=response(p)
     data['rows']=data['rows'][:1];data['rows'][0].update(PRD_SE='A',PRD_DE='2020')
