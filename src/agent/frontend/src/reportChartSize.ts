@@ -25,8 +25,3 @@ export function reportChartSize(layout:Record<string,unknown>,displayed?:ChartIm
  const height=source?.height??(positive(layout.height)?Number(layout.height):800);
  return validateChartSize({width:Math.round(width),height:Math.round(height)});
 }
-
-export function resizeReportChart(size:ChartImageSize,axis:'width'|'height',value:number,ratio:number,locked:boolean):ChartImageSize{
- if(!locked)return {...size,[axis]:value};
- return axis==='width'?{width:value,height:Math.round(value/ratio)}:{width:Math.round(value*ratio),height:value};
-}

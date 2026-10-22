@@ -184,7 +184,7 @@ def structure_request(query):
     # 여수신 is a compound request, even without an explicit conjunction.
     q=compact(COMBINED_RATE_PATTERN.sub('대출금리와 수신금리', str(query)))
     # Institution names are qualifiers, not requests for deposit statistics.
-    metric_q=q.replace("예금은행", "은행").replace("비은행예금취급기관", "기관")
+    metric_q=q.replace("예금은행", "은행").replace("비은행예금취급기관", "기관").replace("예금취급기관", "기관")
     matches=[(name,triggers,terms) for name,triggers,terms in FAMILIES if any(compact(t) in metric_q for t in triggers)]
     # Specific quantities win over their broad substring families.
     specific={"수출물가":("수출","물가"),"수입물가":("수입","물가"),"수출물량":("수출",),
@@ -234,8 +234,14 @@ def missing_requested_scopes(query, selected, tables):
     missing=[]
     requested=structure_request(query)
     missing.extend(tid for tid in requested['explicit_ids'] if tid.upper() not in {t.upper() for t in ids})
+    selected_names={compact(hit.get('value_name','')) for candidate in selected for hit in candidate.get('dimension_hits',[])}
+    for candidate in selected:
+        table=by_id.get(str(candidate['table_id']),{})
+        for dimension in table.get('dimensions',[]):
+            codes=re.split(r'[+,]',str((candidate.get('classifications') or {}).get(dimension.get('api_param'),'')))
+            selected_names.update(compact(v['value_name']) for v in dimension.get('values',[]) if v['value_id'] in codes)
     for mention in catalog_mentions(query,tables):
-        if not ids.intersection(mention['table_ids']):missing.append(mention['text'])
+        if not ids.intersection(mention['table_ids']) and compact(mention['text']) not in selected_names:missing.append(mention['text'])
     covered=set()
     for candidate in selected:
         tid=str(candidate['table_id'])

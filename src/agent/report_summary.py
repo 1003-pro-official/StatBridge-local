@@ -1,5 +1,5 @@
 """Observation-only report sentences; the language model may select IDs only."""
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP, localcontext
 import json
 import re
 from narrative_labels import narrative_name
@@ -16,6 +16,16 @@ def difference_unit(unit):
 
 def number(value):
     return format(Decimal(str(value)).normalize(), ',f')
+
+
+def display_number(value):
+    value = Decimal(str(value))
+    # Keep small nonzero values visible rather than reporting a false zero.
+    if value and abs(value) < Decimal('0.01'):
+        return number(value)
+    with localcontext() as context:
+        context.prec = max(40, len(value.as_tuple().digits) + abs(value.adjusted()) + 5)
+        return number(value.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))
 
 
 def period(value, frequency):

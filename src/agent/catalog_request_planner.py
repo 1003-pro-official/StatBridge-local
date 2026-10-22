@@ -164,7 +164,10 @@ def legacy_selections(query, tables):
                 continue
             if domain == '산업대출' and '예금은행' in q and ('비은행' in title or '예금은행' not in title):
                 continue
-            groups = [dimension_values(query, d) for d in table.get('dimensions', [])]
+            if domain == '산업대출' and '예금취급기관' in q and not any(w in q for w in ('비은행','예금은행')) and '산업별대출금예금취급기관' not in title:
+                continue
+            from semantic_catalog_planner import dimension_matches
+            groups = [dimension_matches(query,table,d) for d in table.get('dimensions', [])]
             coverage = sum((len(v) for v in groups))
             if not coverage:
                 continue
@@ -197,10 +200,15 @@ def legacy_selections(query, tables):
 def selections(query,tables):
     # Bare rates coordinated with another measure need independent clarification.
     if re.search(r'(?:^|까지(?:의)?\s+|(?:최근|현재)\s+)금리(?:와|과)\s',query):return []
-    names={}
-    for table in tables:names.setdefault(table['table_name'],[]).append(table)
-    for name,group in names.items():
-        if len(group)>1 and compact(name.split('(')[0]) in compact(query) and not any(t.get('period_end_observed') for t in group):return []
+    explicit_ids=set(structure_request(query)['explicit_ids'])
+    if explicit_ids:
+        # IDs constrain tables, not the number of requested classifications.
+        # The scalar dictionary scorer otherwise drops coordinated values.
+        scoped=[t for t in tables if t['table_id'] in explicit_ids]
+        if {t['table_id'] for t in scoped}!=explicit_ids:return []
+        semantic_query=re.sub(r'\[?\bDT_[0-9A-Za-z]+\b\]?', ' ', query, flags=re.I)
+        chosen=selections(semantic_query,scoped)
+        return chosen if {t['table_id'] for t in chosen}==explicit_ids else []
     foreign=any(word in query for word in ['미국','미시간','유로지역','글로벌','해외'])
     if foreign and any(word in query for word in ['심리','체감경기','기대인플레이션']):
         eligible=[t for t in tables if not any('sentiment' in domain for domain in t.get('domains',[])) or any(word in str(t.get('table_name')) for word in ['지역별','국가별'])]
@@ -212,8 +220,8 @@ def selections(query,tables):
     from semantic_catalog_planner import selections as semantic_selections
     legacy=legacy_selections(query,tables)
     if legacy and not missing_requested_scopes(query,legacy,tables) and all('explicit_catalog_scope' in item.get('reasons',[]) for item in legacy):return legacy
-    protected={'GDP지출','성장기여도','국제수지','경상수지','생산자물가','수출물가','수입물가','수출물량','수입물량','가계대출','산업대출','금융망'}
-    if legacy and not missing_requested_scopes(query,legacy,tables) and any(domain in protected for domain,_ in domains(query)) and not ('기업대출' in query and '가계대출' in query and '금리' not in query) and not ('여행수지' in query and '운송수지' not in query and not any(w in query for w in ['상품수지','서비스수지','본원소득'])):return legacy
+    # Prefer metadata-grounded measured concepts before broad legacy aliases;
+    # e.g. an unadjusted account must not acquire a seasonal table as an extra.
     selected=semantic_selections(query,tables)
     if selected and not missing_requested_scopes(query,selected,tables):return selected
     return legacy if legacy and not missing_requested_scopes(query,legacy,tables) else []

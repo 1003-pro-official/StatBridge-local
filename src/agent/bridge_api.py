@@ -85,12 +85,13 @@ except RuntimeError as exc:
     service = StatisticsService(client=_NoKeyClient())
 mcp_gateway = McpToolGateway(service)
 agent = StatBridgeAgent(service=mcp_gateway)
-from openai_chart_client import OpenAIChartClient, OpenAIEditModel
+from openai_chart_client import OpenAIChartClient, OpenAIEditModel, text_model_client
 from derived_indicator_runtime import DerivedIndicatorRuntime
 from derived_indicator_planner import is_derived_request, is_availability_check
 from derived_intent_router import is_calculation_edit
+strong_client = OpenAIChartClient()
 agent.workflow.derived_runtime = DerivedIndicatorRuntime(
-    mcp_gateway, OpenAIChartClient(model='gpt-5.4'), ROOT / 'runtime_data' / 'derived_evidence')
+    mcp_gateway, strong_client, ROOT / 'runtime_data' / 'derived_evidence')
 if getattr(service.client,'api_key',None):
     from live_derived_catalog import LiveDerivedCatalog
     live_derived_catalog=LiveDerivedCatalog(service.store,service.client)
@@ -103,12 +104,16 @@ else:
 from derived_supplement import DerivedSupplementService
 derived_supplements=DerivedSupplementService(agent.workflow.derived_runtime,Path(os.getenv('STATBRIDGE_DERIVED_SUPPLEMENT_DIR',str(ROOT/'runtime_data'/'derived_supplements'))))
 from chart_reference import ChartReference
+report_client = agent.output_agent.ncp_client
 if os.getenv('STATBRIDGE_OUTPUT_PROVIDER', 'openai') == 'ncp':
     edit_agent = ChartEditAgent(Hcx007EditModel(agent.ncp), agent.output_agent)
 else:
-    chart_client = OpenAIChartClient()
-    agent.output_agent.ncp_client = chart_client
-    edit_agent = ChartEditAgent(OpenAIEditModel(chart_client), agent.output_agent)
+    # Only fallback-backed fact selection and style proposals use the text tier.
+    chart_client = strong_client
+    text_client = text_model_client(strong_client)
+    agent.output_agent.ncp_client = text_client
+    edit_agent = ChartEditAgent(OpenAIEditModel(strong_client), agent.output_agent)
+    report_client = strong_client
 
 
 class ClarificationSelection(BaseModel):
@@ -261,12 +266,6 @@ class TableExportRequest(BaseModel):
     revision: int = Field(ge=0)
 
 
-class ReportInterpretRequest(BaseModel):
-    edit_session_id: str
-    revision: int = Field(ge=0)
-    as_of: str | None = Field(default=None, pattern=r'^\d{4}-\d{2}-\d{2}$')
-    mode: Literal['evidence', 'chart_brief'] = 'evidence'
-
 
 class StatisticalQuestionRequest(BaseModel):
     edit_session_id: str = Field(min_length=1, max_length=128)
@@ -364,7 +363,7 @@ def statistical_question(payload: StatisticalQuestionRequest):
         if payload.conversation_version is not None and payload.conversation_version!=before_version:
             raise HTTPException(409,'다른 질문이 먼저 처리됐어. 대화를 다시 불러온 뒤 이어서 질문해 줘.')
         try:
-            answer,conversation=reply(question,_report_displayed_series(snapshot,payload.display_mode),snapshot.get('report_conversation'),payload.revision,agent.output_agent.ncp_client,payload.display_mode)
+            answer,conversation=reply(question,_report_displayed_series(snapshot,payload.display_mode),snapshot.get('report_conversation'),payload.revision,report_client,payload.display_mode)
         except RuntimeError as exc:
             raise HTTPException(503,str(exc)) from exc
         with EDIT_LOCK:
@@ -401,7 +400,7 @@ def statistical_question(payload: StatisticalQuestionRequest):
                     displayed=[{**s,'points':s['points'][-spec.report_table.recent_periods:]} for s in displayed]
             answer=describe_visible_chart(question,displayed)
         else:
-            answer = answer_question(question, series, agent.output_agent.ncp_client)
+            answer = answer_question(question, series, report_client)
     except (ValueError, TypeError, KeyError) as exc:
         raise HTTPException(status_code=422, detail='현재 조회 자료와 비교 조건을 확인해 주세요.') from exc
     with EDIT_LOCK:
@@ -411,91 +410,6 @@ def statistical_question(payload: StatisticalQuestionRequest):
     from focused_question_answer import focused_answer
     if answer.get('method')!='displayed_data_server_calculated':answer=focused_answer(answer)
     return {**answer, 'revision': payload.revision, 'sources': copy.deepcopy(output.get('evidence', []))}
-
-
-class ReportDraftExportRequest(BaseModel):
-    edit_session_id: str
-    revision: int = Field(ge=0)
-    draft_id: str = Field(min_length=1,max_length=64)
-    image_data_url: str = Field(max_length=11_000_000)
-    image_width: int | None = Field(default=None,ge=1,strict=True)
-    image_height: int | None = Field(default=None,ge=1,strict=True)
-
-
-@app.post('/api/report/draft/export')
-@observed('report.draft_export', 'span')
-def export_report_draft(payload: ReportDraftExportRequest):
-    from fastapi.responses import Response
-    from report_draft_export import render_draft_pdf
-    with EDIT_LOCK:
-        session=EDIT_SESSIONS.get(payload.edit_session_id)
-        if not session:raise HTTPException(status_code=404,detail='분석 편집 세션이 없습니다.')
-        if payload.revision!=session['output'].get('editVersion',0):
-            raise HTTPException(status_code=409,detail='최신 그래프에서 보고서 초안을 다시 작성해 주세요.')
-        draft=(session.get('report_drafts') or {}).get(payload.draft_id)
-        if not draft or draft.get('revision')!=payload.revision:
-            raise HTTPException(status_code=409,detail='저장할 보고서 초안을 다시 작성해 주세요.')
-        draft=copy.deepcopy(draft)
-    try:
-        content=render_draft_pdf(draft,payload.image_data_url,image_width=payload.image_width,image_height=payload.image_height)
-    except (ValueError,TypeError,KeyError) as exc:
-        raise HTTPException(status_code=422,detail=str(exc)) from exc
-    with EDIT_LOCK:
-        live=EDIT_SESSIONS.get(payload.edit_session_id)
-        if not live or payload.revision!=live['output'].get('editVersion',0):
-            raise HTTPException(status_code=409,detail='분석이 변경되었습니다. 최신 그래프에서 보고서 초안을 다시 작성해 주세요.')
-    return Response(content,media_type='application/pdf',headers={
-        'Content-Disposition':'attachment; filename="statbridge-report-draft.pdf"',
-        'X-Chart-Version':str(payload.revision)})
-
-
-@app.post('/api/report/interpret')
-def interpret_report(payload: ReportInterpretRequest):
-    from datetime import date
-    from report_interpretation import build_draft, retrieve_passages
-    with EDIT_LOCK:
-        session=EDIT_SESSIONS.get(payload.edit_session_id)
-        if not session:raise HTTPException(status_code=404,detail='분석 편집 세션이 없습니다.')
-        if payload.revision!=session['output'].get('editVersion',0):raise HTTPException(status_code=409,detail='최신 분석에서 보고서 초안을 다시 작성해 주세요.')
-        snapshot=copy.deepcopy(session)
-    scopes=snapshot.get('sessions') or []
-    starts=[s.get('period',{}).get('start','') for s in scopes if s.get('period',{}).get('start')]
-    ends=[s.get('period',{}).get('end','') for s in scopes if s.get('period',{}).get('end')]
-    if not starts or not ends:raise HTTPException(status_code=422,detail='분석 기간을 확인할 수 없습니다. 먼저 자료를 조회해 주세요.')
-    start,end=min(starts),max(ends)
-    cutoff=payload.as_of or end
-    try:
-        date.fromisoformat(cutoff)
-        if payload.mode == 'chart_brief':
-            from report_caption import build_caption
-            output=snapshot['output']
-            spec=ChartSpec.model_validate(output['chartState'])
-            displayed=agent.output_agent._display_series(snapshot['result'],spec)
-            displayed=[{**s,'label':spec.display_names.get(s['label'],s['label'])} for s in displayed]
-            draft=build_caption(displayed,agent.output_agent.ncp_client,transform=spec.transform)
-            draft.update(title=spec.title,plotlyFigure=copy.deepcopy(output.get('plotlyFigure')),
-                         sources=copy.deepcopy(output.get('evidence',[])))
-            if not draft['plotlyFigure']:
-                raise ValueError('그래프 출력이 없습니다.')
-        else:
-            from runtime_paths import layout as runtime_layout
-            evidence_path=os.getenv('STATBRIDGE_REPORT_PASSAGES','').strip() or str(runtime_layout()['root']/'.venv/cache/report-evidence/reviewed.jsonl')
-            passages=retrieve_passages(evidence_path,snapshot['result'].get('query',''),start=start,end=end,as_of=cutoff)
-            draft=build_draft(snapshot['output'].get('explanation',{}),snapshot['result'].get('query',''),passages,
-                              agent.output_agent.ncp_client,as_of=cutoff)
-    except (ValueError,TypeError,KeyError) as exc:
-        detail='보고서에 사용할 표시 자료 또는 그래프를 확인해 주세요.' if payload.mode=='chart_brief' else '검수 원문 인덱스 또는 분석 기간을 확인해 주세요.'
-        raise HTTPException(status_code=422,detail=detail) from exc
-    with EDIT_LOCK:
-        live=EDIT_SESSIONS.get(payload.edit_session_id)
-        if not live or payload.revision!=live['output'].get('editVersion',0):raise HTTPException(status_code=409,detail='분석이 변경되었습니다. 최신 분석에서 초안을 다시 작성해 주세요.')
-        if payload.mode=='chart_brief':
-            draft.update(draftId=uuid4().hex,revision=payload.revision)
-            drafts={key:value for key,value in (live.get('report_drafts') or {}).items() if value.get('revision')==payload.revision}
-            while len(drafts)>=3:drafts.pop(next(iter(drafts)))
-            drafts[draft['draftId']]=copy.deepcopy(draft)
-            live['report_drafts']=drafts
-    return {**draft,'revision':payload.revision,'retrospective':cutoff>end}
 
 
 @app.post('/api/table/export')

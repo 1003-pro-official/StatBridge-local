@@ -76,19 +76,15 @@ def selections(query,tables, *, allow_combined_values=False):
                 quoted=re.findall(r'[「《“"](.*?)[」》”"]',text)
                 found=[v for v in values if v['value_name'] in quoted]
                 if not found and not scoped and len(chosen)==1:
-                    q=compact(text)
-                    found=[v for v in values if len(compact(v['value_name']))>=2 and compact(v['value_name']) in q]
-                    found=[v for v in found if not any(compact(v['value_name'])!=compact(w['value_name']) and compact(v['value_name']) in compact(w['value_name']) for w in found)]
-                    if not found:
-                        from semantic_catalog_planner import matches
-                        found=matches(text,dimension)
+                    from semantic_catalog_planner import matches
+                    found=matches(text,dimension)
             if not found and allow_combined_values:
                 q=compact(text)
                 found=[v for v in values if compact(v['value_name']) in q or ((m:=re.fullmatch(r'(.+?)\s*\((.+)\)',v['value_name'])) and all(compact(part) in q for part in m.groups()))]
                 found=[v for v in found if not any(compact(v['value_name'])!=compact(w['value_name']) and compact(v['value_name']) in compact(w['value_name']) for w in found)]
             if not found:
                 representative=dimension.get('representative_value_id')
-                if not representative and len(values)>1 and values[0]['value_name'] not in {'총지수','합계','총계','전체','전국','계'}:
+                if not representative and len(values)>1 and compact(values[0]['value_name']) not in {'총지수','합계','총계','전체','전국','계','종합'}:
                     label=dimension.get('object_name') or f"{level}번째 분류"
                     examples=' / '.join(v['value_name'] for v in values[:3])
                     missing.append(f"{table['table_name']} · {label} ({examples} 등 {len(values)}개)")

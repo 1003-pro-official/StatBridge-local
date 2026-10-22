@@ -90,3 +90,12 @@ def test_bounded_cache_evicts_and_returns_copies():
     assert cache.get('a')['result']['value'] == []
     cache.put('b', {}, 'sha')
     assert cache.get('a') is None
+
+
+def test_model_change_requires_fresh_semantic_review(runtime):
+    runtime.plan("same question")
+    runtime.planner.client.settings = SimpleNamespace(main_model="different-reviewed-model")
+    runtime.plan("same question")
+    assert len(runtime.test_calls) == 2
+    third = runtime.plan("same question")
+    assert len(runtime.test_calls) == 2 and third["plan_cache_hit"] is True

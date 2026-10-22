@@ -46,7 +46,7 @@ class OpenAIChartClient:
     supports_json_schema = True
     def __init__(self, *, api_key=None, model=None, session=None):
         self.api_key = (api_key if api_key is not None else os.getenv('OPENAI_API_KEY', '')).strip()
-        self.settings = SimpleNamespace(main_model=model or os.getenv('OPENAI_CHART_MODEL', 'gpt-5.4'))
+        self.settings = SimpleNamespace(main_model=model or os.getenv('OPENAI_CHART_MODEL', '').strip() or 'gpt-6.1-sol')
         self.session = session or requests.Session()
         self.timeout = int(os.getenv('OPENAI_CHART_TIMEOUT', '90'))
 
@@ -67,13 +67,13 @@ class OpenAIChartClient:
         content = [{'type': 'input_text', 'text': input_text}]
         for item in references:
             if item['mime'] == 'application/pdf':
-                content.append({'type': 'input_file', 'filename': item['name'], 'file_data': item['data_url']})
+                content.append({'type': 'input_file', 'filename': item['name'], 'file_data': item['data_url'], 'detail': 'low'})
             else:
                 content.append({'type': 'input_image', 'image_url': item['data_url'], 'detail': 'auto'})
         body = {'model': self.settings.main_model, 'store': False,
                 'instructions': system, 'input': [{'role': 'user', 'content': content}],
                 # The budget includes reasoning tokens as well as visible text.
-                'max_output_tokens': max(2048, max_tokens), 'reasoning': {'effort': 'low'}}
+                'max_output_tokens': max(4096, max_tokens), 'reasoning': {'effort': 'low'}}
         if response_schema is not None:
             body['text'] = {'format': {'type': 'json_schema', 'name': 'statbridge_response', 'strict': True, 'schema': response_schema}}
         elif json_mode:
@@ -109,6 +109,11 @@ class OpenAIChartClient:
 
     def chat_main(self, system, user, *, max_tokens=1800, thinking_effort=None):
         return self.request(system, user, max_tokens=max_tokens)
+
+
+def text_model_client(strong):
+    """Optional low-cost tier; absence/blank preserves single-model rollback."""
+    return OpenAIChartClient(model=os.getenv('OPENAI_TEXT_MODEL', '').strip() or strong.settings.main_model)
 
 
 class OpenAIEditModel:
