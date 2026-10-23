@@ -27,6 +27,41 @@ def setup(tmp_path):
 def csv_text(value='2',unit='지수',frequency='M'):
     return 'period,value,unit,frequency,source\n'+''.join(f'20200{i},{value},{unit},{frequency},독립 시험 자료\n' for i in range(1,5))
 
+
+def test_uploaded_inputs_resume_without_reentering_provider_availability(setup,monkeypatch):
+    service,_,_,_=setup
+    initial=service.start(1,'2020년 1월부터 2020년 4월까지 경제심리지수와 사용자 비용지수의 비율 계산')
+    wid=initial['supplement']['workspaceId']
+    service.upload(1,wid,'cost','cost.csv',csv_text())
+    w=service.load(1,wid)
+    w['query']='2020년 1월부터 4월까지 경제심리지수를 세계은행의 사용자 제공 지수로 나누어 계산해 주세요.'
+    service.save(w)
+    def forbidden(*a,**kw):
+        raise AssertionError('Uploaded file metadata must reach calculation planning, not source availability')
+    monkeypatch.setattr('derived_provider_scope.explicit_provider_check',forbidden)
+    out=service.resume(1,wid)
+    assert out['status']=='calculated'
+    assert {s['origin'] for s in out['result']['derivedEvidence']['sourceSelections']}=={'kosis_api','user_file'}
+
+
+def test_resume_supplies_verified_api_identity_and_observed_unit(setup,monkeypatch):
+    from expression_tree_schema import SourceSelection
+    service,_,_,_=setup
+    first=service.start(1,'2020년 1월부터 4월까지 경제심리지수와 사용자 비용지수의 비율 계산')
+    wid=first['supplement']['workspaceId'];service.upload(1,wid,'cost','cost.csv',csv_text())
+    w=service.load(1,wid);runtime=service.runtime(w)
+    selected=next(iter(w['prefetched'].values()))['source']
+    source=SourceSelection.model_validate(selected)
+    assert '실제 API 확인 단위: 지수' in runtime.catalog.selection_text(source)
+    meta=runtime.catalog.get_table_metadata(source.table_id)
+    assert meta['server_verified_observation_units'][0]['unit']=='지수'
+    assert 'server_verified_observation_units' not in service.base.catalog.get_table_metadata(source.table_id)
+    received={}
+    def planned(query,**kwargs):received.update(kwargs);return {'status':'need_details'}
+    monkeypatch.setattr(runtime.planner,'plan',planned)
+    runtime._plan_uncached(w['query'])
+    assert received['verified_sources']==[selected]
+
 def test_partial_api_then_upload_resume_preserves_real_source_labels(setup):
     service,calls,slot,final=setup
     initial=service.start(1,'2020년 1월부터 2020년 4월까지 경제심리지수를 사용자 비용지수로 나누어 계산해 주세요.')

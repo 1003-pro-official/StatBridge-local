@@ -69,7 +69,7 @@ def test_execution_failure_is_not_reported_as_resolved(monkeypatch):
         **resolution, "execution": {"status": "error", "error": "조회 실패"},
     })
     response = bridge_api.query(bridge_api.QueryRequest(
-        query="경제심리지수", period_start="2021-01-01", period_end="2021-12-31",
+        query="경제심리지수 원계열", period_start="2021-01-01", period_end="2021-12-31",
     ))
 
     assert response["status"] == "data_unavailable"

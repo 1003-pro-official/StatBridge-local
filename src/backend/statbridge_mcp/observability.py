@@ -38,8 +38,15 @@ def exporter():
 
 
 def shutdown_exporter():
-    if _client is not None:
-        try:_client.shutdown()
+    global _client, _client_state
+    # A stopped SDK consumer must never receive new work or be flushed again.
+    # Detach before shutdown so repeated ASGI lifespans are safe in one process.
+    with _client_lock:
+        client=_client
+        _client=None
+        _client_state='shutdown'
+    if client is not None:
+        try:client.shutdown()
         except Exception:pass
 
 

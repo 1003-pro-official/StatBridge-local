@@ -17,7 +17,7 @@ def test_agent_query_uses_dictionary_without_network_keys(monkeypatch):
 
     monkeypatch.setattr(settings, "kosis_api_key", "")
     monkeypatch.setattr(agent.ncp.settings, "api_key", "")
-    response = query(QueryRequest(query="경제심리지수 추이", execute=False))
+    response = query(QueryRequest(query="경제심리지수 원계열 추이", execute=False))
     assert response["status"] == "need_period"
     assert response["chart"] == []
     assert response["tables"]

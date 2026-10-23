@@ -145,6 +145,7 @@ class DynamicExpressionExecutor:
                     x = args[0].values.get(period)
                     y = args[1].values.get(period) if len(args) == 2 else None
                     value, reason = None, None
+                    missing_periods = []
                     op = node.operator
                     try:
                         if op == 'lag':
@@ -160,7 +161,9 @@ class DynamicExpressionExecutor:
                                     accumulator += x
                                     value = accumulator
                         elif op == 'rolling_mean':
-                            window = [args[0].values.get(shift_period(period, freq, -k)) for k in range(node.window)]
+                            window_periods = [shift_period(period, freq, -k) for k in range(node.window)]
+                            window = [args[0].values.get(p) for p in window_periods]
+                            missing_periods = [p for p,v in zip(window_periods,window) if v is None]
                             if all(v is not None for v in window):
                                 value = sum(window) / node.window
                         elif x is not None:
@@ -191,7 +194,9 @@ class DynamicExpressionExecutor:
                         value, reason = None, 'non_finite'
                     values[period] = value
                     if value is None and plan.start_period <= period <= plan.end_period:
-                        issues.append({'node': node.id, 'period': period, 'reason': reason or 'missing_input_or_history'})
+                        issue={'node': node.id, 'period': period, 'reason': reason or 'missing_input_or_history'}
+                        if missing_periods:issue['missing_periods']=sorted(missing_periods)
+                        issues.append(issue)
                 series[node.id] = Series(values, unit, freq, sorted({s for a in args for s in a.source_ids}))
                 calculations[node.id] = {'label': node.id, 'operator': node.operator, 'inputs': node.inputs,
                                          'parameters': node.model_dump(exclude={'id', 'operator', 'inputs'}, exclude_none=True)}
@@ -200,7 +205,9 @@ class DynamicExpressionExecutor:
             item = series[output.node]
             selected = [(p, v) for p, v in sorted(item.values.items()) if plan.start_period <= p <= plan.end_period and v is not None]
             if not selected:
-                detail = ', '.join(f"{i['period']}({i['reason']})" for i in issues if i['node'] == output.node)[:500]
+                detail = ', '.join(f"{i['period']}({i['reason']}"+
+                    (f"; 부족 시점: {', '.join(i['missing_periods'])}" if i.get('missing_periods') else '')+
+                    ')' for i in issues if i['node'] == output.node)[:500]
                 raise DerivedValidationError(f'{output.label}: 계산 가능한 관측값이 없습니다. 원자료·비교기간·분모를 확인해 주세요. {detail}')
             for period, value in selected:
                 rows.append({'PRD_DE': period, 'DT': value, 'ITM_NM': output.label, 'UNIT_NM': item.unit,
