@@ -17,7 +17,7 @@ export default function DerivedAvailabilityPanel({result,busy,retry,confirm,onRe
   <header><small>DATA AVAILABILITY · 계산 전 확인</small><h2>{scope==='unsupported'?'지원하지 않는 범위입니다':data.status==='checked'?'원자료 확인 결과를 안내합니다':'실제 API 자료를 확인하고 있습니다'}</h2><p>확인 질문은 오류가 아닙니다. 조건이 확정되기 전에는 계산하지 않습니다.</p></header>
   {data.status!=='checked'?<div role="status"><p>{result.summary}</p><p>API 확인에 실패하거나 확인이 진행 중이면 자료 부재로 판정하지 않습니다.</p><button disabled={busy} onClick={retry}>자료 확인 다시 시도</button></div>:<>
    <div className="availability-proof"><strong>실제 KOSIS 메타데이터 API 확인</strong><span>승인 표 {data.checkedTables}/{data.requiredTables}개 · TBL / ITM / PRD</span><span>확인 시각 {data.checkedAt?new Date(data.checkedAt).toLocaleString('ko-KR'):''}</span></div>
-   <p>아래 결과는 승인된 349개 표에 대한 확인입니다. KOSIS 전체 또는 ECOS 전체의 자료 부재를 뜻하지 않습니다.</p>
+   <p>아래 결과는 요청에 필요한 승인 한국은행 표와 사용자가 지정한 출처를 구분한 확인입니다. 전체 349개 표를 모두 조회했다거나 KOSIS·ECOS 전체의 자료가 없다는 뜻은 아닙니다.</p>
    <p><strong>관측값 확보 {data.sources.filter(s=>s.status==='available').length}개 · 승인 범위에서 미확보 {data.sources.filter(s=>s.status==='not_found').length}개 · 추가 확인 {data.sources.filter(s=>!['available','not_found'].includes(s.status)).length}개</strong></p>
    {scope==='unsupported'&&<div className="availability-questions"><strong>필요한 한국은행 KOSIS API 입력이 없습니다</strong><p>파일만 사용하는 계산은 지원하지 않습니다. 승인 한국은행 KOSIS 원자료가 실제 계산에 하나 이상 포함되는 질문으로 다시 작성해 주세요. 자료를 단순히 언급하거나 관련 없는 자료를 추가하는 것으로 지원 조건을 충족할 수 없습니다.</p></div>}
    {scope==='verification_pending'&&<p role="status">KOSIS API 입력의 확보 여부가 아직 미확정입니다. API 장애·항목 선택 미확정을 자료 부재로 단정하지 않으며, 확인될 때까지 파일 연결을 열지 않습니다.</p>}

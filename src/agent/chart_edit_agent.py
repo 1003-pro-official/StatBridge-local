@@ -526,6 +526,8 @@ class ChartEditAgent:
         for command in required_display:
             commands=[c for c in commands if not (c.operation=='set_axis_style' and c.label==command.label and set(c.params)<=set(command.params))]
             commands.append(command)
+        from chart_edit_intents import complete_legend_visibility
+        commands=complete_legend_visibility(state['instruction'],commands)
         if len(commands)>12:
             raise ValueError("한 번에 적용할 수정 명령은 12개까지입니다. 요청을 나누어 주세요.")
         return {"commands": commands, "coverage": coverage, "review_context":context, "review_system":system, "proposal":proposal,

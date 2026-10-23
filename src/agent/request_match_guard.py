@@ -182,9 +182,11 @@ QUALIFIERS = ("지역별", "국가별", "나라별", "산업별", "기관별", "
 
 def structure_request(query):
     # 여수신 is a compound request, even without an explicit conjunction.
-    q=compact(COMBINED_RATE_PATTERN.sub('대출금리와 수신금리', str(query)))
+    q=compact(COMBINED_RATE_PATTERN.sub('대출금리와 수신금리', re.sub(r'이\s+자료', '해당 자료', str(query))))
     # Institution names are qualifiers, not requests for deposit statistics.
     metric_q=q.replace("예금은행", "은행").replace("비은행예금취급기관", "기관").replace("예금취급기관", "기관")
+    if any(w in metric_q for w in ['수입물가','수출물가']) and not any(w in metric_q for w in ['m1','m2','통화량']):
+        metric_q=metric_q.replace('통화','환산기준')
     matches=[(name,triggers,terms) for name,triggers,terms in FAMILIES if any(compact(t) in metric_q for t in triggers)]
     # Specific quantities win over their broad substring families.
     specific={"수출물가":("수출","물가"),"수입물가":("수입","물가"),"수출물량":("수출",),

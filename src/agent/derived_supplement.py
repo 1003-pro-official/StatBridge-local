@@ -21,15 +21,22 @@ def source_key(source):
 
 class SupplementalCatalog(DerivedCatalogTools):
     allow_file_inputs=True
-    def __init__(self,base,files):
-        super().__init__(base.store);self.base=base;self.files=files
+    def __init__(self,base,files,cached=None):
+        super().__init__(base.store);self.base=base;self.files=files;self.cached=cached or {}
         self.version=hashlib.sha256((base.version+json.dumps({k:v['sha256'] for k,v in files.items()},sort_keys=True)).encode()).hexdigest()
 
     def file_metadata(self):
         return [self.get_table_metadata(FILE_PREFIX+alias) for alias in self.files]
 
     def get_table_metadata(self,tid):
-        if not tid.startswith(FILE_PREFIX):return self.base.get_table_metadata(tid)
+        if not tid.startswith(FILE_PREFIX):
+            meta=self.base.get_table_metadata(tid)
+            units=[]
+            for value in self.cached.values():
+                source=SourceSelection.model_validate(value['source'])
+                if source.table_id==tid:
+                    units.append({'selection':source.model_dump(),'unit':source_series(source,value['response']).unit})
+            return {**meta,'server_verified_observation_units':units} if units else meta
         alias=tid[len(FILE_PREFIX):]
         if alias not in self.files:raise DerivedValidationError('현재 계정이 제공하지 않은 파일 입력입니다.')
         f=self.files[alias];periods=[r['PRD_DE'] for r in f['rows']]
@@ -45,6 +52,9 @@ class SupplementalCatalog(DerivedCatalogTools):
         text=super().selection_text(source)
         if source.table_id.startswith(FILE_PREFIX):
             text+=' · 사용자 선언 단위: '+self.files[source.table_id[len(FILE_PREFIX):]]['unit']
+        else:
+            saved=self.cached.get(source_key(source))
+            if saved:text+=' · 실제 API 확인 단위: '+source_series(source,saved['response']).unit
         return text
 
 class SourceInputsRequired(DerivedValidationError):
@@ -57,6 +67,13 @@ class SupplementalRuntime(DerivedIndicatorRuntime):
         super().__init__(gateway,client,evidence_directory)
         self.catalog=catalog;self.files=files;self.prefetched=cached
         self.planner=DerivedIndicatorPlanner(client,catalog)
+
+    def _plan_uncached(self,query,**kwargs):
+        # The owner-scoped workspace already has validated files and API inputs.
+        # Continue arithmetic planning with those selections, never rediscovery.
+        if not kwargs.get('previous') and not kwargs.get('verified_sources'):
+            kwargs['verified_sources']=[v['source'] for v in self.prefetched.values()]
+        return self.planner.plan(query,**kwargs)
 
     def source_origin(self,source):return 'user_file' if source.table_id.startswith(FILE_PREFIX) else 'kosis_api'
 
@@ -165,7 +182,7 @@ class DerivedSupplementService:
         self.pending.pop(key,None);self.raw_uploads.pop(key,None)
 
     def runtime(self,w):
-        catalog=SupplementalCatalog(self.base.catalog,w['files'])
+        catalog=SupplementalCatalog(self.base.catalog,w['files'],w['prefetched'])
         return SupplementalRuntime(self.base.gateway,self.base.planner.client,self.base.evidence.directory,catalog,w['files'],w['prefetched'])
 
     def start(self,owner,query,start=None,end=None,*,planning=None):
@@ -205,7 +222,7 @@ class DerivedSupplementService:
                 available.append(selection.model_dump())
             else:
                 missing.append({'alias':alias,'required_data':source['name'],'reason':source['reason'],
-                    'unit':'','frequency':periods[i][0]['frequency'],'lookback':0})
+                    'unit':source.get('unit',''),'frequency':periods[i][0]['frequency'],'lookback':0})
         planning={'status':'inputs_required','start_period':periods[0][0]['start'],'end_period':periods[0][0]['end'],
                   'available_sources':available,'missing':missing,'usage':[],'searches':[],
                   'calculation_guide':assessment.get('calculationGuide','')+' 실제 DAG 검증에서 시차·이동평균 이력이 필요하면 과거 자료를 추가로 요청합니다.'}

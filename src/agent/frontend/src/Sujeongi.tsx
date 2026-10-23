@@ -110,8 +110,10 @@ export function Sujeongi({sessionId,revision,loading,markCount,onEdit,canSubmitM
       append('assistant','어떤 색으로 수정할까요? 대상별 RGB 색상을 골라 주세요. 다른 변경 내용도 함께 적용합니다.');
       setToolsOpen(false);colorTouched.current.clear();colorAttempt.current='';setPendingColors({instruction,requests});return;
     }
-    if(requests.length&&!references.length){append('user',instruction||markInstructions);await execute(selectedColorInstruction(instruction,requests),true);}
-    else await execute(instruction);
+    // Explicit colors already belong to their original clauses/marks. Collapsing
+    // them into a synthetic global "차트" choice overrides independent targets.
+    // A selected-color override is emitted only by the actual picker above.
+    await execute(instruction);
   };
   const busy=loading||sending;
   return <>

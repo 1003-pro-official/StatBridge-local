@@ -198,6 +198,8 @@ def legacy_selections(query, tables):
 
 
 def selections(query,tables):
+    from query_conditions import active_conditions
+    query=active_conditions(query)
     # Bare rates coordinated with another measure need independent clarification.
     if re.search(r'(?:^|까지(?:의)?\s+|(?:최근|현재)\s+)금리(?:와|과)\s',query):return []
     explicit_ids=set(structure_request(query)['explicit_ids'])

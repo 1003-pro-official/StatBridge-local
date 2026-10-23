@@ -257,6 +257,7 @@ def _render_validated(series,spec,result,format,legacy,periods,colors,period_ind
                 ax.spines[['top','right']].set_visible(False)
                 ax.grid(axis='y',color=spec.presentation.grid_color,linewidth=.6);ax.set_axisbelow(True)
                 if spec.x_axis_label:ax.set_xlabel(spec.x_axis_label,fontproperties=font)
+                elif o.kind not in {'regression','bubble','violin'}:ax.set_xlabel('시점',fontproperties=font)
                 if spec.y_axis_label:ax.set_ylabel(spec.y_axis_label,fontproperties=font)
                 xstyle=spec.axes.get('x')
                 if xstyle:

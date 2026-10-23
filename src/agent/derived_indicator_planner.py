@@ -15,7 +15,7 @@ def _published_measure_names():
     data=json.loads((Path(__file__).parent/'stat_dictionary/stat_language_dictionary.json').read_text(encoding='utf-8'))
     names={t['table_name'].split('(')[0].strip() for t in data['tables']}
     names.update(v['value_name'] for t in data['tables'] for d in t.get('dimensions',[]) for v in d.get('values',[]))
-    return sorted((name for name in names if len(name)>=5 and re.search(r'증가율|감소율|기여도|기여율|교역조건',name)),key=len,reverse=True)
+    return sorted((name for name in names if len(name)>=5 and re.search(r'증가율|감소율|기여도|기여율|교역조건|합계',name)),key=len,reverse=True)
 
 
 def is_derived_request(query):
@@ -27,12 +27,13 @@ def is_derived_request(query):
     # those operations anew. Explicit arithmetic outside the name still routes.
     for name in _published_measure_names():
         query=query.replace(name,'자료')
+    query=re.sub(r'합계(?=로?\s*선택)', '분류',query)
     if re.search(r'자료|통계|지수|금리|이용금액',query) and not re.search(r'합계\s*(?:계산|구해|산출)|두.*합계',query):
         query=re.sub(r'합계(?=\s*(?:자료|통계|[를을]?\s*(?:월별|분기별|연도별|표|선그래프)))','',query)
     return bool(re.search(r'계산|산출|증감률|증가율|감소율|증감액|증가분|감소분|상승폭|하락폭|격차|스프레드|점유율|구성비|배율|배수|정규화|표준화|재지수|누적|가중.*평균|평균.*가중|명목.*실질|실질.*명목|연율화|수익률|상관계수|상관관계|회귀분석|변동성|표준편차|중앙값|기여도|기여율|파생|구매력|통화\s*가치|실질\s*(?:가치|비용|매출|소득|금액|원가)|물가.*조정|교역조건|상승률.*차이|변화율.*차이|'
                           r'(?:비율|비중).*(?:계산|구해|산출|만들)|나누|나눈|나눠|나눗|곱하|곱한|곱해|곱셈|더해|더한|합계|합산|차이|빼고|빼서|빼면|역수|로그|거듭제곱|누적합|이동\s*평균|'
                           r'기준.*100|기준\s*연도|100.*지수|지수화|두.*(?:차이|비율)|실질화|'
-                          r'이동평균|이동 평균|평균(?:을|으로|값)|상승률|변화율|전년.*대비|전월.*대비|전기.*대비|차이.*계산|비율.*보여|'
+                          r'이동평균|이동 평균|산술\s*평균|평균(?:을|으로|값)|상승률|변화율|전년.*대비|전월.*대비|전기.*대비|차이.*계산|비율.*보여|'
                           r'차이(?:를|가|는)?\s*(?:보여|구해|알려|그려)|차감|빼줘|'
                           r'합산.*(?:보여|계산)|대비.*몇.*배|분모|분자|평균.*(?:구해|계산|내줘)', query))
 
@@ -55,7 +56,8 @@ classifications의 키는 metadata.dimensions의 mcp_param(objL1, objL2 등)이�
 outputs에는 사용자가 요청한 최종 지표만 넣고, 중간 계산값은 nodes와 실행 근거에만 보존한다.
 사용자가 항목·분류를 명시하면 해당 계열 하나를 선택하며 표의 전체 항목 출력으로 확대하지 않는다.
 스키마 밖 연산이나 임의 코드 실행이 필수인 요청은 변경 불가로 안내한다. 이전 계획을 그대로 반환해 수정에 성공한 것처럼 처리하지 않는다.
-출력 단위는 Python이 실제 자료로 계산한다. 날짜는 일 YYYYMMDD/월 YYYYMM/분기 YYYY01..04/반기 YYYY01..02/연 YYYY다. 일별 lag·pct_change·difference·rolling_mean의 간격은 달력일이며 영업일이 아니다. 결측일·휴일 값을 채우지 않는다. 일별 yoy_pct는 전년 동일 월일과 비교하며 전년 2월 29일이 없으면 결측 처리한다.
+출력 단위는 Python이 실제 자료로 계산한다. server_verified_observation_units와 source_descriptions의 실제 API 확인 단위는 서버가 관측 응답에서 검증한 단위다. 이 배율을 유지한다. 원화 기준이라는 요청을 원 단위로 자동 환산했다고 해석하지 않는다. 스칼라 배율 환산 연산이 없는 계획에서 십억원을 원으로 바꿨다고 설명하거나 출력 이름에 원/명을 붙이지 않는다. 결과 이름에는 추측한 단위를 넣지 않고 실제 단위는 서버 출력에 맡긴다. 날짜는 일 YYYYMMDD/월 YYYYMM/분기 YYYY01..04/반기 YYYY01..02/연 YYYY다. 일별 lag·pct_change·difference·rolling_mean의 간격은 달력일이며 영업일이 아니다. 결측일·휴일 값을 채우지 않는다. 일별 yoy_pct는 전년 동일 월일과 비교하며 전년 2월 29일이 없으면 결측 처리한다.
+월별 공표값 여러 개의 단순 산술평균을 대표값 하나로 요청하면 원자료 주기는 M을 유지한다. rolling_mean의 window를 요청한 월 수로 정하고 종료 월 한 점을 출력한다. 이것은 공식 연간 가중평균을 요청한 것이 아니므로 연간 원자료나 가중치를 찾을 필요가 없다.
 start_period/end_period는 표시기간이다. 이동평균·시차를 위한 과거 이력은 Python이 별도 조회하므로 표시 시작일을 앞당기지 않는다.
 연산 의미: difference=x(t)-x(t-lag), pct_change=(x(t)/x(t-lag)-1)*100,
 yoy_pct=전년동기 변화율, inverse=1/x, rolling_mean=당기 포함 window기간 평균,
@@ -64,6 +66,8 @@ cumulative_sum은 표시 시작값이 없거나 중간에 결측이 있으면 �
 원문에 나열된 '앞 지수/뒤 지수'는 각각 첫 번째/두 번째 원자료를 가리킨다. '이번 달 앞 지수를 한 달 전 뒤 지수로 나눈 배율'은 첫 자료 당기값을 두 번째 자료 직전값으로 나누는 단일 출력이다. 각 자료의 전월비 두 개로 바꾸지 않는다.
 원자료의 분류명과 정확히 일치하는 사용자 명시값이 있으면 그 값을 선택한다. 이름 일부가 겹치는 하위 분류가 있다는 이유만으로 명시한 상위 분류를 다시 묻지 않는다.
 yoy_pct에는 lag 인자가 없다. 과거 값의 전년동기비는 lag 노드를 먼저 만든 다음 그 노드에 yoy_pct를 적용한다.
+금리·비율의 단순 변화량은 difference의 %p이다. 다만 사용자가 '상대 증감률을 %로'처럼 (당기/이전-1)*100을 명시하면 %p로 바꾸거나 같은 의미를 다시 묻지 않는다.
+비율 원자료에 pct_change를 직접 적용하는 단위 검증을 우회·해제하지 않는다. 이 명시적 상대변화 요청은 같은 원자료를 rebase_100으로 무차원 지수화한 뒤 pct_change/yoy_pct를 적용해 수학적으로 동등하게 표현할 수 있다. 기준기간은 요청에 포함된 실제 시점으로 정하고 기준값 0·결측은 엔진이 차단한다. 단순 '금리 변화'처럼 상대변화인지 %p인지 불명확하면 이 경로를 임의 선택하지 않는다.
 지수 역수를 명시적인 수학 변환으로 요청하고 구매력 해석을 배제하면 정의에도 구매력·통화가치라는 해석을 넣지 않는다.
 엔진은 결측·분모0·음수 로그·음수의 비정수 거듭제곱을 계산 불가로 기록하고 값 생성에서 제외한다. 이를 위해 별도 조건부 연산을 만들 필요가 없다.
 단위가 메타데이터에 없더라도 시차·단순 이동평균처럼 원자료 단위를 유지하는 수학적 변환은 계획할 수 있다. 서버가 실제 API 단위를 확인하지 못하면 실행을 중단한다. 단위를 창작하지 않는다.

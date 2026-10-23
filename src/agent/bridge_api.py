@@ -1008,6 +1008,13 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     q = payload.query.strip()
     if not q:
         raise HTTPException(status_code=400, detail="query is required")
+    from query_conditions import clarification_question
+    condition_question = clarification_question(q, agent.resolver.tables) if not (payload.state or payload.selections or payload.clarification) else None
+    if condition_question:
+        return {'status':'need_details','query':q,'interpretedQuery':q,'summary':condition_question,
+                'period':{},'frequency':'확인 필요','chart':[],'tables':[],'insights':[],'lineage':[],'warnings':[],
+                'state':{},'recovery':{'issue':'clarification','question':condition_question,
+                'choices':[{'id':'revise','label':'조회 조건 입력'}],'preserveState':True}}
     if is_derived_request(q) or (payload.state or {}).get('_derived_query'):
         return _query_derived(payload)
 
@@ -1152,10 +1159,27 @@ def query(payload: QueryRequest) -> dict[str, Any]:
     frequencies = list(dict.fromkeys(str(x["frequency"]) for x in plans))
     frequency_label = "/".join(frequencies)
     available_period = _availability_from_plans(plans)
+    if re.search(r'최신|가장\s*최근', q) and re.search(r'부터|이후', q):
+        # Catalog snapshots lag releases. Resolve an explicit latest-observation
+        # endpoint from this exact source, not today's calendar or another series.
+        from datetime import date
+        latest_ends=[]
+        for selected_plan in plans:
+            frequency=selected_plan['frequency']
+            end=_api_period(date.today().isoformat(),frequency,end=True)
+            data=service.client.get_statistics(selected_plan['org_id'],selected_plan['table_id'],
+                selected_plan['item_id'],frequency,selected_plan['start_period'],end,
+                selected_plan['classifications'])
+            if data:
+                latest_ends.append(_ui_period(max(str(row['PRD_DE']) for row in data),frequency,end=True))
+        if latest_ends:available_period['max']=min(latest_ends)
     text_period = None
     if not payload.period_start and not payload.period_end:
         try:
-            text_period = explicit_period(instruction_text(q, agent.resolver.tables), latest=available_period["max"])
+            period_text=instruction_text(q, agent.resolver.tables)
+            text_period = explicit_period(period_text, latest=available_period["max"])
+            if not text_period and all(plan['frequency'] in {'A','Y'} for plan in plans):
+                text_period=explicit_period(period_text+' 연간',latest=available_period['max'])
         except (ValueError, OverflowError) as exc:
             raise HTTPException(status_code=400, detail=f"날짜를 확인해 주세요: {exc}") from exc
     period_start = payload.period_start or (text_period or {}).get("start")
@@ -1201,7 +1225,7 @@ def query(payload: QueryRequest) -> dict[str, Any]:
             "debug": {"timingMs": {"resolve": resolve_ms, "total": resolve_ms}},
         }
 
-    available_period = _availability_from_plans(plans)
+    # Keep the live endpoint already resolved above for latest-observation requests.
     selected_start = period_start
     selected_end = period_end
     period_selection = {
