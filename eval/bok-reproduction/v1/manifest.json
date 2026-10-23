@@ -1,0 +1,44 @@
+{
+  "dataset_version": "1.2",
+  "ai_assisted": true,
+  "official_performance": false,
+  "status": "ready_for_review; full_original_reproduction_pending",
+  "counts": {
+    "audited": 46,
+    "pilot": 22,
+    "supplemental": 24,
+    "human_approved": 0
+  },
+  "files": {
+    "ANALYSIS.md": "2002b080a9f11596a7172ca14d3dd43bc1f3fc3b3f0dba204ef66d164e6b73fe",
+    "README.md": "f8634878c0d31c045d44fcf78db7b68b3ccbca6fec626f5bf6ccd9be346902e0",
+    "REVIEW.md": "02e2219bb2d50d55d7fb2dd41ae324845fa00a9df0d344c850686ae84ad11c55",
+    "VALIDATION.md": "ee124c8ece3acdb25f3b2bcdeb6d10039d2d8c320635dc6ca12ca5fbfe9cf97e",
+    "audit.jsonl": "ede9299b87c30fcd11ac2092210b1e7b7ea39fbf6f7f55d0ca5dab1fa65f8df6",
+    "canonical/v1/pilot.jsonl": "3e170082bbafda77210f046be2590e364e646fae7ca1ca955e54b6c4c83b2b18",
+    "gold-review-template.jsonl": "f9185ba372e0f221d9298f2313869708a1a3afff069fcfd9739e5141d4a9c699",
+    "pilot.jsonl": "c4abf8ac44755df13b383107899b4939dcb3db4933126f47b4c3beb389bb37ff",
+    "profiles.json": "444bd2f781885e1a23f80579608fcd9f2d7b285cf25b017c3baefb6054eab961",
+    "scripts/build.py": "4893a06c1899871e29251b048a822e45d279ec92a2daf57eeb5d434a40251813",
+    "scripts/component_adapter.py": "9f89ecac1e432e42e1d8b96cf9b3f911d6d653c29de92619a809ee4628582804",
+    "scripts/core.py": "703b69a61a86f81b369b354b22a0696461886827c9d39868c125252b9b7bb669",
+    "scripts/evaluate.py": "912f2743d1bf127cabd5b1455cdc7f6131a305b9ca8ad8338c82613be5b6f05d",
+    "supplemental.jsonl": "7c792fec9612b0c3520f37703222ef4042bd9bff6d9d8b99b5b8aa9e0283eba8",
+    "tests/test_evaluation.py": "0b8f9f04756604a1e8fca3bbb27fb318001371e0d28aa8036bf41627bc7012d8"
+  },
+  "local_provider_sha256": "92243524acdeea8d1a0d79dde1e4c003c01c2e9793d734ecb85a631b227162e5",
+  "local_oracles_sha256": "543d9354045feb52c219177693c2ce7b194d4df1856791f459191f87130c477e",
+  "metadata_sha256": {
+    "data/processed/bok_classifications.csv": "d3ca1abbffc6fabf7f861d73d462bf21fe53b3a1ef2220a893dcc8cb046f83b3",
+    "data/processed/bok_comments.csv": "84532c7a62d263ba0e20f74993cb8c2cbbe6cbea9162176345dd056820c3638f",
+    "data/processed/bok_items.csv": "0152ce4f015221d2c4701eab6c30df606e20c9c3f6b20f7af91f63a3b97a18e1",
+    "data/processed/bok_periods.csv": "82558de615c5e4caefcff12bea611ba79133df1ad150bc0e14862086d7f97d9f",
+    "data/processed/bok_sources.csv": "0cef6dec222a7d9a40c2ad571f3304b5d209f119fe36167752876434c73b89e5",
+    "data/processed/bok_table_master.csv": "94577b1df65a32fae3510439c682924e6fc899f364a93220c794f361b8c55a9b"
+  },
+  "limitations": [
+    "Pilot tests selected raw-source subsets, not entire original tables/graphs.",
+    "Supplemental model/fault scenarios require an explicit runtime adapter; human gold remains pending.",
+    "Historical publication gold and all human approvals remain pending."
+  ]
+}

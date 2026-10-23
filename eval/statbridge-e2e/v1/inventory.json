@@ -1,0 +1,1359 @@
+{
+  "schema_version": "1.0",
+  "name": "StatBridge E2E evaluation inventory",
+  "research": {
+    "path": "research/kosis-bok-reproduction",
+    "files": {
+      "재현매핑.csv": "154a88613def79ea28f067e9c896f8f5cef4683fa35e7c46f662c9188955fef2",
+      "질의집.jsonl": "e71037848e206e569ea7a5e326f91d4aaa036d0896016b6abe792362985960b3",
+      "원본재현명세.json": "f75a437f39b9cbc4b8d47d4d7a0892db424aa130293fd85392e6f4780b6ad973",
+      "원본목록.csv": "ff52a77c1167db4507cca11841e98e33caefe339c776e6415d5901c411bdf703"
+    },
+    "full_specs": [
+      "RATE-FULL",
+      "ESI-FULL",
+      "CREDIT-FULL"
+    ]
+  },
+  "catalog": {
+    "tables_dir": "data/tables",
+    "periods_sha256": "82558de615c5e4caefcff12bea611ba79133df1ad150bc0e14862086d7f97d9f"
+  },
+  "counts": {
+    "types": 36,
+    "tier_a": 8,
+    "tier_b": 25,
+    "tier_c": 3
+  },
+  "types": [
+    {
+      "type_id": "ESI-01",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 기업경기조사 결과 및 경제심리지수(ESI)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065072&menuNo=201264",
+        "pdf_page": 9,
+        "caption": "경제심리지수 추이",
+        "attachment_sha256": "0b093114dbd5023150fa0587082e74dd0de7ce4826719ded864b6398e11aa5cb"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "2003.01",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_513Y001",
+          "item_id": "13103134473999",
+          "classifications": {
+            "objL1": "13102134473ACC_CD.E1000"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [
+        "ESI-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 경제심리지수 원계열 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 경제심리지수 원계열 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "ESI-02",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 기업경기조사 결과 및 경제심리지수(ESI)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065072&menuNo=201264",
+        "pdf_page": 9,
+        "caption": "경제심리지수 추이",
+        "attachment_sha256": "0b093114dbd5023150fa0587082e74dd0de7ce4826719ded864b6398e11aa5cb"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "2003.01",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_513Y001",
+          "item_id": "13103134473999",
+          "classifications": {
+            "objL1": "13102134473ACC_CD.E2000"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [
+        "ESI-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 경제심리지수 순환변동치 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 경제심리지수 순환변동치 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "CSI-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 소비자동향조사 결과",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064975&menuNo=201264",
+        "pdf_page": 2,
+        "caption": "소비자심리지수",
+        "attachment_sha256": "2fc4ca26abd1bd1aad55760af253543feed2cb57d1c7d24f2adef285f3e11ee8"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "2008.07",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_511Y002",
+          "item_id": "13103134688999",
+          "classifications": {
+            "objL1": "13102134688CSI_CD.FME",
+            "objL2": "13102134688CSI_CLF_CD.99988"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 소비자심리지수 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 소비자심리지수 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "CSI-02",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 소비자동향조사 결과",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064975&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "현재생활형편",
+        "attachment_sha256": "2fc4ca26abd1bd1aad55760af253543feed2cb57d1c7d24f2adef285f3e11ee8"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "2008.07",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_511Y002",
+          "item_id": "13103134688999",
+          "classifications": {
+            "objL1": "13102134688CSI_CD.FMAA",
+            "objL2": "13102134688CSI_CLF_CD.99988"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_511Y002",
+          "item_id": "13103134688999",
+          "classifications": {
+            "objL1": "13102134688CSI_CD.FMBA",
+            "objL2": "13102134688CSI_CLF_CD.99988"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 현재생활형편CSI와 생활형편전망CSI 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 현재생활형편CSI와 생활형편전망CSI 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "CSI-03",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 소비자동향조사 결과",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064975&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "현재경기판단",
+        "attachment_sha256": "2fc4ca26abd1bd1aad55760af253543feed2cb57d1c7d24f2adef285f3e11ee8"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "2008.07",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_511Y002",
+          "item_id": "13103134688999",
+          "classifications": {
+            "objL1": "13102134688CSI_CD.FMAB",
+            "objL2": "13102134688CSI_CLF_CD.99988"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_511Y002",
+          "item_id": "13103134688999",
+          "classifications": {
+            "objL1": "13102134688CSI_CD.FMBB",
+            "objL2": "13102134688CSI_CLF_CD.99988"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 현재경기판단CSI와 향후경기전망CSI 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 현재경기판단CSI와 향후경기전망CSI 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "CSI-04",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 소비자동향조사 결과",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064975&menuNo=201264",
+        "pdf_page": 4,
+        "caption": "주택가격전망",
+        "attachment_sha256": "2fc4ca26abd1bd1aad55760af253543feed2cb57d1c7d24f2adef285f3e11ee8"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "주택가격 실측 통계가 아니라 응답자의 전망 CSI",
+      "frequency": "M",
+      "period_range": [
+        "2008.07",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_511Y002",
+          "item_id": "13103134688999",
+          "classifications": {
+            "objL1": "13102134688CSI_CD.FMFB",
+            "objL2": "13102134688CSI_CLF_CD.99988"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 주택가격전망CSI 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 소비자동향조사 전국 월 주택가격전망CSI 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "INF-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 소비자동향조사 결과",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064975&menuNo=201264",
+        "pdf_page": 5,
+        "caption": "기대인플레이션",
+        "attachment_sha256": "2fc4ca26abd1bd1aad55760af253543feed2cb57d1c7d24f2adef285f3e11ee8"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "설문 기대치이며 물가상승률 실적이나 모델 전망으로 대체하지 않음",
+      "frequency": "M",
+      "period_range": [
+        "2002.02",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_511Y003",
+          "item_id": "13103134728999",
+          "classifications": {
+            "objL1": "13102134728CSI_CD.FMB"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 기대인플레이션율 전국 월 향후1년 기대인플레이션율 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 기대인플레이션율 전국 월 향후1년 기대인플레이션율 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "RATE-01",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 금융기관 가중평균금리",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065098&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "예금은행 가중평균금리",
+        "attachment_sha256": "23b81b2d06da561041e4fc3cae990cd810e4f17330c3150faccccec700e8e142"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1996.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA2"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [
+        "RATE-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 예금은행 수신금리(신규취급액 기준) 저축성수신 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 예금은행 수신금리(신규취급액 기준) 저축성수신 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "RATE-02",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 금융기관 가중평균금리",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065098&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "예금은행 가중평균금리",
+        "attachment_sha256": "23b81b2d06da561041e4fc3cae990cd810e4f17330c3150faccccec700e8e142"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1996.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [
+        "RATE-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 예금은행 대출금리(신규취급액 기준) 가계대출 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 예금은행 대출금리(신규취급액 기준) 가계대출 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "RATE-03",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 금융기관 가중평균금리",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065098&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "예금은행 가중평균금리",
+        "attachment_sha256": "23b81b2d06da561041e4fc3cae990cd810e4f17330c3150faccccec700e8e142"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1996.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA0201"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA0202"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [
+        "RATE-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 예금은행 대출금리(신규취급액 기준) 대기업대출과 중소기업대출 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 예금은행 대출금리(신규취급액 기준) 대기업대출과 중소기업대출 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "RATE-04",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 금융기관 가중평균금리",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065098&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "예금은행 가중평균금리",
+        "attachment_sha256": "23b81b2d06da561041e4fc3cae990cd810e4f17330c3150faccccec700e8e142"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1996.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_121Y015",
+          "item_id": "13103134612999",
+          "classifications": {
+            "objL1": "13102134612ACC_ITEM.BECBLB01"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [
+        "RATE-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 예금은행 대출금리(잔액 기준) 총대출 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 예금은행 대출금리(잔액 기준) 총대출 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "PRICE-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 생산자물가지수(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064859&menuNo=201264",
+        "pdf_page": 12,
+        "caption": "생산자물가지수",
+        "attachment_sha256": "d507bf8c4d39dd7dd8d11dda2fc0ffe67a51ba7fef5df4145c52ca2d5388c0be"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본의 지수 열 활용; 전월비·전년비 열과 별도이며 2020=100 기준 확인",
+      "frequency": "M",
+      "period_range": [
+        "1965.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_404Y014",
+          "item_id": "13103134604999",
+          "classifications": {
+            "objL1": "13102134604ACC_CD.*AA"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 생산자물가지수(기본분류) 총지수 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 생산자물가지수(기본분류) 총지수 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "PRICE-02",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 수출입물가지수 및 무역지수(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065605&menuNo=201264",
+        "pdf_page": 13,
+        "caption": "수출입물가지수",
+        "attachment_sha256": "5195ab05f2d208e37d7a5b4f49708c11041a0e4b481386846b9e0783aac01488"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1971.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_402Y014",
+          "item_id": "13103134642999",
+          "classifications": {
+            "objL1": "13102134642ACC_CD.*AA",
+            "objL2": "13102134642CRR_CTRT_CD.W"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_401Y015",
+          "item_id": "13103134643999",
+          "classifications": {
+            "objL1": "13102134643ACC_CD.*AA",
+            "objL2": "13102134643CRR_CTRT_CD.W"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 원화기준 수출물가지수 총지수와 수입물가지수 총지수 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 원화기준 수출물가지수 총지수와 수입물가지수 총지수 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "TRADE-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 수출입물가지수 및 무역지수(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065605&menuNo=201264",
+        "pdf_page": 14,
+        "caption": "수출무역지수",
+        "attachment_sha256": "5195ab05f2d208e37d7a5b4f49708c11041a0e4b481386846b9e0783aac01488"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "자동차·반도체 소분류 활용; 동명 반도체 상위분류와 구분하고 원본 기본분류 표 전체로 확대 해석하지 않음",
+      "frequency": "M",
+      "period_range": [
+        "1988.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_403Y002",
+          "item_id": "13103134523999",
+          "classifications": {
+            "objL1": "13102134523ACC_CD.31211AA"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_403Y002",
+          "item_id": "13103134523999",
+          "classifications": {
+            "objL1": "13102134523ACC_CD.30911AA"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 수출물량지수 자동차와 반도체 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 수출물량지수 자동차와 반도체 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "TRADE-02",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 수출입물가지수 및 무역지수(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065605&menuNo=201264",
+        "pdf_page": 9,
+        "caption": "교역조건지수",
+        "attachment_sha256": "5195ab05f2d208e37d7a5b4f49708c11041a0e4b481386846b9e0783aac01488"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본 증감률 그림에 대응하는 지수 수준 응용형; 증감률과 구분",
+      "frequency": "M",
+      "period_range": [
+        "1988.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_403Y005",
+          "item_id": "13103134627999",
+          "classifications": {
+            "objL1": "13102134627TERMS_TRADE_TYPE.A"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_403Y005",
+          "item_id": "13103134627999",
+          "classifications": {
+            "objL1": "13102134627TERMS_TRADE_TYPE.B"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 교역조건지수 순상품교역조건지수와 소득교역조건지수 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 교역조건지수 순상품교역조건지수와 소득교역조건지수 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "BOP-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 국제수지(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065371&menuNo=201264",
+        "pdf_page": 7,
+        "caption": "국제수지 주요 통계 추이",
+        "attachment_sha256": "7a1d8c294f39a4d77542134cefee31e29fa9cc39f442be006e7fa2c50cf27cb1"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1980.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.000000"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 국제수지 경상수지 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 국제수지 경상수지 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "BOP-02",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 국제수지(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065371&menuNo=201264",
+        "pdf_page": 7,
+        "caption": "국제수지 주요 통계 추이",
+        "attachment_sha256": "7a1d8c294f39a4d77542134cefee31e29fa9cc39f442be006e7fa2c50cf27cb1"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1980.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.100000"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.200000"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 국제수지 상품수지와 서비스수지 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 국제수지 상품수지와 서비스수지 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "BOP-03",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 국제수지(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065371&menuNo=201264",
+        "pdf_page": 7,
+        "caption": "국제수지 주요 통계 추이",
+        "attachment_sha256": "7a1d8c294f39a4d77542134cefee31e29fa9cc39f442be006e7fa2c50cf27cb1"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "M",
+      "period_range": [
+        "1980.01",
+        "2026.07"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.300000"
+          },
+          "frequency": "M"
+        },
+        {
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.400000"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 국제수지 본원소득수지와 이전소득수지 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 국제수지 본원소득수지와 이전소득수지 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "GDP-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 2/4분기 국민소득(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064532&menuNo=201264",
+        "pdf_page": 16,
+        "caption": "국내총생산에 대한 지출",
+        "attachment_sha256": "37139e52518ef144d068b960dd15d8bd901b51e1a48c6234390c59545b42b993"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "지출 실질 수준 계열 활용; 성장기여도나 연쇄가격 구성항목 합산으로 대체하지 않음",
+      "frequency": "Q",
+      "period_range": [
+        "1960 1/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_200Y108",
+          "item_id": "13103136297999",
+          "classifications": {
+            "objL1": "13102136297ACC_ITEM.1010110"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 실질 계절조정 민간 최종소비지출 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 실질 계절조정 민간 최종소비지출 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "GDP-02",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 2/4분기 국민소득(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064532&menuNo=201264",
+        "pdf_page": 16,
+        "caption": "국내총생산에 대한 지출",
+        "attachment_sha256": "37139e52518ef144d068b960dd15d8bd901b51e1a48c6234390c59545b42b993"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "Q",
+      "period_range": [
+        "1960 1/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_200Y108",
+          "item_id": "13103136297999",
+          "classifications": {
+            "objL1": "13102136297ACC_ITEM.1020112"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 실질 계절조정 설비투자 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 실질 계절조정 설비투자 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "CREDIT-01",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 2/4분기중 가계신용(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063896&menuNo=201264",
+        "pdf_page": 7,
+        "caption": "가계신용 잔액",
+        "attachment_sha256": "0bcdbb68911daf4028b96c97de6cef51b1f2a0e8e63bbfc6e5c47e75157c9e32"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "잔액 열 활용; 원본 증감액·증감률은 별도 계산과 선행 시점 필요",
+      "frequency": "Q",
+      "period_range": [
+        "2002 4/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_151Y001",
+          "item_id": "13103134771999",
+          "classifications": {
+            "objL1": "13102134771ACC_ITEM.1000000"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [
+        "CREDIT-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 가계신용(업권별, 분기) 가계신용 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 가계신용(업권별, 분기) 가계신용 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "CREDIT-02",
+      "tier": "A",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 2/4분기중 가계신용(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063896&menuNo=201264",
+        "pdf_page": 7,
+        "caption": "가계신용 잔액",
+        "attachment_sha256": "0bcdbb68911daf4028b96c97de6cef51b1f2a0e8e63bbfc6e5c47e75157c9e32"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "Q",
+      "period_range": [
+        "2002 4/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_151Y001",
+          "item_id": "13103134771999",
+          "classifications": {
+            "objL1": "13102134771ACC_ITEM.1200000"
+          },
+          "frequency": "Q"
+        },
+        {
+          "table_id": "DT_151Y001",
+          "item_id": "13103134771999",
+          "classifications": {
+            "objL1": "13102134771ACC_ITEM.1100000"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [
+        "CREDIT-FULL"
+      ],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 가계신용에서 판매신용과 가계대출 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 가계신용에서 판매신용과 가계대출 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "IIP-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 2/4분기 국제투자대조표(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063936&menuNo=201264",
+        "pdf_page": 4,
+        "caption": "대외금융자산",
+        "attachment_sha256": "18794498cac081abe51bbba9a0344c7578451ddb36891d972bd70fa8d3c95a7a"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "Q",
+      "period_range": [
+        "1994 4/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_311Y001",
+          "item_id": "13103134486999",
+          "classifications": {
+            "objL1": "13102134486ACC_CD.1000000"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 국제투자대조표(IIP) 대외금융자산 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 국제투자대조표(IIP) 대외금융자산 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "IIP-02",
+      "tier": "C",
+      "eligible_for_scoring": false,
+      "source": {
+        "title": "2026년 2/4분기 국제투자대조표(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063936&menuNo=201264",
+        "pdf_page": 4,
+        "caption": "대외금융자산",
+        "attachment_sha256": "18794498cac081abe51bbba9a0344c7578451ddb36891d972bd70fa8d3c95a7a"
+      },
+      "execution_verdict": "기능·질의 보완 필요",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "Q",
+      "period_range": [
+        "1994 4/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_311Y001",
+          "item_id": "13103134486999",
+          "classifications": {
+            "objL1": "13102134486ACC_CD.2000000"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 국제투자대조표(IIP) 대외금융부채 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 국제투자대조표(IIP) 대외금융부채 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "IIP-03",
+      "tier": "C",
+      "eligible_for_scoring": false,
+      "source": {
+        "title": "2026년 2/4분기 국제투자대조표(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063936&menuNo=201264",
+        "pdf_page": 4,
+        "caption": "순대외금융자산",
+        "attachment_sha256": "18794498cac081abe51bbba9a0344c7578451ddb36891d972bd70fa8d3c95a7a"
+      },
+      "execution_verdict": "기능·질의 보완 필요",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "Q",
+      "period_range": [
+        "1994 4/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_311Y001",
+          "item_id": "13103134486999",
+          "classifications": {
+            "objL1": "13102134486ACC_CD.3000000"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 국제투자대조표(IIP) 순대외금융자산 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 국제투자대조표(IIP) 순대외금융자산 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "SURVEY-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "금융기관 대출행태서베이 결과(2026년 2/4분기 동향 및 2026년 3/4분기 전망)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11062971&menuNo=201264",
+        "pdf_page": 5,
+        "caption": "대출태도지수",
+        "attachment_sha256": "b33ce03607b9ba145139c0071a074296689c7ecb337b67c73404b92d073d9ff2"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "가장 최근 분기는 전망치라는 원천 주석 유지; 실적과 혼합 해석 금지",
+      "frequency": "Q",
+      "period_range": [
+        "2002 1/4",
+        "2026 3/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_514Y001",
+          "item_id": "13103134672999",
+          "classifications": {
+            "objL1": "13102134672ACC_CD.AA02"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 대출행태서베이(대출태도) 국내은행-중소기업 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 대출행태서베이(대출태도) 국내은행-중소기업 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "MONEY-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 8월 통화 및 유동성",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065575&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "통화 및 유동성 지표 추이",
+        "attachment_sha256": "a6e4e20468e4580bd212e3dc546f6a4e7c8c0a770f3b4e8a8d9a13327725d61f"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "2025년 말 개편 신·구 M2의 정의와 소급계열 확인 필요; 자동 접속 금지",
+      "frequency": "M",
+      "period_range": [
+        "2003.10",
+        "2026.06"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_161Y005",
+          "item_id": "13103852615999",
+          "classifications": {
+            "objL1": "13102852615ACC_ITEM.BBHS00"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 M2 상품별 구성내역(평잔, 계절조정계열) M2 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 M2 상품별 구성내역(평잔, 계절조정계열) M2 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "FIRM-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2024년 기업경영분석 결과(해설 및 통계편)",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?nttId=10094232&menuNo=200455",
+        "pdf_page": 12,
+        "caption": "매출액증가율",
+        "attachment_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "연간 전수 기업경영분석; 분기 외감기업 표본 자료와 모집단 구분",
+      "frequency": "A",
+      "period_range": [
+        "2010",
+        "2024"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_501Y005",
+          "item_id": "13103134632999",
+          "classifications": {
+            "objL1": "13102134632BZTYP_CD.C",
+            "objL2": "13102134632ENTERPRISE_SCALE.A",
+            "objL3": "13102134632ACC_ITEM.506"
+          },
+          "frequency": "A"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2022년 1월 1일부터 2024년 12월 31일까지 제11차 산업분류 기업경영분석 제조업 매출액증가율 자료를 연도별로 선그래프로 보여줘",
+        "table": "2022년 1월 1일부터 2024년 12월 31일까지 제11차 산업분류 기업경영분석 제조업 매출액증가율 자료를 연도별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "FIRM-02",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2024년 기업경영분석 결과(해설 및 통계편)",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000599/view.do?nttId=10094232&menuNo=200455",
+        "pdf_page": 12,
+        "caption": "매출액영업이익률",
+        "attachment_sha256": "83e0264917171b8230e370bcf1552a2410066f4a6d1dc01295390e3c11d4d77c"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원본에서 선택한 계열의 기간을 축약한 응용형; 원본 전체 재현 아님",
+      "frequency": "A",
+      "period_range": [
+        "2009",
+        "2024"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_501Y006",
+          "item_id": "13103134573999",
+          "classifications": {
+            "objL1": "13102134573BZTYP_CD.ZZZ00",
+            "objL2": "13102134573ENTERPRISE_SCALE.A",
+            "objL3": "13102134573ACC_ITEM.611"
+          },
+          "frequency": "A"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2022년 1월 1일부터 2024년 12월 31일까지 제11차 산업분류 기업경영분석 전산업 매출액영업이익률 자료를 연도별로 선그래프로 보여줘",
+        "table": "2022년 1월 1일부터 2024년 12월 31일까지 제11차 산업분류 기업경영분석 전산업 매출액영업이익률 자료를 연도별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "PAY-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "[보도자료] 2026년 상반기중 전자지급서비스 이용현황",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000502/view.do?nttId=11064870&menuNo=201265",
+        "pdf_page": 2,
+        "caption": "전자지급결제대행",
+        "attachment_sha256": "b97ac4892a10ec22f3ba948a0627daaf9a1e740e6d6150ed3b7abbf2e74146be"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원천 분기 제공값 활용; 보고서 반기 일평균과의 동등성은 집계 정의·일수를 추가 확인해야 함",
+      "frequency": "Q",
+      "period_range": [
+        "2008 1/4",
+        "2026 1/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_633Y002",
+          "item_id": "13103134692999",
+          "classifications": {
+            "objL1": "13102134692GUBUN_CD.M",
+            "objL2": "13102134692ACC_ITEM.1500"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 전자지급결제대행 이용금액 합계 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 전자지급결제대행 이용금액 합계 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "PAY-02",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "[보도자료] 2026년 상반기중 전자지급서비스 이용현황",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000502/view.do?nttId=11064870&menuNo=201265",
+        "pdf_page": 2,
+        "caption": "선불전자지급수단",
+        "attachment_sha256": "b97ac4892a10ec22f3ba948a0627daaf9a1e740e6d6150ed3b7abbf2e74146be"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "원천 분기 제공값 활용; 집계 정의를 확인하기 전 보고서 일평균·간편송금과 동등하다고 보지 않음",
+      "frequency": "Q",
+      "period_range": [
+        "2008 1/4",
+        "2026 1/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_633Y004",
+          "item_id": "13103134506999",
+          "classifications": {
+            "objL1": "13102134506ACC_ITEM.M"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 선불전자지급수단 이용금액 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 선불전자지급수단 이용금액 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "PAY-03",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "[보도자료] 2026년 상반기중 국내 지급결제동향",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000502/view.do?nttId=11065076&menuNo=201265",
+        "pdf_page": 5,
+        "caption": "계좌이체",
+        "attachment_sha256": "b936236deead9aa0a61dade0c9460223ee00bd00f38a2510ebfd5349c5d10e07"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "월별 금액 응용형; 원천 집계 정의와 보고서 일평균·소액결제망 범위의 동등성 대조 필요",
+      "frequency": "M",
+      "period_range": [
+        "1991.01",
+        "2026.06"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_602Y002",
+          "item_id": "13103134546999",
+          "classifications": {
+            "objL1": "13102134546ACC_ITEM.D0000",
+            "objL2": "13102134546AMT_CD.MONEY"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 지급수단별 통계 계좌이체 금액 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 지급수단별 통계 계좌이체 금액 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "BSI-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 9월 기업경기조사 결과 및 경제심리지수(ESI)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065072&menuNo=201264",
+        "pdf_page": 3,
+        "caption": "제조업 기업심리지수",
+        "attachment_sha256": "0b093114dbd5023150fa0587082e74dd0de7ce4826719ded864b6398e11aa5cb"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "CBSI 실적이며 업황BSI·전망CBSI·계절조정CBSI와 구분",
+      "frequency": "M",
+      "period_range": [
+        "2003.01",
+        "2026.08"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_512Y013",
+          "item_id": "13103134673999",
+          "classifications": {
+            "objL1": "13102134673BUSINESS_TYPE_CD.C0000",
+            "objL2": "13102134673BSI_CD.AX"
+          },
+          "frequency": "M"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1월부터 2025년 12월까지 기업경기조사 실적 제조업 기업심리지수실적 자료를 월별로 선그래프로 보여줘",
+        "table": "2023년 1월부터 2025년 12월까지 기업경기조사 실적 제조업 기업심리지수실적 자료를 월별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "FLOW-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 2/4분기중 자금순환(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11065338&menuNo=201264",
+        "pdf_page": 7,
+        "caption": "가계 및 비영리단체의 자금운용",
+        "attachment_sha256": "04586d837b674c6e709c3fd6cd257059938e3fb8e0266e8ba50d030e564e5bd6"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "기간중 금융거래 유량; 금융자산 잔액이나 순자금운용 총액으로 대체하지 않음",
+      "frequency": "Q",
+      "period_range": [
+        "2009 1/4",
+        "2026 1/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_281Y001",
+          "item_id": "13103134730999",
+          "classifications": {
+            "objL1": "13102134730INST_SECTOR_CD.S14",
+            "objL2": "13102134730ACC_CD.F02TZB",
+            "objL3": "13102134730OPER_SRC_CD.C"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 금융거래표 가계 및 비영리단체 현금 및 예금 운용 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 금융거래표 가계 및 비영리단체 현금 및 예금 운용 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "LOAN-01",
+      "tier": "C",
+      "eligible_for_scoring": false,
+      "source": {
+        "title": "2026년 2/4분기 예금취급기관 산업별 대출금",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11064496&menuNo=201264",
+        "pdf_page": 6,
+        "caption": "산업별대출금 증감 추이",
+        "attachment_sha256": "d21be86a605819ff5835b1a7835cb2589dd473ca920db6d5c705c95879e2e12f"
+      },
+      "execution_verdict": "기능·질의 보완 필요",
+      "scope_note": "잔액 수준 활용; 원본 증감액·증감률 그림을 재현하려면 선행 관측값과 별도 계산 필요",
+      "frequency": "Q",
+      "period_range": [
+        "2008 1/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_131Y016",
+          "item_id": "13103134514999",
+          "classifications": {
+            "objL1": "13102134514ACC_ITEM.BDDE13"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 예금취급기관 제조업 산업별대출금 잔액 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 예금취급기관 제조업 산업별대출금 잔액 자료를 분기별로 표로 보여줘"
+      }
+    },
+    {
+      "type_id": "DEBT-01",
+      "tier": "B",
+      "eligible_for_scoring": true,
+      "source": {
+        "title": "2026년 2/4분기 국제투자대조표(잠정)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11063936&menuNo=201264",
+        "pdf_page": 5,
+        "caption": "대외채권",
+        "attachment_sha256": "18794498cac081abe51bbba9a0344c7578451ddb36891d972bd70fa8d3c95a7a"
+      },
+      "execution_verdict": "출력 확인",
+      "scope_note": "대외채무 총액만 활용; 원본 대외채권·단기외채비율·준비자산을 포함한 복합표 전체 아님",
+      "frequency": "Q",
+      "period_range": [
+        "1994 4/4",
+        "2026 2/4"
+      ],
+      "expected_series": [
+        {
+          "table_id": "DT_311Y004",
+          "item_id": "13103134499999",
+          "classifications": {
+            "objL1": "13102134499ACC_CD.A000000"
+          },
+          "frequency": "Q"
+        }
+      ],
+      "full_specs": [],
+      "queries": {
+        "graph": "2023년 1분기부터 2025년 4분기까지 대외채무 총액 자료를 분기별로 선그래프로 보여줘",
+        "table": "2023년 1분기부터 2025년 4분기까지 대외채무 총액 자료를 분기별로 표로 보여줘"
+      }
+    }
+  ]
+}

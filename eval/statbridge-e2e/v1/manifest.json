@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "dataset_version": "1.0",
+  "name": "StatBridge E2E workflow evaluation",
+  "status": "ready_for_review",
+  "official_performance": false,
+  "ai_assisted": true,
+  "product_revision": "d5fcfe34686a61992abff9c760bf8f3113d05ad5",
+  "reference_date": "2026-10-21",
+  "counts": {
+    "dev": 48,
+    "test": 72,
+    "holdout_queries": 40,
+    "oracle_cases": 26,
+    "modes": {
+      "query_output": 84,
+      "derived": 8,
+      "report": 12,
+      "follow_up": 8,
+      "edit": 8
+    }
+  },
+  "research": {
+    "path": "research/kosis-bok-reproduction",
+    "files": {
+      "재현매핑.csv": "154a88613def79ea28f067e9c896f8f5cef4683fa35e7c46f662c9188955fef2",
+      "질의집.jsonl": "e71037848e206e569ea7a5e326f91d4aaa036d0896016b6abe792362985960b3",
+      "원본재현명세.json": "f75a437f39b9cbc4b8d47d4d7a0892db424aa130293fd85392e6f4780b6ad973",
+      "원본목록.csv": "ff52a77c1167db4507cca11841e98e33caefe339c776e6415d5901c411bdf703"
+    },
+    "full_specs": [
+      "RATE-FULL",
+      "ESI-FULL",
+      "CREDIT-FULL"
+    ]
+  },
+  "catalog": {
+    "tables_dir": "data/tables",
+    "periods_sha256": "82558de615c5e4caefcff12bea611ba79133df1ad150bc0e14862086d7f97d9f"
+  },
+  "oracle_sha256": "10bbe44de9cdbf8f31960aa1317a2adbb3f5dc643e86fe71f1add3ebaaa87cfb",
+  "files": {
+    "DESIGN.md": "8a797a3b43665dae92e81d75ff4a32bcf5e9f2c4fb92e13866f6e020aa7110a6",
+    "HANDOFF.md": "d33684098a0035d10e59075df84d38e7db90e4a5689ac744797c9739caf4daf2",
+    "README.md": "df2da2a21516343cf6c975f7a4f5c617908a7e6f86e26730b9b45be4d0f6bc4a",
+    "REVIEW.md": "7d7bb4e4adac20e0a418d34e6fcfc3039cc938dde383c74e5ac520d62da2fe8b",
+    "VALIDATION.md": "ccde39fe1f98c80f641f7c7b2f0fbbf9c3b46aa5b265633d90c235721990a8ae",
+    "cases/dev.jsonl": "35522cb05ed6ecd0e19b05679922cb50d1c838d51f72f8859f2fb59593d21b89",
+    "cases/holdout_queries.jsonl": "3145b471975381873a386eea33680dc635da463cca0b115176a4857fd108be9d",
+    "cases/test.jsonl": "ad2543d3f293aa9cf509dc78d49c40a3fb82f2d654eabd3b29f445dd784bbdde",
+    "inventory.json": "59b92e29730db900f04ffdf4acbabbc88809ee8f943a60d9f72a5ccacaf8ed12",
+    "profiles.json": "8d77894ab9aa6d56f042cce40f398e6b017ecd8cba8fc27d45ffc02a80dd66e2",
+    "schema.json": "1b60bf6e215ebf910ebf41eb81ef096bd4bb86b040f9b76702ebcefe8ac2f784",
+    "scripts/build_cases.py": "920a88943b02850862e9b98a4d1e6731742240e289858e5be73046058f8592e4",
+    "scripts/build_inventory.py": "2c42277629db41f30348059e7a46b6eb8542e1a72d6ad2720932d9699712ce16",
+    "scripts/e2e_common.py": "f58412a5305a102af3e86208e4872fda79e74d1fb4bf09faf31d4aec421ab5c2",
+    "scripts/manifest.py": "6f925311c9f1e699bd0e692a30298f23d97b62c7aa33dac8d2387fe02fb12c42",
+    "scripts/offline_app.py": "d37c2b84f14b0a633faf81d961711eb1bf003a6bbcb105ad9a8c229730ad817e",
+    "scripts/oracle_review.py": "937c78dcc5a0be3a95b0c6a459086954f32ed503b855f9b57fed22244150ebdd",
+    "scripts/review_packet.py": "083fdc5dd86779eb821ac4aeed1fbd0d17c76b08d829eec56fdb6ab132ab31f4",
+    "scripts/run.py": "4008aa4709caf15f9f5ff95571bada6062ee62b553ff9cdeec80a4df22bbd308",
+    "scripts/run_model.py": "87c6c27bfff646beb37910d02b89a7be9fde6e7220b8227b868dd6f772cb2060",
+    "scripts/score.py": "6bafee322157f8059cfb7ca5436a5ffbcd5f0cd968702463fed283a9be85ab81",
+    "scripts/validate.py": "762cebe7cd063d88fd434f047392d68f068fe68f3e46fd33784fa18a977c16e8",
+    "tests/test_e2e.py": "1c32f017551dc97dde7bf79318fd7a3d8dade4ece51829cede18859fa8d95cd4"
+  },
+  "limitations": [
+    "Only tier A cases carry independent numeric oracles.",
+    "Tier B cases score series identity and periods, not values.",
+    "derived/report/follow_up/edit need a model-backed adapter and stay not_executed offline.",
+    "No human gold approval or response review exists yet."
+  ]
+}

@@ -1,0 +1,40 @@
+{"id": "SBH-0001", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 국제수지 경상수지 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0002", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 국제수지 상품수지와 서비스수지 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0003", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 국제수지 본원소득수지와 이전소득수지 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0004", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 기업경기조사 실적 제조업 기업심리지수실적 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0005", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 가계신용(업권별, 분기) 가계신용 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0006", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 가계신용에서 판매신용과 가계대출 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0007", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 소비자동향조사 전국 월 소비자심리지수 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0008", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 소비자동향조사 전국 월 현재생활형편CSI와 생활형편전망CSI 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0009", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 소비자동향조사 전국 월 현재경기판단CSI와 향후경기전망CSI 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0010", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 소비자동향조사 전국 월 주택가격전망CSI 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0011", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 대외채무 총액 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0012", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 경제심리지수 원계열 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0013", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 경제심리지수 순환변동치 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0014", "mode": "query_output", "output_kind": "graph", "query": "2019년부터 2021년까지 제11차 산업분류 기업경영분석 제조업 매출액증가율 자료를 연도별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0015", "mode": "query_output", "output_kind": "graph", "query": "2019년부터 2021년까지 제11차 산업분류 기업경영분석 전산업 매출액영업이익률 자료를 연도별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0016", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 금융거래표 가계 및 비영리단체 현금 및 예금 운용 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0017", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 실질 계절조정 민간 최종소비지출 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0018", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 실질 계절조정 설비투자 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0019", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 국제투자대조표(IIP) 대외금융자산 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0020", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 기대인플레이션율 전국 월 향후1년 기대인플레이션율 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0021", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 M2 상품별 구성내역(평잔, 계절조정계열) M2 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0022", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 전자지급결제대행 이용금액 합계 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0023", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 선불전자지급수단 이용금액 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0024", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 지급수단별 통계 계좌이체 금액 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0025", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 생산자물가지수(기본분류) 총지수 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0026", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 원화기준 수출물가지수 총지수와 수입물가지수 총지수 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0027", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 예금은행 수신금리(신규취급액 기준) 저축성수신 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0028", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 예금은행 대출금리(신규취급액 기준) 가계대출 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0029", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 예금은행 대출금리(신규취급액 기준) 대기업대출과 중소기업대출 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0030", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 예금은행 대출금리(잔액 기준) 총대출 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0031", "mode": "query_output", "output_kind": "graph", "query": "2022년 1분기부터 2022년 4분기까지 대출행태서베이(대출태도) 국내은행-중소기업 자료를 분기별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0032", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 수출물량지수 자동차와 반도체 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0033", "mode": "query_output", "output_kind": "graph", "query": "2022년 1월부터 2022년 12월까지 교역조건지수 순상품교역조건지수와 소득교역조건지수 자료를 월별로 선그래프로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0034", "mode": "query_output", "output_kind": "table", "query": "2022년 1월부터 2022년 12월까지 국제수지 경상수지 자료를 월별로 표로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0035", "mode": "query_output", "output_kind": "table", "query": "2022년 1월부터 2022년 12월까지 국제수지 상품수지와 서비스수지 자료를 월별로 표로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0036", "mode": "query_output", "output_kind": "table", "query": "2022년 1월부터 2022년 12월까지 국제수지 본원소득수지와 이전소득수지 자료를 월별로 표로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0037", "mode": "query_output", "output_kind": "table", "query": "2022년 1월부터 2022년 12월까지 기업경기조사 실적 제조업 기업심리지수실적 자료를 월별로 표로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0038", "mode": "query_output", "output_kind": "table", "query": "2022년 1분기부터 2022년 4분기까지 가계신용(업권별, 분기) 가계신용 자료를 분기별로 표로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0039", "mode": "query_output", "output_kind": "table", "query": "2022년 1분기부터 2022년 4분기까지 가계신용에서 판매신용과 가계대출 자료를 분기별로 표로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
+{"id": "SBH-0040", "mode": "query_output", "output_kind": "table", "query": "2022년 1월부터 2022년 12월까지 소비자동향조사 전국 월 소비자심리지수 자료를 월별로 표로 보여줘", "prior_turns": [], "reference_date": "2026-10-21"}
