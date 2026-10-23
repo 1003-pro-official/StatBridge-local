@@ -1,0 +1,1477 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>데이터 정확도 평가 결과</title><style>body{max-width:1100px;margin:40px auto;font:16px/1.7 sans-serif;padding:0 16px}td,th{border:1px solid #ccc;padding:8px}table{border-collapse:collapse}section{border-top:2px solid #ccc;margin-top:24px}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style><h1>데이터 정확도 v3 평가 결과</h1><p><b>통과 5/20 · 미통과 15/20 · 25점</b></p><p>7개 항목 모두 통과해야 최종 통과. 실시간 API 결과를 사전 고정 정답으로 채점했다. 정답으로 실행을 보완하거나 재실행하지 않았다.</p><p>입력·파일 목록·읽기 차단 사전 검사 3개 통과. 모델 실행 종료 후 별도 네트워크 차단 채점 프로세스에서 정답을 읽었다.</p><table><tr><th>문항</th><th>판정</th><th>미통과 항목</th><th>모델 호출</th></tr><tr><td>DA3-01</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-02</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-03</td><td>미통과</td><td>API 호출, 기관·표, 항목, 분류, 주기·기간, 단위, 수치</td><td>0</td></tr><tr><td>DA3-04</td><td>미통과</td><td>API 호출, 기관·표, 항목, 분류, 주기·기간, 단위, 수치</td><td>0</td></tr><tr><td>DA3-05</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-06</td><td>통과</td><td></td><td>1</td></tr><tr><td>DA3-07</td><td>미통과</td><td>기관·표, 항목, 분류, 주기·기간, 수치</td><td>1</td></tr><tr><td>DA3-08</td><td>통과</td><td></td><td>4</td></tr><tr><td>DA3-09</td><td>미통과</td><td>API 호출, 기관·표, 항목, 분류, 주기·기간, 단위, 수치</td><td>0</td></tr><tr><td>DA3-10</td><td>미통과</td><td>기관·표, 항목, 분류, 주기·기간, 수치</td><td>1</td></tr><tr><td>DA3-11</td><td>통과</td><td></td><td>1</td></tr><tr><td>DA3-12</td><td>통과</td><td></td><td>1</td></tr><tr><td>DA3-13</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-14</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-15</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-16</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-17</td><td>미통과</td><td>주기·기간</td><td>1</td></tr><tr><td>DA3-18</td><td>통과</td><td></td><td>1</td></tr><tr><td>DA3-19</td><td>미통과</td><td>API 호출, 기관·표, 항목, 분류, 주기·기간, 단위, 수치</td><td>0</td></tr><tr><td>DA3-20</td><td>미통과</td><td>API 호출, 기관·표, 항목, 분류, 주기·기간, 단위, 수치</td><td>0</td></tr></table><section><h2>DA3-01 · 미통과</h2><p>2024년 1~3월 M2 총액을 평잔·원계열 기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-01&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_161Y006&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_161Y006&quot;,
+    &quot;table_name&quot;: &quot;M2 상품별 구성내역(평잔 원계열)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103852603999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102852603ACC_ITEM.BBHA00&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_161Y006&quot;,
+      &quot;itmId&quot;: &quot;13103852603999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102852603ACC_ITEM.BBHA00&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-02 · 미통과</h2><p>2024년 1~3월 M2 총액을 말잔·계절조정계열 기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-02&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_161Y007&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_161Y007&quot;,
+    &quot;table_name&quot;: &quot;M2 상품별 구성내역(말잔 계절조정계열)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103852611999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102852611ACC_ITEM.BBGS00&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_161Y007&quot;,
+      &quot;itmId&quot;: &quot;13103852611999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102852611ACC_ITEM.BBGS00&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-03 · 미통과</h2><p>2024년 1~3월 예금은행의 가계대출 금리를 신규취급액 기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-03&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: false,
+    &quot;기관·표&quot;: false,
+    &quot;항목&quot;: false,
+    &quot;분류&quot;: false,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: false,
+    &quot;수치&quot;: false
+  },
+  &quot;failed_checks&quot;: [
+    &quot;API 호출&quot;,
+    &quot;기관·표&quot;,
+    &quot;항목&quot;,
+    &quot;분류&quot;,
+    &quot;주기·기간&quot;,
+    &quot;단위&quot;,
+    &quot;수치&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;error&quot;,
+  &quot;runtime_error&quot;: &quot;예금은행 수신금리(신규취급액 기준): 조회 실패: DT_121Y002&quot;,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_121Y006&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [],
+  &quot;numeric_differences&quot;: [
+    {
+      &quot;period&quot;: &quot;202401&quot;,
+      &quot;expected&quot;: &quot;4.68&quot;,
+      &quot;observed&quot;: []
+    },
+    {
+      &quot;period&quot;: &quot;202402&quot;,
+      &quot;expected&quot;: &quot;4.49&quot;,
+      &quot;observed&quot;: []
+    },
+    {
+      &quot;period&quot;: &quot;202403&quot;,
+      &quot;expected&quot;: &quot;4.5&quot;,
+      &quot;observed&quot;: []
+    }
+  ],
+  &quot;model_http_calls&quot;: 0,
+  &quot;kosis_http_calls&quot;: 3
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_121Y002&quot;,
+    &quot;table_name&quot;: &quot;예금은행 수신금리(신규취급액 기준)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134588999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134588ACC_ITEM.BEABAA&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_121Y002&quot;,
+      &quot;itmId&quot;: &quot;13103134588999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134588ACC_ITEM.BEABAA&quot;
+    }
+  },
+  {
+    &quot;table_id&quot;: &quot;DT_121Y006&quot;,
+    &quot;table_name&quot;: &quot;예금은행 대출금리(신규취급액 기준)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134553999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134553ACC_ITEM.BECBLA03&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_121Y006&quot;,
+      &quot;itmId&quot;: &quot;13103134553999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134553ACC_ITEM.BECBLA03&quot;
+    }
+  },
+  {
+    &quot;table_id&quot;: &quot;DT_121Y006&quot;,
+    &quot;table_name&quot;: &quot;예금은행 대출금리(신규취급액 기준)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134553999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134553ACC_ITEM.BECBLA&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_121Y006&quot;,
+      &quot;itmId&quot;: &quot;13103134553999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134553ACC_ITEM.BECBLA&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-04 · 미통과</h2><p>2024년 1~3월 예금은행의 가계대출 금리를 잔액 기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-04&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: false,
+    &quot;기관·표&quot;: false,
+    &quot;항목&quot;: false,
+    &quot;분류&quot;: false,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: false,
+    &quot;수치&quot;: false
+  },
+  &quot;failed_checks&quot;: [
+    &quot;API 호출&quot;,
+    &quot;기관·표&quot;,
+    &quot;항목&quot;,
+    &quot;분류&quot;,
+    &quot;주기·기간&quot;,
+    &quot;단위&quot;,
+    &quot;수치&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;error&quot;,
+  &quot;runtime_error&quot;: &quot;예금은행 수신금리(잔액 기준): 조회 실패: DT_121Y013&quot;,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_121Y015&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [],
+  &quot;numeric_differences&quot;: [
+    {
+      &quot;period&quot;: &quot;202401&quot;,
+      &quot;expected&quot;: &quot;5.07&quot;,
+      &quot;observed&quot;: []
+    },
+    {
+      &quot;period&quot;: &quot;202402&quot;,
+      &quot;expected&quot;: &quot;5.03&quot;,
+      &quot;observed&quot;: []
+    },
+    {
+      &quot;period&quot;: &quot;202403&quot;,
+      &quot;expected&quot;: &quot;5&quot;,
+      &quot;observed&quot;: []
+    }
+  ],
+  &quot;model_http_calls&quot;: 0,
+  &quot;kosis_http_calls&quot;: 3
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_121Y013&quot;,
+    &quot;table_name&quot;: &quot;예금은행 수신금리(잔액 기준)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134701999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134701ACC_ITEM.BEABAB&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_121Y013&quot;,
+      &quot;itmId&quot;: &quot;13103134701999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134701ACC_ITEM.BEABAB&quot;
+    }
+  },
+  {
+    &quot;table_id&quot;: &quot;DT_121Y015&quot;,
+    &quot;table_name&quot;: &quot;예금은행 대출금리(잔액 기준)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134612999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134612ACC_ITEM.BECBLB0202&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_121Y015&quot;,
+      &quot;itmId&quot;: &quot;13103134612999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134612ACC_ITEM.BECBLB0202&quot;
+    }
+  },
+  {
+    &quot;table_id&quot;: &quot;DT_121Y015&quot;,
+    &quot;table_name&quot;: &quot;예금은행 대출금리(잔액 기준)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134612999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134612ACC_ITEM.BECBLB&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_121Y015&quot;,
+      &quot;itmId&quot;: &quot;13103134612999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134612ACC_ITEM.BECBLB&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-05 · 미통과</h2><p>2024년 1~3월 예금은행 저축성수신 금리를 금융채 제외·신규취급액 기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-05&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_121Y002&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_121Y002&quot;,
+    &quot;table_name&quot;: &quot;예금은행 수신금리(신규취급액 기준)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134588999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134588ACC_ITEM.BEABAA1&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_121Y002&quot;,
+      &quot;itmId&quot;: &quot;13103134588999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134588ACC_ITEM.BEABAA1&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-06 · 통과</h2><p>2024년 1~4분기 예금은행 산업별대출금에서 제조업 중소기업의 대출금을 분기별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-06&quot;,
+  &quot;result&quot;: &quot;통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: true,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_131Y018&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_131Y018&quot;,
+    &quot;table_name&quot;: &quot;산업별대출금(예금은행 기업규모별)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103136163999&quot;,
+    &quot;frequency&quot;: &quot;Q&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202404&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102136163ACC_ITEM.1103000&quot;,
+      &quot;objL2&quot;: &quot;13102136163ENTERPRISE_SCALE.E20&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_131Y018&quot;,
+      &quot;itmId&quot;: &quot;13103136163999&quot;,
+      &quot;prdSe&quot;: &quot;Q&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202404&quot;,
+      &quot;objL1&quot;: &quot;13102136163ACC_ITEM.1103000&quot;,
+      &quot;objL2&quot;: &quot;13102136163ENTERPRISE_SCALE.E20&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-07 · 미통과</h2><p>2024년 1~3월 부산 지역 예금은행 가계대출을 말잔 기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-07&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: false,
+    &quot;항목&quot;: false,
+    &quot;분류&quot;: false,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: false
+  },
+  &quot;failed_checks&quot;: [
+    &quot;기관·표&quot;,
+    &quot;항목&quot;,
+    &quot;분류&quot;,
+    &quot;주기·기간&quot;,
+    &quot;수치&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_151Y003&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [
+    {
+      &quot;period&quot;: &quot;202401&quot;,
+      &quot;expected&quot;: &quot;62850.3&quot;,
+      &quot;observed&quot;: [
+        &quot;919685.2&quot;
+      ]
+    },
+    {
+      &quot;period&quot;: &quot;202402&quot;,
+      &quot;expected&quot;: &quot;62879.8&quot;,
+      &quot;observed&quot;: [
+        &quot;921520.3&quot;
+      ]
+    },
+    {
+      &quot;period&quot;: &quot;202403&quot;,
+      &quot;expected&quot;: &quot;62914.1&quot;,
+      &quot;observed&quot;: [
+        &quot;919202.8&quot;
+      ]
+    }
+  ],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_151Y002&quot;,
+    &quot;table_name&quot;: &quot;예금취급기관 가계대출(업권별 월)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134549999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134549ACC_ITEM.1111000&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_151Y002&quot;,
+      &quot;itmId&quot;: &quot;13103134549999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134549ACC_ITEM.1111000&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-08 · 통과</h2><p>2024년 1~4분기 시장가격 국내총생산(GDP)을 실질·계절조정계열로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-08&quot;,
+  &quot;result&quot;: &quot;통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: true,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_200Y104&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 4,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_200Y104&quot;,
+    &quot;table_name&quot;: &quot;경제활동별 GDP 및 GNI(계절조정 실질 분기)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103136259999&quot;,
+    &quot;frequency&quot;: &quot;Q&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202404&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102136259ACC_ITEM.1400&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_200Y104&quot;,
+      &quot;itmId&quot;: &quot;13103136259999&quot;,
+      &quot;prdSe&quot;: &quot;Q&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202404&quot;,
+      &quot;objL1&quot;: &quot;13102136259ACC_ITEM.1400&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-09 · 미통과</h2><p>2023년과 2024년 시장가격 국내총생산(GDP)을 명목·원계열의 연간 값으로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-09&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: false,
+    &quot;기관·표&quot;: false,
+    &quot;항목&quot;: false,
+    &quot;분류&quot;: false,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: false,
+    &quot;수치&quot;: false
+  },
+  &quot;failed_checks&quot;: [
+    &quot;API 호출&quot;,
+    &quot;기관·표&quot;,
+    &quot;항목&quot;,
+    &quot;분류&quot;,
+    &quot;주기·기간&quot;,
+    &quot;단위&quot;,
+    &quot;수치&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;error&quot;,
+  &quot;runtime_error&quot;: &quot;제도부문별 소득계정(명목 연간): 조회 실패: DT_200Y121&quot;,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_200Y105&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;2023&quot;,
+    &quot;2024&quot;
+  ],
+  &quot;observed_periods&quot;: [],
+  &quot;numeric_differences&quot;: [
+    {
+      &quot;period&quot;: &quot;2023&quot;,
+      &quot;expected&quot;: &quot;2407575.8&quot;,
+      &quot;observed&quot;: []
+    },
+    {
+      &quot;period&quot;: &quot;2024&quot;,
+      &quot;expected&quot;: &quot;2564204.2&quot;,
+      &quot;observed&quot;: []
+    }
+  ],
+  &quot;model_http_calls&quot;: 0,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_200Y121&quot;,
+    &quot;table_name&quot;: &quot;제도부문별 소득계정(명목 연간)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103136278999&quot;,
+    &quot;frequency&quot;: &quot;A&quot;,
+    &quot;start_period&quot;: &quot;2023&quot;,
+    &quot;end_period&quot;: &quot;2024&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102136278AMT_CD.111&quot;,
+      &quot;objL2&quot;: &quot;13102136278ACC_ITEM.5017&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_200Y121&quot;,
+      &quot;itmId&quot;: &quot;13103136278999&quot;,
+      &quot;prdSe&quot;: &quot;A&quot;,
+      &quot;startPrdDe&quot;: &quot;2023&quot;,
+      &quot;endPrdDe&quot;: &quot;2024&quot;,
+      &quot;objL1&quot;: &quot;13102136278AMT_CD.111&quot;,
+      &quot;objL2&quot;: &quot;13102136278ACC_ITEM.5017&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-10 · 미통과</h2><p>2024년 1~3월 국제수지의 경상수지를 계절조정하지 않은 월별 원계열로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-10&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: false,
+    &quot;항목&quot;: false,
+    &quot;분류&quot;: false,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: false
+  },
+  &quot;failed_checks&quot;: [
+    &quot;기관·표&quot;,
+    &quot;항목&quot;,
+    &quot;분류&quot;,
+    &quot;주기·기간&quot;,
+    &quot;수치&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_301Y013&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [
+    {
+      &quot;period&quot;: &quot;202401&quot;,
+      &quot;expected&quot;: &quot;3511.9&quot;,
+      &quot;observed&quot;: [
+        &quot;3511.9&quot;,
+        &quot;8841.8&quot;
+      ]
+    },
+    {
+      &quot;period&quot;: &quot;202402&quot;,
+      &quot;expected&quot;: &quot;6802.1&quot;,
+      &quot;observed&quot;: [
+        &quot;6802.1&quot;,
+        &quot;6783.4&quot;
+      ]
+    },
+    {
+      &quot;period&quot;: &quot;202403&quot;,
+      &quot;expected&quot;: &quot;7826.8&quot;,
+      &quot;observed&quot;: [
+        &quot;7826.8&quot;,
+        &quot;7430.9&quot;
+      ]
+    }
+  ],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 2
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_301Y013&quot;,
+    &quot;table_name&quot;: &quot;국제수지&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134519999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134519ACC_CD.000000&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_301Y013&quot;,
+      &quot;itmId&quot;: &quot;13103134519999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134519ACC_CD.000000&quot;
+    }
+  },
+  {
+    &quot;table_id&quot;: &quot;DT_301Y017&quot;,
+    &quot;table_name&quot;: &quot;경상수지(계절조정)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134664999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134664ACC_CD.SA000&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_301Y017&quot;,
+      &quot;itmId&quot;: &quot;13103134664999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134664ACC_CD.SA000&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-11 · 통과</h2><p>2023년과 2024년 중국에 대한 경상수지를 연간으로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-11&quot;,
+  &quot;result&quot;: &quot;통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: true,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_301Y015&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;2023&quot;,
+    &quot;2024&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;2023&quot;,
+    &quot;2024&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_301Y015&quot;,
+    &quot;table_name&quot;: &quot;지역별 경상수지&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134752999&quot;,
+    &quot;frequency&quot;: &quot;A&quot;,
+    &quot;start_period&quot;: &quot;2023&quot;,
+    &quot;end_period&quot;: &quot;2024&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134752ACC_CD.REG0000&quot;,
+      &quot;objL2&quot;: &quot;13102134752RG_CD.CN&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_301Y015&quot;,
+      &quot;itmId&quot;: &quot;13103134752999&quot;,
+      &quot;prdSe&quot;: &quot;A&quot;,
+      &quot;startPrdDe&quot;: &quot;2023&quot;,
+      &quot;endPrdDe&quot;: &quot;2024&quot;,
+      &quot;objL1&quot;: &quot;13102134752ACC_CD.REG0000&quot;,
+      &quot;objL2&quot;: &quot;13102134752RG_CD.CN&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-12 · 통과</h2><p>2024년 1~4분기 국제투자대조표의 대외금융자산 총액을 분기별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-12&quot;,
+  &quot;result&quot;: &quot;통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: true,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_311Y001&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_311Y001&quot;,
+    &quot;table_name&quot;: &quot;국제투자대조표(IIP)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134486999&quot;,
+    &quot;frequency&quot;: &quot;Q&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202404&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134486ACC_CD.1000000&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_311Y001&quot;,
+      &quot;itmId&quot;: &quot;13103134486999&quot;,
+      &quot;prdSe&quot;: &quot;Q&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202404&quot;,
+      &quot;objL1&quot;: &quot;13102134486ACC_CD.1000000&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-13 · 미통과</h2><p>2024년 1~3월 수입물가지수 기본분류의 총지수를 원화기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-13&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_401Y015&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_401Y015&quot;,
+    &quot;table_name&quot;: &quot;수입물가지수(기본분류)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134643999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134643ACC_CD.*AA&quot;,
+      &quot;objL2&quot;: &quot;13102134643CRR_CTRT_CD.W&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_401Y015&quot;,
+      &quot;itmId&quot;: &quot;13103134643999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134643ACC_CD.*AA&quot;,
+      &quot;objL2&quot;: &quot;13102134643CRR_CTRT_CD.W&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-14 · 미통과</h2><p>2024년 1~3월 수출물가지수 기본분류의 총지수를 달러기준으로 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-14&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_402Y014&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_402Y014&quot;,
+    &quot;table_name&quot;: &quot;수출물가지수(기본분류)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134642999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134642ACC_CD.*AA&quot;,
+      &quot;objL2&quot;: &quot;13102134642CRR_CTRT_CD.D&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_402Y014&quot;,
+      &quot;itmId&quot;: &quot;13103134642999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134642ACC_CD.*AA&quot;,
+      &quot;objL2&quot;: &quot;13102134642CRR_CTRT_CD.D&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-15 · 미통과</h2><p>2024년 1~3월 수출금액지수 총지수를 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-15&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_403Y001&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_403Y001&quot;,
+    &quot;table_name&quot;: &quot;수출금액지수&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134671999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134671ACC_CD.*AA&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_403Y001&quot;,
+      &quot;itmId&quot;: &quot;13103134671999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134671ACC_CD.*AA&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-16 · 미통과</h2><p>2024년 1~3월 수출물량지수 총지수를 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-16&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_403Y002&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_403Y002&quot;,
+    &quot;table_name&quot;: &quot;수출물량지수&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134523999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134523ACC_CD.*AA&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_403Y002&quot;,
+      &quot;itmId&quot;: &quot;13103134523999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134523ACC_CD.*AA&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-17 · 미통과</h2><p>2024년 1~3월 순상품교역조건지수를 월별로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-17&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [
+    &quot;주기·기간&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_403Y005&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;202401&quot;,
+    &quot;202402&quot;,
+    &quot;202403&quot;,
+    &quot;202404&quot;,
+    &quot;202405&quot;,
+    &quot;202406&quot;,
+    &quot;202407&quot;,
+    &quot;202408&quot;,
+    &quot;202409&quot;,
+    &quot;202410&quot;,
+    &quot;202411&quot;,
+    &quot;202412&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_403Y005&quot;,
+    &quot;table_name&quot;: &quot;교역조건지수&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134627999&quot;,
+    &quot;frequency&quot;: &quot;M&quot;,
+    &quot;start_period&quot;: &quot;202401&quot;,
+    &quot;end_period&quot;: &quot;202412&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134627TERMS_TRADE_TYPE.A&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_403Y005&quot;,
+      &quot;itmId&quot;: &quot;13103134627999&quot;,
+      &quot;prdSe&quot;: &quot;M&quot;,
+      &quot;startPrdDe&quot;: &quot;202401&quot;,
+      &quot;endPrdDe&quot;: &quot;202412&quot;,
+      &quot;objL1&quot;: &quot;13102134627TERMS_TRADE_TYPE.A&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-18 · 통과</h2><p>제11차 한국표준산업분류 기준 기업경영분석에서 제조업·기업규모 종합의 2023년과 2024년 매출액증가율을 연간으로 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-18&quot;,
+  &quot;result&quot;: &quot;통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: true,
+    &quot;기관·표&quot;: true,
+    &quot;항목&quot;: true,
+    &quot;분류&quot;: true,
+    &quot;주기·기간&quot;: true,
+    &quot;단위&quot;: true,
+    &quot;수치&quot;: true
+  },
+  &quot;failed_checks&quot;: [],
+  &quot;runtime_status&quot;: &quot;resolved&quot;,
+  &quot;execution_status&quot;: &quot;success&quot;,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: null,
+  &quot;expected_table&quot;: &quot;DT_501Y005&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;2023&quot;,
+    &quot;2024&quot;
+  ],
+  &quot;observed_periods&quot;: [
+    &quot;2023&quot;,
+    &quot;2024&quot;
+  ],
+  &quot;numeric_differences&quot;: [],
+  &quot;model_http_calls&quot;: 1,
+  &quot;kosis_http_calls&quot;: 1
+}</pre><details><summary>관측된 계획</summary><pre>[
+  {
+    &quot;table_id&quot;: &quot;DT_501Y005&quot;,
+    &quot;table_name&quot;: &quot;성장성 지표(제11차 한국표준산업분류 2009~)&quot;,
+    &quot;org_id&quot;: &quot;301&quot;,
+    &quot;item_id&quot;: &quot;13103134632999&quot;,
+    &quot;frequency&quot;: &quot;A&quot;,
+    &quot;start_period&quot;: &quot;2023&quot;,
+    &quot;end_period&quot;: &quot;2024&quot;,
+    &quot;classifications&quot;: {
+      &quot;objL1&quot;: &quot;13102134632BZTYP_CD.C&quot;,
+      &quot;objL2&quot;: &quot;13102134632ENTERPRISE_SCALE.A&quot;,
+      &quot;objL3&quot;: &quot;13102134632ACC_ITEM.506&quot;
+    },
+    &quot;exact_params&quot;: {
+      &quot;method&quot;: &quot;getList&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;jsonVD&quot;: &quot;Y&quot;,
+      &quot;smblChk&quot;: &quot;Y&quot;,
+      &quot;orgId&quot;: &quot;301&quot;,
+      &quot;tblId&quot;: &quot;DT_501Y005&quot;,
+      &quot;itmId&quot;: &quot;13103134632999&quot;,
+      &quot;prdSe&quot;: &quot;A&quot;,
+      &quot;startPrdDe&quot;: &quot;2023&quot;,
+      &quot;endPrdDe&quot;: &quot;2024&quot;,
+      &quot;objL1&quot;: &quot;13102134632BZTYP_CD.C&quot;,
+      &quot;objL2&quot;: &quot;13102134632ENTERPRISE_SCALE.A&quot;,
+      &quot;objL3&quot;: &quot;13102134632ACC_ITEM.506&quot;
+    }
+  }
+]</pre></details></section><section><h2>DA3-19 · 미통과</h2><p>2008 SNA 기준 상세자금순환표(2018~)의 잔액표에서 계정항목은 현금 발행 및 예수금 합계, 제도부문은 합계로 선택해 2023년과 2024년 값을 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-19&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: false,
+    &quot;기관·표&quot;: false,
+    &quot;항목&quot;: false,
+    &quot;분류&quot;: false,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: false,
+    &quot;수치&quot;: false
+  },
+  &quot;failed_checks&quot;: [
+    &quot;API 호출&quot;,
+    &quot;기관·표&quot;,
+    &quot;항목&quot;,
+    &quot;분류&quot;,
+    &quot;주기·기간&quot;,
+    &quot;단위&quot;,
+    &quot;수치&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;need_details&quot;,
+  &quot;execution_status&quot;: null,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: &quot;승인된 349개 표의 실제 KOSIS 메타데이터를 확인하고 있습니다 (0/349). 자료 부재 판정이 아닙니다. 잠시 후 같은 요청으로 확인을 이어가 주세요.&quot;,
+  &quot;expected_table&quot;: &quot;DT_284Y001&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;2023&quot;,
+    &quot;2024&quot;
+  ],
+  &quot;observed_periods&quot;: [],
+  &quot;numeric_differences&quot;: [
+    {
+      &quot;period&quot;: &quot;2023&quot;,
+      &quot;expected&quot;: &quot;4900732.6&quot;,
+      &quot;observed&quot;: []
+    },
+    {
+      &quot;period&quot;: &quot;2024&quot;,
+      &quot;expected&quot;: &quot;5160600.7&quot;,
+      &quot;observed&quot;: []
+    }
+  ],
+  &quot;model_http_calls&quot;: 0,
+  &quot;kosis_http_calls&quot;: 0
+}</pre><details><summary>관측된 계획</summary><pre>[]</pre></details></section><section><h2>DA3-20 · 미통과</h2><p>2008 SNA 기준 상세자금순환표(2018~)의 거래표에서 계정항목은 현금 발행 및 예수금 합계, 제도부문은 합계로 선택해 2023년과 2024년 값을 보여줘. 원자료 단위도 함께 표시해줘.</p><pre>{
+  &quot;id&quot;: &quot;DA3-20&quot;,
+  &quot;result&quot;: &quot;미통과&quot;,
+  &quot;checks&quot;: {
+    &quot;API 호출&quot;: false,
+    &quot;기관·표&quot;: false,
+    &quot;항목&quot;: false,
+    &quot;분류&quot;: false,
+    &quot;주기·기간&quot;: false,
+    &quot;단위&quot;: false,
+    &quot;수치&quot;: false
+  },
+  &quot;failed_checks&quot;: [
+    &quot;API 호출&quot;,
+    &quot;기관·표&quot;,
+    &quot;항목&quot;,
+    &quot;분류&quot;,
+    &quot;주기·기간&quot;,
+    &quot;단위&quot;,
+    &quot;수치&quot;
+  ],
+  &quot;runtime_status&quot;: &quot;need_details&quot;,
+  &quot;execution_status&quot;: null,
+  &quot;runtime_error&quot;: null,
+  &quot;clarification_question&quot;: &quot;승인된 349개 표의 실제 KOSIS 메타데이터를 확인하고 있습니다 (0/349). 자료 부재 판정이 아닙니다. 잠시 후 같은 요청으로 확인을 이어가 주세요.&quot;,
+  &quot;expected_table&quot;: &quot;DT_284Y002&quot;,
+  &quot;expected_periods&quot;: [
+    &quot;2023&quot;,
+    &quot;2024&quot;
+  ],
+  &quot;observed_periods&quot;: [],
+  &quot;numeric_differences&quot;: [
+    {
+      &quot;period&quot;: &quot;2023&quot;,
+      &quot;expected&quot;: &quot;90093&quot;,
+      &quot;observed&quot;: []
+    },
+    {
+      &quot;period&quot;: &quot;2024&quot;,
+      &quot;expected&quot;: &quot;233083.9&quot;,
+      &quot;observed&quot;: []
+    }
+  ],
+  &quot;model_http_calls&quot;: 0,
+  &quot;kosis_http_calls&quot;: 0
+}</pre><details><summary>관측된 계획</summary><pre>[]</pre></details></section></html>

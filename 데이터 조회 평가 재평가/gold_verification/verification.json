@@ -1,0 +1,515 @@
+{
+  "summary": {
+    "phase": "posthoc_gold_verification",
+    "not_original_model_run": true,
+    "cases": 20,
+    "passed": 20,
+    "expected_points": 58,
+    "matched_points": 58,
+    "gold_sha256": "92361d8c2a86edca7126de6b4f972a8f2f8075a82fd6569d0dd207ca7169b4ff",
+    "network_disabled": true,
+    "evaluation_scores_changed": false
+  },
+  "results": [
+    {
+      "id": "DA3-01",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "M2 상품별 구성내역(평잔 원계열)"
+      ],
+      "official_item_names": [
+        "M2 상품별 구성내역(평잔 원계열)"
+      ],
+      "response_file": "official_responses/DA3-01.bin"
+    },
+    {
+      "id": "DA3-02",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "M2 상품별 구성내역(말잔 계절조정계열)"
+      ],
+      "official_item_names": [
+        "M2 상품별 구성내역(말잔 계절조정계열)"
+      ],
+      "response_file": "official_responses/DA3-02.bin"
+    },
+    {
+      "id": "DA3-03",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "예금은행 대출금리(신규취급액 기준)"
+      ],
+      "official_item_names": [
+        "예금은행 대출금리(신규취급액 기준)"
+      ],
+      "response_file": "official_responses/DA3-03.bin"
+    },
+    {
+      "id": "DA3-04",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "예금은행 대출금리(잔액 기준)"
+      ],
+      "official_item_names": [
+        "예금은행 대출금리(잔액 기준)"
+      ],
+      "response_file": "official_responses/DA3-04.bin"
+    },
+    {
+      "id": "DA3-05",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "예금은행 수신금리(신규취급액 기준)"
+      ],
+      "official_item_names": [
+        "예금은행 수신금리(신규취급액 기준)"
+      ],
+      "response_file": "official_responses/DA3-05.bin"
+    },
+    {
+      "id": "DA3-06",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 4,
+      "expected_points": 4,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "산업별대출금(예금은행 기업규모별)"
+      ],
+      "official_item_names": [
+        "산업별대출금(예금은행 기업규모별)"
+      ],
+      "response_file": "official_responses/DA3-06.bin"
+    },
+    {
+      "id": "DA3-07",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "예금은행 지역별 가계대출(말잔)"
+      ],
+      "official_item_names": [
+        "예금은행 지역별 가계대출(말잔)"
+      ],
+      "response_file": "official_responses/DA3-07.bin"
+    },
+    {
+      "id": "DA3-08",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 4,
+      "expected_points": 4,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "경제활동별 GDP 및 GNI(계절조정 실질 분기)"
+      ],
+      "official_item_names": [
+        "경제활동별 GDP 및 GNI(계절조정 실질 분기)"
+      ],
+      "response_file": "official_responses/DA3-08.bin"
+    },
+    {
+      "id": "DA3-09",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 2,
+      "expected_points": 2,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "경제활동별 GDP 및 GNI(원계열 명목 분기 및 연간)"
+      ],
+      "official_item_names": [
+        "경제활동별 GDP 및 GNI(원계열 명목 분기 및 연간)"
+      ],
+      "response_file": "official_responses/DA3-09.bin"
+    },
+    {
+      "id": "DA3-10",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "국제수지"
+      ],
+      "official_item_names": [
+        "국제수지"
+      ],
+      "response_file": "official_responses/DA3-10.bin"
+    },
+    {
+      "id": "DA3-11",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 2,
+      "expected_points": 2,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "지역별 경상수지"
+      ],
+      "official_item_names": [
+        "지역별 경상수지"
+      ],
+      "response_file": "official_responses/DA3-11.bin"
+    },
+    {
+      "id": "DA3-12",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 4,
+      "expected_points": 4,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "국제투자대조표(IIP)"
+      ],
+      "official_item_names": [
+        "국제투자대조표(IIP)"
+      ],
+      "response_file": "official_responses/DA3-12.bin"
+    },
+    {
+      "id": "DA3-13",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "수입물가지수(기본분류)"
+      ],
+      "official_item_names": [
+        "수입물가지수(기본분류)"
+      ],
+      "response_file": "official_responses/DA3-13.bin"
+    },
+    {
+      "id": "DA3-14",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "수출물가지수(기본분류)"
+      ],
+      "official_item_names": [
+        "수출물가지수(기본분류)"
+      ],
+      "response_file": "official_responses/DA3-14.bin"
+    },
+    {
+      "id": "DA3-15",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "수출금액지수"
+      ],
+      "official_item_names": [
+        "수출금액지수"
+      ],
+      "response_file": "official_responses/DA3-15.bin"
+    },
+    {
+      "id": "DA3-16",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "수출물량지수"
+      ],
+      "official_item_names": [
+        "수출물량지수"
+      ],
+      "response_file": "official_responses/DA3-16.bin"
+    },
+    {
+      "id": "DA3-17",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 3,
+      "expected_points": 3,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "교역조건지수"
+      ],
+      "official_item_names": [
+        "교역조건지수"
+      ],
+      "response_file": "official_responses/DA3-17.bin"
+    },
+    {
+      "id": "DA3-18",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 2,
+      "expected_points": 2,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "성장성 지표(제11차 한국표준산업분류 2009~)"
+      ],
+      "official_item_names": [
+        "성장성 지표(제11차 한국표준산업분류 2009~)"
+      ],
+      "response_file": "official_responses/DA3-18.bin"
+    },
+    {
+      "id": "DA3-19",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 2,
+      "expected_points": 2,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "잔액표"
+      ],
+      "official_item_names": [
+        "잔액표"
+      ],
+      "response_file": "official_responses/DA3-19.bin"
+    },
+    {
+      "id": "DA3-20",
+      "passed": true,
+      "checks": {
+        "API 응답": true,
+        "요청 인자": true,
+        "기관·표": true,
+        "항목": true,
+        "분류": true,
+        "주기·기간": true,
+        "단위": true,
+        "수치": true
+      },
+      "matched_points": 2,
+      "expected_points": 2,
+      "numeric_differences": [],
+      "provider_error": null,
+      "official_table_names": [
+        "거래표"
+      ],
+      "official_item_names": [
+        "거래표"
+      ],
+      "response_file": "official_responses/DA3-20.bin"
+    }
+  ]
+}

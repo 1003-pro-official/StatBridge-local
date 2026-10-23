@@ -1,0 +1,11 @@
+{
+  "phase": "posthoc_gold_verification",
+  "not_original_model_run": true,
+  "collected_at_utc": "2026-10-23T05:42:09.013106+00:00",
+  "gold_sha256": "92361d8c2a86edca7126de6b4f972a8f2f8075a82fd6569d0dd207ca7169b4ff",
+  "cases": 20,
+  "model_calls": 0,
+  "body_scope": "Decoded HTTP entity-body bytes from requests.Response.content; not TLS/network wire bytes.",
+  "note": "Fresh official responses independently verify frozen gold; do not replace prior run evidence or scores.",
+  "this_collection_is_model_run": false
+}

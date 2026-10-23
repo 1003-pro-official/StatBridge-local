@@ -1,0 +1,19 @@
+{
+  "ai_assisted": true,
+  "raw_capture_unit_check": "passed: byte preservation, SHA256, case mapping, API key redaction",
+  "question_and_gold_unchanged": true,
+  "preflight_checks_passed": 3,
+  "execution_completed_cases": 20,
+  "gold_access_attempts_after_selftest": 0,
+  "runtime_bodies_verified": 41,
+  "final_rows_found_in_official_bodies": 148,
+  "official_gold_cases_passed": 20,
+  "official_gold_points_matched": 58,
+  "credential_scan": "passed",
+  "ui_test_performed": false,
+  "full_pytest_performed_this_run": false,
+  "frontend_build_performed_this_run": false,
+  "product_code_changed": false,
+  "github_new_results_pushed": false,
+  "previous_remote_evaluation_branch_deleted": true
+}

@@ -1,0 +1,8 @@
+{
+  "ncp_configured": true,
+  "ncp_classifier": "HCX-003",
+  "ncp_main": "HCX-007",
+  "openai_model": "gpt-6.1-sol",
+  "hybrid_enabled": true,
+  "mode": "StatBridge Agent->MCP->live KOSIS; no browser/HTTP authentication evaluation; no answer-informed clarifications or retries"
+}

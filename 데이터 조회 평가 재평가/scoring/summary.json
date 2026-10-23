@@ -1,0 +1,38 @@
+{
+  "total": 20,
+  "passed": 5,
+  "failed": 15,
+  "score_percent": 25,
+  "axis_passed": {
+    "API 호출": 15,
+    "기관·표": 13,
+    "항목": 13,
+    "분류": 13,
+    "주기·기간": 5,
+    "단위": 15,
+    "수치": 13
+  },
+  "models": {
+    "HCX-007": 15,
+    "HCX-003": 1,
+    "jev-preview": 1,
+    "NCP embedding v2": 1
+  },
+  "actual_http_counts": {
+    "model": 18,
+    "kosis_data": 23,
+    "other": 0
+  },
+  "gold_isolation": {
+    "preflight_passed": 3,
+    "gold_access_attempts_after_selftest": 0,
+    "scorer_network_disabled": true
+  },
+  "scope": "Actual StatBridge Agent/MCP/live KOSIS execution, no browser or authenticated HTTP route test. One independent query per case; no answer-informed clarification, no rerun. Deterministic resolver shortcuts are included; some questions may make zero model calls.",
+  "reference": "User-reviewed gold with v3 query prefix change fixed snapshot (347 ZIP + 2 live downloads); live revisions remain strict mismatches in this run.",
+  "gold_sha256": "92361d8c2a86edca7126de6b4f972a8f2f8075a82fd6569d0dd207ca7169b4ff",
+  "observations_sha256": "c44581d449408df309d275e44bd703a85b030185afb3007a65452c6f9abd19ec",
+  "questions_sha256": "526998a951b27d93fe026da0af4befa776b815ed453d9a8b1f3d5aac3f615770",
+  "run_id": "data-accuracy-raw-rerun-20261023",
+  "runtime_response_bodies": "../execution/raw_responses"
+}

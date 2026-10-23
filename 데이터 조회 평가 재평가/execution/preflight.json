@@ -1,0 +1,18 @@
+{
+  "checks": [
+    {
+      "check": "input schema contains only id and query; 20 cases",
+      "passed": true
+    },
+    {
+      "check": "input directory contains questions.jsonl only",
+      "passed": true
+    },
+    {
+      "check": "gold read denial self-test before model execution",
+      "passed": true
+    }
+  ],
+  "questions_sha256": "526998a951b27d93fe026da0af4befa776b815ed453d9a8b1f3d5aac3f615770",
+  "no_gold_opened": true
+}

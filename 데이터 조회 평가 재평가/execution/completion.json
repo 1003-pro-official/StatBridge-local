@@ -1,0 +1,11 @@
+{
+  "completed": true,
+  "cases": 20,
+  "http_calls": {
+    "model": 18,
+    "kosis_data": 23,
+    "other": 0
+  },
+  "gold_access_attempts_after_selftest": 0,
+  "model_payload_guard_active": true
+}
