@@ -144,6 +144,7 @@ def test_availability_response_is_normal_clarification():
 def test_missing_kosis_key_never_uses_local_catalog_as_live_proof():
     from derived_indicator_runtime import DerivedIndicatorRuntime
     r=object.__new__(DerivedIndicatorRuntime);r.availability_unconfigured=True
+    r.catalog=SimpleNamespace(allow_file_inputs=False)
     result=r.plan('원자료를 확인하고 아직 계산하지 마')
     assert result['availability']['status']=='verification_failed' and result['availability']['checkedTables']==0
     assert not result['availability']['sources']
@@ -164,6 +165,7 @@ def test_normal_daily_graph_request_uses_preflight_without_user_check_instructio
     import derived_availability
     from derived_indicator_runtime import DerivedIndicatorRuntime
     calls=[];r=object.__new__(DerivedIndicatorRuntime);r.api_inventory=object()
+    r.catalog=SimpleNamespace(allow_file_inputs=False)
     expected={'status':'need_details','availability':{'status':'checked','questions':['월평균인가요?'],'sources':[{'status':'not_found'}]}}
     monkeypatch.setattr(derived_availability,'check_availability',lambda runtime,q:(calls.append(q) or expected))
     result=r.plan('2024년 11월 5일부터 2025년 2월 24일까지 달러 대비 통화가치 변화율 그래프를 만들어줘')
@@ -176,6 +178,7 @@ def test_preflight_with_all_inputs_ready_continues_normal_calculation_planning(m
     import derived_availability
     from derived_indicator_runtime import DerivedIndicatorRuntime
     r=object.__new__(DerivedIndicatorRuntime);r.api_inventory=object();calls=[]
+    r.catalog=SimpleNamespace(allow_file_inputs=False)
     r.planner=SimpleNamespace(plan=lambda q,**kwargs:(calls.append(q) or {'status':'planned','usage':['planner']}))
     monkeypatch.setattr(derived_availability,'check_availability',lambda runtime,q:{'availability':{'status':'checked','questions':[],'sources':[{'status':'available'}]},'usage':['preflight']})
     assert r.plan('일별 증가율 계산해줘')['usage']==['preflight','planner'] and len(calls)==1

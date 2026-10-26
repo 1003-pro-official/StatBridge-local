@@ -15,8 +15,24 @@ def _boundary(match,end=False):
 
 def explicit_period(query, latest=None):
     original=str(query or '')
+    original=re.sub(r'(?<!\d)(?:19|20)\d{2}\s*SNA\s*기준|\((?:19|20)\d{2}\s*[~∼]\s*\)', ' ',original,flags=re.I)
+    # Expand closed shorthand before TOKEN can mistake its year for a full
+    # January-to-December request ("2025년 1~6월"). No endpoints are guessed
+    # across distinct years, and open bounds keep their existing behavior.
+    month_range=r'(\d{1,2})\s*(?:월\s*)?(?:~|～|–|—)\s*(\d{1,2})\s*월(?:\s*까지)?'
+    expanded=re.sub(r'(?<!\d)((?:19|20)\d{2})\s*년\s*'+month_range,
+                    lambda m:f'{m[1]}년 {m[2]}월부터 {m[1]}년 {m[3]}월까지',original)
+    years=set(re.findall(r'(?<![\da-z_])(?:19|20)\d{2}(?!\d)',original,re.I))
+    if len(years)==1:
+        year=next(iter(years))
+        expanded=re.sub(r'(?<![\d년])'+month_range,
+                        lambda m:f'{year}년 {m[1]}월부터 {year}년 {m[2]}월까지',expanded)
+    if expanded!=original:
+        result=explicit_period(expanded,latest)
+        if result:result['expression']=original
+        return result
     # Index base years are metadata, not a second observation endpoint.
-    text=re.sub(r'(?<!\d)(?:19|20)\d{2}\s*(?:년\s*)?[=＝]\s*100(?!\d)',lambda m:' '*len(m[0]),original)
+    text=re.sub(r'(?<!\d)(?:19|20)\d{2}\s*(?:년\s*(?:\d{1,2}\s*월\s*)?)?[=＝]\s*100(?!\d)',lambda m:' '*len(m[0]),original)
     matches=list(TOKEN.finditer(text))
     relative = re.search(r'최근\s*(\d{1,2})\s*년', text)
     if relative and not matches and latest:
@@ -62,7 +78,10 @@ def explicit_period(query, latest=None):
         between=text[matches[0].end():matches[1].start()]
         connected=re.search(r'부터|에서|~|～|–|—|-|\bto\b',between,re.I)
         through=re.fullmatch(r'\s*(?:과|와)\s*',between) and re.match(r'\s*(?:까지|사이)',text[matches[1].end():])
-        if not connected and not through:return None
+        adjacent_years = (re.fullmatch(r'\s*(?:과|와)\s*',between) and re.search(r'연간|연도별',text)
+                          and int(matches[1]['year']) == int(matches[0]['year'])+1
+                          and not any(m['month'] or m['im'] or m['quarter'] for m in matches))
+        if not connected and not through and not adjacent_years:return None
         start,end=_boundary(matches[0]),_boundary(matches[1],True)
     elif re.search(r'현재|지금|최신|오늘',text) and re.search(r'부터|이후',text):
         if not latest:return None

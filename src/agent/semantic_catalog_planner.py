@@ -7,6 +7,7 @@ import csv
 from pathlib import Path
 from itertools import product
 from functools import lru_cache
+from collections import Counter
 
 
 def norm(s):
@@ -148,11 +149,13 @@ def matches(query,dimension):
 
 def family(q,title,table):
     """A measured family is stronger evidence than generic dimension words."""
+    if ('gdp' in q or '국내총생산' in q) and '지출' not in q:
+        return 'GDP' if '경제활동별gdp' in title and 'gni' in title else None
     if '경상수지' in q and '국제수지' not in q and '원계열' not in q and not any(w in q for w in ['상품수지','서비스수지','본원소득수지','자본수지','금융계정']):
         return '경상수지' if '경상수지' in title else None
     if any(x in q for x in ['상품수지','서비스수지','상품수출','상품수입','경상수지','본원소득수지','자본수지','금융계정']):
         if '지역' in title:return '금융계정' if '금융계정' in title and '금융계정' in q else '국제수지' if '경상수지' in title and '경상수지' in q else None
-        if '계절조정' in q:return '국제수지' if '경상수지' in title and '계절조정' in title else None
+        if '계절조정' in q and '원계열' not in q and not any(w in q for w in ['계절조정하지않','계절조정하지않은']):return '국제수지' if '경상수지' in title and '계절조정' in title else None
         return '국제수지' if title=='국제수지' else None
     if any(x in q for x in ['여행수지','운송수지']):return '서비스수지' if '서비스무역세분류' in title else None
     if '기업' in q and any(w in q for w in ['연간','연도별','최근몇년']) and '금리' not in q:
@@ -173,6 +176,8 @@ def family(q,title,table):
     if '예금은행' in q and '총수신' in q:return '총수신' if '예금은행총수신' in title else None
     if '예금은행' in q and '원화예금' in q:return '원화예금' if '예금은행원화예금' in title else None
     if '예금은행' in q and '총수신' in q:return '총수신' if '예금은행총수신' in title else None
+    if '금리' not in q and '가계대출' in q and '예금은행' in q and '예금은행지역별가계대출' in title:
+        return '가계대출잔액'
     if '금리' not in q and '비중' not in q and '대출' in q:
         if '기업대출' in q and '예금은행' in q and '예금은행대출금' in title:return '기업대출잔액'
         if '가계대출' in q and ('예금취급기관' in q or '예금은행' in q) and '예금취급기관가계대출' in title:return '가계대출잔액'
@@ -182,7 +187,7 @@ def family(q,title,table):
             return '금리비중' if '금리' in title and '비중' in title else None
         if '금리' not in title or '비중' in title:return None
         if '대출' in title:return '대출금리' if '대출' in q else None
-        if '수신' in title:return '수신금리' if any(x in q for x in ['예금','적금','수신','cd','rp']) else None
+        if '수신' in title:return '수신금리' if any(x in q.replace('예금은행','') for x in ['예금','적금','수신','저축','cd','rp']) else None
         return None
     for term in ['대출태도','신용위험','대출수요']:
         if term in title:return term if term in q else None
@@ -214,11 +219,13 @@ def family(q,title,table):
 
 
 def selections(query,tables,debug=None):
+    query=re.sub(r'계절\s*조정하지\s*않(?:은|고)?', '원계열',query)
     query=query.replace('계절 요인을 제거한','계절조정').replace('계절 요인 제거','계절조정')
     q=norm(query).replace('협의통화','m1').replace('광의통화','m2').replace('대중국','중국')
     buckets={}
     paths=catalog_paths()
-    duplicate_titles={t['table_name'] for t in tables if sum(other['table_name']==t['table_name'] for other in tables)>1}
+    counts=Counter(t['table_name'] for t in tables)
+    duplicate_titles={name for name,count in counts.items() if count>1}
     for table in tables:
         title=norm(table['table_name']);f=family(q,title,table)
         if '금리' in title and '금리' not in q:continue
@@ -237,6 +244,10 @@ def selections(query,tables,debug=None):
             if '잔액' in q and '신규취급액' not in q and '신규취급액' in path:continue
             if '신규취급액' in q and '잔액' not in q and '잔액' in path:continue
         groups=[dimension_matches(query,table,d) for d in table.get('dimensions',[])]
+        if f in {'대출금리','수신금리'}:
+            # Basis aliases describe the table, not an extra account series.
+            groups=[[v for v in vs if norm(v['value_name']) not in {'신규취급액기준','잔액기준'}] or vs for vs in groups]
+            if all(not any(norm(v['value_name']) not in {'신규취급액기준','잔액기준'} for v in vs) for vs in groups):continue
         scoped_table={**table,'item_names':table.get('item_names',[])+[v['value_name'] for vs in groups for v in vs]}
         if f=='경영애로' and '%' in table.get('units',[]):scoped_table['item_names']+=['응답 비중']
         measure_query=' '.join(v['value_name'] for v in (groups[-1] if groups else [])) if f=='corporate_measure' else query
@@ -253,6 +264,8 @@ def selections(query,tables,debug=None):
             if any(x in q for x in ['금리','업황','bsi','소비자물가','기준금리']):continue
             f='dimension_measure'
         frequency=table.get('prd_se')
+        if any(x in q for x in ['연간','연도별','매년']) and ('연간' in title or '년' in table.get('available_frequencies',[])):
+            frequency='Y'
         if '일별' in q and frequency!='D':continue
         if '시간별' in q and frequency!='H':continue
         if any(x in q for x in ['월별','월마다','매월']) and frequency!='M':continue
@@ -274,7 +287,7 @@ def selections(query,tables,debug=None):
         if '가계신용' not in q and '대출행태' in title and not any(w in q for w in ['대출태도','대출수요','신용위험','대출에대한태도']):continue
         if '예금은행' in q and '상호저축은행' not in q and '비은행' not in q and '비은행' in title:continue
         if '한국은행' in q and '원화대출금' in q and '한국은행원화대출금' not in title:continue
-        if '지역' in title and not any(x in q for x in ['지역','중국','미국','일본']):continue
+        if '지역' in title and not any(x in q for x in ['지역','중국','미국','일본']) and not any(norm(v['value_name']) in q for d in table.get('dimensions',[]) for v in d['values'] if len(norm(v['value_name']))>=2 and (re.search(r'(?:RG|AREA|REGION|NATION|COUNTRY)_',v['value_id'],re.I) or '지역' in d.get('object_name',''))):continue
         if '국가' in title and '국가' not in q:continue
         if f=='dimension_measure' and '기준' in ''.join(v['value_name'] for d in table['dimensions'] for v in d['values']) and any(w in q for w in ['수출금액','수출물량']):continue
         if '업종별기업경기' in title and '서비스업' not in q and not ('제조업' in q and '비제조업' in q):continue
@@ -350,5 +363,5 @@ def selections(query,tables,debug=None):
                 vs=vs[:1]
             choices.append(vs or [None])
         for combo in product(*choices):
-            result.append({'table_id':table['table_id'],'table_name':table['table_name'],'score':400,'reasons':['metadata_named_measure'],'dimension_hits':[{'api_param':d['api_param'],'value_id':v['value_id'],'value_name':v['value_name']} for d,v in zip(table.get('dimensions',[]),combo) if v],'_missing_dimensions':missing})
+            result.append({'table_id':table['table_id'],'table_name':table['table_name'],'score':400,'reasons':['metadata_named_measure'],'_frequency':('Y' if any(x in q for x in ['연간','연도별','매년']) and '연간' in norm(table['table_name']) else table.get('prd_se')),'dimension_hits':[{'api_param':d['api_param'],'value_id':v['value_id'],'value_name':v['value_name']} for d,v in zip(table.get('dimensions',[]),combo) if v],'_missing_dimensions':missing})
     return result

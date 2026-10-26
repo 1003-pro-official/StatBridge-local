@@ -1,6 +1,12 @@
 """Resolve explicit catalog references without treating title words as filters."""
 import re
 from itertools import product
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1024)
+def _title_pattern(name):
+    return re.compile(r"\s*".join(re.escape(c) for c in name if not c.isspace()),re.I)
 from request_match_guard import compact
 
 
@@ -11,8 +17,7 @@ def references(query, tables):
     hits=[]
     for table in tables:
         name=table['table_name']
-        pattern=r'\s*'.join(re.escape(c) for c in name if not c.isspace())
-        for m in re.finditer(pattern, searchable, re.I):
+        for m in _title_pattern(name).finditer(searchable):
             hits.append((m.start(),m.end(),table))
     hits=[h for h in hits if query[h[0]:h[1]] == h[2]['table_name'] or not any(a==h[0] and b==h[1] and query[a:b]==t['table_name'] for a,b,t in hits)]
     return [h for h in hits if not any(a<=h[0] and b>=h[1] and b-a>h[1]-h[0] for a,b,_ in hits)]

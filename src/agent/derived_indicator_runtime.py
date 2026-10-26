@@ -35,7 +35,7 @@ class DerivedIndicatorRuntime:
         # Any deployed planner, schema or validation change invalidates reuse.
         files = ('derived_indicator_planner.py', 'expression_tree_schema.py',
                  'expression_tree_validator.py', 'derived_support_policy.py',
-                 'derived_indicator_runtime.py', 'derived_plan_cache.py', 'verified_source_units.py')
+                 'derived_indicator_runtime.py', 'derived_plan_cache.py', 'verified_source_units.py', 'derived_provider_scope.py')
         self.plan_policy_hash = fingerprint([Path(__file__).with_name(f).read_text(encoding='utf-8') for f in files])
         self.plan_cache = VerifiedPlanCache()
 
@@ -87,6 +87,10 @@ class DerivedIndicatorRuntime:
         if private_metric(query):
             return self.planner.plan(query, **kwargs)
         from derived_indicator_planner import is_availability_check, needs_source_preflight
+        if not kwargs.get('previous') and not getattr(self.catalog,'allow_file_inputs',False):
+            from derived_provider_scope import explicit_provider_check
+            explicit=explicit_provider_check(self,query)
+            if explicit is not None:return explicit
         if not kwargs.get('previous') and needs_source_preflight(query) and getattr(self, 'availability_unconfigured', False):
             return {'status':'need_details','question':'KOSIS API 연결 설정이 없어 실제 자료 확보 여부를 확인하지 못했습니다. 서버의 KOSIS 키 설정을 확인해 주세요. 자료 부재 판정이 아니며 계산은 실행하지 않았습니다.',
                 'availability':{'status':'verification_failed','checkedTables':0,'requiredTables':349,'sources':[],'questions':[],'error':'KOSIS_API_KEY_missing'},'usage':[],'searches':[]}

@@ -77,6 +77,7 @@ def test_model_search_exhaustion_is_not_proof_of_zero_api_inputs(monkeypatch):
  import derived_availability
  from derived_indicator_runtime import DerivedIndicatorRuntime
  r=object.__new__(DerivedIndicatorRuntime);r.api_inventory=object()
+ r.catalog=NS(allow_file_inputs=False)
  r.planner=NS(plan=lambda *a,**kw:{'status':'need_details','unsupported':True,'usage':[{'stage':'planning'}]})
  verified={'status':'need_details','availability':{'status':'checked','sources':[{'status':'available'},{'status':'not_found'}],'questions':[]},'usage':[{'stage':'api_check'}]}
  monkeypatch.setattr(derived_availability,'check_availability',lambda *a:verified)

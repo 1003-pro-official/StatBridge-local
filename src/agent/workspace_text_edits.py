@@ -9,8 +9,20 @@ END=r'(?:바꿔줘|변경해줘|바꿔\s*주세요|변경해\s*주세요|해줘|
 def simple_workspace_commands(text,spec,series,selected='chart'):
     text=text.strip().rstrip('.!?')
     if re.search(r'[;\n]|그리고|바꾸고|변경하고|옮기고',text):return None
+    title_size=re.fullmatch(r'제목(?:의)?\s*(?:(?:글자|폰트)\s*)?크기(?:를|는|도)?\s*(\d+)\s*(?:px|pt)?(?:으?로)\s*'+END,text)
+    if title_size:
+        size=int(title_size[1])
+        if not 10<=size<=42:raise ValueError('제목 크기는 10~42로 지정해 주세요.')
+        return [ChartEditCommand(operation='set_presentation',kind='STYLE_EDIT',params={'title_size':size})]
+    # Attribute requests without an explicit new title must reach the normal
+    # interpreter. Otherwise "제목 크기도 24로" becomes the literal title.
+    if re.match(r'제목(?:의)?\s*(?:크기|글자|글씨|폰트|색|위치|정렬|두께|높이|너비)',text):return None
     title=re.fullmatch(r'제목(?:을|은)?\s*(.+?)(?:으?로)\s*'+END,text)
-    if title:return [ChartEditCommand(operation='set_title',kind='STYLE_EDIT',value=title[1].strip().strip('"\''))]
+    if title:
+        value=title[1].strip()
+        pairs={'"':'"',"'":"'",'‘':'’','“':'”'}
+        if len(value)>=2 and pairs.get(value[0])==value[-1]:value=value[1:-1]
+        return [ChartEditCommand(operation='set_title',kind='STYLE_EDIT',value=value)]
     period=re.fullmatch(r'(\d{4})년\s*([1-4])분기부터\s*(\d{4})년\s*([1-4])분기까지\s*'+COLOR+r'(?:으?로)\s*강조(?:해줘|해\s*주세요)',text)
     if period and series and all(s.get('frequency')=='Q' for s in series):
         start=f'{period[1]}0{period[2]}';end=f'{period[3]}0{period[4]}'

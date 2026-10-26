@@ -3,6 +3,19 @@ import re
 from output_schema import ChartEditCommand
 
 
+def complete_legend_visibility(instruction,commands):
+    """A legend placement plan must also honor an explicit show request."""
+    text=re.sub(r'“[^”]*”|‘[^’]*’|"[^"]*"|\'[^\']*\'', '', instruction)
+    placement=any(c.operation=='set_legend' and isinstance(c.value,str) for c in commands)
+    show=bool(re.search(r'범례[^.;\n]*(?:보여|표시)|^\s*다시\s*보여',text))
+    negative=bool(re.search(r'숨|감춰|표시\s*하지|보여\s*주지',text))
+    if not placement or not show or negative:return commands
+    # Keep position and every unrelated edit. Visibility and placement are
+    # independent fields in the output contract.
+    return [c for c in commands if not(c.operation=='set_legend' and isinstance(c.value,bool))]+[
+        ChartEditCommand(operation='set_legend',kind='STYLE_EDIT',value=True)]
+
+
 def selected_style(instruction,operation,mark=None):
     if '사용자가 고른 RGB 색상' not in instruction:return None
     tail=instruction.split('사용자가 고른 RGB 색상')[-1]

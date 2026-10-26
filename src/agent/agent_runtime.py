@@ -371,8 +371,8 @@ class StatBridgeAgent:
         params = dict(table.get("api_call_params") or {})
         item_ids = list(table.get("item_ids") or [])
         item_id = str(params.get("itmId") or (item_ids[0] if item_ids else "ALL"))
-        frequency = str(params.get("prdSe") or table.get("prd_se") or "Y")
-        start_period, end_period = self._periods(query, table)
+        frequency = str(selected.get("_frequency") or params.get("prdSe") or table.get("prd_se") or "Y")
+        start_period, end_period = self._periods(query, {**table, "prd_se": frequency})
         classifications = self._merge_classifications(table, selected)
         if selected.get("_comparison_default"):
             classifications = self._merge_classifications(table, {})

@@ -6,6 +6,12 @@ def input_guidance(slot, query=''):
     base={'searchTerms':name[:120], 'verifiedAt':'2026-10-19', 'links':[],
           'checklist':['요청한 지표·지역·항목이 일치하는지 확인해 주세요.', '표시기간과 필요한 과거 이력을 포함하고 주기·단위·기준연도를 확인해 주세요.',
                        '파일의 source에 기관·통계표명 또는 자체 자료의 작성 기준을 기록해 주세요.']}
+    if re.search(r'세계\s*은행|world\s*bank',name,re.I) and re.search(r'인구|population',name,re.I):
+        return {**base,'verifiedAt':'2026-10-22','kind':'official_series_directory',
+                'title':'세계은행 Population, total (SP.POP.TOTL)',
+                'description':'세계은행 지표 SP.POP.TOTL에서 Korea, Rep. (KOR), 요청 연도, 연간 인구 총수(명)를 선택해 CSV 또는 Excel로 내려받으세요. 공식 다운로드가 여러 국가·연도의 넓은 표이면 한국의 요청 연도만 추려 앱의 빈 양식으로 정리하세요. period에는 연도, value에는 인구, unit에는 명, frequency에는 Y, source에는 세계은행 SP.POP.TOTL을 기록한 뒤 부족 자료 업로드 공간에 넣으세요. 추정 인구나 다른 기관 값으로 대체하지 않습니다.',
+                'links':[{'label':'세계은행 · 한국 총인구 SP.POP.TOTL','url':'https://data.worldbank.org/indicator/SP.POP.TOTL?locations=KR','note':'Korea, Rep. → 요청 연도 → Download CSV/Excel → 연간·명 확인'}],
+                'checklist':base['checklist']+['국가 코드 KOR·지표 코드 SP.POP.TOTL·연간 단위 명을 확인해 주세요.']}
     if re.search(r'가상|합성|시험용|검증용',text) or re.search(r'가상|합성',query) and re.search(r'사용자|비용지수',name):
         return {**base,'kind':'self_provided','title':'직접 작성하는 시험 자료입니다',
                 'description':'이 요청의 가상·합성 지수에 대응하는 공식 다운로드 자료는 안내할 수 없습니다. 사용자가 정한 실제 시험값과 산정 기준을 양식에 입력해 주세요. 공식 지수로 대체하거나 관측값을 만들어 제공하지 않습니다.'}

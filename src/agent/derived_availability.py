@@ -19,6 +19,7 @@ class RequiredPeriod(ClosedModel):
 
 class RequiredInput(ClosedModel):
     name: str = Field(min_length=1,max_length=250)
+    requested_provider: Literal["bok_kosis", "external", "unspecified"] = "unspecified"
     # Semantic search vocabulary, not observations, formulas or a recipe library.
     search_terms: list[str] = Field(min_length=1,max_length=6)
     periods: list[RequiredPeriod] = Field(min_length=1,max_length=4)
@@ -46,11 +47,12 @@ class CandidateSelection(ClosedModel):
 
 
 SYSTEM = '''사용자에게는 한국어 존댓말로 안내한다.
-calculation_guide에는 사용자 지표의 예정 계산법, 필요한 입력, 단위, 미확정 조건을 짧게 설명한다. 실제 수치는 생성하지 않는다.
+calculation_guide에는 사용자 지표의 예정 계산법, 필요한 입력, 단위, 미확정 조건을 짧게 설명한다. 실제 수치는 생성하지 않는다. 원화 기준은 통화 지정이며 원 단위로 자동 환산한다는 뜻이 아니다. 금액 자료는 실제 API에서 확인한 원·백만원·십억원 등의 배율을 유지한다고 설명하고, 아직 확인하지 않은 배율 환산이나 원/명 출력을 약속하지 않는다.
 통화가치 변화율은 원자료가 자국통화/USD이면 (시작환율/종료환율-1)*100, USD/자국통화이면 (종료환율/시작환율-1)*100이다.
 DXY는 (종료지수/시작지수-1)*100이며 통화가치와 구별한다. 평균선은 사용자가 지정한 대상의 변화율 산술평균이다.
 사용자의 '계산 전 원자료 확보 확인' 요청을 구조화한다. 계산이나 수치 생성은 금지다.
 server_display_period가 있으면 서버가 원문에서 확정한 표시기간이다. 2020=100 같은 지수 기준연도와 구별하고, 끝 연도가 생략된 월 범위의 연도를 임의로 바꾸지 않는다. 필요한 시차 이력은 별도 입력 범위로 설명한다.
+requested_provider는 요청한 출처가 한국은행 KOSIS이면 bok_kosis, 세계은행 등 외부기관이면 external, 출처를 지정하지 않았으면 unspecified이다. 명시된 기관을 name에도 보존한다. 명시 출처를 다른 기관의 유사 자료로 대체하지 않는다.
 inputs는 필요한 원자료를 정확히 한 시계열씩 나열한다(최대12). 국가를 한 항목에 묶지 않는다.
 비교기간을 각각 periods에 보존한다. 1기의 월평균/특정일 기준이 미확정이면 frequency=pending,
 start/end에는 원문에 있는 YYYYMM 수준까지만 적고 임의 날짜를 채우지 않는다. 일별은 YYYYMMDD.
@@ -167,6 +169,10 @@ def check_availability(runtime, query):
     if not isinstance(query,str) or not 1<=len(query)<=8000:
         raise DerivedValidationError('질문은 1~8,000자 안에서 입력해 주세요.')
     started=time.perf_counter()
+    from derived_provider_scope import explicit_provider_check
+    explicit = explicit_provider_check(runtime, query)
+    if explicit is not None:
+        return explicit
     inventory=runtime.api_inventory
     snapshot=inventory.ensure()
     if snapshot is None:
@@ -189,6 +195,9 @@ def check_availability(runtime, query):
         # application-level defaults, in the required list.
         schema['required']=list(schema['properties'])
         schema['properties']['calculation_guide'].pop('default',None)
+        definition=schema['$defs']['RequiredInput']
+        definition['required']=list(definition['properties'])
+        definition['properties']['requested_provider'].pop('default',None)
         options['response_schema']=schema
     from derived_request_period import requested_display_period
     normalized_period=requested_display_period(query)

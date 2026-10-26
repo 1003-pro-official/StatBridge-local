@@ -317,17 +317,18 @@ export default function ChartSketchEditor({ children, series, sessionId, revisio
         <button type="button" disabled={!marks.length||loading||busy} onClick={()=>setMarks([])}>표시 지우기</button>
       </>}
     </div>
-    {marks.some(mark=>!mark.selection&&!elementTargets.has(mark.target))&&<details className="sketch-unresolved"><summary>표시 범위를 확인해 주세요</summary>
+    <details className="sketch-unresolved"><summary>수정 대상 · 시점 선택</summary>
     <div className="sketch-fields">
-      <label>수정 대상<select value={target} disabled={loading||busy} onChange={e=>{setTarget(e.target.value);setStart("");setEnd("");}}>
+      <label>수정 대상<select aria-label="수정 대상" value={target} disabled={loading||busy} onChange={e=>{setTarget(e.target.value);setStart("");setEnd("");}}>
         <option value="chart">그래프 전체 / 확인 필요</option><option value="title">제목</option><option value="legend">범례</option><option value="x_axis">가로축</option><option value="y_axis">세로축</option>
         {Array.from(new Set(series.map(s=>s.label))).map(label=><option key={label} value={label}>{label}</option>)}
       </select></label>
-      <label>적용 범위<select value={scope} disabled={loading||busy||elementTargets.has(target)} onChange={e=>setScope(e.target.value as EditSelection["scope"])}><option value="segment">선분 / 관측 구간</option><option value="point">관측점 / 막대 하나</option><option value="series">계열 전체</option></select>{elementTargets.has(target)&&<small>제목·축·범례는 시점 선택 없이 수정합니다.</small>}</label>
-      {chosen&&scope!=="series"&&<><label>시작 시점<select value={start} onChange={e=>setStart(e.target.value)}><option value="">그림으로 선택</option>{periods.map(p=><option key={p}>{p}</option>)}</select></label>{scope==="segment"&&<label>종료 시점<select value={end} onChange={e=>setEnd(e.target.value)}><option value="">그림으로 선택</option>{periods.map(p=><option key={p}>{p}</option>)}</select></label>}</>}
+      <label>적용 범위<select aria-label="적용 범위" value={scope} disabled={loading||busy||elementTargets.has(target)} onChange={e=>setScope(e.target.value as EditSelection["scope"])}><option value="segment">선분 / 관측 구간</option><option value="point">관측점 / 막대 하나</option><option value="series">계열 전체</option></select>{elementTargets.has(target)&&<small>제목·축·범례는 시점 선택 없이 수정합니다.</small>}</label>
+      {chosen&&scope!=="series"&&<><label>시작 시점<select aria-label="선택 시작 시점" value={start} onChange={e=>setStart(e.target.value)}><option value="">그림으로 선택</option>{periods.map(p=><option key={p}>{p}</option>)}</select></label>{scope==="segment"&&<label>종료 시점<select aria-label="선택 종료 시점" value={end} onChange={e=>setEnd(e.target.value)}><option value="">그림으로 선택</option>{periods.map(p=><option key={p}>{p}</option>)}</select></label>}</>}
       {manual&&<span>선택: {manual.label} · {manual.scope} · {manual.start} ~ {manual.end}</span>}
     </div>
-    </details>}
+    </details>
+    {marks.map((mark,index)=><label key={mark.id}>mark-{index+1} 수정 설명<textarea aria-label={`표시 ${index+1} 수정 설명`} value={mark.text} disabled={loading||busy} onChange={e=>setMarks(current=>current.map(item=>item.id===mark.id?{...item,text:e.target.value}:item))}/></label>)}
     {enabled&&!selectMode&&tool==="text"&&<div className="setup-block sketch-text-panel" role="group" aria-label="그래프 텍스트 표시 입력">
       <label>표시할 텍스트<textarea ref={textInput} value={note} maxLength={300} disabled={loading||busy} onChange={e=>setNote(e.target.value)} placeholder="그래프 위에 배치할 수정 설명을 입력하세요"/></label>
       <p>{textAnchor?"배치 위치를 선택했습니다. 텍스트 배치를 눌러 주세요.":"텍스트를 입력한 뒤 그래프에서 배치할 위치를 클릭하세요."} 최종 그래프 주석이 아닌 수정 지시용 표시입니다.</p>

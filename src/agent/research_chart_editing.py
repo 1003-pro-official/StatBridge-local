@@ -218,7 +218,11 @@ def validate_research_spec(series: list[dict[str, Any]], spec: ChartSpec) -> Non
             raise ValueError("이 그래프의 계열 스타일은 색상·투명도만 지원합니다.")
         if kind == "heatmap":
             raise ValueError("히트맵 색상은 set_presentation의 color_scale로 변경해 주세요.")
-        if kind in {"bar", "stacked_bar"} and props & {"dash", "marker_size", "marker_symbol", "markers", "line_shape"}:
+        # A solid line is neutral when an existing series changes to bars.
+        # Keep that setting for a later return to lines; actual dash patterns
+        # remain unsupported on bars and are still rejected below.
+        bar_props = props - ({"dash"} if style.dash == "solid" else set())
+        if kind in {"bar", "stacked_bar"} and bar_props & {"dash", "marker_size", "marker_symbol", "markers", "line_shape"}:
             raise ValueError("막대는 색상·투명도·테두리·값 표시를 사용해 주세요.")
         if kind in {"scatter", "bubble"} and (props & {"dash", "width", "line_shape"} or label != series[0]["label"]):
             raise ValueError("산점도 스타일 대상은 첫 번째 좌표 계열입니다. 점 스타일을 사용해 주세요.")
