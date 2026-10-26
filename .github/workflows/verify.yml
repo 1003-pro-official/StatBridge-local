@@ -44,6 +44,16 @@ jobs:
       - name: Validate v4.1 dataset
         run: python eval/table-discovery/v4.1/scripts/validate_v41.py
 
+      - name: Verify BOK reproduction evaluation tools
+        run: |
+          python -m pytest -q eval/bok-reproduction/v1/tests
+          python eval/bok-reproduction/v1/scripts/evaluate.py validate
+
+      - name: Verify E2E workflow evaluation contracts
+        run: |
+          python -m pytest -q eval/statbridge-e2e/v1/tests
+          python eval/statbridge-e2e/v1/scripts/validate.py --no-oracles
+
       - uses: pnpm/action-setup@v4
         with:
           version: 10

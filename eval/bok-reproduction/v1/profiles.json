@@ -1,0 +1,18 @@
+{
+  "baseline": {
+    "main_model": "gpt-5.4",
+    "text_model": "gpt-5.4"
+  },
+  "sol": {
+    "main_model": "gpt-6.1-sol",
+    "text_model": "gpt-6.1-sol"
+  },
+  "mixed": {
+    "main_model": "gpt-6.1-sol",
+    "text_model": "gpt-6-luna"
+  },
+  "repeats": 3,
+  "seed": 42,
+  "speed": "standard",
+  "actual_model_verification_required": true
+}
