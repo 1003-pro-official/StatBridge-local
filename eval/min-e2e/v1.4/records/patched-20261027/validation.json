@@ -1,0 +1,22 @@
+{
+  "full_suite": {
+    "files": 128,
+    "passed": 2392,
+    "failed": 1,
+    "subtests_passed": 355,
+    "failure": "test_missing_indicators_and_recovery_actions_are_precise",
+    "resolution": "Fixed and passed in related 79-test rerun"
+  },
+  "final_affected_tests": {
+    "passed": 475,
+    "deselected": 1916
+  },
+  "additional_related_tests": {
+    "passed": 79
+  },
+  "v41": "VALIDATION OK",
+  "frontend": "tsc --noEmit and vite build succeeded",
+  "diff_check": "no whitespace errors",
+  "ai_assisted": true,
+  "human_approval": "pending"
+}

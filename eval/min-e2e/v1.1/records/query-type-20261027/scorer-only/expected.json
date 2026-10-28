@@ -1,0 +1,82 @@
+[
+  {
+    "id": "QT1-01",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-02",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-03",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-04",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-05",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-06",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-07",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-08",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-09",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-10",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-11",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-12",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-13",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-14",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-15",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-16",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-17",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-18",
+    "expected_label": "general"
+  },
+  {
+    "id": "QT1-19",
+    "expected_label": "derived"
+  },
+  {
+    "id": "QT1-20",
+    "expected_label": "general"
+  }
+]

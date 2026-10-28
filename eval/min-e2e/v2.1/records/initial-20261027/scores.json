@@ -1,0 +1,2465 @@
+{
+  "prediction_directory": "final-predictions",
+  "summary": {
+    "DA": {
+      "미통과": 15,
+      "통과": 5
+    },
+    "CQ": {
+      "미통과": 14,
+      "통과": 6
+    },
+    "QT": {
+      "미통과": 15,
+      "통과": 5
+    }
+  },
+  "results": [
+    {
+      "id": "DA21-01",
+      "group": "DA",
+      "query": "M2 상품별 구성내역에서 총액을 보고 싶어. 2024년 첫 석 달을 각각 한 행으로 보여주고, 한 달 동안의 평균잔액 기준을 써줘. 계절 요인을 제거한 계열은 제외하고 발표된 원자료 단위도 붙여줘.",
+      "status": "미통과",
+      "reasons": [
+        "M2 총액은 평잔과 말잔 중 어느 기준으로 조회할까요?"
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-02",
+      "group": "DA",
+      "query": "2024년 1~3월 M2 상품별 구성내역의 총액을 월별로 보여줘. 초안에는 평잔·원계열이라고 적었지만 최종 기준은 매월 마지막 시점의 잔액과 계절조정계열이야. 최종 기준의 값과 원자료 단위를 써줘.",
+      "status": "미통과",
+      "reasons": [
+        "같은 이름의 통계표가 여러 개입니다. 기준과 통계표 ID를 확인해 선택해 주세요.  M2 상품별 구성내역(평잔 계절조정계열) [DT_101Y003] M2 상품별 구성내역(평잔 원계열) [DT_101Y004] M2 상품별 구성내역(평잔 계절조정계열) [DT_161Y005] M2 상품별 구성내역(평잔 원계열) [DT_161Y006]"
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-03",
+      "group": "DA",
+      "query": "예금은행에서 가계가 그달 새로 받은 대출에 적용된 금리를 보고 싶어. 기간은 2024년 첫 분기지만 월별 세 값으로 보여줘. 기존에 남아 있는 대출 전체의 금리는 제외하고 공표 단위를 붙여줘.",
+      "status": "미통과",
+      "reasons": [
+        "예금 금리와 대출 금리 중 어느 쪽을 말씀하시나요?"
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-04",
+      "group": "DA",
+      "query": "예금은행 가계대출 금리 자료를 찾고 있어. 메모의 ‘신규취급액’은 이전 검토안이고, 실제로 필요한 건 각 달에 남아 있는 대출 잔액 전체에 대한 금리야. 2024년 1월부터 3월까지 매달의 값과 원자료 단위를 보여줘.",
+      "status": "미통과",
+      "reasons": [
+        "요청 계열 1개 대신 2개 선택",
+        "기관·표·항목·분류·주기 중 불일치",
+        "요청 기간·행 수 불일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_121Y006",
+            "table_name": "예금은행 대출금리(신규취급액 기준)",
+            "org_id": "301",
+            "item_id": "13103134553999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_121Y006",
+              "itmId": "13103134553999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202403",
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            }
+          },
+          {
+            "table_id": "DT_121Y015",
+            "table_name": "예금은행 대출금리(잔액 기준)",
+            "org_id": "301",
+            "item_id": "13103134612999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "classifications": {
+              "objL1": "13102134612ACC_ITEM.BECBLB0202"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_121Y015",
+              "itmId": "13103134612999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202403",
+              "objL1": "13102134612ACC_ITEM.BECBLB0202"
+            }
+          }
+        ],
+        "actual_rows": [
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "DT": "4.68",
+            "C1": "13102134553ACC_ITEM.BECBLA03",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Percent Per Annum",
+            "ITM_ID": "13103134553999",
+            "TBL_ID": "DT_121Y006",
+            "ITM_NM": "예금은행 대출금리(신규취급액 기준)",
+            "TBL_NM": "예금은행 대출금리(신규취급액 기준)",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Loans To Households",
+            "C1_NM": "가계대출",
+            "UNIT_NM": "연리%",
+            "ITM_NM_ENG": "Based on Newly Extended",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "_SERIES_LABEL": "예금은행 대출금리(신규취급액 기준)",
+            "_SOURCE_SERIES_ID": "DT_121Y006",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "DT": "4.49",
+            "C1": "13102134553ACC_ITEM.BECBLA03",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Percent Per Annum",
+            "ITM_ID": "13103134553999",
+            "TBL_ID": "DT_121Y006",
+            "ITM_NM": "예금은행 대출금리(신규취급액 기준)",
+            "TBL_NM": "예금은행 대출금리(신규취급액 기준)",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Loans To Households",
+            "C1_NM": "가계대출",
+            "UNIT_NM": "연리%",
+            "ITM_NM_ENG": "Based on Newly Extended",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "_SERIES_LABEL": "예금은행 대출금리(신규취급액 기준)",
+            "_SOURCE_SERIES_ID": "DT_121Y006",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "DT": "4.5",
+            "C1": "13102134553ACC_ITEM.BECBLA03",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Percent Per Annum",
+            "ITM_ID": "13103134553999",
+            "TBL_ID": "DT_121Y006",
+            "ITM_NM": "예금은행 대출금리(신규취급액 기준)",
+            "TBL_NM": "예금은행 대출금리(신규취급액 기준)",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Loans To Households",
+            "C1_NM": "가계대출",
+            "UNIT_NM": "연리%",
+            "ITM_NM_ENG": "Based on Newly Extended",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "_SERIES_LABEL": "예금은행 대출금리(신규취급액 기준)",
+            "_SOURCE_SERIES_ID": "DT_121Y006",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "DT": "5.07",
+            "C1": "13102134612ACC_ITEM.BECBLB0202",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Percent Per Annum",
+            "ITM_ID": "13103134612999",
+            "TBL_ID": "DT_121Y015",
+            "ITM_NM": "예금은행 대출금리(잔액 기준)",
+            "TBL_NM": "예금은행 대출금리(잔액 기준)",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Loans To Households 2)",
+            "C1_NM": "가계대출 2)",
+            "UNIT_NM": "연리%",
+            "ITM_NM_ENG": "Based on Outstanding",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "_SERIES_LABEL": "예금은행 대출금리(잔액 기준)",
+            "_SOURCE_SERIES_ID": "DT_121Y015",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "DT": "5.03",
+            "C1": "13102134612ACC_ITEM.BECBLB0202",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Percent Per Annum",
+            "ITM_ID": "13103134612999",
+            "TBL_ID": "DT_121Y015",
+            "ITM_NM": "예금은행 대출금리(잔액 기준)",
+            "TBL_NM": "예금은행 대출금리(잔액 기준)",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Loans To Households 2)",
+            "C1_NM": "가계대출 2)",
+            "UNIT_NM": "연리%",
+            "ITM_NM_ENG": "Based on Outstanding",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "_SERIES_LABEL": "예금은행 대출금리(잔액 기준)",
+            "_SOURCE_SERIES_ID": "DT_121Y015",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "DT": "5",
+            "C1": "13102134612ACC_ITEM.BECBLB0202",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Percent Per Annum",
+            "ITM_ID": "13103134612999",
+            "TBL_ID": "DT_121Y015",
+            "ITM_NM": "예금은행 대출금리(잔액 기준)",
+            "TBL_NM": "예금은행 대출금리(잔액 기준)",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Loans To Households 2)",
+            "C1_NM": "가계대출 2)",
+            "UNIT_NM": "연리%",
+            "ITM_NM_ENG": "Based on Outstanding",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "_SERIES_LABEL": "예금은행 대출금리(잔액 기준)",
+            "_SOURCE_SERIES_ID": "DT_121Y015",
+            "_FREQUENCY": "M"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-05",
+      "group": "DA",
+      "query": "2024년 1~3월 예금은행의 자금 조달 금리를 월별로 볼게. 대출 쪽은 빼고, 새로 유치한 저축성수신 중 금융채가 빠진 공표 계열을 골라줘. 금리 값 옆에는 원자료 단위를 적어줘.",
+      "status": "통과",
+      "reasons": [
+        "계열·기간·단위·수치 일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_121Y002",
+            "table_name": "예금은행 수신금리(신규취급액 기준)",
+            "org_id": "301",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "exact_params": {},
+            "series_label": "예금은행 수신금리(신규취급액 기준), 저축성수신(금융채 제외) 1)의 월별 공표 금리"
+          }
+        ],
+        "actual_rows": [
+          {
+            "PRD_DE": "202401",
+            "DT": 3.66,
+            "ITM_NM": "예금은행 저축성수신 금리(신규취급액 기준·금융채 제외)",
+            "UNIT_NM": "(연리%)^1",
+            "_SERIES_LABEL": "예금은행 저축성수신 금리(신규취급액 기준·금융채 제외)",
+            "_SOURCE_SERIES_ID": "deposit_rate_level",
+            "_FREQUENCY": "M",
+            "_DERIVED_CALCULATION": "deposit_rate_level"
+          },
+          {
+            "PRD_DE": "202402",
+            "DT": 3.61,
+            "ITM_NM": "예금은행 저축성수신 금리(신규취급액 기준·금융채 제외)",
+            "UNIT_NM": "(연리%)^1",
+            "_SERIES_LABEL": "예금은행 저축성수신 금리(신규취급액 기준·금융채 제외)",
+            "_SOURCE_SERIES_ID": "deposit_rate_level",
+            "_FREQUENCY": "M",
+            "_DERIVED_CALCULATION": "deposit_rate_level"
+          },
+          {
+            "PRD_DE": "202403",
+            "DT": 3.56,
+            "ITM_NM": "예금은행 저축성수신 금리(신규취급액 기준·금융채 제외)",
+            "UNIT_NM": "(연리%)^1",
+            "_SERIES_LABEL": "예금은행 저축성수신 금리(신규취급액 기준·금융채 제외)",
+            "_SOURCE_SERIES_ID": "deposit_rate_level",
+            "_FREQUENCY": "M",
+            "_DERIVED_CALCULATION": "deposit_rate_level"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-06",
+      "group": "DA",
+      "query": "예금은행 산업별대출금에서 제조업 전체 값은 참고만 했어. 실제 표에는 제조업 안의 중소기업 대출금만 넣어줘. 2024년 네 분기를 각각 표시하고, 다른 산업이나 대기업을 섞지 말고 공표 단위를 유지해줘.",
+      "status": "미통과",
+      "reasons": [
+        "요청 계열 1개 대신 2개 선택",
+        "기관·표·항목·분류·주기 중 불일치",
+        "요청 기간·행 수 불일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_131Y018",
+            "table_name": "산업별대출금(예금은행 기업규모별)",
+            "org_id": "301",
+            "item_id": "13103136163999",
+            "frequency": "Q",
+            "start_period": "202401",
+            "end_period": "202404",
+            "classifications": {
+              "objL1": "13102136163ACC_ITEM.1103000",
+              "objL2": "13102136163ENTERPRISE_SCALE.E20"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_131Y018",
+              "itmId": "13103136163999",
+              "prdSe": "Q",
+              "startPrdDe": "202401",
+              "endPrdDe": "202404",
+              "objL1": "13102136163ACC_ITEM.1103000",
+              "objL2": "13102136163ENTERPRISE_SCALE.E20"
+            }
+          },
+          {
+            "table_id": "DT_131Y018",
+            "table_name": "산업별대출금(예금은행 기업규모별)",
+            "org_id": "301",
+            "item_id": "13103136163999",
+            "frequency": "Q",
+            "start_period": "202401",
+            "end_period": "202404",
+            "classifications": {
+              "objL1": "13102136163ACC_ITEM.1103000",
+              "objL2": "13102136163ENTERPRISE_SCALE.E10"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_131Y018",
+              "itmId": "13103136163999",
+              "prdSe": "Q",
+              "startPrdDe": "202401",
+              "endPrdDe": "202404",
+              "objL1": "13102136163ACC_ITEM.1103000",
+              "objL2": "13102136163ENTERPRISE_SCALE.E10"
+            }
+          }
+        ],
+        "actual_rows": [
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "중소기업",
+            "DT": "304950.6",
+            "C2": "13102136163ENTERPRISE_SCALE.E20",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Medium ＆ Small Enterprises",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "중소기업",
+            "DT": "308635.7",
+            "C2": "13102136163ENTERPRISE_SCALE.E20",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Medium ＆ Small Enterprises",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "중소기업",
+            "DT": "311683",
+            "C2": "13102136163ENTERPRISE_SCALE.E20",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Medium ＆ Small Enterprises",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "중소기업",
+            "DT": "311839",
+            "C2": "13102136163ENTERPRISE_SCALE.E20",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202404",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Medium ＆ Small Enterprises",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "대기업",
+            "DT": "126924.5",
+            "C2": "13102136163ENTERPRISE_SCALE.E10",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Large Corporations",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "대기업",
+            "DT": "130022.3",
+            "C2": "13102136163ENTERPRISE_SCALE.E10",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Large Corporations",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "대기업",
+            "DT": "135212",
+            "C2": "13102136163ENTERPRISE_SCALE.E10",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Large Corporations",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          },
+          {
+            "C1_OBJ_NM": "계정항목별",
+            "C2_NM": "대기업",
+            "DT": "135162.1",
+            "C2": "13102136163ENTERPRISE_SCALE.E10",
+            "C1": "13102136163ACC_ITEM.1103000",
+            "PRD_SE": "Q",
+            "UNIT_NM_ENG": "Bil.Won",
+            "ITM_ID": "13103136163999",
+            "TBL_ID": "DT_131Y018",
+            "ITM_NM": "산업별대출금(예금은행 기업규모별)",
+            "TBL_NM": "산업별대출금(예금은행 기업규모별)",
+            "PRD_DE": "202404",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Manufacturing",
+            "C1_NM": "제조업",
+            "UNIT_NM": "십억원",
+            "ITM_NM_ENG": "By Size",
+            "C2_OBJ_NM_ENG": "Enterprise Scale",
+            "C2_NM_ENG": "Large Corporations",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "ACCOUNT",
+            "C2_OBJ_NM": "기업규모별",
+            "_SERIES_LABEL": "산업별대출금(예금은행 기업규모별)",
+            "_SOURCE_SERIES_ID": "DT_131Y018",
+            "_FREQUENCY": "Q"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-07",
+      "group": "DA",
+      "query": "부산의 예금은행 가계대출 잔액을 2024년 1월부터 3월까지 월별로 정리해줘. 매달 마지막 시점의 잔액이 필요해. 전국 값과 다른 금융기관 값은 빼고 원자료 단위를 붙여줘.",
+      "status": "통과",
+      "reasons": [
+        "계열·기간·단위·수치 일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_151Y003",
+            "table_name": "예금은행 지역별 가계대출(말잔)",
+            "org_id": "301",
+            "item_id": "13103134697999",
+            "classifications": {
+              "objL1": "13102134697ACC_ITEM.1111000",
+              "objL2": "13102134697RG_CD.B00"
+            },
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "exact_params": {},
+            "series_label": "부산 예금은행 가계대출 월말 잔액. 주택관련대출과 기타대출의 하위 분류가 아닌 예금은행 전체 계열을 선택한다."
+          }
+        ],
+        "actual_rows": [
+          {
+            "PRD_DE": "202401",
+            "DT": 62850.3,
+            "ITM_NM": "부산 예금은행 가계대출 월말 잔액",
+            "UNIT_NM": "(십억원)^1",
+            "_SERIES_LABEL": "부산 예금은행 가계대출 월말 잔액",
+            "_SOURCE_SERIES_ID": "monthly_balance",
+            "_FREQUENCY": "M",
+            "_DERIVED_CALCULATION": "monthly_balance"
+          },
+          {
+            "PRD_DE": "202402",
+            "DT": 62879.8,
+            "ITM_NM": "부산 예금은행 가계대출 월말 잔액",
+            "UNIT_NM": "(십억원)^1",
+            "_SERIES_LABEL": "부산 예금은행 가계대출 월말 잔액",
+            "_SOURCE_SERIES_ID": "monthly_balance",
+            "_FREQUENCY": "M",
+            "_DERIVED_CALCULATION": "monthly_balance"
+          },
+          {
+            "PRD_DE": "202403",
+            "DT": 62914.1,
+            "ITM_NM": "부산 예금은행 가계대출 월말 잔액",
+            "UNIT_NM": "(십억원)^1",
+            "_SERIES_LABEL": "부산 예금은행 가계대출 월말 잔액",
+            "_SOURCE_SERIES_ID": "monthly_balance",
+            "_FREQUENCY": "M",
+            "_DERIVED_CALCULATION": "monthly_balance"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-08",
+      "group": "DA",
+      "query": "시장가격 GDP의 2024년 분기별 공표 값을 보고 싶어. 가격 변동 영향을 제거한 실질 계열 중에서 계절 요인까지 조정된 것을 써줘. 명목이나 원계열 후보는 제외하고 1~4분기 값과 원자료 단위를 보여줘.",
+      "status": "미통과",
+      "reasons": [
+        "이 요청에 필요한 원자료 중 승인 한국은행 KOSIS API에서 사용할 수 있는 자료가 하나도 확인되지 않아 지원하지 않는 범위입니다. 파일만 업로드하는 계산은 지원하지 않습니다. KOSIS 제공 원자료를 실제로 사용하는 질문으로 다시 작성해 주세요."
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-09",
+      "group": "DA",
+      "query": "시장가격 GDP를 2023년과 2024년 각각 한 값씩 보고 싶어. 그해 가격으로 표시한 명목·원계열의 공표 연간 값을 쓰고, 같은 이름의 분기별 수치나 실질 계열은 제외해줘. 단위는 원자료 그대로 표시해줘.",
+      "status": "미통과",
+      "reasons": [
+        "원자료 API 확인 결과와 계산 전 확인할 조건을 아래에 나누어 안내합니다. 아직 계산하지 않았습니다."
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-10",
+      "group": "DA",
+      "query": "2024년 첫 분기 국제수지를 월별 세 행으로 정리해줘. 필요한 건 경상수지 총액 한 계열이고 상품수지 하나만 뽑는 건 아니야. 계절 요인을 따로 조정하지 않은 공표 계열로, 원자료 단위를 함께 보여줘.",
+      "status": "미통과",
+      "reasons": [
+        "요청 계열 1개 대신 2개 선택",
+        "기관·표·항목·분류·주기 중 불일치",
+        "요청 기간·행 수 불일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_301Y013",
+            "table_name": "국제수지",
+            "org_id": "301",
+            "item_id": "13103134519999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202412",
+            "classifications": {
+              "objL1": "13102134519ACC_CD.000000"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_301Y013",
+              "itmId": "13103134519999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202412",
+              "objL1": "13102134519ACC_CD.000000"
+            }
+          },
+          {
+            "table_id": "DT_301Y013",
+            "table_name": "국제수지",
+            "org_id": "301",
+            "item_id": "13103134519999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202412",
+            "classifications": {
+              "objL1": "13102134519ACC_CD.100000"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_301Y013",
+              "itmId": "13103134519999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202412",
+              "objL1": "13102134519ACC_CD.100000"
+            }
+          }
+        ],
+        "actual_rows": [
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "3511.9",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "6802.1",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "7826.8",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "773.8",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202404",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "9277.4",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202405",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "13431.5",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202406",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "9022.6",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202407",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "5899.8",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202408",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "11368.5",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202409",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "9861.5",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202410",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "9456.6",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202411",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "12741",
+            "C1": "13102134519ACC_CD.000000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202412",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "4950.4",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "7606.5",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "9802.1",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "5973.1",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202404",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "9849.7",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202405",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "13043.1",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202406",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "9275.5",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202407",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "7732.3",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202408",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "11831.9",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202409",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "8920.1",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202410",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "10488.4",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202411",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "11436.9",
+            "C1": "13102134519ACC_CD.100000",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134519999",
+            "TBL_ID": "DT_301Y013",
+            "ITM_NM": "국제수지",
+            "TBL_NM": "국제수지",
+            "PRD_DE": "202412",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Balance of goods",
+            "C1_NM": "상품수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Balance of Payments",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "국제수지",
+            "_SOURCE_SERIES_ID": "DT_301Y013",
+            "_FREQUENCY": "M"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-11",
+      "group": "DA",
+      "query": "우리나라의 대외 경상수지 중 상대국이 중국인 값만 필요해. 중국 자체의 전 세계 경상수지나 아시아 전체 값은 제외해줘. 2023년과 2024년은 각각 공표 연간 값 하나로 정리하고 원자료 단위를 표시해줘.",
+      "status": "통과",
+      "reasons": [
+        "계열·기간·단위·수치 일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_301Y015",
+            "table_name": "지역별 경상수지",
+            "org_id": "301",
+            "item_id": "13103134752999",
+            "frequency": "A",
+            "start_period": "2023",
+            "end_period": "2024",
+            "classifications": {
+              "objL1": "13102134752ACC_CD.REG0000",
+              "objL2": "13102134752RG_CD.CN"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_301Y015",
+              "itmId": "13103134752999",
+              "prdSe": "A",
+              "startPrdDe": "2023",
+              "endPrdDe": "2024",
+              "objL1": "13102134752ACC_CD.REG0000",
+              "objL2": "13102134752RG_CD.CN"
+            }
+          }
+        ],
+        "actual_rows": [
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "중국",
+            "DT": "-28299.1",
+            "C2": "13102134752RG_CD.CN",
+            "C1": "13102134752ACC_CD.REG0000",
+            "PRD_SE": "A",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134752999",
+            "TBL_ID": "DT_301Y015",
+            "ITM_NM": "지역별 경상수지",
+            "TBL_NM": "지역별 경상수지",
+            "PRD_DE": "2023",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Regional Current Account",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "China",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "지역코드별",
+            "_SERIES_LABEL": "지역별 경상수지",
+            "_SOURCE_SERIES_ID": "DT_301Y015",
+            "_FREQUENCY": "A"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "중국",
+            "DT": "-23450",
+            "C2": "13102134752RG_CD.CN",
+            "C1": "13102134752ACC_CD.REG0000",
+            "PRD_SE": "A",
+            "UNIT_NM_ENG": "Mil.U$",
+            "ITM_ID": "13103134752999",
+            "TBL_ID": "DT_301Y015",
+            "ITM_NM": "지역별 경상수지",
+            "TBL_NM": "지역별 경상수지",
+            "PRD_DE": "2024",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "Current account",
+            "C1_NM": "경상수지",
+            "UNIT_NM": "백만달러",
+            "ITM_NM_ENG": "Regional Current Account",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "China",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "지역코드별",
+            "_SERIES_LABEL": "지역별 경상수지",
+            "_SOURCE_SERIES_ID": "DT_301Y015",
+            "_FREQUENCY": "A"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-12",
+      "group": "DA",
+      "query": "국제투자대조표에서 해외에 보유한 금융자산 쪽의 총액을 보고 싶어. 부채를 차감한 순자산이나 대외금융부채는 제외해줘. 2024년 1~4분기를 각각 한 행으로 하고 발표된 단위를 붙여줘.",
+      "status": "미통과",
+      "reasons": [
+        "기간 범위 오류: 202406"
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-13",
+      "group": "DA",
+      "query": "검토 메모에는 ‘수출물가·달러’라고 되어 있지만 이번 표는 수입물가로 바꿀게. 기본분류 총지수를 원화 기준으로, 2024년 1월부터 3월까지 월별로 보여줘. 지수의 공표 기준단위도 그대로 붙여줘.",
+      "status": "미통과",
+      "reasons": [
+        "요청 계열 1개 대신 2개 선택",
+        "기관·표·항목·분류·주기 중 불일치",
+        "요청 기간·행 수 불일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_401Y015",
+            "table_name": "수입물가지수(기본분류)",
+            "org_id": "301",
+            "item_id": "13103134643999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "classifications": {
+              "objL1": "13102134643ACC_CD.*AA",
+              "objL2": "13102134643CRR_CTRT_CD.W"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_401Y015",
+              "itmId": "13103134643999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202403",
+              "objL1": "13102134643ACC_CD.*AA",
+              "objL2": "13102134643CRR_CTRT_CD.W"
+            }
+          },
+          {
+            "table_id": "DT_402Y014",
+            "table_name": "수출물가지수(기본분류)",
+            "org_id": "301",
+            "item_id": "13103134642999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "classifications": {
+              "objL1": "13102134642ACC_CD.*AA",
+              "objL2": "13102134642CRR_CTRT_CD.W"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_402Y014",
+              "itmId": "13103134642999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202403",
+              "objL1": "13102134642ACC_CD.*AA",
+              "objL2": "13102134642CRR_CTRT_CD.W"
+            }
+          }
+        ],
+        "actual_rows": [
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "원화기준",
+            "DT": "136.27",
+            "C2": "13102134643CRR_CTRT_CD.W",
+            "C1": "13102134643ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134643999",
+            "TBL_ID": "DT_401Y015",
+            "ITM_NM": "수입물가지수(기본분류)",
+            "TBL_NM": "수입물가지수(기본분류)",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Import Price Indices(Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Won Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수입물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_401Y015",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "원화기준",
+            "DT": "137.63",
+            "C2": "13102134643CRR_CTRT_CD.W",
+            "C1": "13102134643ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134643999",
+            "TBL_ID": "DT_401Y015",
+            "ITM_NM": "수입물가지수(기본분류)",
+            "TBL_NM": "수입물가지수(기본분류)",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Import Price Indices(Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Won Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수입물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_401Y015",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "원화기준",
+            "DT": "138.31",
+            "C2": "13102134643CRR_CTRT_CD.W",
+            "C1": "13102134643ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134643999",
+            "TBL_ID": "DT_401Y015",
+            "ITM_NM": "수입물가지수(기본분류)",
+            "TBL_NM": "수입물가지수(기본분류)",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Import Price Indices(Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Won Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수입물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_401Y015",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "원화기준",
+            "DT": "124.59",
+            "C2": "13102134642CRR_CTRT_CD.W",
+            "C1": "13102134642ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134642999",
+            "TBL_ID": "DT_402Y014",
+            "ITM_NM": "수출물가지수(기본분류)",
+            "TBL_NM": "수출물가지수(기본분류)",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Price Indices (Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Won Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수출물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_402Y014",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "원화기준",
+            "DT": "126.54",
+            "C2": "13102134642CRR_CTRT_CD.W",
+            "C1": "13102134642ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134642999",
+            "TBL_ID": "DT_402Y014",
+            "ITM_NM": "수출물가지수(기본분류)",
+            "TBL_NM": "수출물가지수(기본분류)",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Price Indices (Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Won Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수출물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_402Y014",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "원화기준",
+            "DT": "126.94",
+            "C2": "13102134642CRR_CTRT_CD.W",
+            "C1": "13102134642ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134642999",
+            "TBL_ID": "DT_402Y014",
+            "ITM_NM": "수출물가지수(기본분류)",
+            "TBL_NM": "수출물가지수(기본분류)",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Price Indices (Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Won Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수출물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_402Y014",
+            "_FREQUENCY": "M"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-14",
+      "group": "DA",
+      "query": "2024년 1~3월 수출물가지수 기본분류 총지수가 필요해. 보고서 공통 설정은 원화지만 이 표에만 달러 기준을 적용해줘. 계약통화로도 바꾸지 말고 매달 값과 공표 기준단위를 보여줘.",
+      "status": "통과",
+      "reasons": [
+        "계열·기간·단위·수치 일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_402Y014",
+            "table_name": "수출물가지수(기본분류)",
+            "org_id": "301",
+            "item_id": "13103134642999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "classifications": {
+              "objL1": "13102134642ACC_CD.*AA",
+              "objL2": "13102134642CRR_CTRT_CD.D"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_402Y014",
+              "itmId": "13103134642999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202403",
+              "objL1": "13102134642ACC_CD.*AA",
+              "objL2": "13102134642CRR_CTRT_CD.D"
+            }
+          }
+        ],
+        "actual_rows": [
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "달러기준",
+            "DT": "111",
+            "C2": "13102134642CRR_CTRT_CD.D",
+            "C1": "13102134642ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134642999",
+            "TBL_ID": "DT_402Y014",
+            "ITM_NM": "수출물가지수(기본분류)",
+            "TBL_NM": "수출물가지수(기본분류)",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Price Indices (Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Dollar Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수출물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_402Y014",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "달러기준",
+            "DT": "112.05",
+            "C2": "13102134642CRR_CTRT_CD.D",
+            "C1": "13102134642ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134642999",
+            "TBL_ID": "DT_402Y014",
+            "ITM_NM": "수출물가지수(기본분류)",
+            "TBL_NM": "수출물가지수(기본분류)",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Price Indices (Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Dollar Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수출물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_402Y014",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "C2_NM": "달러기준",
+            "DT": "112.48",
+            "C2": "13102134642CRR_CTRT_CD.D",
+            "C1": "13102134642ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134642999",
+            "TBL_ID": "DT_402Y014",
+            "ITM_NM": "수출물가지수(기본분류)",
+            "TBL_NM": "수출물가지수(기본분류)",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Price Indices (Basic Groups)",
+            "C2_OBJ_NM_ENG": "Selection of Items",
+            "C2_NM_ENG": "Dollar Basis",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "C2_OBJ_NM": "통화계약구분코드별",
+            "_SERIES_LABEL": "수출물가지수(기본분류)",
+            "_SOURCE_SERIES_ID": "DT_402Y014",
+            "_FREQUENCY": "M"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-15",
+      "group": "DA",
+      "query": "수출 지수를 2024년 1~3월 월별로 보여줘. 물량을 나타내는 쪽은 제외하고 수출금액을 지수로 발표한 계열의 총지수를 원해. 개별 품목 대신 전체 총지수와 공표 기준단위를 표시해줘.",
+      "status": "통과",
+      "reasons": [
+        "계열·기간·단위·수치 일치"
+      ],
+      "details": {
+        "actual_plans": [
+          {
+            "table_id": "DT_403Y001",
+            "table_name": "수출금액지수",
+            "org_id": "301",
+            "item_id": "13103134671999",
+            "frequency": "M",
+            "start_period": "202401",
+            "end_period": "202403",
+            "classifications": {
+              "objL1": "13102134671ACC_CD.*AA"
+            },
+            "exact_params": {
+              "method": "getList",
+              "format": "json",
+              "jsonVD": "Y",
+              "smblChk": "Y",
+              "orgId": "301",
+              "tblId": "DT_403Y001",
+              "itmId": "13103134671999",
+              "prdSe": "M",
+              "startPrdDe": "202401",
+              "endPrdDe": "202403",
+              "objL1": "13102134671ACC_CD.*AA"
+            }
+          }
+        ],
+        "actual_rows": [
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "126.58",
+            "C1": "13102134671ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134671999",
+            "TBL_ID": "DT_403Y001",
+            "ITM_NM": "수출금액지수",
+            "TBL_NM": "수출금액지수",
+            "PRD_DE": "202401",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Value Indices",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "수출금액지수",
+            "_SOURCE_SERIES_ID": "DT_403Y001",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "122.48",
+            "C1": "13102134671ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134671999",
+            "TBL_ID": "DT_403Y001",
+            "ITM_NM": "수출금액지수",
+            "TBL_NM": "수출금액지수",
+            "PRD_DE": "202402",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Value Indices",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "수출금액지수",
+            "_SOURCE_SERIES_ID": "DT_403Y001",
+            "_FREQUENCY": "M"
+          },
+          {
+            "C1_OBJ_NM": "계정코드별",
+            "DT": "132.73",
+            "C1": "13102134671ACC_CD.*AA",
+            "PRD_SE": "M",
+            "UNIT_NM_ENG": "2020＝100",
+            "ITM_ID": "13103134671999",
+            "TBL_ID": "DT_403Y001",
+            "ITM_NM": "수출금액지수",
+            "TBL_NM": "수출금액지수",
+            "PRD_DE": "202403",
+            "LST_CHN_DE": "2026-10-26",
+            "C1_NM_ENG": "All items",
+            "C1_NM": "총지수",
+            "UNIT_NM": "2020＝100",
+            "ITM_NM_ENG": "Export Value Indices",
+            "ORG_ID": "301",
+            "C1_OBJ_NM_ENG": "Selection of Items",
+            "_SERIES_LABEL": "수출금액지수",
+            "_SOURCE_SERIES_ID": "DT_403Y001",
+            "_FREQUENCY": "M"
+          }
+        ],
+        "numeric_differences": [],
+        "unit_normalization": "A/Y annual equivalent; full-width =; (unit)^1 same dimension"
+      }
+    },
+    {
+      "id": "DA21-16",
+      "group": "DA",
+      "query": "2024년 첫 석 달의 수출 지수를 각각 보여줘. 메모에 있는 ‘수출금액지수’는 제외 대상이고 실제로는 수출물량지수의 전체 총지수가 필요해. 개별 품목 값은 빼고 원자료 기준단위를 붙여줘.",
+      "status": "미통과",
+      "reasons": [
+        "사용자는 2024년 첫 석 달(1~3월)의 월별 값을 요청했으나 계획은 표시기간을 2024년 1~12월로 설정해 요청과 불일치합니다. validated_bounds의 조회 범위는 표시기간을 12월까지 확대하는 근거가 아닙니다."
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-17",
+      "group": "DA",
+      "query": "2024년 1~3월 교역조건을 월별로 볼게. 후보 목록에는 순상품교역조건지수와 소득교역조건지수가 함께 있는데, 이번에는 앞의 순상품 계열만 필요해. 새로 산식을 적용하지 말고 공표된 지수 값과 기준단위를 그대로 보여줘.",
+      "status": "미통과",
+      "reasons": [
+        "요청한 원자료는 실제 API에서 확인했습니다. 계산식 또는 계산 조건을 확인해 주세요. 필요한 원자료를 승인된 349개 카탈로그 검색에서 확인하지 못했습니다. 2024년 1~3월 월별 순상품교역조건지수 공표값과 기준단위의 원자료 그대로 출력: 승인 표 DT_403Y005에서 순상품교역조건지수 분류와 월별 제공 기간은 확인했습니다. 다만 현재 계획 스키마는 계산 노드를 최소 하나 요구하며 원자료를 그대로 출력하는 연산을 지원하지 않습니다. 새 산식을 적용하지 말라는 요청을 유지하려면 원자료 직접 출력 지원이 필요합니다. 기준단위는 추측하지 않고 실제 API 응답에서 확인해야 합니다. KOSIS 전체 API의 자료 부재를 뜻하지 않습니다."
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-18",
+      "group": "DA",
+      "query": "기업경영분석의 제조업 매출액증가율을 2023년과 2024년 각각 보여줘. 산업분류는 제11차 기준이고 기업규모는 대기업만이나 중소기업만이 아니라 종합이야. 매출액에서 다시 계산하지 말고 이미 발표된 증가율과 단위를 가져와줘.",
+      "status": "미통과",
+      "reasons": [
+        "원자료 API 확인 결과와 계산 전 확인할 조건을 아래에 나누어 안내합니다. 아직 계산하지 않았습니다."
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-19",
+      "group": "DA",
+      "query": "상세자금순환표의 2008 SNA 기준, 2018년 이후 수록 자료에서 찾아줘. 거래 흐름은 제외하고 잔액표를 쓸 거야. 계정항목은 ‘현금 발행 및 예수금 합계’, 제도부문도 ‘합계’로 선택하고 2023년과 2024년 연간 값만 원자료 단위와 함께 보여줘.",
+      "status": "미통과",
+      "reasons": [
+        "실제 선택 원자료인 plan.sources의 표·항목·분류 코드가 ‘2008 SNA 기준, 2018년 이후 수록 상세자금순환표’의 거래표가 아닌 잔액표에 해당하는지 확인할 근거가 부족합니다. 또한 실제 관측 응답이나 원자료 단위가 제시되지 않아 단위 포함 요청의 충족 여부도 확인할 수 없습니다. 연간 빈도와 2023~2024년 범위, 지수 1의 항등 변환은 요청과 일치하지만, required_data와 source_descriptions의 설명만으로 원자료 선택의 적합성을 확정할 수 없어 승인하지 않습니다."
+      ],
+      "details": {}
+    },
+    {
+      "id": "DA21-20",
+      "group": "DA",
+      "query": "2008 SNA 기준 상세자금순환표의 2018년 이후 수록 자료를 사용할게. 초안의 잔액표 선택을 거래표로 바꿔줘. 계정항목 ‘현금 발행 및 예수금 합계’와 제도부문 ‘합계’를 선택해 2023년과 2024년 공표 연간 값을 각각 보여주고 원자료 단위를 붙여줘.",
+      "status": "미통과",
+      "reasons": [
+        "실제 선택된 plan.sources의 DT_284Y002와 항목·분류 코드가 2018년 이후 수록된 2008 SNA 상세자금순환표의 거래표, ‘현금 발행 및 예수금 합계’, 제도부문 ‘합계’에 해당하는지 확인할 메타데이터가 없습니다. required_data와 source_descriptions의 설명만으로 잔액표에서 거래표로 변경되었다고 판단할 수 없으며, 공표 연간 자료 여부와 실제 원자료 단위도 확인되지 않아 승인할 수 없습니다."
+      ],
+      "details": {}
+    },
+    {
+      "id": "CQ21-01",
+      "group": "CQ",
+      "query": "2024년 첫 석 달 예금은행 가계대출 금리를 월별로 보고 싶어. 보고서 양식의 ‘신규취급액 / 잔액’은 선택지 목록으로만 적혀 있어. 가계 쪽만 다루고 기업대출은 제외할게.",
+      "status": "미통과",
+      "reasons": [
+        "신규취급액/잔액이 후보 목록일 뿐인데 기준 확인 없이 데이터 조회로 진행"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_output_config",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-02",
+      "group": "CQ",
+      "query": "2024년 1~3월 M2 상품별 구성내역의 총액을 월별로 보여줘. 계절 요인을 조정한 계열을 쓰고 참고용 구 M2는 빼줘. 자료 안내에서 평잔과 말잔 두 방식이 있다는 것까지는 봤어.",
+      "status": "통과",
+      "reasons": [
+        "메타데이터 준비 후 평잔/말잔 기준을 구체적으로 질문; 사용자 답변 전 결과 확정 없음"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_details",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-03",
+      "group": "CQ",
+      "query": "M2 상품별 구성내역의 총액을 2024년 첫 분기 안에서 매달 보여줘. 한 달 평균잔액 기준으로 하고 구 M2는 제외해줘. 표 양식에는 ‘원계열·계절조정’이라는 두 체크 항목이 남아 있어.",
+      "status": "미통과",
+      "reasons": [
+        "이미 한 달 평균잔액을 명시했는데 평잔/말잔을 다시 물음; 필요한 계절조정 여부를 묻지 않음"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_details",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-04",
+      "group": "CQ",
+      "query": "2024년 국내총생산에 대한 지출 총액을 네 분기로 나눠 보여줘. 계절적 움직임을 조정한 공표 계열을 사용할 거야. 참고 자료의 제목은 ‘명목과 실질의 차이’인데 여기서는 지출 총액 하나를 보려고 해.",
+      "status": "통과",
+      "reasons": [
+        "메타데이터 준비 후 명목/실질 기준을 구체적으로 질문; 이미 지정한 계절조정·분기·기간은 다시 묻지 않음"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_details",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-05",
+      "group": "CQ",
+      "query": "국내총생산에 대한 지출 총액을 2024년 1분기부터 4분기까지 보여줘. 그해 가격이 움직인 영향을 제거한 실질 값을 쓸게. 주기는 분기별이고 표와 그래프 둘 다 있으면 좋겠어.",
+      "status": "통과",
+      "reasons": [
+        "실질을 유지한 원계열/계절조정 두 표를 선택지로 제시하여 미확정 조건 확인"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_clarification",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-06",
+      "group": "CQ",
+      "query": "수입물가지수 기본분류에서 전체 총지수를 보고 싶어. 2024년 첫 석 달을 월별로 보여줘. 원화·달러·계약통화는 참고 문서에 적힌 후보 목록이고 개별 품목으로 범위를 좁히지는 않을게.",
+      "status": "미통과",
+      "reasons": [
+        "분류 누락 코드는 objL2이나 사용자에게 통화 기준을 구체적으로 묻지 않고 분류 확인만 요구"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_details",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-07",
+      "group": "CQ",
+      "query": "2024년 1~3월 경제심리지수의 월별 값을 보고 싶어. 다른 문서의 ‘원계열과 순환변동치 해설’이라는 제목을 참고했는데, 이번 표에는 경제심리지수 한 계열을 넣으려고 해. 개별 기업심리지수나 소비자심리지수는 제외해줘.",
+      "status": "미통과",
+      "reasons": [
+        "경제심리지수 원계열/순환변동치 대신 소비자동향조사 표 선택을 요구"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_clarification",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-08",
+      "group": "CQ",
+      "query": "예금은행에서 가계가 그달 새로 받은 대출의 금리를 월별로 보여줘. 양식 머리말의 2024년은 양식 작성 연도야. 이번 조회의 시작월과 종료월은 그 머리말로 정하지 말아줘.",
+      "status": "미통과",
+      "reasons": [
+        "미확정 시작월/종료월 대신 이미 지정한 대출 종류를 다시 물음"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_clarification",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-09",
+      "group": "CQ",
+      "query": "수입물가지수 기본분류 총지수가 얼마나 오르내렸는지 백분율로 보고 싶어. 원화 기준으로 2024년 1~3월을 월별 표시해줘. 메모의 ‘전월 대비 / 전년 동월 대비’는 가능한 비교 방식들을 적어둔 것이야.",
+      "status": "통과",
+      "reasons": [
+        "원화 총지수를 유지한 상태에서 전월 대비/전년 동월 대비를 구체적으로 질문; 아직 계산하지 않음을 명시"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_details",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-10",
+      "group": "CQ",
+      "query": "2024년 예금은행에서 가계에 그달 새로 취급한 대출의 월별 금리 12개로 그해를 대표하는 값 하나를 보여줘. ‘12개월 단순평균, 12월 값’은 보고서 양식에 적힌 예시야. 대출 기준과 연도는 이 요청대로 적용해줘.",
+      "status": "미통과",
+      "reasons": [
+        "연간 집계 방식을 묻지 않고 예금/대출 금리 선택을 요구"
+      ],
+      "details": {
+        "clarification_required": true,
+        "response_status": "need_clarification",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-11",
+      "group": "CQ",
+      "query": "예금은행 가계대출 금리를 2024년 첫 석 달 각각 보여줘. 각 달에 새로 취급한 대출 기준으로 하고 기존 잔액 전체를 대상으로 한 금리는 빼줘. 주기는 월별, 단위는 원자료 그대로면 돼.",
+      "status": "미통과",
+      "reasons": [
+        "명시된 첫 석 달을 모델이 변경해 data_unavailable로 중단하고 계산 조건 재입력을 요구; 외부 API 장애가 아닌 제품 기간 해석 오류"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "data_unavailable",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-12",
+      "group": "CQ",
+      "query": "이번 요청에 적용할 분석 메모를 붙일게. ‘M2 상품별 구성내역, 총액, 한 달 평균잔액, 계절조정 전 값, 참고용 구 M2 제외’. 검토하다 버린 말잔·계절조정안은 쓰지 말고 이 메모대로 2024년 1~3월을 월별로 보여줘.",
+      "status": "미통과",
+      "reasons": [
+        "재질문은 없지만 확정된 평잔·원계열을 따르지 않고 폐기된 말잔·계절조정 표로 진행"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_output_config",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-13",
+      "group": "CQ",
+      "query": "이 보고서의 공통 규칙은 ‘별도 통화 지시가 없는 수입물가지수는 원화 기준’이야. 참고 문헌 제목에 달러가 등장해도 이 규칙을 바꾸지는 않아. 수입물가지수 기본분류 총지수의 2024년 1~3월 월별 값을 보여줘.",
+      "status": "통과",
+      "reasons": [
+        "원화 기본값을 적용해 통화 기준을 재질문하지 않고 진행"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_output_config",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-14",
+      "group": "CQ",
+      "query": "2024년 1~4분기 국내총생산에 대한 지출 총액이 필요해. 참고 메모에 ‘명목인가 실질인가’가 남아 있지만 최종 선택한 표는 DT_200Y108이야. 그 표가 제공하는 가격·계절조정·주기 기준을 그대로 적용해줘.",
+      "status": "미통과",
+      "reasons": [
+        "표 DT_200Y108의 총액이 지정됐지만 후보가 많다며 지표·항목 구체화 및 계산 기준 답변을 요구"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_details",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-15",
+      "group": "CQ",
+      "query": "경제심리지수를 2024년 첫 석 달 월별로 보고 싶어. 중간 메모의 ‘한 계열만 선택’은 취소할게. 원계열 옆에 순환변동치를 함께 놓아 두 계열의 공표 값을 모두 보여줘.",
+      "status": "통과",
+      "reasons": [
+        "원계열·순환변동치 두 계열을 모두 선택하고 하나만 선택하라는 재질문 없음; 첫 석 달을 1년으로 해석한 별도 기간 오류는 기록"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_output_config",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-16",
+      "group": "CQ",
+      "query": "경제심리지수를 2024년 1월부터 월별로 보여줘. 순환변동치는 제외하고 원계열을 사용할게. 종료월은 오늘이 속한 달로 채우지 말고 이 원계열에 실제 관측값이 발표된 마지막 달로 잡아줘.",
+      "status": "미통과",
+      "reasons": [
+        "명시된 원계열만 유지하지 않고 순환변동치까지 포함; 실제 최신월 202609를 확인하지 않고 202608로 종료. 독립 KOSIS 확인 근거 저장"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_output_config",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-17",
+      "group": "CQ",
+      "query": "2024년 첫 석 달 수입물가지수 기본분류 총지수를 원화 기준으로 볼게. 각 달이 바로 앞달이 아니라 작년의 같은 달보다 몇 퍼센트 높거나 낮은지 보여줘. 비교에 쓰는 2023년 값은 가져와도 되지만 화면에는 2024년 1~3월만 월별 표시해줘.",
+      "status": "미통과",
+      "reasons": [
+        "표시기간 2024년 1~3월이 명시됐는데 정확한 시작일/종료일 입력을 요구"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_period",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-18",
+      "group": "CQ",
+      "query": "M2 상품별 구성내역의 총액을 2024년 1~3월 월별 추이로 그려줘. 매월 마지막 잔액의 계절조정계열을 쓰고 참고용 구 M2는 제외할게. 메모에 파랑·빨강과 여러 제목 후보가 남아 있지만 그건 나중에 고를 것이니 기본 모양으로 진행해줘.",
+      "status": "미통과",
+      "reasons": [
+        "매월 마지막 잔액으로 말잔을 지정했는데 평잔/말잔 선택을 다시 요구"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_details",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-19",
+      "group": "CQ",
+      "query": "수입물가지수는 별도 지시가 없으면 원화 기준이라는 규칙을 사용 중이야. 다만 이번 표는 예외로 달러 기준으로 변경할게. 기본분류 총지수의 2024년 1~3월 월별 값을 보여주고, 기존 원화 기본값으로 되돌리지 말아줘.",
+      "status": "미통과",
+      "reasons": [
+        "달러 예외로 진행해야 하나 이전 원화 기본값까지 함께 조회하여 명시적 변경 미반영"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "need_output_config",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "CQ21-20",
+      "group": "CQ",
+      "query": "예금은행 가계대출 금리를 2024년의 대표 숫자 하나로 정리해줘. 신규취급액 기준의 1~12월 월별 값 12개를 쓰고 각 달에 1/12씩 같은 비중을 줘. 대출금액에 따라 비중을 바꾸거나 12월 값 하나로 대신하지 말아줘.",
+      "status": "미통과",
+      "reasons": [
+        "단순평균 기준이 지정됐지만 no_match로 지표 수정을 필수 요구; 계산 수치 자체는 채점하지 않음"
+      ],
+      "details": {
+        "clarification_required": false,
+        "response_status": "no_match",
+        "review": "ai-assisted; human review pending"
+      }
+    },
+    {
+      "id": "QT21-01",
+      "group": "QT",
+      "query": "보고서의 ‘생산자물가 변화율 검토’라는 절에 넣을 기초자료야. 2024년 1~6월 생산자물가지수 총지수의 공표 값을 한 달에 한 행씩 보여줘. 이 표에는 원래 지수 값만 필요해.",
+      "status": "미통과",
+      "reasons": [
+        "기대 general / 관측 derived"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-02",
+      "group": "QT",
+      "query": "2024년 1~6월 생산자물가지수 총지수로 ‘상반기 대표 수준’을 보여줘. 여섯 달 각각의 값을 1/6씩 반영한 한 숫자가 필요하고, 마지막 달 하나로 대신하면 안 돼.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-03",
+      "group": "QT",
+      "query": "도표 제목은 ‘월별 수출물가’로 둘게. 실제 내용에는 원화 기준 수출물가지수 총지수로 2024년 1월 수준에 비해 2월이 몇 퍼센트 높아졌거나 낮아졌는지 한 숫자를 넣어줘. 비교의 출발점은 1월이야.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-04",
+      "group": "QT",
+      "query": "원화 기준 수출물가지수 총지수의 2024년 1월 값과 2월 값을 나란히 보여줘. 증가율은 내가 따로 다룰 예정이고, 이번 표는 이미 발표된 두 지수 값 그대로면 돼.",
+      "status": "미통과",
+      "reasons": [
+        "기대 general / 관측 derived"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-05",
+      "group": "QT",
+      "query": "2024년 첫 석 달 예금은행 가계대출 금리를 매달 한 점씩 선으로 이어줘. 각 달에 새로 취급한 대출의 공표 금리가 대상이고, 세 달을 한 숫자로 요약할 필요는 없어.",
+      "status": "통과",
+      "reasons": [
+        "기대 general / 관측 general"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-06",
+      "group": "QT",
+      "query": "예금은행 가계대출의 신규취급액 기준 금리로 2024년 1월에서 2월로 이동한 폭을 보고 싶어. 2월이 높으면 양수, 낮으면 음수가 되게 하고 단위는 %p로 해줘. 두 금리를 나란히 적는 대신 그 사이 간격 하나를 보여줘.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-07",
+      "group": "QT",
+      "query": "‘가계신용 잔액’ 절에 넣을 숫자야. 2024년 1분기의 판매신용 잔액을 1로 놓았을 때 가계대출 잔액이 얼마에 해당하는지 보여줘. 두 잔액 자체를 나란히 제시하는 것으로 끝내지는 말아줘.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-08",
+      "group": "QT",
+      "query": "가계신용 자료로 2024년 1분기 표를 만들 거야. ‘가계신용 구성비’는 보고서 전체 제목이고, 여기서는 가계대출과 판매신용의 공표 잔액 두 개를 각각 보여줘. 비중으로 바꾸는 작업은 포함하지 않아.",
+      "status": "미통과",
+      "reasons": [
+        "기대 general / 관측 derived"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-09",
+      "group": "QT",
+      "query": "부산 지역 예금은행 가계대출의 2024년 첫 석 달 값을 매달 한 행씩 보여줘. 기준은 월말에 남아 있는 잔액이야. 전월 대비 변화는 다음 작업에서 다룰 테니 이번에는 원래 잔액을 가져와줘.",
+      "status": "미통과",
+      "reasons": [
+        "기대 general / 관측 derived"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-10",
+      "group": "QT",
+      "query": "2024년 3월 부산과 대구의 예금은행 가계대출 말잔을 하나의 묶음으로 보고 싶어. 두 지역 금액을 모두 포함하는 총잔액 한 숫자를 만들어줘. 전국 값으로 대체하거나 지역별 두 값만 제시하면 안 돼.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-11",
+      "group": "QT",
+      "query": "경제심리지수의 2024년 1~3월 값을 각각 알려줘. 경기의 순환 부분만 따로 뽑은 계열은 빼고 원계열로 발표된 수치가 필요해. 세 달을 묶은 대표값 대신 각 월의 값을 유지해줘.",
+      "status": "미통과",
+      "reasons": [
+        "기대 general / 관측 derived"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-12",
+      "group": "QT",
+      "query": "2024년 1~3월 경제심리지수 원계열의 세 점을 생각해보자. 가장 높은 점에서 가장 낮은 점까지 세로로 얼마나 떨어져 있는지 지수 단위의 숫자 하나로 보여줘. 퍼센트로 표현할 필요는 없어.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-13",
+      "group": "QT",
+      "query": "2024년 1~3월 M2 상품별 구성내역 총액은 평잔·원계열로 사용할게. 1월 위치를 100으로 놓고, 2월과 3월은 원래 각 월 값과 1월 값 사이의 비례관계가 유지되도록 새 눈금의 숫자로 보여줘. 단순히 축의 표시 글자만 바꾸는 것은 아니야.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-14",
+      "group": "QT",
+      "query": "2024년 첫 석 달의 M2 상품별 구성내역 총액을 월별로 보여줘. 이미 월 평균잔액으로 공표된 평잔 계열 중 계절조정하지 않은 값을 써줘. 내가 요구한 평균은 계열의 기준이고 세 달 전체를 다시 평균 내라는 뜻은 아니야.",
+      "status": "통과",
+      "reasons": [
+        "기대 general / 관측 general"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-15",
+      "group": "QT",
+      "query": "2024년 1분기와 2분기 시장가격 GDP를 각각 보여줘. 문서의 ‘명목 GDP 실질화’는 설명 절의 이름이고, 이번에는 이미 실질·계절조정계열로 공표된 두 분기 값을 그대로 가져오면 돼.",
+      "status": "미통과",
+      "reasons": [
+        "기대 general / 관측 derived"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-16",
+      "group": "QT",
+      "query": "2024년 시장가격 GDP의 실질·계절조정계열을 사용할게. 1분기를 기준으로 2분기에 몇 퍼센트 더 커졌거나 작아졌는지 숫자 하나를 보여줘. ‘분기별 GDP’라는 제목을 쓰더라도 표 안에는 두 원래 금액을 그대로 나열하지 말아줘.",
+      "status": "미통과",
+      "reasons": [
+        "기대 derived / 관측 general"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-17",
+      "group": "QT",
+      "query": "경상수지의 2024년 1월·2월·3월 공표 월별 금액을 입력으로 사용할게. 제목은 ‘월별 자료’로 두되 결과는 그 세 달의 금액을 전부 더한 1분기 전체 금액 하나로 보여줘. 월별 세 행을 그대로 출력하는 것으로 끝내지는 말아줘.",
+      "status": "통과",
+      "reasons": [
+        "기대 derived / 관측 derived"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-18",
+      "group": "QT",
+      "query": "2024년 1~3월 경상수지를 월별로 보여줘. 보고서 양식에는 누계 열도 있지만 그 열은 사용하지 않을 거야. 각 달에 발표된 금액을 앞달 값과 더하지 말고 각각 표시해줘.",
+      "status": "통과",
+      "reasons": [
+        "기대 general / 관측 general"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "general",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-19",
+      "group": "QT",
+      "query": "2024년 1~6월 소비자심리지수의 월별 값 여섯 개를 작은 순서대로 놓아줘. 최종적으로 필요한 숫자는 가운데 세 번째 값과 네 번째 값의 중간값 하나야. 여섯 달 전체의 단순평균으로 대신하지는 말아줘.",
+      "status": "통과",
+      "reasons": [
+        "기대 derived / 관측 derived"
+      ],
+      "details": {
+        "expected": "derived",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    },
+    {
+      "id": "QT21-20",
+      "group": "QT",
+      "query": "소비자심리지수의 2024년 1월부터 6월까지 추이를 선으로 그려줘. 변동이 들쭉날쭉해도 발표된 여섯 값이 그대로 드러나게 해줘. 이동평균으로 매끈하게 만들거나 기준월을 바꾸는 처리는 빼줘.",
+      "status": "미통과",
+      "reasons": [
+        "기대 general / 관측 derived"
+      ],
+      "details": {
+        "expected": "general",
+        "actual": "derived",
+        "mode": "local_branch"
+      }
+    }
+  ]
+}

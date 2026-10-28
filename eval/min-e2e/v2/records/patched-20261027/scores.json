@@ -1,0 +1,2100 @@
+{
+  "scope": "Model/API component evaluation; actual UI E2E not executed",
+  "counts": {
+    "edit": {
+      "pass": 20
+    },
+    "screen_file": {
+      "pass": 20
+    },
+    "derived": {
+      "pass": 20
+    }
+  },
+  "total": {
+    "pass": 60
+  },
+  "ui_pass_claimed": false,
+  "cases": [
+    {
+      "id": "E21",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E21",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E22",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E22",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E23",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E23",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E24",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E24",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 5,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E25",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E25",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E26",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E26",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E27",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E27",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E28",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E28",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E29",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E29",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E30",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E30",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E31",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E31",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E32",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E32",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E33",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E33",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E34",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E34",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E35",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E35",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E36",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E36",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E37",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E37",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 5,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E38",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E38",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E39",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E39",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 5,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "E40",
+      "group": "edit",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "edit-complete-fixture\\E40",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F21",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F21",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F22",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F22",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F23",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F23",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F24",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F24",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F25",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F25",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F26",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F26",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 5,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F27",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F27",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 5,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F28",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F28",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F29",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F29",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F30",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F30",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F31",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F31",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F32",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F32",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F33",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F33",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F34",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F34",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F35",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F35",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F36",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F36",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F37",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F37",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F38",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F38",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F39",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F39",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "F40",
+      "group": "screen_file",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "file-complete-fixture\\F40",
+      "steps": [
+        {
+          "step": 1,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 2,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 3,
+          "status": "pass",
+          "issues": []
+        },
+        {
+          "step": 4,
+          "status": "pass",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "id": "D21",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D21",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 4
+    },
+    {
+      "id": "D22",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D22",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 3
+    },
+    {
+      "id": "D23",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D23",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        }
+      ],
+      "numeric_values": 5
+    },
+    {
+      "id": "D24",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D24",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 3
+    },
+    {
+      "id": "D25",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D25",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        }
+      ],
+      "numeric_values": 4
+    },
+    {
+      "id": "D26",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D26",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 3
+    },
+    {
+      "id": "D27",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D27",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        }
+      ],
+      "numeric_values": 3
+    },
+    {
+      "id": "D28",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D28",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 3
+    },
+    {
+      "id": "D29",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D29",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 4
+    },
+    {
+      "id": "D30",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D30",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 3
+    },
+    {
+      "id": "D31",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D31",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 4
+    },
+    {
+      "id": "D32",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D32",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 4
+    },
+    {
+      "id": "D33",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D33",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 4
+    },
+    {
+      "id": "D34",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D34",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        }
+      ],
+      "numeric_values": 5
+    },
+    {
+      "id": "D35",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D35",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202502",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202502",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        }
+      ],
+      "numeric_values": 5
+    },
+    {
+      "id": "D36",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D36",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        }
+      ],
+      "numeric_values": 6
+    },
+    {
+      "id": "D37",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D37",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 5
+    },
+    {
+      "id": "D38",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D38",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        }
+      ],
+      "numeric_values": 4
+    },
+    {
+      "id": "D39",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D39",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202504",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202504",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 1
+    },
+    {
+      "id": "D40",
+      "group": "derived",
+      "status": "pass",
+      "ui_status": "not_run",
+      "issues": [],
+      "evidence_folder": "derived-final\\D40",
+      "fetches": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          }
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "frequency": "M",
+          "start_period": "202501",
+          "end_period": "202506",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          }
+        }
+      ],
+      "numeric_values": 1
+    }
+  ],
+  "files": [
+    {
+      "id": "F21",
+      "path": "file-complete-fixture\\F21\\step-03-browser.png",
+      "format": "png",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F21",
+      "path": "file-complete-fixture\\F21\\step-03-file-2.svg",
+      "format": "svg",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F22",
+      "path": "file-complete-fixture\\F22\\step-03-browser.png",
+      "format": "png",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F22",
+      "path": "file-complete-fixture\\F22\\step-03-file-2.pdf",
+      "format": "pdf",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending",
+      "pages": 1
+    },
+    {
+      "id": "F23",
+      "path": "file-complete-fixture\\F23\\step-02-browser.png",
+      "format": "png",
+      "step": 2,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F23",
+      "path": "file-complete-fixture\\F23\\step-04-browser.png",
+      "format": "png",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F24",
+      "path": "file-complete-fixture\\F24\\step-04-file-1.svg",
+      "format": "svg",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F24",
+      "path": "file-complete-fixture\\F24\\step-04-file-2.csv",
+      "format": "csv",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 12
+    },
+    {
+      "id": "F25",
+      "path": "file-complete-fixture\\F25\\step-04-browser.png",
+      "format": "png",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F25",
+      "path": "file-complete-fixture\\F25\\step-04-file-2.pdf",
+      "format": "pdf",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "pending",
+      "pages": 1
+    },
+    {
+      "id": "F26",
+      "path": "file-complete-fixture\\F26\\step-05-file-1.svg",
+      "format": "svg",
+      "step": 5,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F26",
+      "path": "file-complete-fixture\\F26\\step-05-browser.png",
+      "format": "png",
+      "step": 5,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F27",
+      "path": "file-complete-fixture\\F27\\step-05-browser.png",
+      "format": "png",
+      "step": 5,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F27",
+      "path": "file-complete-fixture\\F27\\step-05-file-2.svg",
+      "format": "svg",
+      "step": 5,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F28",
+      "path": "file-complete-fixture\\F28\\step-03-browser.png",
+      "format": "png",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F28",
+      "path": "file-complete-fixture\\F28\\step-03-file-2.pdf",
+      "format": "pdf",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending",
+      "pages": 1,
+      "note_position": {
+        "x": 0.9001156363265731,
+        "y": 0.10254114744624437
+      }
+    },
+    {
+      "id": "F29",
+      "path": "file-complete-fixture\\F29\\step-03-file-1.svg",
+      "format": "svg",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F29",
+      "path": "file-complete-fixture\\F29\\step-03-file-2.pdf",
+      "format": "pdf",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending",
+      "pages": 1
+    },
+    {
+      "id": "F30",
+      "path": "file-complete-fixture\\F30\\step-03-file-1.csv",
+      "format": "csv",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 4
+    },
+    {
+      "id": "F30",
+      "path": "file-complete-fixture\\F30\\step-03-file-2.xlsx",
+      "format": "xlsx",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 4
+    },
+    {
+      "id": "F31",
+      "path": "file-complete-fixture\\F31\\step-03-file-1.csv",
+      "format": "csv",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 4
+    },
+    {
+      "id": "F31",
+      "path": "file-complete-fixture\\F31\\step-03-file-2.xlsx",
+      "format": "xlsx",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 4
+    },
+    {
+      "id": "F32",
+      "path": "file-complete-fixture\\F32\\step-02-file-1.csv",
+      "format": "csv",
+      "step": 2,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 12
+    },
+    {
+      "id": "F32",
+      "path": "file-complete-fixture\\F32\\step-02-file-2.xlsx",
+      "format": "xlsx",
+      "step": 2,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 12
+    },
+    {
+      "id": "F33",
+      "path": "file-complete-fixture\\F33\\step-04-file-1.csv",
+      "format": "csv",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 12
+    },
+    {
+      "id": "F33",
+      "path": "file-complete-fixture\\F33\\step-04-browser.png",
+      "format": "png",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F34",
+      "path": "file-complete-fixture\\F34\\step-03-browser.png",
+      "format": "png",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F34",
+      "path": "file-complete-fixture\\F34\\step-03-file-2.csv",
+      "format": "csv",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 12
+    },
+    {
+      "id": "F35",
+      "path": "file-complete-fixture\\F35\\step-03-file-1.svg",
+      "format": "svg",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F35",
+      "path": "file-complete-fixture\\F35\\step-03-browser.png",
+      "format": "png",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F36",
+      "path": "file-complete-fixture\\F36\\step-04-browser.png",
+      "format": "png",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F36",
+      "path": "file-complete-fixture\\F36\\step-04-file-2.xlsx",
+      "format": "xlsx",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 8
+    },
+    {
+      "id": "F37",
+      "path": "file-complete-fixture\\F37\\step-03-file-1.pdf",
+      "format": "pdf",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending",
+      "pages": 1
+    },
+    {
+      "id": "F37",
+      "path": "file-complete-fixture\\F37\\step-03-file-2.svg",
+      "format": "svg",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F38",
+      "path": "file-complete-fixture\\F38\\step-03-browser.png",
+      "format": "png",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F38",
+      "path": "file-complete-fixture\\F38\\step-03-file-2.csv",
+      "format": "csv",
+      "step": 3,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 12
+    },
+    {
+      "id": "F39",
+      "path": "file-complete-fixture\\F39\\step-02-file-1.svg",
+      "format": "svg",
+      "step": 2,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F39",
+      "path": "file-complete-fixture\\F39\\step-04-file-2.svg",
+      "format": "svg",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "pending"
+    },
+    {
+      "id": "F40",
+      "path": "file-complete-fixture\\F40\\step-04-file-1.csv",
+      "format": "csv",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 3
+    },
+    {
+      "id": "F40",
+      "path": "file-complete-fixture\\F40\\step-04-file-2.xlsx",
+      "format": "xlsx",
+      "step": 4,
+      "status": "pass",
+      "visual_review": "not_applicable",
+      "values": 3
+    }
+  ]
+}

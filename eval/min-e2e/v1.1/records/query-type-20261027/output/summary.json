@@ -1,0 +1,20 @@
+{
+  "scope": "local_product_intent_dispatch_only",
+  "total": 20,
+  "passed": 20,
+  "failed": 0,
+  "accuracy_percent": 100.0,
+  "by_label": {
+    "general": {
+      "total": 10,
+      "passed": 10
+    },
+    "derived": {
+      "total": 10,
+      "passed": 10
+    }
+  },
+  "execution_errors": 0,
+  "label_status": "human_review_pending",
+  "predictions_sha256": "dafbf2d59dfca98af538df11edca05667761f30920a0464b3a3c4fcd0bbdf784"
+}

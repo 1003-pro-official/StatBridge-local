@@ -1,0 +1,3629 @@
+{
+  "interpretation": "Latest per-question state, combining the full 50-case run with the predeclared seven-case recheck; both runs retained separately.",
+  "counts": {
+    "pass": 49,
+    "pending": 1
+  },
+  "full_run_counts": {
+    "pass": 46,
+    "fail": 3,
+    "pending": 1
+  },
+  "targeted_recheck_counts": {
+    "pass": 6,
+    "pending": 1
+  },
+  "results": [
+    {
+      "id": "ME14-01",
+      "category": "일반",
+      "query": "유동성 규모의 추이를 보고서에 정리하려고 해. 2021년 1월부터 2024년 12월 M2 상품별 구성내역의 M2 총액(평잔·원계열)을 월별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), M2 상품별 구성내역(평잔, 원계열) (DT_161Y006) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), M2 상품별 구성내역(평잔, 원계열) (DT_161Y006) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_161Y006",
+          "item_id": "13103852603999",
+          "classifications": {
+            "objL1": "13102852603ACC_ITEM.BBHA00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 19.55,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-01",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-02",
+      "category": "일반",
+      "query": "가계의 신규 차입 금리를 보고서에 정리하려고 해. 2021년 1월부터 2024년 12월 예금은행 가계대출 금리(신규취급액 기준)을 월별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 예금은행 대출금리(신규취급액 기준) (DT_121Y006) (연리%)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 예금은행 대출금리(신규취급액 기준) (DT_121Y006) (연리%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 21.34,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-02",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-03",
+      "category": "일반",
+      "query": "예금은행 수신금리를 보고서에 정리하려고 해. 2021년 1월부터 2024년 12월 예금은행 저축성수신 금리(금융채 제외·신규취급액 기준)을 월별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 예금은행 수신금리(신규취급액 기준) (DT_121Y002) (연리%)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 예금은행 수신금리(신규취급액 기준) (DT_121Y002) (연리%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 19.25,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-03",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-04",
+      "category": "일반",
+      "query": "제조업 중소기업 대출을 보고서에 정리하려고 해. 2021년 1분기부터 2024년 4분기 예금은행 제조업 중소기업 대출금 잔액을 분기별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 산업별대출금(예금은행, 기업규모별) (DT_131Y018) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 산업별대출금(예금은행, 기업규모별) (DT_131Y018) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_131Y018",
+          "item_id": "13103136163999",
+          "classifications": {
+            "objL1": "13102136163ACC_ITEM.1103000",
+            "objL2": "13102136163ENTERPRISE_SCALE.E20"
+          },
+          "frequency": "Q",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 16,
+      "ui_seconds": 18.36,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-04",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-05",
+      "category": "일반",
+      "query": "부산 지역 가계대출을 보고서에 정리하려고 해. 2021년 1월부터 2024년 12월 부산 지역 예금은행 가계대출(말잔)을 월별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 예금은행 지역별 가계대출(말잔) (DT_151Y003) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 예금은행 지역별 가계대출(말잔) (DT_151Y003) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_151Y003",
+          "item_id": "13103134697999",
+          "classifications": {
+            "objL1": "13102134697ACC_ITEM.1111000",
+            "objL2": "13102134697RG_CD.B00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 20.03,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-05",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-06",
+      "category": "일반",
+      "query": "실질 경제 규모를 보고서에 정리하려고 해. 2019년 1분기부터 2024년 4분기 시장가격 국내총생산(GDP, 실질·계절조정)을 분기별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 경제활동별 GDP 및 GNI(계절조정, 실질, 분기) (DT_200Y104) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 경제활동별 GDP 및 GNI(계절조정, 실질, 분기) (DT_200Y104) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y104",
+          "item_id": "13103136259999",
+          "classifications": {
+            "objL1": "13102136259ACC_ITEM.1400"
+          },
+          "frequency": "Q",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 24,
+      "ui_seconds": 21.5,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-06",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-07",
+      "category": "일반",
+      "query": "명목 경제 규모를 보고서에 정리하려고 해. 2015년부터 2024년 시장가격 국내총생산(GDP, 명목·원계열)을 연간 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 경제활동별 GDP 및 GNI(원계열, 명목, 분기 및 연간) (DT_200Y105) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 경제활동별 GDP 및 GNI(원계열, 명목, 분기 및 연간) (DT_200Y105) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y105",
+          "item_id": "13103136260999",
+          "classifications": {
+            "objL1": "13102136260ACC_ITEM.1400"
+          },
+          "frequency": "Y",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 10,
+      "ui_seconds": 20.34,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-07",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-08",
+      "category": "일반",
+      "query": "경상수지를 보고서에 정리하려고 해. 2021년 1월부터 2024년 12월 국제수지 경상수지(원계열)을 월별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 국제수지 (DT_301Y013) (백만달러)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 국제수지 (DT_301Y013) (백만달러)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.000000"
+          },
+          "frequency": "M",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 16.33,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-08",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-09",
+      "category": "일반",
+      "query": "대중국 경상수지를 보고서에 정리하려고 해. 2015년부터 2024년 중국에 대한 경상수지를 연간 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 지역별 경상수지 (DT_301Y015) (백만달러)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 지역별 경상수지 (DT_301Y015) (백만달러)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_301Y015",
+          "item_id": "13103134752999",
+          "classifications": {
+            "objL1": "13102134752ACC_CD.REG0000",
+            "objL2": "13102134752RG_CD.CN"
+          },
+          "frequency": "Y",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 10,
+      "ui_seconds": 16.94,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-09",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-10",
+      "category": "일반",
+      "query": "대외금융자산을 보고서에 정리하려고 해. 2019년 1분기부터 2024년 4분기 국제투자대조표 대외금융자산 총액을 분기별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 국제투자대조표(IIP) (DT_311Y001) (백만달러)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 국제투자대조표(IIP) (DT_311Y001) (백만달러)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_311Y001",
+          "item_id": "13103134486999",
+          "classifications": {
+            "objL1": "13102134486ACC_CD.1000000"
+          },
+          "frequency": "Q",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 24,
+      "ui_seconds": 20.3,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-10",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-11",
+      "category": "일반",
+      "query": "수입물가를 보고서에 정리하려고 해. 2020년 1월부터 2024년 12월 수입물가지수 기본분류 총지수(원화 기준)을 월별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 수입물가지수(기본분류) (DT_401Y015) (2020＝100)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 수입물가지수(기본분류) (DT_401Y015) (2020＝100)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_401Y015",
+          "item_id": "13103134643999",
+          "classifications": {
+            "objL1": "13102134643ACC_CD.*AA",
+            "objL2": "13102134643CRR_CTRT_CD.W"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 18.28,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-11",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-12",
+      "category": "일반",
+      "query": "교역조건을 보고서에 정리하려고 해. 2020년 1월부터 2024년 12월 순상품교역조건지수를 월별 표와 추이 선그래프로 보여줘. 단위와 출처도 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 교역조건지수 (DT_403Y005) (2020＝100)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 교역조건지수 (DT_403Y005) (2020＝100)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y005",
+          "item_id": "13103134627999",
+          "classifications": {
+            "objL1": "13102134627TERMS_TRADE_TYPE.A"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 19.59,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-12",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-13",
+      "category": "복수 지표 일반",
+      "query": "가계대출의 신규 취급과 기존 잔액에 적용되는 금리의 수준을 비교하려고 해. 2021년 1월부터 2024년 12월 예금은행 가계대출 금리(신규취급액 기준)과 예금은행 가계대출 금리(잔액 기준)을 월별 표와 선그래프로 함께 보여줘. 각 계열의 기준과 단위를 분명히 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 예금은행 대출금리(신규취급액 기준) (DT_121Y006) (연리%)",
+        "계열2: 한국은행(301), 예금은행 대출금리(잔액 기준) (DT_121Y015) (연리%)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 예금은행 대출금리(신규취급액 기준) (DT_121Y006) (연리%)",
+        "계열2: 한국은행(301), 예금은행 대출금리(잔액 기준) (DT_121Y015) (연리%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y015",
+          "item_id": "13103134612999",
+          "classifications": {
+            "objL1": "13102134612ACC_ITEM.BECBLB0202"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 21.38,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-13",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-14",
+      "category": "복수 지표 일반",
+      "query": "가계 차입금리와 저축성수신금리의 흐름을 점검하려고 해. 2021년 1월부터 2024년 12월 예금은행 가계대출 금리(신규취급액 기준)과 예금은행 저축성수신 금리(금융채 제외·신규취급액 기준)을 월별 표와 선그래프로 함께 보여줘. 각 계열의 기준과 단위를 분명히 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 예금은행 대출금리(신규취급액 기준) (DT_121Y006) (연리%)",
+        "계열2: 한국은행(301), 예금은행 수신금리(신규취급액 기준) (DT_121Y002) (연리%)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 예금은행 대출금리(신규취급액 기준) (DT_121Y006) (연리%)",
+        "계열2: 한국은행(301), 예금은행 수신금리(신규취급액 기준) (DT_121Y002) (연리%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 21.44,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          1,
+          0
+        ],
+        "graph_mapping": [
+          1,
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-14",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-15",
+      "category": "복수 지표 일반",
+      "query": "수출의 금액과 물량 추이를 점검하려고 해. 2020년 1월부터 2024년 12월 수출금액지수 총지수와 수출물량지수 총지수를 월별 표와 선그래프로 함께 보여줘. 각 계열의 기준과 단위를 분명히 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 수출금액지수 (DT_403Y001) (2020＝100)",
+        "계열2: 한국은행(301), 수출물량지수 (DT_403Y002) (2020＝100)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 수출금액지수 (DT_403Y001) (2020＝100)",
+        "계열2: 한국은행(301), 수출물량지수 (DT_403Y002) (2020＝100)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y001",
+          "item_id": "13103134671999",
+          "classifications": {
+            "objL1": "13102134671ACC_CD.*AA"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y002",
+          "item_id": "13103134523999",
+          "classifications": {
+            "objL1": "13102134523ACC_CD.*AA"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 21.15,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-15",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-16",
+      "category": "복수 지표 일반",
+      "query": "M2의 평잔 원계열과 말잔 계절조정계열의 기준별 추이를 점검하려고 해. 2021년 1월부터 2024년 12월 M2 상품별 구성내역의 M2 총액(평잔·원계열)과 M2 상품별 구성내역의 M2 총액(말잔·계절조정계열)을 월별 표와 선그래프로 함께 보여줘. 각 계열의 기준과 단위를 분명히 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), M2 상품별 구성내역(평잔, 원계열) (DT_161Y006) (십억원)",
+        "계열2: 한국은행(301), M2 상품별 구성내역(말잔, 계절조정계열) (DT_161Y007) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), M2 상품별 구성내역(평잔, 원계열) (DT_161Y006) (십억원)",
+        "계열2: 한국은행(301), M2 상품별 구성내역(말잔, 계절조정계열) (DT_161Y007) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_161Y006",
+          "item_id": "13103852603999",
+          "classifications": {
+            "objL1": "13102852603ACC_ITEM.BBHA00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_161Y007",
+          "item_id": "13103852611999",
+          "classifications": {
+            "objL1": "13102852611ACC_ITEM.BBGS00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 23.48,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-16",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-17",
+      "category": "복수 지표 일반",
+      "query": "현금 및 예수금의 잔액과 거래 흐름을 점검하려고 해. 2018년부터 2024년 상세자금순환표(2008 SNA)의 현금 발행 및 예수금 합계·제도부문 합계(잔액표)과 상세자금순환표(2008 SNA)의 현금 발행 및 예수금 합계·제도부문 합계(거래표)을 연간 표와 선그래프로 함께 보여줘. 각 계열의 기준과 단위를 분명히 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 잔액표 (DT_284Y001) (십억원)",
+        "계열2: 한국은행(301), 거래표 (DT_284Y002) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 잔액표 (DT_284Y001) (십억원)",
+        "계열2: 한국은행(301), 거래표 (DT_284Y002) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_284Y001",
+          "item_id": "13103852624999",
+          "classifications": {
+            "objL1": "13102852624ACC_ITEM.A1000",
+            "objL2": "13102852624INSTITUTIONAL_SECTOR.T10000"
+          },
+          "frequency": "Y",
+          "unit": "십억원"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_284Y002",
+          "item_id": "13103852623999",
+          "classifications": {
+            "objL1": "13102852623ACC_ITEM.A1000",
+            "objL2": "13102852623INSTITUTIONAL_SECTOR.T10000"
+          },
+          "frequency": "Y",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 7,
+      "ui_seconds": 23.37,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-17",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-18",
+      "category": "복수 지표 일반",
+      "query": "수입물가와 교역조건의 추이를 점검하려고 해. 2020년 1월부터 2024년 12월 수입물가지수 기본분류 총지수(원화 기준)과 순상품교역조건지수를 월별 표와 선그래프로 함께 보여줘. 각 계열의 기준과 단위를 분명히 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 수입물가지수(기본분류) (DT_401Y015) (2020＝100)",
+        "계열2: 한국은행(301), 교역조건지수 (DT_403Y005) (2020＝100)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 수입물가지수(기본분류) (DT_401Y015) (2020＝100)",
+        "계열2: 한국은행(301), 교역조건지수 (DT_403Y005) (2020＝100)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_401Y015",
+          "item_id": "13103134643999",
+          "classifications": {
+            "objL1": "13102134643ACC_CD.*AA",
+            "objL2": "13102134643CRR_CTRT_CD.W"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y005",
+          "item_id": "13103134627999",
+          "classifications": {
+            "objL1": "13102134627TERMS_TRADE_TYPE.A"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 23.3,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-18",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-19",
+      "category": "복수 지표 일반",
+      "query": "지역별 가계대출 잔액의 추이를 비교하려고 해. 2021년 1월부터 2024년 12월 서울과 부산 지역의 예금은행 가계대출을 각각 말잔 기준으로 월별 표와 선그래프로 보여줘. 각 지역과 단위, 출처를 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 예금은행 지역별 가계대출(말잔) (DT_151Y003) (십억원)",
+        "계열2: 한국은행(301), 예금은행 지역별 가계대출(말잔) (DT_151Y003) (십억원)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 예금은행 지역별 가계대출(말잔) (DT_151Y003) (십억원)",
+        "계열2: 한국은행(301), 예금은행 지역별 가계대출(말잔) (DT_151Y003) (십억원)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_151Y003",
+          "item_id": "13103134697999",
+          "classifications": {
+            "objL1": "13102134697ACC_ITEM.1111000",
+            "objL2": "13102134697RG_CD.A00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_151Y003",
+          "item_id": "13103134697999",
+          "classifications": {
+            "objL1": "13102134697ACC_ITEM.1111000",
+            "objL2": "13102134697RG_CD.B00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 16.15,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-19",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-20",
+      "category": "복수 지표 일반",
+      "query": "국제수지의 전체 경상수지와 대중국 경상수지의 연간 추이를 살펴보고 싶어. 2015년부터 2024년까지 한국은행 국제수지 전체 경상수지와 지역별 대중국 경상수지를 연간 표와 선그래프로 보여줘. 계열의 대상 지역과 단위, 출처를 표시해줘.",
+      "weights": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1: 한국은행(301), 국제수지 (DT_301Y013) (백만달러)",
+        "계열2: 한국은행(301), 지역별 경상수지 (DT_301Y015) (백만달러)"
+      ],
+      "required_graph_columns": [
+        "계열1: 한국은행(301), 국제수지 (DT_301Y013) (백만달러)",
+        "계열2: 한국은행(301), 지역별 경상수지 (DT_301Y015) (백만달러)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.000000"
+          },
+          "frequency": "Y",
+          "unit": "백만달러"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_301Y015",
+          "item_id": "13103134752999",
+          "classifications": {
+            "objL1": "13102134752ACC_CD.REG0000",
+            "objL2": "13102134752RG_CD.CN"
+          },
+          "frequency": "Y",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 10,
+      "ui_seconds": 17.95,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 0,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-20",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-21",
+      "category": "단순 파생",
+      "query": "유동성 규모의 변화를 분석하려고 해. 2021년 1월부터 2024년 12월 M2 상품별 구성내역의 M2 총액(평잔·원계열)의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_161Y006",
+          "item_id": "13103852603999",
+          "classifications": {
+            "objL1": "13102852603ACC_ITEM.BBHA00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 34.78,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 60,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-21",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-targeted-recheck-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-22",
+      "category": "단순 파생",
+      "query": "통화량의 계절조정 변화를 분석하려고 해. 2022년 1월부터 2024년 12월 M2 상품별 구성내역의 M2 총액(말잔·계절조정계열)의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_161Y007",
+          "item_id": "13103852611999",
+          "classifications": {
+            "objL1": "13102852611ACC_ITEM.BBGS00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 36,
+      "ui_seconds": 26.99,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 48,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-22",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-23",
+      "category": "단순 파생",
+      "query": "가계의 신규 차입 금리의 변화를 분석하려고 해. 2021년 1월부터 2024년 12월 예금은행 가계대출 금리(신규취급액 기준)의 전기 대비 변화폭을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (연리%)",
+        "계산값 (%p)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%p)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 27.21,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 49,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-23",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-24",
+      "category": "단순 파생",
+      "query": "기존 대출잔액의 금리의 변화를 분석하려고 해. 2021년 1월부터 2024년 12월 예금은행 가계대출 금리(잔액 기준)의 전기 대비 변화폭을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (연리%)",
+        "계산값 (%p)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%p)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y015",
+          "item_id": "13103134612999",
+          "classifications": {
+            "objL1": "13102134612ACC_ITEM.BECBLB0202"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 30.32,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 49,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-24",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-25",
+      "category": "단순 파생",
+      "query": "예금은행 수신금리의 변화를 분석하려고 해. 2021년 1월부터 2024년 12월 예금은행 저축성수신 금리(금융채 제외·신규취급액 기준)의 전기 대비 변화폭을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (연리%)",
+        "계산값 (%p)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%p)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 25.4,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 49,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-25",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-26",
+      "category": "단순 파생",
+      "query": "제조업 중소기업 대출의 변화를 분석하려고 해. 2022년 1분기부터 2024년 4분기 예금은행 제조업 중소기업 대출금 잔액의 전년 동기 대비 증가율을 분기별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_131Y018",
+          "item_id": "13103136163999",
+          "classifications": {
+            "objL1": "13102136163ACC_ITEM.1103000",
+            "objL2": "13102136163ENTERPRISE_SCALE.E20"
+          },
+          "frequency": "Q",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 12,
+      "ui_seconds": 26.36,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 16,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-26",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-27",
+      "category": "단순 파생",
+      "query": "부산 지역 가계대출의 변화를 분석하려고 해. 2021년 1월부터 2024년 12월 부산 지역 예금은행 가계대출(말잔)의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_151Y003",
+          "item_id": "13103134697999",
+          "classifications": {
+            "objL1": "13102134697ACC_ITEM.1111000",
+            "objL2": "13102134697RG_CD.B00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 35.62,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 60,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-27",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-28",
+      "category": "단순 파생",
+      "query": "실질 경제 규모의 변화를 분석하려고 해. 2019년 1분기부터 2024년 4분기 시장가격 국내총생산(GDP, 실질·계절조정)의 전년 동기 대비 증가율을 분기별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y104",
+          "item_id": "13103136259999",
+          "classifications": {
+            "objL1": "13102136259ACC_ITEM.1400"
+          },
+          "frequency": "Q",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 24,
+      "ui_seconds": 52.28,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 28,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-28",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-29",
+      "category": "단순 파생",
+      "query": "명목 경제 규모의 변화를 분석하려고 해. 2015년부터 2024년 시장가격 국내총생산(GDP, 명목·원계열)의 전년 동기 대비 증가율을 연간으로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y105",
+          "item_id": "13103136260999",
+          "classifications": {
+            "objL1": "13102136260ACC_ITEM.1400"
+          },
+          "frequency": "Y",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 10,
+      "ui_seconds": 33.64,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 11,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-29",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-30",
+      "category": "단순 파생",
+      "query": "경상수지의 변화를 분석하려고 해. 2021년 1월부터 2024년 12월 국제수지 경상수지(원계열)의 전기 대비 증감액을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (백만달러)",
+        "계산값 (백만달러)"
+      ],
+      "required_graph_columns": [
+        "계산값 (백만달러)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_301Y013",
+          "item_id": "13103134519999",
+          "classifications": {
+            "objL1": "13102134519ACC_CD.000000"
+          },
+          "frequency": "M",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 36.8,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 49,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-30",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-31",
+      "category": "단순 파생",
+      "query": "대중국 경상수지의 변화를 분석하려고 해. 2015년부터 2024년 중국에 대한 경상수지의 전기 대비 증감액을 연간으로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (백만달러)",
+        "계산값 (백만달러)"
+      ],
+      "required_graph_columns": [
+        "계산값 (백만달러)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_301Y015",
+          "item_id": "13103134752999",
+          "classifications": {
+            "objL1": "13102134752ACC_CD.REG0000",
+            "objL2": "13102134752RG_CD.CN"
+          },
+          "frequency": "Y",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 10,
+      "ui_seconds": 22.88,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 11,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-31",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-32",
+      "category": "단순 파생",
+      "query": "대외금융자산의 변화를 분석하려고 해. 2019년 1분기부터 2024년 4분기 국제투자대조표 대외금융자산 총액의 전년 동기 대비 증가율을 분기별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (백만달러)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_311Y001",
+          "item_id": "13103134486999",
+          "classifications": {
+            "objL1": "13102134486ACC_CD.1000000"
+          },
+          "frequency": "Q",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 24,
+      "ui_seconds": 24.58,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 28,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-32",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-33",
+      "category": "단순 파생",
+      "query": "수입물가의 변화를 분석하려고 해. 2020년 1월부터 2024년 12월 수입물가지수 기본분류 총지수(원화 기준)의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (2020＝100)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_401Y015",
+          "item_id": "13103134643999",
+          "classifications": {
+            "objL1": "13102134643ACC_CD.*AA",
+            "objL2": "13102134643CRR_CTRT_CD.W"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 26.19,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 72,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-33",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-34",
+      "category": "단순 파생",
+      "query": "수출물가의 변화를 분석하려고 해. 2020년 1월부터 2024년 12월 수출물가지수 기본분류 총지수(달러 기준)의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (2020＝100)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_402Y014",
+          "item_id": "13103134642999",
+          "classifications": {
+            "objL1": "13102134642ACC_CD.*AA",
+            "objL2": "13102134642CRR_CTRT_CD.D"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 26.25,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 72,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-34",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-35",
+      "category": "단순 파생",
+      "query": "수출금액의 변화를 분석하려고 해. 2020년 1월부터 2024년 12월 수출금액지수 총지수의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (2020＝100)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y001",
+          "item_id": "13103134671999",
+          "classifications": {
+            "objL1": "13102134671ACC_CD.*AA"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 38.07,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 72,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-35",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-targeted-recheck-20261027",
+      "full_run_status": "fail"
+    },
+    {
+      "id": "ME14-36",
+      "category": "단순 파생",
+      "query": "수출물량의 변화를 분석하려고 해. 2020년 1월부터 2024년 12월 수출물량지수 총지수의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (2020＝100)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y002",
+          "item_id": "13103134523999",
+          "classifications": {
+            "objL1": "13102134523ACC_CD.*AA"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 44.71,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 72,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-36",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-37",
+      "category": "단순 파생",
+      "query": "교역조건의 변화를 분석하려고 해. 2020년 1월부터 2024년 12월 순상품교역조건지수의 전년 동기 대비 증가율을 월별로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (2020＝100)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y005",
+          "item_id": "13103134627999",
+          "classifications": {
+            "objL1": "13102134627TERMS_TRADE_TYPE.A"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 22.73,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 72,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-37",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-38",
+      "category": "단순 파생",
+      "query": "현금 및 예수금 잔액의 변화를 분석하려고 해. 2019년부터 2024년 상세자금순환표(2008 SNA)의 현금 발행 및 예수금 합계·제도부문 합계(잔액표)의 전년 동기 대비 증가율을 연간으로 계산해 원자료와 함께 표로 보여주고 계산 결과를 선그래프로 작성해줘. 계산에 필요한 선행 기간을 조회하고 단위와 출처를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_284Y001",
+          "item_id": "13103852624999",
+          "classifications": {
+            "objL1": "13102852624ACC_ITEM.A1000",
+            "objL2": "13102852624INSTITUTIONAL_SECTOR.T10000"
+          },
+          "frequency": "Y",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 6,
+      "ui_seconds": 58.67,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 7,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-38",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-targeted-recheck-20261027",
+      "full_run_status": "fail"
+    },
+    {
+      "id": "ME14-39",
+      "category": "복잡 파생",
+      "query": "가계 신규 차입금리와 저축성수신금리의 차이 추이를 보고서에 정리하려고 해. 2020년 1월부터 2024년 12월 예금은행 가계대출 금리(신규취급액 기준)에서 예금은행 저축성수신 금리(금융채 제외·신규취급액 기준)을 뺀 월별 차이와 그 차이의 전월 대비 변화를 계산해줘. 두 원자료와 계산값을 표로 제시하고 차이는 선그래프로 보여줘. 계열의 기준 차이와 단위를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1 (연리%)",
+        "계열2 (연리%)",
+        "차이 (%p)",
+        "차이 변화 (%p)"
+      ],
+      "required_graph_columns": [
+        "차이 (%p)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y002",
+          "item_id": "13103134588999",
+          "classifications": {
+            "objL1": "13102134588ACC_ITEM.BEABAA1"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 83.51,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 122,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-39",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-40",
+      "category": "복잡 파생",
+      "query": "가계대출 신규취급과 잔액 금리의 차이 추이를 보고서에 정리하려고 해. 2021년 1월부터 2024년 12월 예금은행 가계대출 금리(신규취급액 기준)에서 예금은행 가계대출 금리(잔액 기준)을 뺀 월별 차이와 그 차이의 전월 대비 변화를 계산해줘. 두 원자료와 계산값을 표로 제시하고 차이는 선그래프로 보여줘. 계열의 기준 차이와 단위를 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "계열1 (연리%)",
+        "계열2 (연리%)",
+        "차이 (%p)",
+        "차이 변화 (%p)"
+      ],
+      "required_graph_columns": [
+        "차이 (%p)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y006",
+          "item_id": "13103134553999",
+          "classifications": {
+            "objL1": "13102134553ACC_ITEM.BECBLA03"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_121Y015",
+          "item_id": "13103134612999",
+          "classifications": {
+            "objL1": "13102134612ACC_ITEM.BECBLB0202"
+          },
+          "frequency": "M",
+          "unit": "연리%"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 80.93,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 98,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-40",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-targeted-recheck-20261027",
+      "full_run_status": "fail"
+    },
+    {
+      "id": "ME14-41",
+      "category": "복잡 파생",
+      "query": "서울과 부산의 가계대출 잔액 규모를 비교하려고 해. 2021년 1월부터 2024년 12월 예금은행 가계대출 말잔의 부산 잔액을 서울 잔액으로 나눈 비율과 그 비율의 전월 대비 변화를 월별로 계산해줘. 두 지역의 원자료와 계산값을 한 표로 보여주고 비율을 선그래프로 표시해줘. 비율은 부산 잔액의 서울 잔액 대비 비율로 설명해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "부산 잔액 (십억원)",
+        "서울 잔액 (십억원)",
+        "부산/서울 비율 (%)",
+        "비율 변화 (%p)"
+      ],
+      "required_graph_columns": [
+        "부산/서울 비율 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_151Y003",
+          "item_id": "13103134697999",
+          "classifications": {
+            "objL1": "13102134697ACC_ITEM.1111000",
+            "objL2": "13102134697RG_CD.B00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_151Y003",
+          "item_id": "13103134697999",
+          "classifications": {
+            "objL1": "13102134697ACC_ITEM.1111000",
+            "objL2": "13102134697RG_CD.A00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 87.54,
+      "levels": {
+        "A": null,
+        "B": null,
+        "C": null,
+        "D": 0,
+        "E": 0
+      },
+      "checks": {},
+      "evidence": "predictions\\ME14-41",
+      "status": "pending",
+      "total": null,
+      "product_status": "need_details",
+      "failure_message": "원자료 API 확인 결과와 계산 전 확인할 조건을 아래에 나누어 안내합니다. 아직 계산하지 않았습니다.",
+      "review_issue": "질의에 비율의 배율과 전월 변화의 정의가 미확정이며 전달 README도 검토 대상으로 명시함. 제품의 확인 질문을 오답으로 확정하지 않음.",
+      "source_run": "v14-targeted-recheck-20261027",
+      "full_run_status": "pending"
+    },
+    {
+      "id": "ME14-42",
+      "category": "복잡 파생",
+      "query": "수출금액과 수출물량의 증가 흐름을 비교하려고 해. 2020년 1월부터 2024년 12월 수출금액지수와 수출물량지수 총지수의 전년 동월 대비 증가율을 각각 계산하고, 수출금액 증가율에서 수출물량 증가율을 뺀 차이를 월별로 계산해줘. 두 원지수와 증가율 및 차이를 한 표로, 두 증가율은 선그래프로 보여줘. 이 차이를 공식 수출가격 효과로 단정하지 말아줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "수출금액지수 (2020=100)",
+        "수출물량지수 (2020=100)",
+        "금액 증가율 (%)",
+        "물량 증가율 (%)",
+        "증가율 차이 (%p)"
+      ],
+      "required_graph_columns": [
+        "금액 증가율 (%)",
+        "물량 증가율 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y001",
+          "item_id": "13103134671999",
+          "classifications": {
+            "objL1": "13102134671ACC_CD.*AA"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        },
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y002",
+          "item_id": "13103134523999",
+          "classifications": {
+            "objL1": "13102134523ACC_CD.*AA"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 48.56,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 144,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-42",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-43",
+      "category": "복잡 파생",
+      "query": "유동성 규모의 규모와 변화 속도를 함께 분석해줘. 2021년 1월부터 2024년 12월 M2 상품별 구성내역의 M2 총액(평잔·원계열)의 원자료와 전년 동기 대비 증가율을 월별로 계산해 한 표에 넣고, 원자료와 증가율은 단위를 구분한 그래프로 보여줘. 선행 자료도 조회해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_161Y006",
+          "item_id": "13103852603999",
+          "classifications": {
+            "objL1": "13102852603ACC_ITEM.BBHA00"
+          },
+          "frequency": "M",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 48,
+      "ui_seconds": 21.42,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 60,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-43",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-44",
+      "category": "복잡 파생",
+      "query": "제조업 중소기업 대출의 규모와 변화 속도를 함께 분석해줘. 2022년 1분기부터 2024년 4분기 예금은행 제조업 중소기업 대출금 잔액의 원자료와 전년 동기 대비 증가율을 분기별로 계산해 한 표에 넣고, 원자료와 증가율은 단위를 구분한 그래프로 보여줘. 선행 자료도 조회해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_131Y018",
+          "item_id": "13103136163999",
+          "classifications": {
+            "objL1": "13102136163ACC_ITEM.1103000",
+            "objL2": "13102136163ENTERPRISE_SCALE.E20"
+          },
+          "frequency": "Q",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 12,
+      "ui_seconds": 24.88,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 16,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-44",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-45",
+      "category": "복잡 파생",
+      "query": "실질 경제 규모의 규모와 변화 속도를 함께 분석해줘. 2019년 1분기부터 2024년 4분기 시장가격 국내총생산(GDP, 실질·계절조정)의 원자료와 전년 동기 대비 증가율을 분기별로 계산해 한 표에 넣고, 원자료와 증가율은 단위를 구분한 그래프로 보여줘. 선행 자료도 조회해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y104",
+          "item_id": "13103136259999",
+          "classifications": {
+            "objL1": "13102136259ACC_ITEM.1400"
+          },
+          "frequency": "Q",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 24,
+      "ui_seconds": 40.31,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 28,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-45",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-46",
+      "category": "복잡 파생",
+      "query": "명목 경제 규모의 규모와 변화 속도를 함께 분석해줘. 2015년부터 2024년 시장가격 국내총생산(GDP, 명목·원계열)의 원자료와 전년 동기 대비 증가율을 연간으로 계산해 한 표에 넣고, 원자료와 증가율은 단위를 구분한 그래프로 보여줘. 선행 자료도 조회해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "원자료 (십억원)",
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y105",
+          "item_id": "13103136260999",
+          "classifications": {
+            "objL1": "13102136260ACC_ITEM.1400"
+          },
+          "frequency": "Y",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 10,
+      "ui_seconds": 22.6,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 11,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-46",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-47",
+      "category": "복잡 파생",
+      "query": "대외금융자산의 규모와 변화 속도를 함께 분석해줘. 2019년 1분기부터 2024년 4분기 국제투자대조표 대외금융자산 총액의 원자료와 전년 동기 대비 증가율을 분기별로 계산해 한 표에 넣고, 원자료와 증가율은 단위를 구분한 그래프로 보여줘. 선행 자료도 조회해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (백만달러)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "원자료 (백만달러)",
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_311Y001",
+          "item_id": "13103134486999",
+          "classifications": {
+            "objL1": "13102134486ACC_CD.1000000"
+          },
+          "frequency": "Q",
+          "unit": "백만달러"
+        }
+      ],
+      "expected_periods": 24,
+      "ui_seconds": 25.73,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 28,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-47",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-48",
+      "category": "복잡 파생",
+      "query": "수출금액의 규모와 변화 속도를 함께 분석해줘. 2020년 1월부터 2024년 12월 수출금액지수 총지수의 원자료와 전년 동기 대비 증가율을 월별로 계산해 한 표에 넣고, 원자료와 증가율은 단위를 구분한 그래프로 보여줘. 선행 자료도 조회해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (2020＝100)",
+        "계산값 (%)"
+      ],
+      "required_graph_columns": [
+        "원자료 (2020＝100)",
+        "계산값 (%)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_403Y001",
+          "item_id": "13103134671999",
+          "classifications": {
+            "objL1": "13102134671ACC_CD.*AA"
+          },
+          "frequency": "M",
+          "unit": "2020＝100"
+        }
+      ],
+      "expected_periods": 60,
+      "ui_seconds": 20.83,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 72,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1
+        ],
+        "graph_mapping": [
+          0,
+          1
+        ]
+      },
+      "evidence": "predictions\\ME14-48",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-output-final-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-49",
+      "category": "복잡 파생",
+      "query": "명목 경제 규모의 누적 변화를 비교하기 위해 2015년부터 2024년 시장가격 국내총생산(GDP, 명목·원계열)을 2015년=100으로 재기준화하고 기준시점 대비 변화율도 계산해줘. 연간 원자료와 두 계산 결과를 표로 보여주고 재기준화 지수를 선그래프로 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "재기준화 지수 (기준=100)",
+        "기준 대비 변화율 (%)"
+      ],
+      "required_graph_columns": [
+        "재기준화 지수 (기준=100)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y105",
+          "item_id": "13103136260999",
+          "classifications": {
+            "objL1": "13102136260ACC_ITEM.1400"
+          },
+          "frequency": "Y",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 10,
+      "ui_seconds": 98.39,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 10,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1,
+          2
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-49",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-targeted-recheck-20261027",
+      "full_run_status": "pass"
+    },
+    {
+      "id": "ME14-50",
+      "category": "복잡 파생",
+      "query": "실질 경제 규모의 누적 변화를 비교하기 위해 2019년 1분기부터 2024년 4분기 시장가격 국내총생산(GDP, 실질·계절조정)을 2019년 1분기=100으로 재기준화하고 기준시점 대비 변화율도 계산해줘. 분기별 원자료와 두 계산 결과를 표로 보여주고 재기준화 지수를 선그래프로 표시해줘.",
+      "weights": {
+        "A": 20,
+        "B": 15,
+        "C": 30,
+        "D": 20,
+        "E": 15
+      },
+      "required_table_columns": [
+        "원자료 (십억원)",
+        "재기준화 지수 (기준=100)",
+        "기준 대비 변화율 (%)"
+      ],
+      "required_graph_columns": [
+        "재기준화 지수 (기준=100)"
+      ],
+      "required_sources": [
+        {
+          "org_id": "301",
+          "table_id": "DT_200Y104",
+          "item_id": "13103136259999",
+          "classifications": {
+            "objL1": "13102136259ACC_ITEM.1400"
+          },
+          "frequency": "Q",
+          "unit": "십억원"
+        }
+      ],
+      "expected_periods": 24,
+      "ui_seconds": 30.87,
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      },
+      "checks": {
+        "source_signatures": true,
+        "all_display_periods": true,
+        "all_table_values": true,
+        "table_units": true,
+        "source_and_history_values": true,
+        "source_values_compared": 24,
+        "history_issues": [],
+        "actual_dom_values": true,
+        "actual_dom_units": true,
+        "table_source": true,
+        "actual_plotly_values": true,
+        "graph_units": true,
+        "graph_periods": true,
+        "graph_source": true,
+        "graph_layout": true,
+        "table_mapping": [
+          0,
+          1,
+          2
+        ],
+        "graph_mapping": [
+          0
+        ]
+      },
+      "evidence": "predictions\\ME14-50",
+      "total": 100,
+      "status": "pass",
+      "source_run": "v14-targeted-recheck-20261027",
+      "full_run_status": "pass"
+    }
+  ],
+  "categories": {
+    "일반": {
+      "pass": 12
+    },
+    "복수 지표 일반": {
+      "pass": 8
+    },
+    "단순 파생": {
+      "pass": 18
+    },
+    "복잡 파생": {
+      "pass": 11,
+      "pending": 1
+    }
+  },
+  "history_values_compared": 1438
+}

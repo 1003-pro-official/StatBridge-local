@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-27",
+  "model": "gpt-6.1-sol",
+  "git_head": "ef02d2471c5d928f7de1382b2dd5c9db82322e9d",
+  "question_sha256": "45d9eece6f61f5a2730fe73225101b2b9c08ed5e4767f1aaeda1fea40b895e42",
+  "source_sha256": {
+    "src/agent/bridge_api.py": "b38844bfa5176f5acc4066bab776ff9ec5c7f6d13b8b81d0b33fbc35fece7c96",
+    "src/agent/derived_indicator_planner.py": "0ec52e875f6dbb1312a11b06b7de7c47cddc574f2efd3f46dd7d10a66d72bb3a",
+    "src/agent/dynamic_expression_executor.py": "04eab27baa68a12e001beca0113f0eafca8b3db1b905790b7fc09051863d4e9f",
+    "src/agent/workspace_text_edits.py": "826c1f1976cab95698820554c34b197afe93a3fcf0218c2a0fee75cbce7033f8",
+    "src/agent/chart_edit_agent.py": "77861cedc630f509865235b7b42089588d28725ee23253879f262acb17afba49",
+    "src/agent/report_export.py": "70040cd2b37adfa35698f477b3ed1acf7b51b3a1b53c9f12badca7014304295f",
+    "src/agent/frontend/src/workspaceDownload.ts": "6bab461d420bd65b02bfdb94a5a3b68bf673131b300bfe870acc42fb1c4e0862",
+    "src/agent/frontend/src/ChartSketchEditor.tsx": "d2f52420becfdd32aa95b0bdaa540f1fc8cbb1c4d6591e18550f9106db35fb24"
+  },
+  "original_zip_sha256": "0b7d1244f7793f91322dd3e97cd70620469cfd00a123899c21c210a9e1f9e75c",
+  "actual_ui_e2e": false,
+  "live_kosis": false,
+  "product_modified": false,
+  "ai_assisted": true,
+  "human_review": "pending"
+}

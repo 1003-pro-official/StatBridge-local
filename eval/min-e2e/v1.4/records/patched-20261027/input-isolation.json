@@ -1,0 +1,18 @@
+[
+  {
+    "run": "v14-output-final-20261027",
+    "query_calls": 50,
+    "automatic_output_calls": 47,
+    "query_only_requests": true,
+    "gold_copied_after_freeze": true,
+    "frozen_prediction_hashes_verified": true
+  },
+  {
+    "run": "v14-targeted-recheck-20261027",
+    "query_calls": 7,
+    "automatic_output_calls": 6,
+    "query_only_requests": true,
+    "gold_copied_after_freeze": true,
+    "frozen_prediction_hashes_verified": true
+  }
+]

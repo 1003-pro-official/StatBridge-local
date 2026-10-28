@@ -1,0 +1,8 @@
+{
+  "mode": "DA/CQ real API first response; QT production local routing function",
+  "input_sha256": "3a95cadc7aa18f34e191fc68eb40788f21275fbf345762ea4c0a5fa18c4cb790",
+  "started": "2026-10-27T16:32:29+0900",
+  "kosis_configured": true,
+  "raw_data": "live service; no fixtures or gold injected",
+  "fresh_request_state": true
+}

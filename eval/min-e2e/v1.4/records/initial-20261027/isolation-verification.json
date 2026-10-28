@@ -1,0 +1,32 @@
+{
+  "questions": 50,
+  "query_calls": 50,
+  "automatic_output_calls": 16,
+  "all_query_requests_exact_original_query_and_execute_only": true,
+  "previous_state_or_answers_in_query_requests": false,
+  "gold_material_extracted_only_after_prediction_freeze": true,
+  "product_code_unchanged_during_evaluation": true,
+  "bundled_fetch_or_render_executed": false,
+  "product_process_stopped_before_final_report": true,
+  "frontend_hashes": {
+    "src\\agent\\frontend\\dist\\index.html": "52e9caa07b80f57e8bb39a5bda1db0c2d737bfa0dcc80b21cd5e728a811d9ccd",
+    "src\\agent\\frontend\\dist\\assets\\index-Dq9XqtfA.js": "9c2d3d9c8adddd6806fae9538a7668b72b219388c10e78a171f7601a6ec21113",
+    "src\\agent\\frontend\\dist\\assets\\index-tAjSJl_v.css": "61ec0280c5f49651901f0494eea7a7248357e471f5a45463cf959d491660717a",
+    "src\\agent\\frontend\\dist\\assets\\ReportPreview-CWg4kPf_.js": "cc87251d42e346986ac80b531a611f1bd458bcb01126b249b2da29407b7b4d90",
+    "src\\agent\\frontend\\dist\\stickers\\catalog.json": "ba05ba9494f67ee80b85008cd3cb943fcc8b4227a89a03cf7f283077a45efe0d",
+    "src\\agent\\frontend\\dist\\stickers\\report-arrow-down.png": "44bdff33004e82e8414db8e94c5baf8a7edf51b141c4a6686c4b632764aeea4b",
+    "src\\agent\\frontend\\dist\\stickers\\report-arrow-up.png": "f6c40cdcd359d49c839f12a6009c8e1dddfb03f193a94030d328e73064aeb48b",
+    "src\\agent\\frontend\\dist\\sujeongi\\guide.png": "efbcfe82d94da029db5fc34b05ef8d93aff297c04062b66c58ed21b179728163",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-all-actions.gif": "ffc8f5d86001d4f2547533d3b627f05c6636aaa317947daa4f4595695886f48d",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-cheer.gif": "c8e66522aff4992bb36e47efeb89c68eeda9e141bebf9bf96e554bf22da2ac8e",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-coffee.gif": "dfd5eed455f0410f8b8c154caaabb08274fbbce5e6fc4b225ae79bf5337ce3db",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-explaining.gif": "2458148f363a338a2eac816a51ccbb94027df38892801891c13275f7013ce5ed",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-happy.gif": "29d9544ed882a2123086c1b2d9d5dcbdd213108bd8746b87b4eb61adb2130965",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-idle.gif": "4a4ec795260d7e12468ffa461f34afce2eeeb590d082f975e3313d26d9f4baa5",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-thinking.gif": "0b4b1a2d82d0f1077c460822148b83a5132f5e174e472f4a5ef13ab22c0ed3d5",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-wave.gif": "11b2a8c209731a24924721a23aec7de99fab70faf1f7433d690a43b63e2006cd",
+    "src\\agent\\frontend\\dist\\sujeongi\\sujeongi-working.gif": "1d85db1c45997afeebdbbc97a3bd13f812160ca1399be54585b4428e20747788"
+  },
+  "git_commit": "ef02d2471c5d928f7de1382b2dd5c9db82322e9d",
+  "git_branch": "fix/query-semantics-and-export-consistency"
+}

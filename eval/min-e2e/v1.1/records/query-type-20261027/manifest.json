@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-27T12:15:07.315320+09:00",
+  "scope": "local_product_intent_dispatch_only",
+  "target": "derived_indicator_planner.is_derived_request",
+  "count": 20,
+  "shuffle_seed": 20261027,
+  "git_head": "ef02d2471c5d928f7de1382b2dd5c9db82322e9d",
+  "source_sha256": "c08221ad578320e310f47a68a183e464d9e9912f0fdf3c4c383681b9c576bb5b",
+  "questions_sha256": "7b89fddbb7a01e47860dbd79293d10372b4c207071ccf3d856f6a8d4b68e10ab",
+  "target_dependency_sha256": {
+    "src/agent/derived_indicator_planner.py": "0ec52e875f6dbb1312a11b06b7de7c47cddc574f2efd3f46dd7d10a66d72bb3a",
+    "src/agent/derived_private_inputs.py": "91365802f01868f8009a51f87c7ecf756459e197cc1b0be530f9e818086a7dde",
+    "src/agent/stat_dictionary/stat_language_dictionary.json": "5584821a18a6a3d121f514e2b522a99f14b61a832f704852cd1e5ae5b4976019"
+  },
+  "label_status": "human_review_pending",
+  "isolation": "Separate subprocess per question; stdin contains query only. No OS filesystem access isolation."
+}

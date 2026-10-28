@@ -1,0 +1,25 @@
+{
+  "version": "2.1",
+  "family": "min-e2e",
+  "total": 60,
+  "counts": {
+    "data_accuracy": 20,
+    "clarification": 20,
+    "query_type": 20
+  },
+  "difficulty": "hard",
+  "difficulty_status": "design_based_unverified",
+  "review_status": "human_review_pending",
+  "evaluation_status": "not_run",
+  "question_shuffle_seed": 20261027,
+  "baseline_version": "1.1",
+  "baseline_sha256": {
+    "eval/min-e2e/v1.1/질의와_정답_40문항.md": "53e669af44dc8183a54d9453952551ab09fb478666c760cfe5d8092b6e0d9c36",
+    "eval/min-e2e/v1.1/질의_유형_분류_정확도_20문항.md": "c08221ad578320e310f47a68a183e464d9e9912f0fdf3c4c383681b9c576bb5b"
+  },
+  "sha256": {
+    "cases.jsonl": "16b25396a4e36782eb37c5bd7ab2e0cf0721d902cc9a56601122e476df819e1b",
+    "questions.jsonl": "3a95cadc7aa18f34e191fc68eb40788f21275fbf345762ea4c0a5fa18c4cb790",
+    "질의와_정답_60문항.md": "9ef58ce9214d0241bf9499204bd8e7ec0d57a4221c9bd596432193708f853a8d"
+  }
+}

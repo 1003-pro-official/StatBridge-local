@@ -1,0 +1,25 @@
+{
+  "case_count": 60,
+  "groups": {
+    "edit": 20,
+    "screen_file": 20,
+    "derived": 20
+  },
+  "question_only_fields": [
+    "id",
+    "group",
+    "query"
+  ],
+  "question_and_markdown_consistency": "PASS",
+  "baseline_same_content_after_line_ending_normalization": true,
+  "derived_cases_independently_recomputed": 20,
+  "numeric_values_checked": 75,
+  "maximum_numeric_error": "3.086419753086419753100E-38",
+  "equivalence_maximum_deltas": {
+    "D26_equals_D28": "6.7E-60",
+    "D26_equals_D30_divided_by_3": "0E-61",
+    "D37_equals_pct_change_of_unrebased_gap": "1.00E-57",
+    "D38_equals_pct_change_of_unrebased_A": "0E-59"
+  },
+  "actual_ui_evaluation_performed": false
+}

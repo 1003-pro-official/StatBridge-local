@@ -1,0 +1,9 @@
+{
+  "archive_sha256": "c0431cdc1cd36302fa9d23f75106ad019326bc5e890cd0ed4a3730813781be67",
+  "source_question_sha256": "fa4b4d7694b7da108e3bd9dce3517d650c744a8690d61f2706d6bbe977d9eca3",
+  "execution_input_sha256": "f2aca82a29bbea9030261175794a629356f6d4f5278ec2973fdfd676ad0b1f4c",
+  "cases": 50,
+  "model_input": "original query only; no answer/reference/observation file extracted before prediction freeze",
+  "ui": "production frontend; fresh browser context per question",
+  "product_mutations": false
+}

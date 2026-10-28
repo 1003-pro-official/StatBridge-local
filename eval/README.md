@@ -4,6 +4,7 @@
 
 | 계열 | 경로 | 범위와 현재 상태 |
 |---|---|---|
+| 최소 E2E | [`min-e2e`](min-e2e/README.md) | v1·v1.1·v2·v2.1·v1.4 질의·정답과 기존 평가 기록의 업로드 점검. 최초·수정 후·단일 재검증을 구분 |
 | 표 탐색 | [`table-discovery/v1`](table-discovery/v1/README.md) | ClaBi에서 가져온 150건 초안, 사람 승인 0건 |
 | 표 탐색 | [`table-discovery/v2`](table-discovery/v2/README.md) | ClaBi에서 가져온 150건 구조 개선 초안, 사람 승인 0건 |
 | 표 탐색 | [`table-discovery/v3`](table-discovery/v3/README.md) | ClaBi에서 가져온 dev 30건, 사람 승인 0건 |

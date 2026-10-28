@@ -1,0 +1,13 @@
+{
+  "ai_assisted": true,
+  "human_approval": "pending",
+  "focused_tests_passed": 77,
+  "full_tests_passed": 2402,
+  "subtests_passed": 355,
+  "full_test_files": 129,
+  "v41": "VALIDATION OK",
+  "frontend": "TypeScript and Vite build succeeded",
+  "diff_whitespace_check": "passed",
+  "isolated_patch_reverse_check": "passed",
+  "pytest_summary_recovered_from_completed_logs_after_user_interruption": true
+}

@@ -1,0 +1,17 @@
+{
+  "reason": "only actual metadata verification pending; no semantic-failure retries",
+  "ids": [
+    "DA21-08",
+    "CQ21-09",
+    "DA21-20",
+    "CQ21-11",
+    "CQ21-14",
+    "CQ21-04",
+    "DA21-18",
+    "DA21-19",
+    "CQ21-02",
+    "DA21-12",
+    "DA21-17",
+    "DA21-09"
+  ]
+}

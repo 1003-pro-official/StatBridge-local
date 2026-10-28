@@ -1,0 +1,15 @@
+{
+  "status": "provisional_unapproved",
+  "data_observed": "2026-10-27",
+  "source": "KOSIS 301",
+  "sha256": {
+    "questions.md": "fa4b4d7694b7da108e3bd9dce3517d650c744a8690d61f2706d6bbe977d9eca3",
+    "answers.md": "9da2c252307d835d620d866017761dcfb4c7d18fad0a061e5e079b58b7d394ae",
+    "rubric.md": "ecc6b963dc4cbe7872c474267a182614f8b65ad35539da478de03746c4ced6e4",
+    "observations.json": "7497f8370328650782e3c8054c351a7be408930a97d3a666ee56b062a7fa5ae9",
+    "fetch.py": "97ae3cc631a38df0ae436222b1b35f7a1660733aca684c1945c192ae2faeecb2",
+    "render.py": "d63bfd9563626d4b99204909d1afa24894d05d2ec05bcb5b28686008e14c63b4",
+    "reference.html": "c2285aab31a766004be0aac0edb74f90d5abaa13979e451f7b94c51cfbe2e69a"
+  },
+  "reproduction": "reference.regenerated.html SHA-256 equals reference.html"
+}

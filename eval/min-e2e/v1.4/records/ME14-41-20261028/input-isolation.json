@@ -1,0 +1,9 @@
+{
+  "query_calls": 1,
+  "exact_clarified_query_and_execute_only": true,
+  "answer_or_previous_state_in_product_input": false,
+  "gold_copied_only_after_prediction_freeze": true,
+  "prediction_hashes_verified": true,
+  "product_hashes_unchanged": true,
+  "query_sha256": "adc18b84fa6179ab1ada303ab745351523578b93d9c9d116b2b4ad54612add7a"
+}

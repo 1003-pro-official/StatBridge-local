@@ -1,0 +1,2239 @@
+{
+  "version": "v2",
+  "human_review": "pending",
+  "mode": "fixed_public_API_fixture",
+  "absolute_tolerance": "0.000001",
+  "sources": [
+    {
+      "alias": "a",
+      "table_id": "DT_121Y002",
+      "item_id": "13103134588999",
+      "classifications": {
+        "objL1": "13102134588ACC_ITEM.BEABAA1"
+      },
+      "frequency": "M",
+      "required_data": "저축성수신(금융채 제외)"
+    },
+    {
+      "alias": "b",
+      "table_id": "DT_121Y006",
+      "item_id": "13103134553999",
+      "classifications": {
+        "objL1": "13102134553ACC_ITEM.BECBLA03"
+      },
+      "frequency": "M",
+      "required_data": "가계대출"
+    }
+  ],
+  "fixture": {
+    "months": [
+      "202501",
+      "202502",
+      "202503",
+      "202504",
+      "202505",
+      "202506"
+    ],
+    "a": [
+      "3.08",
+      "2.97",
+      "2.83",
+      "2.72",
+      "2.64",
+      "2.55"
+    ],
+    "b": [
+      "4.65",
+      "4.52",
+      "4.51",
+      "4.36",
+      "4.26",
+      "4.21"
+    ]
+  },
+  "cases": [
+    {
+      "id": "E21",
+      "group": "edit",
+      "purpose": "정정 이후 대명사·범례 맥락",
+      "query": "① 수신금리를 빨간색 #E53935, 두께 4로 바꿔줘. → ② 아니, 빨간색은 대출금리에 적용하고 수신금리는 원래 파란색 #2563EB으로 돌려줘. 수신금리 두께 4는 유지해줘. → ③ 범례를 아래로 내려줘.",
+      "answer": "① A=#E53935·두께4. ② A=#2563EB·두께4, B=#E53935·두께2. ③ 같은 상태에 범례 아래쪽. 양 계열 실선 유지."
+    },
+    {
+      "id": "E22",
+      "group": "edit",
+      "purpose": "인용문 속 계산 기호와 제목 속성 구분",
+      "query": "① 제목을 ‘대출금리−수신금리: 월별 비교’로 바꿔줘. → ② 제목 크기만 26으로 바꿔줘. → ③ 수신금리만 대시형 점선(dash)으로 바꿔줘.",
+      "answer": "제목은 따옴표 없이 대출금리−수신금리: 월별 비교, 제목 크기26. A만 dash. 계산을 실행하거나 원자료를 차감하지 않음."
+    },
+    {
+      "id": "E23",
+      "group": "edit",
+      "purpose": "범례 숨김 유지 후 명시적 재표시",
+      "query": "① 범례를 숨겨줘. → ② 범례는 숨긴 채 아래로 옮기고 수신금리 두께를 4로 바꿔줘. → ③ 범례를 다시 보여줘.",
+      "answer": "① 범례 숨김. ② 숨김 유지·위치 아래쪽·A 두께4. ③ 아래쪽 범례 표시. B 두께2 유지."
+    },
+    {
+      "id": "E24",
+      "group": "edit",
+      "purpose": "복합 편집 뒤 단계별 되돌리기",
+      "query": "① 제목을 ‘편집 이력 검증’으로 바꿔줘. → ② 수신금리만 #E53935로 바꿔줘. → ③ 대출금리만 dash로 바꿔줘. → ④ [UI] 되돌리기 2회. → ⑤ [UI] 다시 실행 1회.",
+      "answer": "④ 제목 편집만 남고 A 파랑·B 실선. ⑤ 제목 유지·A 빨강·B 실선. 최종 B dash가 아님."
+    },
+    {
+      "id": "E25",
+      "group": "edit",
+      "purpose": "기간 축소 후 계열 유형과 제목 유지",
+      "query": "① 2025년 2월부터 5월까지만 보여줘. → ② 수신금리만 막대로 바꿔줘. 대출금리는 선으로 유지해줘. → ③ 제목을 ‘2∼5월 혼합 금리’로 바꿔줘.",
+      "answer": "2~5월 네 달×두 계열 8값. A 막대·B 선. 제목 2∼5월 혼합 금리. 기간·숫자는 ③에서도 유지."
+    },
+    {
+      "id": "E26",
+      "group": "edit",
+      "purpose": "숨긴 계열의 스타일 복원",
+      "query": "① 대출금리만 #16A34A·dash·두께4로 바꿔줘. → ② 대출금리를 숨겨줘. → ③ 제목을 ‘대출 계열 복원’으로 바꿔줘. → ④ 숨긴 대출금리를 다시 보여줘.",
+      "answer": "②~③ 화면은 A만 표시. ④ B가 #16A34A·dash·두께4로 복원되고 제목 대출 계열 복원 유지. A 유지."
+    },
+    {
+      "id": "E27",
+      "group": "edit",
+      "purpose": "구간 색 변경 후 전체와 부분 속성 결합",
+      "query": "① [UI] A의 2~4월 구간 선택. ② 선택 구간만 #E53935로 바꿔줘. → ③ [UI] 선택 해제. ④ 수신금리 선 전체 두께를 4로 해줘.",
+      "answer": "A 2~4월만 빨강, 나머지는 파랑. A 전체 두께4. B는 원래 색·두께2. 부분 색상을 전체로 확대하지 않음."
+    },
+    {
+      "id": "E28",
+      "group": "edit",
+      "purpose": "동일 월 서로 다른 계열의 점 선택",
+      "query": "① [UI] A의 6월 관측점 선택. ② 이 점만 #E53935로 표시해줘. → ③ [UI] B의 6월 관측점 선택. ④ 이 점만 #16A34A로 표시해줘.",
+      "answer": "A6 관측점 빨강·B6 관측점 초록. 나머지 점과 두 계열 선은 원래 상태. 같은 월이라는 이유로 대상이 합쳐지지 않음."
+    },
+    {
+      "id": "E29",
+      "group": "edit",
+      "purpose": "두 구간 표시와 전체 제목의 분리",
+      "query": "① [UI 표시] mark-1=A 1~2월, mark-2=B 5~6월. 각 표시 설명에 대상을 입력. ② mark-1만 #E53935·dash, mark-2만 #16A34A·solid로 바꿔줘. → ③ 제목을 ‘두 구간 비교’로 바꿔줘.",
+      "answer": "A1~2만 빨강·dash, B5~6만 초록·solid. 범위 밖 유지. 제목 두 구간 비교이며 ③으로 두 구간 편집이 사라지지 않음."
+    },
+    {
+      "id": "E30",
+      "group": "edit",
+      "purpose": "필터 뒤 되돌리기의 범위",
+      "query": "① 수신금리 두께를 4로 바꿔줘. → ② 2025년 3~6월만 보여줘. → ③ 제목을 ‘필터 취소 전’으로 바꿔줘. → ④ [UI] 되돌리기 2회.",
+      "answer": "③은 3~6월·A 두께4·제목 필터 취소 전. ④는 1~6월·A 두께4·기준 제목. 두께 편집까지 취소하지 않음."
+    },
+    {
+      "id": "E31",
+      "group": "edit",
+      "purpose": "계열 유형 왕복 후 재지정",
+      "query": "① 수신금리만 막대로 바꿔줘. → ② 그 수신금리를 다시 선으로 바꿔줘. → ③ 수신금리만 dash·두께4로 바꾸고 범례를 아래로 내려줘.",
+      "answer": "최종 A 선·dash·두께4, B 선·solid·두께2. 범례 아래쪽. 원자료 유지. 막대에 dash를 요구하는 단계는 없음."
+    },
+    {
+      "id": "E32",
+      "group": "edit",
+      "purpose": "제목 색상 단어와 계열 색 분리",
+      "query": "① 제목을 ‘빨간색 선과 파란색 선의 비교’로 바꿔줘. → ② 대출금리 선만 #16A34A로 바꿔줘. → ③ 제목 크기만 24로 해줘.",
+      "answer": "제목 빨간색 선과 파란색 선의 비교·크기24. A 파랑, B 초록. 제목의 색상 단어를 실제 계열 색 지시로 해석하지 않음."
+    },
+    {
+      "id": "E33",
+      "group": "edit",
+      "purpose": "모호한 요청 뒤 명시적 대상·범위 응답",
+      "query": "① [UI 선택 없음] 여기만 강조해줘. → ② 수신금리의 2025년 2~3월 구간만 #E53935·dash로 바꿔줘. → ③ 범례를 아래로 내려줘.",
+      "answer": "① 계열·범위·강조 방법을 확인하고 차트·revision 유지. ② A2~3만 빨강·dash. ③ 범례 아래쪽, 부분 스타일 유지."
+    },
+    {
+      "id": "E34",
+      "group": "edit",
+      "purpose": "대명사 맥락과 다른 계열의 후속 편집",
+      "query": "① 대출금리를 #16A34A로 바꿔줘. → ② 그 선을 dash·두께4로 해줘. → ③ 수신금리는 두께3으로 해줘.",
+      "answer": "B는 초록·dash·두께4, A는 원래 파랑·solid·두께3. ③의 두께가 B에 적용되지 않음."
+    },
+    {
+      "id": "E35",
+      "group": "edit",
+      "purpose": "범례 복원·기간·제목 독립 유지",
+      "query": "① 범례를 숨겨줘. → ② 2025년 2~6월만 보여줘. → ③ 범례를 다시 보여주고 아래로 내려줘. → ④ 제목을 ‘2∼6월 금리’로 바꿔줘.",
+      "answer": "최종 2~6월 다섯 달×두 계열, 아래쪽 범례 표시, 제목 2∼6월 금리. ③에서 필터가 초기화되지 않음."
+    },
+    {
+      "id": "E36",
+      "group": "edit",
+      "purpose": "두 색 교환 후 첫 수정만 남기기",
+      "query": "① 수신금리를 #16A34A로 바꿔줘. → ② 대출금리를 #E53935로 바꿔줘. → ③ [UI] 되돌리기 1회. → ④ 수신금리를 dash로도 바꿔줘.",
+      "answer": "최종 A 초록·dash, B 원래 주황·solid. 되돌린 B 빨강이 후속 편집에 의해 복원되지 않음."
+    },
+    {
+      "id": "E37",
+      "group": "edit",
+      "purpose": "구간 맥락의 유지와 명시적 전체 범위 확장",
+      "query": "① [UI] A 3~4월 선택. ② 여기만 #E53935로 바꿔줘. → ③ [UI] 선택 해제. ④ 방금 바꾼 같은 구간을 dash로도 바꿔줘. → ⑤ 수신금리 전체를 #2563EB 실선으로 돌려줘.",
+      "answer": "④ A3~4만 빨강·dash. ⑤ A 전체 파랑·solid로 복원. 부분 스타일 잔여 없음. B 유지."
+    },
+    {
+      "id": "E38",
+      "group": "edit",
+      "purpose": "막대·선 혼합 상태에서 취소와 재실행",
+      "query": "① 수신금리만 막대로 바꿔줘. → ② 대출금리 선 두께를 5로 바꿔줘. → ③ [UI] 되돌리기 1회. → ④ [UI] 다시 실행 1회.",
+      "answer": "③ A 막대·B 선 두께2. ④ A 막대 유지·B 선 두께5. A가 선으로 되돌아가지 않음."
+    },
+    {
+      "id": "E39",
+      "group": "edit",
+      "purpose": "선택 점 편집과 별개 계열 숨김",
+      "query": "① [UI] A 4월 관측점 선택. ② 이 점만 #E53935로 해줘. → ③ [UI] 선택 해제. ④ 대출금리를 숨겨줘. → ⑤ 숨긴 대출금리를 다시 보여줘.",
+      "answer": "A4 점 빨강을 유지한 채 B가 숨겨졌다 원래 스타일로 복원. A 전체 선이나 다른 관측점은 바뀌지 않음."
+    },
+    {
+      "id": "E40",
+      "group": "edit",
+      "purpose": "복합 수정·저장 재개·최초 상태 복원",
+      "query": "① 수신금리를 #E53935·dash로 바꾸고 범례를 아래로 내려줘. → ② 제목을 ‘복원 전 금리’로 바꿔줘. → ③ [UI] 분석 저장 후 같은 계정에서 재개. ④ [UI] 처음 상태 복원.",
+      "answer": "③ 저장한 A 빨강·dash·아래 범례·제목 복원 전 금리 유지. ④ 기준 그래프 전체 복구: A 파랑·B 주황·두 계열 선/solid/두께2, 기준 제목·크기20·위 범례·1~6월 12값. 저장 직전 상태가 최초 상태로 오인되지 않음."
+    },
+    {
+      "id": "F21",
+      "group": "screen_file",
+      "purpose": "복합 편집의 PNG·SVG 동시 일치",
+      "query": "① 제목을 ‘금리 비교: 2025 상반기’로, 제목 크기를24로 바꿔줘. ② 수신금리만 #E53935·dash·두께4로 바꾸고 범례를 아래로 내려줘. ③ [UI] PNG와 SVG를 각각 다운로드.",
+      "answer": "두 파일과 같은 revision 화면 모두 제목·크기24·A 빨강/dash/두께4·아래 범례 일치. B 유지, 12값."
+    },
+    {
+      "id": "F22",
+      "group": "screen_file",
+      "purpose": "기간과 혼합 유형의 PNG·PDF 일치",
+      "query": "① 2025년 2~5월만 보여줘. ② 수신금리만 막대로 바꿔줘. ③ [UI] PNG와 PDF 다운로드.",
+      "answer": "두 파일 모두 2~5월 8값, A 막대·B 선. 기준 제목·출처 유지. 1·6월 제외."
+    },
+    {
+      "id": "F23",
+      "group": "screen_file",
+      "purpose": "범례 숨김과 재표시의 서로 다른 파일 스냅샷",
+      "query": "① 범례를 숨겨줘. ② [UI] PNG 다운로드(파일1). ③ 범례를 다시 보여주고 아래에 배치해줘. ④ [UI] PNG 다운로드(파일2).",
+      "answer": "파일1에는 범례 없음. 파일2에는 아래쪽 범례. 각 파일은 다운로드 당시 화면과 일치. 두 파일을 모두 마지막 상태로 덮어쓰면 실패."
+    },
+    {
+      "id": "F24",
+      "group": "screen_file",
+      "purpose": "되돌리기 후 SVG와 데이터 CSV",
+      "query": "① 제목을 ‘임시 제목’으로 바꿔줘. ② 수신금리를 #E53935로 바꿔줘. ③ [UI] 되돌리기 1회. ④ [UI] SVG와 CSV 다운로드.",
+      "answer": "SVG 제목 임시 제목·A 원래 파랑. CSV는 1~6월 두 계열 12값. 제목 수정은 유지, 취소된 빨강은 SVG에 없음."
+    },
+    {
+      "id": "F25",
+      "group": "screen_file",
+      "purpose": "다시 실행 후 PNG·PDF",
+      "query": "① 수신금리 두께를4로 바꿔줘. ② 대출금리를 dash로 바꿔줘. ③ [UI] 되돌리기1회→다시 실행1회. ④ [UI] PNG·PDF 다운로드.",
+      "answer": "두 파일 모두 A 두께4·B dash. 두 단계 스타일 모두 남으며 원자료12값 유지."
+    },
+    {
+      "id": "F26",
+      "group": "screen_file",
+      "purpose": "부분 구간과 전체 선 패턴의 SVG·PNG",
+      "query": "① [UI] A 2~3월 선택. ② 선택 구간만 #E53935·dash로 바꿔줘. ③ [UI] 선택 해제. ④ 대출금리 전체를 #16A34A 실선으로 바꿔줘. ⑤ [UI] SVG·PNG 다운로드.",
+      "answer": "A2~3만 빨강/dash·범위 밖 파랑/solid, B전체 초록/solid. 두 파일 모두 각 범위와 스타일 일치."
+    },
+    {
+      "id": "F27",
+      "group": "screen_file",
+      "purpose": "점 스타일과 기간 필터의 PNG·SVG",
+      "query": "① [UI] B 6월 점 선택. ② 이 점만 #E53935로 표시해줘. ③ [UI] 선택 해제. ④ 2025년 4~6월만 보여줘. ⑤ [UI] PNG·SVG 다운로드.",
+      "answer": "4~6월 6값. B6 점만 빨강, 다른 점·선 원래 스타일. 두 파일에 1~3월은 없음."
+    },
+    {
+      "id": "F28",
+      "group": "screen_file",
+      "purpose": "메모·제목의 인용 기호 보존",
+      "query": "① 제목을 ‘수신·대출 / 상반기 비교’로 바꿔줘. ② 그래프 내부 오른쪽 아래 x=0.90,y=0.10에 ‘검토용: 2025.01~06’ 메모를 추가해줘. ③ [UI] PNG·PDF 다운로드.",
+      "answer": "제목 수신·대출 / 상반기 비교와 메모 검토용: 2025.01~06이 두 파일에 일치. 바깥 따옴표 없음. 메모 좌표는 왼쪽 아래 원점 정규화(0.90,0.10)."
+    },
+    {
+      "id": "F29",
+      "group": "screen_file",
+      "purpose": "기준선과 범례의 SVG·PDF 일치",
+      "query": "① 2025년 4월에 세로 기준선을 추가해줘. ② 범례를 아래로 내려줘. ③ [UI] SVG·PDF 다운로드.",
+      "answer": "4월 위치 세로 기준선과 아래 범례가 두 파일과 화면에 일치. 6월까지 두 계열12값 유지."
+    },
+    {
+      "id": "F30",
+      "group": "screen_file",
+      "purpose": "기간·표 계열 교집합의 CSV·XLSX",
+      "query": "① 2025년 2~5월만 보여줘. ② [UI] 표 보기→표 표시 계열을 수신금리 하나로 선택. ③ [UI] 현재 표 CSV·XLSX 다운로드.",
+      "answer": "두 파일과 표 모두 A2~5 네 값: 2.97,2.83,2.72,2.64 연리%. B와1·6월 제외. XLSX 숫자 셀·표 순서 유지."
+    },
+    {
+      "id": "F31",
+      "group": "screen_file",
+      "purpose": "다른 계열의 기간·표 선택과 두 형식",
+      "query": "① 2025년 3~6월만 보여줘. ② [UI] 표 보기→표 표시 계열을 대출금리 하나로 선택. ③ [UI] CSV·XLSX 다운로드.",
+      "answer": "B3~6 네 값만 포함:4.51,4.36,4.26,4.21 연리%. A 제외. 두 파일과 현재 표의 월·순서 일치."
+    },
+    {
+      "id": "F32",
+      "group": "screen_file",
+      "purpose": "숫자 데이터가 스타일 편집과 독립인지",
+      "query": "① 수신금리만 #E53935·dash로 바꾸고 제목을 ‘데이터 불변 확인’으로 바꿔줘. ② [UI] CSV·XLSX 다운로드.",
+      "answer": "두 파일 모두 1~6월 A·B12값과 단위 유지. 스타일 변경 때문에 수치·날짜·계열이 바뀌지 않음. CSV/XLSX에 색상 구현은 요구하지 않음."
+    },
+    {
+      "id": "F33",
+      "group": "screen_file",
+      "purpose": "필터 취소 후 CSV 전체 범위 복구",
+      "query": "① 수신금리 두께를4로 바꿔줘. ② 2025년 4~6월만 보여줘. ③ [UI] 되돌리기1회. ④ [UI] CSV·PNG 다운로드.",
+      "answer": "CSV는1~6월12값. PNG도1~6월·A두께4. 취소된4~6월 필터가 파일 생성에 남지 않음."
+    },
+    {
+      "id": "F34",
+      "group": "screen_file",
+      "purpose": "최초 복원 후 이미지·원자료 동시 검증",
+      "query": "① 수신금리를 #E53935로 바꾸고 대출금리를 숨겨줘. ② 제목을 ‘초기화 대상’으로 바꿔줘. ③ [UI] 처음 상태 복원→PNG·CSV 다운로드.",
+      "answer": "PNG는 기준 제목·양계열·A파랑·B주황·위범례. CSV는기준12값. 숨김·제목·색상 잔여가 없음."
+    },
+    {
+      "id": "F35",
+      "group": "screen_file",
+      "purpose": "저장 재개 후 기간·스타일·SVG",
+      "query": "① 2025년 2~6월만 보여줘. ② 수신금리를 #E53935·dash로 바꾸고 범례를 아래로 내려줘. ③ [UI] 분석 저장→같은 계정으로 재개→SVG·PNG 다운로드.",
+      "answer": "재개 화면과 두 파일 모두2~6월10값·A빨강/dash·아래범례. B원래스타일. 최초1~6월로 초기화되지 않음."
+    },
+    {
+      "id": "F36",
+      "group": "screen_file",
+      "purpose": "복합 편집 후 이미지와 표 수치 분리 검증",
+      "query": "① 2025년 1~4월만 보여줘. ② 수신금리만 막대로, 대출금리는 선으로 해줘. ③ 제목을 ‘1∼4월 혼합 비교’로 바꿔줘. ④ [UI] PNG 다운로드→표 보기→XLSX 다운로드.",
+      "answer": "PNG 혼합유형·정확한 제목·1~4월. XLSX 두 계열8값: A=3.08,2.97,2.83,2.72; B=4.65,4.52,4.51,4.36. 표와 순서·숫자셀 일치."
+    },
+    {
+      "id": "F37",
+      "group": "screen_file",
+      "purpose": "두 표시의 서로 다른 범위를 PDF·SVG로 검증",
+      "query": "① [UI 표시] mark-1=A2~3월, mark-2=B5~6월, 각 설명 입력. ② mark-1만 #E53935·dash, mark-2만 #16A34A·solid로 바꿔줘. ③ [UI] PDF·SVG 다운로드.",
+      "answer": "두 파일 모두 A2~3만 빨강/dash·B5~6만 초록/solid. 범위 밖·수치·기간 유지. 두 표시가 섞이지 않음."
+    },
+    {
+      "id": "F38",
+      "group": "screen_file",
+      "purpose": "제목에 수식 기호가 있는 이미지·데이터",
+      "query": "① 제목을 ‘B−A는 계산하지 않은 원금리 비교’로 바꿔줘. ② 범례를 아래로 내려줘. ③ [UI] PNG·CSV 다운로드.",
+      "answer": "PNG 제목 B−A는 계산하지 않은 원금리 비교·아래범례. CSV는 A와B12개 원금리, 차이계열을 생성하지 않음."
+    },
+    {
+      "id": "F39",
+      "group": "screen_file",
+      "purpose": "같은 분석의 연속 파일이 오래된 상태를 쓰지 않는지",
+      "query": "① 제목을 ‘1차 검토’로 바꿔줘. ② [UI] SVG 다운로드(파일1). ③ 제목을 ‘2차 검토’로 바꾸고 수신금리를 #16A34A로 바꿔줘. ④ [UI] SVG 다운로드(파일2).",
+      "answer": "파일1=제목1차 검토·A파랑. 파일2=제목2차 검토·A초록. 두 파일은 각 revision의 화면과 일치하며 파일1은 나중 변경으로 바뀌지 않음."
+    },
+    {
+      "id": "F40",
+      "group": "screen_file",
+      "purpose": "저장 재개 후 표 필터를 새로 적용한 CSV·XLSX",
+      "query": "① 제목을 ‘저장된 금리 분석’으로 바꿔줘. ② [UI] 분석 저장→같은 계정으로 재개. ③ 2025년 4~6월만 보여줘. ④ [UI] 표 보기→표 표시 계열을 수신금리 하나로 선택→CSV·XLSX 다운로드.",
+      "answer": "현재 표와 두 파일 모두 A4~6 세 값2.72,2.64,2.55 연리%. 재개 이전 전체범위나 B가 포함되지 않음. XLSX숫자셀·표순서 유지."
+    },
+    {
+      "id": "D21",
+      "group": "derived",
+      "purpose": "차이의 2개월 전 대비 차이",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 3월부터 2025년 6월까지. 계산 정의: (B−A)(t)−(B−A)(t−2). 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: (B−A)(t)−(B−A)(t−2); 결과(%p): 202503: 0.110000000; 202504: 0.090000000; 202505: -0.060000000; 202506: 0.020000000.",
+      "expected": [
+        {
+          "period": "202503",
+          "value": "0.11"
+        },
+        {
+          "period": "202504",
+          "value": "0.09"
+        },
+        {
+          "period": "202505",
+          "value": "-0.06"
+        },
+        {
+          "period": "202506",
+          "value": "0.02"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "차이의 2개월 전 대비 차이",
+        "economic_definition": "(B−A)(t)−(B−A)(t−2)",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "gap",
+            "operator": "subtract",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "difference",
+            "inputs": [
+              "gap"
+            ],
+            "lag": 2,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "차이의 2개월 전 대비 차이"
+          }
+        ],
+        "start_period": "202503",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 2,
+        "estimated_cells": 24,
+        "work": 10
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D22",
+      "group": "derived",
+      "purpose": "차이의 3개월 전 대비 차이",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 4월부터 2025년 6월까지. 계산 정의: (B−A)(t)−(B−A)(t−3). 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: (B−A)(t)−(B−A)(t−3); 결과(%p): 202504: 0.070000000; 202505: 0.070000000; 202506: -0.020000000.",
+      "expected": [
+        {
+          "period": "202504",
+          "value": "0.07"
+        },
+        {
+          "period": "202505",
+          "value": "0.07"
+        },
+        {
+          "period": "202506",
+          "value": "-0.02"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "차이의 3개월 전 대비 차이",
+        "economic_definition": "(B−A)(t)−(B−A)(t−3)",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "gap",
+            "operator": "subtract",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "difference",
+            "inputs": [
+              "gap"
+            ],
+            "lag": 3,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "차이의 3개월 전 대비 차이"
+          }
+        ],
+        "start_period": "202504",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 3,
+        "estimated_cells": 24,
+        "work": 9
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D23",
+      "group": "derived",
+      "purpose": "차이의 2개월 이동평균",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 2월부터 2025년 6월까지. 계산 정의: 당월과 이전1개월의 (B−A) 산술평균. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: 당월과 이전1개월의 (B−A) 산술평균; 결과(%p): 202502: 1.560000000; 202503: 1.615000000; 202504: 1.660000000; 202505: 1.630000000; 202506: 1.640000000.",
+      "expected": [
+        {
+          "period": "202502",
+          "value": "1.56"
+        },
+        {
+          "period": "202503",
+          "value": "1.615"
+        },
+        {
+          "period": "202504",
+          "value": "1.66"
+        },
+        {
+          "period": "202505",
+          "value": "1.63"
+        },
+        {
+          "period": "202506",
+          "value": "1.64"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "차이의 2개월 이동평균",
+        "economic_definition": "당월과 이전1개월의 (B−A) 산술평균",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "gap",
+            "operator": "subtract",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rolling_mean",
+            "inputs": [
+              "gap"
+            ],
+            "lag": null,
+            "window": 2,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "차이의 2개월 이동평균"
+          }
+        ],
+        "start_period": "202502",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 1,
+        "estimated_cells": 24,
+        "work": 17
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D24",
+      "group": "derived",
+      "purpose": "차이의 4개월 이동평균",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 4월부터 2025년 6월까지. 계산 정의: 당월과 이전3개월의 (B−A) 산술평균. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: 당월과 이전3개월의 (B−A) 산술평균; 결과(%p): 202504: 1.610000000; 202505: 1.622500000; 202506: 1.650000000.",
+      "expected": [
+        {
+          "period": "202504",
+          "value": "1.61"
+        },
+        {
+          "period": "202505",
+          "value": "1.6225"
+        },
+        {
+          "period": "202506",
+          "value": "1.65"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "차이의 4개월 이동평균",
+        "economic_definition": "당월과 이전3개월의 (B−A) 산술평균",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "gap",
+            "operator": "subtract",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rolling_mean",
+            "inputs": [
+              "gap"
+            ],
+            "lag": null,
+            "window": 4,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "차이의 4개월 이동평균"
+          }
+        ],
+        "start_period": "202504",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 3,
+        "estimated_cells": 24,
+        "work": 27
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D25",
+      "group": "derived",
+      "purpose": "전월차 후 2개월 평활",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 3월부터 2025년 6월까지. 계산 정의: A 전월차를 먼저 구한 뒤 당월·직전월 변화 두 개의 산술평균. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: A 전월차를 먼저 구한 뒤 당월·직전월 변화 두 개의 산술평균; 결과(%p): 202503: -0.125000000; 202504: -0.125000000; 202505: -0.095000000; 202506: -0.085000000.",
+      "expected": [
+        {
+          "period": "202503",
+          "value": "-0.125"
+        },
+        {
+          "period": "202504",
+          "value": "-0.125"
+        },
+        {
+          "period": "202505",
+          "value": "-0.095"
+        },
+        {
+          "period": "202506",
+          "value": "-0.085"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "전월차 후 2개월 평활",
+        "economic_definition": "A 전월차를 먼저 구한 뒤 당월·직전월 변화 두 개의 산술평균",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "delta",
+            "operator": "difference",
+            "inputs": [
+              "a"
+            ],
+            "lag": 1,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rolling_mean",
+            "inputs": [
+              "delta"
+            ],
+            "lag": null,
+            "window": 2,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "전월차 후 2개월 평활"
+          }
+        ],
+        "start_period": "202503",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 2,
+        "estimated_cells": 18,
+        "work": 17
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D26",
+      "group": "derived",
+      "purpose": "전월차 후 3개월 평활",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 4월부터 2025년 6월까지. 계산 정의: B 전월차를 먼저 구한 뒤 당월·이전2개월 변화 세 개의 산술평균. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: B 전월차를 먼저 구한 뒤 당월·이전2개월 변화 세 개의 산술평균; 결과(%p): 202504: -0.096666667; 202505: -0.086666667; 202506: -0.100000000.",
+      "expected": [
+        {
+          "period": "202504",
+          "value": "-0.09666666666666666666666666666666666666667"
+        },
+        {
+          "period": "202505",
+          "value": "-0.08666666666666666666666666666666666666667"
+        },
+        {
+          "period": "202506",
+          "value": "-0.10"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "전월차 후 3개월 평활",
+        "economic_definition": "B 전월차를 먼저 구한 뒤 당월·이전2개월 변화 세 개의 산술평균",
+        "sources": [
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "delta",
+            "operator": "difference",
+            "inputs": [
+              "b"
+            ],
+            "lag": 1,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rolling_mean",
+            "inputs": [
+              "delta"
+            ],
+            "lag": null,
+            "window": 3,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "전월차 후 3개월 평활"
+          }
+        ],
+        "start_period": "202504",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 3,
+        "estimated_cells": 18,
+        "work": 22
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D27",
+      "group": "derived",
+      "purpose": "3개월 평균의 전월차",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 4월부터 2025년 6월까지. 계산 정의: A의 당월 포함 3개월 이동평균에서 그 이동평균의 직전월 값을 차감. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: A의 당월 포함 3개월 이동평균에서 그 이동평균의 직전월 값을 차감; 결과(%p): 202504: -0.120000000; 202505: -0.110000000; 202506: -0.093333333.",
+      "expected": [
+        {
+          "period": "202504",
+          "value": "-0.12"
+        },
+        {
+          "period": "202505",
+          "value": "-0.11"
+        },
+        {
+          "period": "202506",
+          "value": "-0.093333333333333333333333333333333333333"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "3개월 평균의 전월차",
+        "economic_definition": "A의 당월 포함 3개월 이동평균에서 그 이동평균의 직전월 값을 차감",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "mean",
+            "operator": "rolling_mean",
+            "inputs": [
+              "a"
+            ],
+            "lag": null,
+            "window": 3,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "difference",
+            "inputs": [
+              "mean"
+            ],
+            "lag": 1,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "3개월 평균의 전월차"
+          }
+        ],
+        "start_period": "202504",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 3,
+        "estimated_cells": 18,
+        "work": 21
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D28",
+      "group": "derived",
+      "purpose": "대출 평균의 전월차",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 4월부터 2025년 6월까지. 계산 정의: B의 당월 포함 3개월 이동평균에서 그 이동평균의 직전월 값을 차감. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: B의 당월 포함 3개월 이동평균에서 그 이동평균의 직전월 값을 차감; 결과(%p): 202504: -0.096666667; 202505: -0.086666667; 202506: -0.100000000.",
+      "expected": [
+        {
+          "period": "202504",
+          "value": "-0.096666666666666666666666666666666666667"
+        },
+        {
+          "period": "202505",
+          "value": "-0.086666666666666666666666666666666666666"
+        },
+        {
+          "period": "202506",
+          "value": "-0.100000000000000000000000000000000000000"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "대출 평균의 전월차",
+        "economic_definition": "B의 당월 포함 3개월 이동평균에서 그 이동평균의 직전월 값을 차감",
+        "sources": [
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "mean",
+            "operator": "rolling_mean",
+            "inputs": [
+              "b"
+            ],
+            "lag": null,
+            "window": 3,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "difference",
+            "inputs": [
+              "mean"
+            ],
+            "lag": 1,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "대출 평균의 전월차"
+          }
+        ],
+        "start_period": "202504",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 3,
+        "estimated_cells": 18,
+        "work": 21
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D29",
+      "group": "derived",
+      "purpose": "직전월 대신 두 달 전 참조",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 3월부터 2025년 6월까지. 계산 정의: A(t)−A(t−2). 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: A(t)−A(t−2); 결과(%p): 202503: -0.250000000; 202504: -0.250000000; 202505: -0.190000000; 202506: -0.170000000.",
+      "expected": [
+        {
+          "period": "202503",
+          "value": "-0.25"
+        },
+        {
+          "period": "202504",
+          "value": "-0.25"
+        },
+        {
+          "period": "202505",
+          "value": "-0.19"
+        },
+        {
+          "period": "202506",
+          "value": "-0.17"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "직전월 대신 두 달 전 참조",
+        "economic_definition": "A(t)−A(t−2)",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "out",
+            "operator": "difference",
+            "inputs": [
+              "a"
+            ],
+            "lag": 2,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "직전월 대신 두 달 전 참조"
+          }
+        ],
+        "start_period": "202503",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 2,
+        "estimated_cells": 12,
+        "work": 6
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D30",
+      "group": "derived",
+      "purpose": "3개월 시차와 출력범위 분리",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 4월부터 2025년 6월까지. 계산 정의: B(t)−B(t−3). 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: B(t)−B(t−3); 결과(%p): 202504: -0.290000000; 202505: -0.260000000; 202506: -0.300000000.",
+      "expected": [
+        {
+          "period": "202504",
+          "value": "-0.29"
+        },
+        {
+          "period": "202505",
+          "value": "-0.26"
+        },
+        {
+          "period": "202506",
+          "value": "-0.30"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "3개월 시차와 출력범위 분리",
+        "economic_definition": "B(t)−B(t−3)",
+        "sources": [
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "out",
+            "operator": "difference",
+            "inputs": [
+              "b"
+            ],
+            "lag": 3,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "3개월 시차와 출력범위 분리"
+          }
+        ],
+        "start_period": "202504",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 3,
+        "estimated_cells": 12,
+        "work": 6
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D31",
+      "group": "derived",
+      "purpose": "두 금리의 비율과 방향",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 2월부터 2025년 6월까지. 계산 정의: B(t)/A(t), 백분율이 아닌 배 단위. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: B(t)/A(t), 백분율이 아닌 배 단위; 결과(배): 202502: 1.521885522; 202503: 1.593639576; 202504: 1.602941176; 202505: 1.613636364; 202506: 1.650980392.",
+      "expected": [
+        {
+          "period": "202502",
+          "value": "1.521885521885521885521885521885521885522"
+        },
+        {
+          "period": "202503",
+          "value": "1.593639575971731448763250883392226148410"
+        },
+        {
+          "period": "202504",
+          "value": "1.602941176470588235294117647058823529412"
+        },
+        {
+          "period": "202505",
+          "value": "1.613636363636363636363636363636363636364"
+        },
+        {
+          "period": "202506",
+          "value": "1.650980392156862745098039215686274509804"
+        }
+      ],
+      "unit": "배",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "두 금리의 비율과 방향",
+        "economic_definition": "B(t)/A(t), 백분율이 아닌 배 단위",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "ratio",
+            "operator": "divide",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "ratio",
+            "label": "두 금리의 비율과 방향"
+          }
+        ],
+        "start_period": "202502",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202502",
+        "fetch_end": "202506",
+        "lookback": 0,
+        "estimated_cells": 15,
+        "work": 5
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D32",
+      "group": "derived",
+      "purpose": "비율을 먼저 구한 뒤 평균",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 3월부터 2025년 6월까지. 계산 정의: 월별 B/A를 먼저 구한 뒤 당월 포함3개월 산술평균. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: 월별 B/A를 먼저 구한 뒤 당월 포함3개월 산술평균; 결과(배): 202503: 1.541755119; 202504: 1.572822091; 202505: 1.603405705; 202506: 1.622519311.",
+      "expected": [
+        {
+          "period": "202503",
+          "value": "1.541755119199171024848292221672669258064"
+        },
+        {
+          "period": "202504",
+          "value": "1.572822091442613856526418017445523854448"
+        },
+        {
+          "period": "202505",
+          "value": "1.603405705359561106807001631362471104729"
+        },
+        {
+          "period": "202506",
+          "value": "1.622519310754604872251931075460487225193"
+        }
+      ],
+      "unit": "배",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "비율을 먼저 구한 뒤 평균",
+        "economic_definition": "월별 B/A를 먼저 구한 뒤 당월 포함3개월 산술평균",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "ratio",
+            "operator": "divide",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rolling_mean",
+            "inputs": [
+              "ratio"
+            ],
+            "lag": null,
+            "window": 3,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "비율을 먼저 구한 뒤 평균"
+          }
+        ],
+        "start_period": "202503",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 2,
+        "estimated_cells": 24,
+        "work": 22
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D33",
+      "group": "derived",
+      "purpose": "평균을 먼저 구한 뒤 비율",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 3월부터 2025년 6월까지. 계산 정의: 당월 포함3개월 B 산술평균 / 같은3개월 A 산술평균. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: 당월 포함3개월 B 산술평균 / 같은3개월 A 산술평균; 결과(배): 202503: 1.540540541; 202504: 1.571596244; 202505: 1.603174603; 202506: 1.621997472.",
+      "expected": [
+        {
+          "period": "202503",
+          "value": "1.540540540540540540540540540540540540541"
+        },
+        {
+          "period": "202504",
+          "value": "1.571596244131455399061032863849765258216"
+        },
+        {
+          "period": "202505",
+          "value": "1.603174603174603174603174603174603174603"
+        },
+        {
+          "period": "202506",
+          "value": "1.621997471554993678887484197218710493047"
+        }
+      ],
+      "unit": "배",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "평균을 먼저 구한 뒤 비율",
+        "economic_definition": "당월 포함3개월 B 산술평균 / 같은3개월 A 산술평균",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "ma",
+            "operator": "rolling_mean",
+            "inputs": [
+              "a"
+            ],
+            "lag": null,
+            "window": 3,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "mb",
+            "operator": "rolling_mean",
+            "inputs": [
+              "b"
+            ],
+            "lag": null,
+            "window": 3,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "divide",
+            "inputs": [
+              "mb",
+              "ma"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "평균을 먼저 구한 뒤 비율"
+          }
+        ],
+        "start_period": "202503",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 2,
+        "estimated_cells": 30,
+        "work": 42
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D34",
+      "group": "derived",
+      "purpose": "비율의 전월 차이",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 2월부터 2025년 6월까지. 계산 정의: (B/A)(t)−(B/A)(t−1), 비율 증가율(%)이 아닌 배 단위의 차이. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: (B/A)(t)−(B/A)(t−1), 비율 증가율(%)이 아닌 배 단위의 차이; 결과(배): 202502: 0.012145262; 202503: 0.071754054; 202504: 0.009301600; 202505: 0.010695187; 202506: 0.037344029.",
+      "expected": [
+        {
+          "period": "202502",
+          "value": "0.012145262145262145262145262145262145262"
+        },
+        {
+          "period": "202503",
+          "value": "0.071754054086209563241365361506704262888"
+        },
+        {
+          "period": "202504",
+          "value": "0.009301600498856786530866763666597381002"
+        },
+        {
+          "period": "202505",
+          "value": "0.010695187165775401069518716577540106952"
+        },
+        {
+          "period": "202506",
+          "value": "0.037344028520499108734402852049910873440"
+        }
+      ],
+      "unit": "배",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "비율의 전월 차이",
+        "economic_definition": "(B/A)(t)−(B/A)(t−1), 비율 증가율(%)이 아닌 배 단위의 차이",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "ratio",
+            "operator": "divide",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "difference",
+            "inputs": [
+              "ratio"
+            ],
+            "lag": 1,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "비율의 전월 차이"
+          }
+        ],
+        "start_period": "202502",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 1,
+        "estimated_cells": 24,
+        "work": 11
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D35",
+      "group": "derived",
+      "purpose": "서로 다른 계열의 동일 기준 재지수화 차이",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 2월부터 2025년 6월까지. 계산 정의: A와 B를 각각2025년2월=100으로 재지수화한 뒤 A지수−B지수. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: A와 B를 각각2025년2월=100으로 재지수화한 뒤 A지수−B지수; 결과(포인트): 202502: 0.000000000; 202503: -4.492565776; 202504: -4.877685409; 202505: -5.358898722; 202506: -7.283007062.",
+      "expected": [
+        {
+          "period": "202502",
+          "value": "0"
+        },
+        {
+          "period": "202503",
+          "value": "-4.49256577575161645958106135097285539763"
+        },
+        {
+          "period": "202504",
+          "value": "-4.87768540865885998629361461219868299515"
+        },
+        {
+          "period": "202505",
+          "value": "-5.35889872173058013765978367748279252704"
+        },
+        {
+          "period": "202506",
+          "value": "-7.28300706176812371502636989362653079467"
+        }
+      ],
+      "unit": "포인트",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "서로 다른 계열의 동일 기준 재지수화 차이",
+        "economic_definition": "A와 B를 각각2025년2월=100으로 재지수화한 뒤 A지수−B지수",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "ia",
+            "operator": "rebase_100",
+            "inputs": [
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": "202502",
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "ib",
+            "operator": "rebase_100",
+            "inputs": [
+              "b"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": "202502",
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "subtract",
+            "inputs": [
+              "ia",
+              "ib"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "서로 다른 계열의 동일 기준 재지수화 차이"
+          }
+        ],
+        "start_period": "202502",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202502",
+        "fetch_end": "202506",
+        "lookback": 0,
+        "estimated_cells": 25,
+        "work": 15
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D36",
+      "group": "derived",
+      "purpose": "차이 계열을 만든 뒤 재지수화",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 1월부터 2025년 6월까지. 계산 정의: B−A를 먼저 구하고 그 차이를2025년1월=100으로 재지수화. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: B−A를 먼저 구하고 그 차이를2025년1월=100으로 재지수화; 결과(지수(기준=100)): 202501: 100.000000000; 202502: 98.726114650; 202503: 107.006369427; 202504: 104.458598726; 202505: 103.184713376; 202506: 105.732484076.",
+      "expected": [
+        {
+          "period": "202501",
+          "value": "100"
+        },
+        {
+          "period": "202502",
+          "value": "98.72611464968152866242038216560509554140"
+        },
+        {
+          "period": "202503",
+          "value": "107.0063694267515923566878980891719745223"
+        },
+        {
+          "period": "202504",
+          "value": "104.4585987261146496815286624203821656051"
+        },
+        {
+          "period": "202505",
+          "value": "103.1847133757961783439490445859872611465"
+        },
+        {
+          "period": "202506",
+          "value": "105.7324840764331210191082802547770700637"
+        }
+      ],
+      "unit": "지수(기준=100)",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "차이 계열을 만든 뒤 재지수화",
+        "economic_definition": "B−A를 먼저 구하고 그 차이를2025년1월=100으로 재지수화",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "gap",
+            "operator": "subtract",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rebase_100",
+            "inputs": [
+              "gap"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": "202501",
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "차이 계열을 만든 뒤 재지수화"
+          }
+        ],
+        "start_period": "202501",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 0,
+        "estimated_cells": 24,
+        "work": 12
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D37",
+      "group": "derived",
+      "purpose": "금리차의 상대 증감률과 %p 구분",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 2월부터 2025년 6월까지. 계산 정의: B−A를2025년1월=100 지수로 만든 뒤 지수의 전월 상대 증감률(%). 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: B−A를2025년1월=100 지수로 만든 뒤 지수의 전월 상대 증감률(%); 결과(%): 202502: -1.273885350; 202503: 8.387096774; 202504: -2.380952381; 202505: -1.219512195; 202506: 2.469135802.",
+      "expected": [
+        {
+          "period": "202502",
+          "value": "-1.273885350318471337579617834394904458600"
+        },
+        {
+          "period": "202503",
+          "value": "8.387096774193548387096774193548387096800"
+        },
+        {
+          "period": "202504",
+          "value": "-2.380952380952380952380952380952380952380"
+        },
+        {
+          "period": "202505",
+          "value": "-1.219512195121951219512195121951219512200"
+        },
+        {
+          "period": "202506",
+          "value": "2.469135802469135802469135802469135802500"
+        }
+      ],
+      "unit": "%",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "금리차의 상대 증감률과 %p 구분",
+        "economic_definition": "B−A를2025년1월=100 지수로 만든 뒤 지수의 전월 상대 증감률(%)",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "gap",
+            "operator": "subtract",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "idx",
+            "operator": "rebase_100",
+            "inputs": [
+              "gap"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": "202501",
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "pct_change",
+            "inputs": [
+              "idx"
+            ],
+            "lag": 1,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "금리차의 상대 증감률과 %p 구분"
+          }
+        ],
+        "start_period": "202502",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 1,
+        "estimated_cells": 30,
+        "work": 16
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D38",
+      "group": "derived",
+      "purpose": "재지수화 후 두 달 전 대비 증가율",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 3월부터 2025년 6월까지. 계산 정의: A를2025년1월=100으로 재지수화한 뒤 지수의2개월 전 대비 상대 증감률(%). 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: A를2025년1월=100으로 재지수화한 뒤 지수의2개월 전 대비 상대 증감률(%); 결과(%): 202503: -8.116883117; 202504: -8.417508418; 202505: -6.713780919; 202506: -6.250000000.",
+      "expected": [
+        {
+          "period": "202503",
+          "value": "-8.116883116883116883116883116883116883120"
+        },
+        {
+          "period": "202504",
+          "value": "-8.417508417508417508417508417508417508420"
+        },
+        {
+          "period": "202505",
+          "value": "-6.713780918727915194346289752650176678450"
+        },
+        {
+          "period": "202506",
+          "value": "-6.2500"
+        }
+      ],
+      "unit": "%",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "재지수화 후 두 달 전 대비 증가율",
+        "economic_definition": "A를2025년1월=100으로 재지수화한 뒤 지수의2개월 전 대비 상대 증감률(%)",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "idx",
+            "operator": "rebase_100",
+            "inputs": [
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": "202501",
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "pct_change",
+            "inputs": [
+              "idx"
+            ],
+            "lag": 2,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "재지수화 후 두 달 전 대비 증가율"
+          }
+        ],
+        "start_period": "202503",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 2,
+        "estimated_cells": 18,
+        "work": 10
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D39",
+      "group": "derived",
+      "purpose": "차이 평활의 단일 종료월과 이력 확보",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 6월부터 2025년 6월까지. 계산 정의: B−A의4~6월 세 값만 단순 산술평균. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: B−A의4~6월 세 값만 단순 산술평균; 결과(%p): 202506: 1.640000000.",
+      "expected": [
+        {
+          "period": "202506",
+          "value": "1.64"
+        }
+      ],
+      "unit": "%p",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "차이 평활의 단일 종료월과 이력 확보",
+        "economic_definition": "B−A의4~6월 세 값만 단순 산술평균",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "gap",
+            "operator": "subtract",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rolling_mean",
+            "inputs": [
+              "gap"
+            ],
+            "lag": null,
+            "window": 3,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "차이 평활의 단일 종료월과 이력 확보"
+          }
+        ],
+        "start_period": "202506",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202504",
+        "fetch_end": "202506",
+        "lookback": 2,
+        "estimated_cells": 12,
+        "work": 10
+      },
+      "engine_verified": true
+    },
+    {
+      "id": "D40",
+      "group": "derived",
+      "purpose": "월별 비율 평균의 단일 종료월",
+      "query": "예금은행 저축성수신(금융채 제외) 신규취급액 금리를 A, 예금은행 가계대출 신규취급액 금리를 B로 하여 계산해줘. 표시 기간은 2025년 6월부터 2025년 6월까지. 계산 정의: 1~6월 월별 B/A 여섯 비율의 단순 산술평균. B평균/A평균이 아님. 필요한 선행 월은 조회하되 결과에는 지정 월만 표시해줘. 금리 공표값의 산술 계산이며 거래금액 가중평균은 아니야.",
+      "answer": "계산식: 1~6월 월별 B/A 여섯 비율의 단순 산술평균. B평균/A평균이 아님; 결과(배): 202506: 1.582137215.",
+      "expected": [
+        {
+          "period": "202506",
+          "value": "1.582137214976887948550111648566578241629"
+        }
+      ],
+      "unit": "배",
+      "plan": {
+        "plan_version": "1.0",
+        "indicator_name": "월별 비율 평균의 단일 종료월",
+        "economic_definition": "1~6월 월별 B/A 여섯 비율의 단순 산술평균. B평균/A평균이 아님",
+        "sources": [
+          {
+            "alias": "a",
+            "table_id": "DT_121Y002",
+            "item_id": "13103134588999",
+            "classifications": {
+              "objL1": "13102134588ACC_ITEM.BEABAA1"
+            },
+            "frequency": "M",
+            "required_data": "저축성수신(금융채 제외)"
+          },
+          {
+            "alias": "b",
+            "table_id": "DT_121Y006",
+            "item_id": "13103134553999",
+            "classifications": {
+              "objL1": "13102134553ACC_ITEM.BECBLA03"
+            },
+            "frequency": "M",
+            "required_data": "가계대출"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "ratio",
+            "operator": "divide",
+            "inputs": [
+              "b",
+              "a"
+            ],
+            "lag": null,
+            "window": null,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          },
+          {
+            "id": "out",
+            "operator": "rolling_mean",
+            "inputs": [
+              "ratio"
+            ],
+            "lag": null,
+            "window": 6,
+            "base_period": null,
+            "exponent": null,
+            "periods": null,
+            "direction": null
+          }
+        ],
+        "outputs": [
+          {
+            "node": "out",
+            "label": "월별 비율 평균의 단일 종료월"
+          }
+        ],
+        "start_period": "202506",
+        "end_period": "202506",
+        "category_comparison": null
+      },
+      "history": {
+        "frequency": "M",
+        "fetch_start": "202501",
+        "fetch_end": "202506",
+        "lookback": 5,
+        "estimated_cells": 24,
+        "work": 37
+      },
+      "engine_verified": true
+    }
+  ]
+}

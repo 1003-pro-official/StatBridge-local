@@ -1,0 +1,8 @@
+{
+  "case": "ME14-41",
+  "clarified_by_user": "2026-10-28",
+  "question_file_sha256": "adc18b84fa6179ab1ada303ab745351523578b93d9c9d116b2b4ad54612add7a",
+  "original_runs_preserved": true,
+  "model_input": "id excluded; query and execute=true only",
+  "formula_definition": "ratio percent, month-to-month percentage-point difference"
+}

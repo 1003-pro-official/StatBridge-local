@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "cases": 60,
+  "steps": 164,
+  "derived_cases": 20,
+  "numeric_values": 74,
+  "independent_decimal_oracle": true,
+  "requested_history_only": true,
+  "markdown_json_sync": true,
+  "D28_D30_distinct_at_all_months": true,
+  "actual_model_evaluation": false
+}
