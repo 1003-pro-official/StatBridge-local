@@ -119,8 +119,20 @@ def is_availability_check(query):
 
 def needs_source_preflight(query):
     """Check combined inputs and daily coverage without requiring special user words."""
+    if re.search(r'중앙값|중간값|가장\s*높은|가장\s*낮은', query):
+        return True
     return is_availability_check(query) or bool(re.search(
-        r'나누|나눈|나눠|나눗|분자|분모|비율|비중|구성비|점유율|격차|합산|합계|차감|상관|가중|실질|차이|곱하|곱한|곱해|곱셈|더해|더한|더하기|빼서|빼줘|두.*(?:지표|지수|자료|계열|평균)|비교|부족.*(?:자료|파일)|(?:API|KOSIS).*확보|파일.*(?:안내|업로드|보완)|자료.*입수처|일별|일간|(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일|\b\d{4}-\d{2}-\d{2}\b|\b(?:19|20)\d{6}\b', query))
+        r'나누|나눈|나눠|나눗|분자|분모|비율|비중|구성비|점유율|격차|합산|합계|차감|상관|가중|실질|차이|곱하|곱한|곱해|곱셈|더해|더한|더하기|빼서|빼줘|1로\s*(?:놓|두|삼)|얼마에\s*해당|두.*(?:지표|지수|자료|계열|평균)|비교|부족.*(?:자료|파일)|(?:API|KOSIS).*확보|파일.*(?:안내|업로드|보완)|자료.*입수처|일별|일간|(?:\d{4}년\s*)?\d{1,2}월\s*\d{1,2}일|\b\d{4}-\d{2}-\d{2}\b|\b(?:19|20)\d{6}\b', query))
+
+
+SYSTEM += '''
+기간 전체를 더한 한 숫자는 rolling_sum(window=N)으로 마지막 입력 시점에 출력한다. cumulative_sum은 표시 시작점부터 누적하므로 단일 종료 시점 출력의 기간 합계로 대체하지 않는다.
+기간 내 중앙값은 rolling_median(window=N)이다. 짝수 개는 정렬한 가운데 두 값의 평균이며 전체 산술평균으로 대체하지 않는다.
+최댓값과 최솟값의 차이는 rolling_range(window=N)이다. 한 숫자를 요청하면 마지막 입력 시점 한 점을 출력하며 원자료 주기를 바꾸지 않는다.
+기간 통계 연산은 모든 달력 시점이 있어야 하고 결측을 빼거나 채우지 않는다.
+표 전용 지시가 없다면 단일 숫자 결과도 display=both로 마지막 시점에 표시한다. 단일 결과라는 이유로 그래프 출력을 없애지 않는다.
+단지 정의한 원자료를 모두 sources에 넣지 않는다. 실제 최종 계산 또는 사용자가 별도로 요청한 원자료 출력에 연결되는 source만 넣는다. 사용하지 않는 계열의 용도를 다시 묻지 않는다.
+'''
 
 
 class DerivedIndicatorPlanner:
@@ -261,7 +273,7 @@ missing의 각 항목은 정확히 하나의 시계열이다. 여러 나라·항
                     seen['dimensions'].setdefault(key, set()).add(value)
         started = time.perf_counter()
         schema_repairs = period_repairs = selection_repairs = meaning_repairs = clarification_repairs = interface_repairs = 0
-        json_repairs = immutable_repairs = 0
+        json_repairs = immutable_repairs = output_repairs = 0
         for _ in range(call_limit):
             context['remaining_calls'] = call_limit - _
             if _ >= call_limit - 2:
@@ -361,9 +373,9 @@ missing의 각 항목은 정확히 하나의 시계열이다. 여러 나라·항
                 try:
                     plan = ExpressionPlan.model_validate(proposal)
                 except ValueError:
-                    parameters = {'pct_change':'lag','difference':'lag','lag':'lag','rolling_mean':'window','rebase_100':'base_period','base_change':'base_period','power':'exponent'}
+                    parameters = {'pct_change':'lag','difference':'lag','lag':'lag','rolling_mean':'window','rolling_sum':'window','rolling_median':'window','rolling_range':'window','rebase_100':'base_period','base_change':'base_period','power':'exponent'}
                     nodes = proposal.get('nodes') if isinstance(proposal,dict) else None
-                    allowed_ops = {'add','subtract','multiply','divide','percent_ratio','pct_change','yoy_pct','difference','rolling_mean','cumulative_sum','rebase_100','base_change','lag','inverse','log','power'}
+                    allowed_ops = {'add','subtract','multiply','divide','percent_ratio','pct_change','yoy_pct','difference','rolling_mean','rolling_sum','rolling_median','rolling_range','cumulative_sum','rebase_100','base_change','lag','inverse','log','power'}
                     repairable = isinstance(nodes,list) and 0 < len(nodes) <= 48 and all(isinstance(n,dict) and n.get('operator') in allowed_ops and not set(n)-{'id','operator','inputs','lag','window','base_period','exponent','periods','direction'} for n in nodes)
                     missing = [parameters[n['operator']] for n in nodes if n['operator'] in parameters and n.get(parameters[n['operator']]) is None] if repairable else []
                     misplaced = [n['id'] for n in nodes if any(n.get(k) is not None and parameters.get(n['operator'])!=k for k in ('lag','window','base_period','exponent'))] if repairable else []
@@ -415,7 +427,15 @@ missing의 각 항목은 정확히 하나의 시계열이다. 여러 나라·항
                 except DerivedValidationError as exc:
                     context['tools'].append({'action':'validation_feedback','reason':str(exc),'instruction':'필수 사내 파일이 없으면 request_inputs로 요청하세요. 파일이 있으면 해당 자료를 최종 출력에 연결하세요.'})
                     continue
-                bounds = validate_plan(plan, self.catalog)
+                try:
+                    bounds = validate_plan(plan, self.catalog)
+                except DerivedValidationError as exc:
+                    if str(exc) == '그래프에 표시할 출력 계열이 필요합니다.' and output_repairs == 0 and not re.search(r'표만|그래프\s*(?:없이|제외|빼|말고)|그래프는\s*(?:제외|빼|말고)', query):
+                        output_repairs += 1
+                        context['tools'].append({'action':'validation_feedback', 'reason':str(exc),
+                            'instruction':'이 화면에는 최소 한 개의 그래프 출력이 필요합니다. 숫자 하나인 결과도 같은 단일 시점의 출력으로 표시할 수 있습니다. 사용자에게 표 전용 지시가 없으면 display=both로 계획을 다시 제출하세요. 수식, 값, 기간, 출력 수를 바꾸지 마세요.'})
+                        continue
+                    raise
                 from derived_support_policy import require_api_dependency, unsupported
                 try:require_api_dependency(plan,self.catalog)
                 except DerivedValidationError as exc:
