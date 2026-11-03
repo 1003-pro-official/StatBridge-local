@@ -1,0 +1,106 @@
+{
+  "created_at": "2026-11-02T15:11:21.622957+09:00",
+  "before_run": "qualitative-10-rerun-20261102-network-ok",
+  "after_run": "qualitative-q05-q06-unit-stage-patched-20261102",
+  "cases": [
+    {
+      "question_id": "Q05",
+      "case_id": "ME14-23",
+      "before_statuses": [
+        "need_details"
+      ],
+      "before_workspace": false,
+      "after_statuses": [
+        "need_output_config",
+        "resolved"
+      ],
+      "after_workspace": true,
+      "table_rows": 96,
+      "display_points_per_series": 48,
+      "fetch_start": "202012",
+      "fetch_end": "202412",
+      "source_identity": {
+        "alias": "household_loan_rate",
+        "table_id": "DT_121Y006",
+        "item_id": "13103134553999",
+        "classifications": {
+          "objL1": "13102134553ACC_ITEM.BECBLA03"
+        },
+        "frequency": "M",
+        "required_data": "한국은행 KOSIS 예금은행 가계대출 금리(신규취급액 기준), 월별. 표시기간 202101~202412 및 전월 차이 계산용 선행월 202012."
+      },
+      "observed_raw_unit": "연리%",
+      "calculated_unit": "%p",
+      "independent_recalculation": [
+        {
+          "unit": "연리%",
+          "points_compared": 48,
+          "max_abs_difference": "0.00",
+          "max_table_abs_difference": "0.00"
+        },
+        {
+          "unit": "%p",
+          "points_compared": 48,
+          "max_abs_difference": "7.5E-16",
+          "max_table_abs_difference": "7.5E-16"
+        }
+      ],
+      "graph_points_compared": 48,
+      "max_graph_abs_difference": "7.5E-16",
+      "tolerance": "0.0000010001",
+      "semantic_review_approved": true,
+      "verification_scope": "Independent arithmetic from the fresh KOSIS response saved by the product, plus full table/graph comparison. Not an independent re-fetch or a new LLM Judge score."
+    },
+    {
+      "question_id": "Q06",
+      "case_id": "ME14-29",
+      "before_statuses": [
+        "need_details"
+      ],
+      "before_workspace": false,
+      "after_statuses": [
+        "need_output_config",
+        "resolved"
+      ],
+      "after_workspace": true,
+      "table_rows": 20,
+      "display_points_per_series": 10,
+      "fetch_start": "2014",
+      "fetch_end": "2024",
+      "source_identity": {
+        "alias": "nominal_gdp",
+        "table_id": "DT_200Y105",
+        "item_id": "13103136260999",
+        "classifications": {
+          "objL1": "13102136260ACC_ITEM.1400"
+        },
+        "frequency": "Y",
+        "required_data": "국내총생산(시장가격 GDP), 명목·원계열, 연간. 표시기간 2015~2024년과 전년 대비 증가율 산출에 필요한 2014년."
+      },
+      "observed_raw_unit": "십억원",
+      "calculated_unit": "%",
+      "independent_recalculation": [
+        {
+          "unit": "십억원",
+          "points_compared": 10,
+          "max_abs_difference": "0.0",
+          "max_table_abs_difference": "0.0"
+        },
+        {
+          "unit": "%",
+          "points_compared": 10,
+          "max_abs_difference": "1.854912874695871843900E-14",
+          "max_table_abs_difference": "1.854912874695871843900E-14"
+        }
+      ],
+      "graph_points_compared": 10,
+      "max_graph_abs_difference": "1.854912874695871843900E-14",
+      "tolerance": "0.0000010001",
+      "semantic_review_approved": true,
+      "verification_scope": "Independent arithmetic from the fresh KOSIS response saved by the product, plus full table/graph comparison. Not an independent re-fetch or a new LLM Judge score."
+    }
+  ],
+  "openai_calls": 6,
+  "estimated_openai_usd": 0.0686979,
+  "estimated_cost_excludes_other_providers": true
+}

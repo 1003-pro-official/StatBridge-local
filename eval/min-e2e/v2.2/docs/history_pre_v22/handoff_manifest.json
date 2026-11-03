@@ -1,0 +1,170 @@
+{
+  "version": "2.0.1-human-review-handoff",
+  "cases": 120,
+  "question_changes": 0,
+  "numeric_gold_changes": 0,
+  "oracle_contract_changed": false,
+  "human_visual_review": {
+    "input_sha256": "111d0ea636a3afb29145d4b1cdc68f57befecb369dc0874b9d490afd3dd7bb48",
+    "records": 18,
+    "artifact_hashes_verified": 18,
+    "screen_hashes_verified": 18,
+    "reference_hashes_verified": 18,
+    "human_matches": 16,
+    "human_mismatches": 2,
+    "visual_pending": 0,
+    "F_rule_summary": {
+      "pass": 17,
+      "fail": 3
+    },
+    "reviewer": [
+      "사람 검토자"
+    ],
+    "oracle_approval": false,
+    "CQ_semantic_review": false,
+    "original_evidence_unchanged": true,
+    "applied": [
+      {
+        "id": "F21_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "2a197e07b9040b7df5247f958253da94c073c2709c0def71350bbe161c2fa9a1"
+      },
+      {
+        "id": "F22_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "69015d2562b36db23e0ca84e989da05efa466edfe43603e80fdbf5447e51865e"
+      },
+      {
+        "id": "F22_2",
+        "matches": false,
+        "reason": "화면과 PDF의 범례 순서가 다르다 파란색이 위로 가 있으면 다운로드 파일은 파란색이 왼쪽에 있어야 정상이다",
+        "artifact_sha256": "5d774b312ddf4132decadfb24e8be26c24c3cbe89be379f71d93ff9060d10274"
+      },
+      {
+        "id": "F23_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "16744deb44266e374d8111b364fe620acc36331588ce5abb0e1f232ab4573d1b"
+      },
+      {
+        "id": "F23_2",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "2ba568a825ca0575c3bfbe40fc594652429985f42c4cec8406cdc051aedb9a4c"
+      },
+      {
+        "id": "F25_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "6ee7dd19e6ba624a7aba45512811a9372dd1a41e4fb3b45aa566d1fc1a4cf556"
+      },
+      {
+        "id": "F25_2",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "bfdf671f3f4dc4c0e7b96ddec1651bf4e7fb5927e86fe49a71e5be5ed7648cba"
+      },
+      {
+        "id": "F26_2",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "e8c1f0b2af56116919ba01cc5c80c4b4774c4230e9e844e045c8e89a39aa0377"
+      },
+      {
+        "id": "F27_1",
+        "matches": false,
+        "reason": "빨간점 안보임",
+        "artifact_sha256": "e01cdb7bd52efafa3df6020e124d340e5a3295c66cf955fc579aa7ecdd66ea54"
+      },
+      {
+        "id": "F28_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "ffb5ace49a76e51706a20516402ebef19d807d3389d10b96e072bda4daac02b9"
+      },
+      {
+        "id": "F28_2",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "d4f1ee93bddadfd09d461be30e9ad0b231056c5b6fc8c7ae4453cf67ba58c3dc"
+      },
+      {
+        "id": "F29_2",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "ed2aa9d1bf8717c639d3078b12fcd2c7ab069754057487640715b3d780e3b341"
+      },
+      {
+        "id": "F33_2",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "2049832b9dd6932796e216f6a3259febc07d7c904a7f3fe489f3dac8bca8aff3"
+      },
+      {
+        "id": "F34_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "16771647f91a9fe0769483ccd598be6ecd69e775338de08a9bf0ed69a273fed8"
+      },
+      {
+        "id": "F35_2",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "64fd48133087d645f81f7b3310e1218a1da8a9e089a5257763e50aee5a7cd242"
+      },
+      {
+        "id": "F36_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "77e479d2c6a3aff494bf97d02c07459399be0a0c56286bfaf52675031a41f8b4"
+      },
+      {
+        "id": "F37_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "4d14a9fd9d85e07e09993a99eddad511c4081f244dc0fadaa2309d4172e585c1"
+      },
+      {
+        "id": "F38_1",
+        "matches": true,
+        "reason": "",
+        "artifact_sha256": "ad2d9ea156a9b95867a046640f7430b95ac819942da6114948d9ada2ca85d4e5"
+      }
+    ]
+  },
+  "rule_summary": {
+    "QT": {
+      "pass": 19,
+      "pending": 1
+    },
+    "CQ": {
+      "pending": 20
+    },
+    "DA": {
+      "pending": 20
+    },
+    "D": {
+      "pass": 17,
+      "fail": 3
+    },
+    "E": {
+      "pass": 16,
+      "fail": 4
+    },
+    "F": {
+      "pass": 17,
+      "fail": 3
+    }
+  },
+  "offline_checks": 1015,
+  "offline_passed": 1015,
+  "remaining": [
+    "CQ20 semantic approval",
+    "120 oracle human approvals",
+    "D23 Judge adjudication"
+  ],
+  "original_dataset_unchanged": true,
+  "evidence_zip_sha256": "c30ea49f29f8953921948b4cf36e255180d845164bb39df55eb8cd140c239184"
+}

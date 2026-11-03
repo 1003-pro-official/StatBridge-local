@@ -1,0 +1,181 @@
+{
+  "scope": "22 report-only NA slots, not reconstructed actual observations",
+  "records": [
+    {
+      "reported_slot": "QT-NA-1",
+      "case_id": "QT21-11",
+      "case_binding": "reported",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-2",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-3",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-4",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-5",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-6",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-7",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-8",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "QT-NA-9",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-1",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-2",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-3",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-4",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-5",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-6",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-7",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-8",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-9",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "CQ-NA-10",
+      "case_id": null,
+      "case_binding": "unknown_without_raw_json",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "D-NA-1",
+      "case_id": "D25",
+      "case_binding": "reported",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "D-NA-2",
+      "case_id": "D27",
+      "case_binding": "reported",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    },
+    {
+      "reported_slot": "D-NA-3",
+      "case_id": "D38",
+      "case_binding": "reported",
+      "status": "REVIEW_REQUIRED",
+      "classification": "EVIDENCE_GAP",
+      "new_judge_score": null
+    }
+  ]
+}

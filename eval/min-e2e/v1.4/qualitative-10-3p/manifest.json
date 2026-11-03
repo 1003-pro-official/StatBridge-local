@@ -1,0 +1,25 @@
+{
+  "created": "2026-10-28",
+  "status": "not_executed",
+  "source_zip": "C:\\Users\\<user>\\Downloads\\StatBridge_v1.4_평가셋_전달본.zip",
+  "source_sha256": "c0431cdc1cd36302fa9d23f75106ad019326bc5e890cd0ed4a3730813781be67",
+  "selected_ids": [
+    "ME14-01",
+    "ME14-06",
+    "ME14-13",
+    "ME14-19",
+    "ME14-23",
+    "ME14-29",
+    "ME14-33",
+    "ME14-39",
+    "ME14-42",
+    "ME14-43"
+  ],
+  "evaluators": [
+    "P1",
+    "P2",
+    "P3"
+  ],
+  "design": "10 shared outputs independently rated by 3 evaluators",
+  "question_text_modified": false
+}

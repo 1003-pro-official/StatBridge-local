@@ -1,0 +1,11 @@
+{
+  "mode": "DA/CQ real API first response; QT production local routing function",
+  "input_sha256": "3a95cadc7aa18f34e191fc68eb40788f21275fbf345762ea4c0a5fa18c4cb790",
+  "kosis_configured": true,
+  "raw_data": "live service; no fixtures or gold injected",
+  "fresh_request_state": true,
+  "first_observed_request_utc": "2026-10-27T06:27:36.274680+00:00",
+  "last_initial_request_utc": "2026-10-27T06:28:33.732477+00:00",
+  "code_commit": "ef02d2471c5d928f7de1382b2dd5c9db82322e9d",
+  "scoring": "separate process after initial freeze; infrastructure-only retries predeclared"
+}

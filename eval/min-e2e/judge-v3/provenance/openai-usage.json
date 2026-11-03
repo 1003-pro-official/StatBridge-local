@@ -1,0 +1,515 @@
+[
+  {
+    "captured_at": "2026-11-02T12:39:52+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 5967,
+      "input_tokens_details": {
+        "cache_write_tokens": 5964,
+        "cached_tokens": 0
+      },
+      "output_tokens": 28,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 5995
+    },
+    "estimated_usd": 0.015196,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:01+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7331,
+      "input_tokens_details": {
+        "cache_write_tokens": 4330,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 550,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7881
+    },
+    "estimated_usd": 0.016630799999999998,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:07+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1497,
+      "input_tokens_details": {
+        "cache_write_tokens": 1494,
+        "cached_tokens": 0
+      },
+      "output_tokens": 207,
+      "output_tokens_details": {
+        "reasoning_tokens": 102
+      },
+      "total_tokens": 1704
+    },
+    "estimated_usd": 0.005811,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:13+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7484,
+      "input_tokens_details": {
+        "cache_write_tokens": 4483,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 473,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7957
+    },
+    "estimated_usd": 0.0162433,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:19+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1522,
+      "input_tokens_details": {
+        "cache_write_tokens": 1519,
+        "cached_tokens": 0
+      },
+      "output_tokens": 161,
+      "output_tokens_details": {
+        "reasoning_tokens": 49
+      },
+      "total_tokens": 1683
+    },
+    "estimated_usd": 0.0054135,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:25+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 6002,
+      "input_tokens_details": {
+        "cache_write_tokens": 3001,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 38,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 6040
+    },
+    "estimated_usd": 0.0081883,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:34+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7769,
+      "input_tokens_details": {
+        "cache_write_tokens": 4768,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 521,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 8290
+    },
+    "estimated_usd": 0.017435799999999998,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:39+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1480,
+      "input_tokens_details": {
+        "cache_write_tokens": 1477,
+        "cached_tokens": 0
+      },
+      "output_tokens": 159,
+      "output_tokens_details": {
+        "reasoning_tokens": 30
+      },
+      "total_tokens": 1639
+    },
+    "estimated_usd": 0.0052885,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:42+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7946,
+      "input_tokens_details": {
+        "cache_write_tokens": 4945,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 44,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7990
+    },
+    "estimated_usd": 0.0131083,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:50+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 9771,
+      "input_tokens_details": {
+        "cache_write_tokens": 6770,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 617,
+      "output_tokens_details": {
+        "reasoning_tokens": 38
+      },
+      "total_tokens": 10388
+    },
+    "estimated_usd": 0.0234008,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:40:54+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1536,
+      "input_tokens_details": {
+        "cache_write_tokens": 1533,
+        "cached_tokens": 0
+      },
+      "output_tokens": 110,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1646
+    },
+    "estimated_usd": 0.0049385,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:41:01+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 5908,
+      "input_tokens_details": {
+        "cache_write_tokens": 2907,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 31,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 5939
+    },
+    "estimated_usd": 0.0078833,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:41:10+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7993,
+      "input_tokens_details": {
+        "cache_write_tokens": 4992,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 550,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 8543
+    },
+    "estimated_usd": 0.018285799999999998,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:41:17+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1511,
+      "input_tokens_details": {
+        "cache_write_tokens": 1508,
+        "cached_tokens": 0
+      },
+      "output_tokens": 240,
+      "output_tokens_details": {
+        "reasoning_tokens": 79
+      },
+      "total_tokens": 1751
+    },
+    "estimated_usd": 0.006176,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:41:35+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1662,
+      "input_tokens_details": {
+        "cache_write_tokens": 1659,
+        "cached_tokens": 0
+      },
+      "output_tokens": 694,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 2356
+    },
+    "estimated_usd": 0.0110935,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:41:47+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 6986,
+      "input_tokens_details": {
+        "cache_write_tokens": 6983,
+        "cached_tokens": 0
+      },
+      "output_tokens": 181,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7167
+    },
+    "estimated_usd": 0.0192735,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:02+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7432,
+      "input_tokens_details": {
+        "cache_write_tokens": 7429,
+        "cached_tokens": 0
+      },
+      "output_tokens": 215,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7647
+    },
+    "estimated_usd": 0.0207285,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:11+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7043,
+      "input_tokens_details": {
+        "cache_write_tokens": 4042,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 754,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7797
+    },
+    "estimated_usd": 0.0179508,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:14+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1998,
+      "input_tokens_details": {
+        "cache_write_tokens": 1995,
+        "cached_tokens": 0
+      },
+      "output_tokens": 198,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 2196
+    },
+    "estimated_usd": 0.0069735,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:34+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 5625,
+      "input_tokens_details": {
+        "cache_write_tokens": 4175,
+        "cached_tokens": 1447
+      },
+      "output_tokens": 670,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 6295
+    },
+    "estimated_usd": 0.0172882,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:38+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 2366,
+      "input_tokens_details": {
+        "cache_write_tokens": 2363,
+        "cached_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 2504
+    },
+    "estimated_usd": 0.0072935,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:43+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 2364,
+      "input_tokens_details": {
+        "cache_write_tokens": 2361,
+        "cached_tokens": 0
+      },
+      "output_tokens": 152,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 2516
+    },
+    "estimated_usd": 0.0074285,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:51+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 6847,
+      "input_tokens_details": {
+        "cache_write_tokens": 3846,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 730,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7577
+    },
+    "estimated_usd": 0.017220799999999998,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:42:56+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1933,
+      "input_tokens_details": {
+        "cache_write_tokens": 1930,
+        "cached_tokens": 0
+      },
+      "output_tokens": 171,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 2104
+    },
+    "estimated_usd": 0.006541,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:43:07+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 6073,
+      "input_tokens_details": {
+        "cache_write_tokens": 3072,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 28,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 6101
+    },
+    "estimated_usd": 0.008265799999999998,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:43:15+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 7175,
+      "input_tokens_details": {
+        "cache_write_tokens": 4174,
+        "cached_tokens": 2998
+      },
+      "output_tokens": 497,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7672
+    },
+    "estimated_usd": 0.0157108,
+    "price_known": true
+  },
+  {
+    "captured_at": "2026-11-02T12:43:20+0900",
+    "model": "gpt-6.1-sol",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 1454,
+      "input_tokens_details": {
+        "cache_write_tokens": 1451,
+        "cached_tokens": 0
+      },
+      "output_tokens": 206,
+      "output_tokens_details": {
+        "reasoning_tokens": 60
+      },
+      "total_tokens": 1660
+    },
+    "estimated_usd": 0.0056935,
+    "price_known": true
+  }
+]

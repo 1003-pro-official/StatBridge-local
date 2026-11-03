@@ -1,0 +1,63 @@
+{
+  "verified_on": "2026-11-02",
+  "inputs": {
+    "original_approval_record.md": "c6d90fe187a4c9a2b21ccff15649c88bdaf0cbf1ce5b61ae1b180419148116d3",
+    "original_score_v2.py": "d2f064a0d386e8e2339a885ea97ab9733f1ccaeba3198fbfcd9b9d208c8c2ac3",
+    "reference-hash-verification.json": "e6ea5a909ba38fb1234e7d83f817fad07bc0314b89ce89804ff33d2dec2b40a2",
+    "00_README.txt": "ab77e24f48feb9adc15ea397add457ba174f3b9b27397a691c77ad8b1616ed5c"
+  },
+  "approval_record": {
+    "date": "2026-10-27",
+    "hashes_listed": {
+      "questions.md": "fa4b4d7694b7da108e3bd9dce3517d650c744a8690d61f2706d6bbe977d9eca3",
+      "answers.md": "9da2c252307d835d620d866017761dcfb4c7d18fad0a061e5e079b58b7d394ae",
+      "rubric.md": "ecc6b963dc4cbe7872c474267a182614f8b65ad35539da478de03746c4ced6e4",
+      "observations.json": "7497f8370328650782e3c8054c351a7be408930a97d3a666ee56b062a7fa5ae9",
+      "reference.html": "c2285aab31a766004be0aac0edb74f90d5abaa13979e451f7b94c51cfbe2e69a"
+    },
+    "reference_files_recomputed": {
+      "answers.md": {
+        "sha256": "9da2c252307d835d620d866017761dcfb4c7d18fad0a061e5e079b58b7d394ae",
+        "matches_approval_record": true
+      },
+      "observations.json": {
+        "sha256": "7497f8370328650782e3c8054c351a7be408930a97d3a666ee56b062a7fa5ae9",
+        "matches_approval_record": true
+      },
+      "reference.html": {
+        "sha256": "c2285aab31a766004be0aac0edb74f90d5abaa13979e451f7b94c51cfbe2e69a",
+        "matches_approval_record": true
+      }
+    },
+    "scope_statement": "승인은 사용자의 의사 표시이며 50개 실제 제품 출력의 성공 판정이나 별도 독립 원천 검증을 뜻하지 않음 (승인 기록 원문)",
+    "document_markings_remaining": "answers.md '사람 검수 전'·'검증 대기', reference.html '최종 검수 전' 표기 잔존",
+    "not_covered_by_approval_hashes": {
+      "evaluation_design/qualitative_rubric.md": "cdda1a2c1c072a6d66886ac32519fd8c0faa66409acf2c6d2092bb86192e8bfa",
+      "evaluation_design/questions_10.md": "741b7f9ffa5b856277aac461de8546402422f0e15f9c9c024ce9cfa4c8b0bc59",
+      "note": "정성평가 기준과 10문항 발췌본은 승인 해시 목록(questions.md·rubric.md 등)에 없음. 10문항 질문 문자열은 승인된 answers.md 질의와 일치"
+    },
+    "change_rule": "질문·산식·수치·그래프·기준이 변경되면 변경 부분의 승인 대상을 다시 명시 (승인 기록 원문)"
+  },
+  "user_decisions_20261102": [
+    "출처: 모든 문항에서 근거 확인의 용이성으로 평가, 그래프 내부 출처 문구를 필수·치명 조건으로 두지 않음, 명시 요청 문항은 요구 반영도 확인",
+    "0 기준선: 권장",
+    "허용 오차: score_v2 기준 적용",
+    "Q08 기준 차이 해석: 두 금리 구별 및 신규취급액·금융채 제외 조건 식별",
+    "Q08 전월 차이, Q09 전년 동월 값, Q10 전년 동기 값 열: 선택",
+    "case-index.json 행·계열 수는 관측값(observed_shape)이며 정답 아님",
+    "note: 위 결정은 2026-10-27 승인과 별개인 Judge 평가 기준 결정으로 기록"
+  ],
+  "score_v2_findings": {
+    "tolerance": "match_vectors: 양쪽 None이면 대응, 한쪽 None이면 불일치, abs(a-b) <= tol+1e-10 (tol=1e-6). source_history: abs(a-e) > 1e-6+1e-10이면 불일치 (이 함수는 어느 쪽이든 None이면 불일치로 처리)",
+    "required_columns_for_10_cases": {
+      "ME14-01·06·13·19 (i<=20)": "모든 계열 열이 표·그래프 필수",
+      "ME14-23·29·33 (21~38)": "표 [원자료, 계산값], 그래프 [계산값]. 비교시점·비교시점 원자료 열은 필수 아님",
+      "ME14-39": "표 [계열1, 계열2, 차이, 차이 변화], 그래프 [차이]. '전월 차이' 필수 아님",
+      "ME14-42": "표 [금액지수, 물량지수, 금액 증가율, 물량 증가율, 증가율 차이], 그래프 [두 증가율]. 전년 동월 지수 필수 아님",
+      "ME14-43 (43~48)": "표·그래프 [원자료, 계산값]. 비교시점 열 필수 아님"
+    },
+    "period_check": "all_display_periods: 각 계열의 시점 목록이 참고 표 시점 목록과 완전히 같아야 함 (누락·중복·추가·순서 모두 검출)",
+    "not_adopted_in_judge": "가중치(A~E), 총점, 80점 합격 기준, pass/fail 집계는 이번 Judge 평가에서 사용하지 않음 (종합 점수·합격률 미작성 원칙)"
+  },
+  "readme_note": "00_README.txt의 한글 본문은 파일 자체에 '?'로 저장되어 있어 판독 불가 (manifest 해시와 일치하므로 전달 중 손상 아님). 판독 가능한 숫자·영문 부분과 사용자 메시지·다른 원본 파일을 근거로 사용"
+}

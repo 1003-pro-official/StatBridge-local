@@ -1,0 +1,47 @@
+{
+  "original_reported": {
+    "ragas": "0.4.3",
+    "judge": "gpt-6.1-sol",
+    "live_scored": 58,
+    "live_na": 22,
+    "live_mean": 0.94335,
+    "groups": {
+      "QT": {
+        "scored": 11,
+        "mean": 0.818182,
+        "na": 9
+      },
+      "CQ": {
+        "scored": 10,
+        "mean": 0.971429,
+        "na": 10
+      },
+      "DA": {
+        "scored": 20,
+        "mean": 0.95,
+        "na": 0
+      },
+      "D": {
+        "scored": 17,
+        "mean": 1.0,
+        "na": 3
+      }
+    },
+    "replay_DA_mean": 0.95,
+    "replay_D_scored": 18,
+    "replay_D_na": 2,
+    "replay_D_mean": 1.0
+  },
+  "new_judge_executed": false,
+  "new_score": null,
+  "delta": null,
+  "reason": "Actual responses, captured contexts, original claim verdicts and manifest missing",
+  "original_scores_unchanged": true,
+  "priority_case_ids": [
+    "QT21-08",
+    "QT21-10",
+    "CQ21-15",
+    "DA21-19",
+    "DA21-20"
+  ]
+}

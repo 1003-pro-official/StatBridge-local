@@ -1,0 +1,134 @@
+{
+  "source": {
+    "org_id": "301",
+    "table_id": "DT_403Y005",
+    "item_id": "13103134627999",
+    "classifications": {
+      "objL1": "13102134627TERMS_TRADE_TYPE.A"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "origin": "direct_official_KOSIS_API",
+  "endpoint": "https://kosis.kr/openapi/Param/statisticsParameterData.do",
+  "request_params_without_key": {
+    "method": "getList",
+    "format": "json",
+    "jsonVD": "Y",
+    "smblChk": "Y",
+    "orgId": "301",
+    "tblId": "DT_403Y005",
+    "itmId": "13103134627999",
+    "prdSe": "M",
+    "startPrdDe": "202401",
+    "endPrdDe": "202403",
+    "objL1": "13102134627TERMS_TRADE_TYPE.A"
+  },
+  "checked_at": "2026-10-28T12:07:04.239143+00:00",
+  "status": "fetched",
+  "rows": [
+    {
+      "period": "202401",
+      "raw_period": "202401",
+      "value": "90.95",
+      "unit": "2020＝100",
+      "org_id": "301",
+      "table_id": "DT_403Y005",
+      "item_id": "13103134627999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134627TERMS_TRADE_TYPE.A"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202402",
+      "raw_period": "202402",
+      "value": "91.34",
+      "unit": "2020＝100",
+      "org_id": "301",
+      "table_id": "DT_403Y005",
+      "item_id": "13103134627999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134627TERMS_TRADE_TYPE.A"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202403",
+      "raw_period": "202403",
+      "value": "91.8",
+      "unit": "2020＝100",
+      "org_id": "301",
+      "table_id": "DT_403Y005",
+      "item_id": "13103134627999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134627TERMS_TRADE_TYPE.A"
+      },
+      "source_last_changed": "2026-10-27"
+    }
+  ],
+  "response": [
+    {
+      "C1_OBJ_NM": "교역조건구분별",
+      "DT": "90.95",
+      "C1": "13102134627TERMS_TRADE_TYPE.A",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "2020＝100",
+      "ITM_ID": "13103134627999",
+      "TBL_ID": "DT_403Y005",
+      "ITM_NM": "교역조건지수",
+      "TBL_NM": "교역조건지수",
+      "PRD_DE": "202401",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Net barter terms of trade index",
+      "C1_NM": "순상품교역조건지수",
+      "UNIT_NM": "2020＝100",
+      "ITM_NM_ENG": "Terms of Trade Indices",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "Selection of Items"
+    },
+    {
+      "C1_OBJ_NM": "교역조건구분별",
+      "DT": "91.34",
+      "C1": "13102134627TERMS_TRADE_TYPE.A",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "2020＝100",
+      "ITM_ID": "13103134627999",
+      "TBL_ID": "DT_403Y005",
+      "ITM_NM": "교역조건지수",
+      "TBL_NM": "교역조건지수",
+      "PRD_DE": "202402",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Net barter terms of trade index",
+      "C1_NM": "순상품교역조건지수",
+      "UNIT_NM": "2020＝100",
+      "ITM_NM_ENG": "Terms of Trade Indices",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "Selection of Items"
+    },
+    {
+      "C1_OBJ_NM": "교역조건구분별",
+      "DT": "91.8",
+      "C1": "13102134627TERMS_TRADE_TYPE.A",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "2020＝100",
+      "ITM_ID": "13103134627999",
+      "TBL_ID": "DT_403Y005",
+      "ITM_NM": "교역조건지수",
+      "TBL_NM": "교역조건지수",
+      "PRD_DE": "202403",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Net barter terms of trade index",
+      "C1_NM": "순상품교역조건지수",
+      "UNIT_NM": "2020＝100",
+      "ITM_NM_ENG": "Terms of Trade Indices",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "Selection of Items"
+    }
+  ],
+  "response_sha256": "ecabde5fa4028141e01fec3bdc84a74c61956a1a9e14bd50fd254cc89ad8d442"
+}

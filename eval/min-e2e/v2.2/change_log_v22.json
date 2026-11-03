@@ -1,0 +1,14 @@
+{
+  "policy": "remove final human oracle approval gate; never fabricate approval",
+  "scorer_changes": [
+    "accept hash-bound direct AI CQ review",
+    "verify full actual CQ response packet",
+    "trace-based execution flag CQ08",
+    "CQ16 latest-reference evidence gap",
+    "D23 separate summary semantics check",
+    "PASS without final human approval; EVIDENCE_GAP for missing proof"
+  ],
+  "question_or_expected_changes": 0,
+  "D23_previous_explanation_retracted": true,
+  "old_raw_scores_preserved": true
+}

@@ -1,0 +1,115 @@
+{
+  "source": {
+    "org_id": "301",
+    "table_id": "DT_284Y002",
+    "item_id": "13103852623999",
+    "classifications": {
+      "objL1": "13102852623ACC_ITEM.A1000",
+      "objL2": "13102852623INSTITUTIONAL_SECTOR.T10000"
+    },
+    "frequency": "Y",
+    "start_period": "2023",
+    "end_period": "2024"
+  },
+  "origin": "direct_official_KOSIS_API",
+  "endpoint": "https://kosis.kr/openapi/Param/statisticsParameterData.do",
+  "request_params_without_key": {
+    "method": "getList",
+    "format": "json",
+    "jsonVD": "Y",
+    "smblChk": "Y",
+    "orgId": "301",
+    "tblId": "DT_284Y002",
+    "itmId": "13103852623999",
+    "prdSe": "Y",
+    "startPrdDe": "2023",
+    "endPrdDe": "2024",
+    "objL1": "13102852623ACC_ITEM.A1000",
+    "objL2": "13102852623INSTITUTIONAL_SECTOR.T10000"
+  },
+  "checked_at": "2026-10-28T12:07:10.385393+00:00",
+  "status": "fetched",
+  "rows": [
+    {
+      "period": "2023",
+      "raw_period": "2023",
+      "value": "90093",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_284Y002",
+      "item_id": "13103852623999",
+      "frequency": "A",
+      "classifications": {
+        "objL1": "13102852623ACC_ITEM.A1000",
+        "objL2": "13102852623INSTITUTIONAL_SECTOR.T10000"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "2024",
+      "raw_period": "2024",
+      "value": "233083.9",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_284Y002",
+      "item_id": "13103852623999",
+      "frequency": "A",
+      "classifications": {
+        "objL1": "13102852623ACC_ITEM.A1000",
+        "objL2": "13102852623INSTITUTIONAL_SECTOR.T10000"
+      },
+      "source_last_changed": "2026-10-27"
+    }
+  ],
+  "response": [
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "C2_NM": "합계",
+      "DT": "90093",
+      "C2": "13102852623INSTITUTIONAL_SECTOR.T10000",
+      "C1": "13102852623ACC_ITEM.A1000",
+      "PRD_SE": "A",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103852623999",
+      "TBL_ID": "DT_284Y002",
+      "ITM_NM": "거래표",
+      "TBL_NM": "거래표",
+      "PRD_DE": "2023",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Total Currency ＆ Deposits",
+      "C1_NM": "현금 발행 및 예수금 합계",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "Net Transactions",
+      "C2_OBJ_NM_ENG": "Institutional Sector",
+      "C2_NM_ENG": "Total Sum",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT",
+      "C2_OBJ_NM": "제도부문별"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "C2_NM": "합계",
+      "DT": "233083.9",
+      "C2": "13102852623INSTITUTIONAL_SECTOR.T10000",
+      "C1": "13102852623ACC_ITEM.A1000",
+      "PRD_SE": "A",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103852623999",
+      "TBL_ID": "DT_284Y002",
+      "ITM_NM": "거래표",
+      "TBL_NM": "거래표",
+      "PRD_DE": "2024",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Total Currency ＆ Deposits",
+      "C1_NM": "현금 발행 및 예수금 합계",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "Net Transactions",
+      "C2_OBJ_NM_ENG": "Institutional Sector",
+      "C2_NM_ENG": "Total Sum",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT",
+      "C2_OBJ_NM": "제도부문별"
+    }
+  ],
+  "response_sha256": "d8db28fd96e2aaae741c985de5a0f5120b75d01700a5fe72ec18b5a18bccc80a"
+}

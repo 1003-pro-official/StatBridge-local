@@ -1,0 +1,5408 @@
+{
+  "E21": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E22": [
+    {
+      "title": "대출금리−수신금리: 월별 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "대출금리−수신금리: 월별 비교",
+      "font": 26,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "대출금리−수신금리: 월별 비교",
+      "font": 26,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E23": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": false,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": false,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E24": [
+    {
+      "title": "편집 이력 검증",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "편집 이력 검증",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "편집 이력 검증",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "편집 이력 검증",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "편집 이력 검증",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E25": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2∼5월 혼합 금리",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E26": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": false
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "대출 계열 복원",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": false
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "대출 계열 복원",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E27": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202504",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202504",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202504",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E28": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        },
+        {
+          "label": "B",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#16a34a"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E29": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202501",
+          "end": "202502",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        },
+        {
+          "label": "B",
+          "start": "202505",
+          "end": "202506",
+          "scope": "segment",
+          "style": {
+            "color": "#16a34a",
+            "dash": "solid"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "두 구간 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202501",
+          "end": "202502",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        },
+        {
+          "label": "B",
+          "start": "202505",
+          "end": "202506",
+          "scope": "segment",
+          "style": {
+            "color": "#16a34a",
+            "dash": "solid"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E30": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "필터 취소 전",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E31": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E32": [
+    {
+      "title": "빨간색 선과 파란색 선의 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "빨간색 선과 파란색 선의 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "빨간색 선과 파란색 선의 비교",
+      "font": 24,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E33": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E34": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 3,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E35": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": false,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": false,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2∼6월 금리",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E36": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#16a34a",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E37": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202503",
+          "end": "202504",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202503",
+          "end": "202504",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202503",
+          "end": "202504",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E38": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 5,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 5,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E39": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202504",
+          "end": "202504",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202504",
+          "end": "202504",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": false
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202504",
+          "end": "202504",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202504",
+          "end": "202504",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "E40": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "복원 전 금리",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "복원 전 금리",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F21": [
+    {
+      "title": "금리 비교: 2025 상반기",
+      "font": 24,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "금리 비교: 2025 상반기",
+      "font": 24,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "금리 비교: 2025 상반기",
+      "font": 24,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F22": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F23": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": false,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": false,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F24": [
+    {
+      "title": "임시 제목",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "임시 제목",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "임시 제목",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "임시 제목",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F25": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F26": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F27": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "B",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "B",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "B",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "B",
+          "start": "202506",
+          "end": "202506",
+          "scope": "point",
+          "style": {
+            "color": "#e53935"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F28": [
+    {
+      "title": "수신·대출 / 상반기 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "수신·대출 / 상반기 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [
+        {
+          "text": "검토용: 2025.01~06",
+          "x": 0.9,
+          "y": 0.1
+        }
+      ],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "수신·대출 / 상반기 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [
+        {
+          "text": "검토용: 2025.01~06",
+          "x": 0.9,
+          "y": 0.1
+        }
+      ],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F29": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [
+        "202504"
+      ],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [
+        "202504"
+      ],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [
+        "202504"
+      ],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F30": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A"
+      ]
+    }
+  ],
+  "F31": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "B"
+      ]
+    }
+  ],
+  "F32": [
+    {
+      "title": "데이터 불변 확인",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "데이터 불변 확인",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F33": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 4,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F34": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": false
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "초기화 대상",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": false
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F35": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#e53935",
+        "dash": "dash",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F36": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "1∼4월 혼합 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "1∼4월 혼합 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "bar",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F37": [
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        },
+        {
+          "label": "B",
+          "start": "202505",
+          "end": "202506",
+          "scope": "segment",
+          "style": {
+            "color": "#16a34a",
+            "dash": "solid"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2025년 상반기 금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [
+        {
+          "label": "A",
+          "start": "202502",
+          "end": "202503",
+          "scope": "segment",
+          "style": {
+            "color": "#e53935",
+            "dash": "dash"
+          }
+        },
+        {
+          "label": "B",
+          "start": "202505",
+          "end": "202506",
+          "scope": "segment",
+          "style": {
+            "color": "#16a34a",
+            "dash": "solid"
+          }
+        }
+      ],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F38": [
+    {
+      "title": "B−A는 계산하지 않은 원금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "B−A는 계산하지 않은 원금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "B−A는 계산하지 않은 원금리 비교",
+      "font": 20,
+      "legend": true,
+      "legend_position": "bottom",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F39": [
+    {
+      "title": "1차 검토",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "1차 검토",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2차 검토",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "2차 검토",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#16a34a",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "F40": [
+    {
+      "title": "저장된 금리 분석",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "저장된 금리 분석",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "저장된 금리 분석",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "title": "저장된 금리 분석",
+      "font": 20,
+      "legend": true,
+      "legend_position": "top",
+      "months": [
+        4,
+        5,
+        6
+      ],
+      "A": {
+        "color": "#2563eb",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "B": {
+        "color": "#f97316",
+        "dash": "solid",
+        "width": 2,
+        "type": "line",
+        "visible": true
+      },
+      "ranges": [],
+      "notes": [],
+      "guides": [],
+      "table_labels": [
+        "A"
+      ]
+    }
+  ]
+}

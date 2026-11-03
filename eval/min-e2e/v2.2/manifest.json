@@ -1,0 +1,51 @@
+{
+  "name": "StatBridge v2.2 AI-reviewed evaluation",
+  "version": "2.2",
+  "cases": 120,
+  "questions_changed": 0,
+  "expected_answers_changed": 0,
+  "final_human_approval_required": false,
+  "CQ_review_actor": "ai_model",
+  "human_visual_decisions_preserved": 18,
+  "new_product_execution": false,
+  "new_ragas_execution": false,
+  "D23_original_ragas_score": 0.25,
+  "D23_adjudication": "PRODUCT_SUMMARY_DEFECT_WITH_JUDGE_SCOPE_AMBIGUITY",
+  "rule_summary": {
+    "QT": {
+      "pass": 19,
+      "pending": 1
+    },
+    "CQ": {
+      "pass": 18,
+      "fail": 1,
+      "pending": 1
+    },
+    "DA": {
+      "pending": 20
+    },
+    "D": {
+      "pass": 16,
+      "fail": 4
+    },
+    "E": {
+      "pass": 16,
+      "fail": 4
+    },
+    "F": {
+      "pass": 17,
+      "fail": 3
+    }
+  },
+  "validation": {
+    "checks": 419,
+    "passed": 419,
+    "failed": 0
+  },
+  "evidence_gaps": [
+    "CQ21-16 pre-prediction latest reference",
+    "QT unobserved pre-clarification API route",
+    "DA same-run table vs separately verified UI"
+  ],
+  "product_code_changed": false
+}
