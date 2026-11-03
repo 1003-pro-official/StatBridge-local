@@ -1,0 +1,13 @@
+{
+  "version": "2.2",
+  "user_instruction": "최종 사람 승인은 평가에서 삭제",
+  "final_human_approval_required": false,
+  "semantic_review_actors": [
+    "ai_model",
+    "human"
+  ],
+  "require_source_hash_binding": true,
+  "preserve_existing_human_visual_decisions": true,
+  "never_auto_pass_missing_evidence": true,
+  "no_retroactive_human_approval": true
+}

@@ -1,0 +1,167 @@
+{
+  "source": {
+    "org_id": "301",
+    "table_id": "DT_200Y108",
+    "item_id": "13103136297999",
+    "classifications": {
+      "objL1": "13102136297ACC_ITEM.10601"
+    },
+    "frequency": "Q",
+    "start_period": "202401",
+    "end_period": "202404"
+  },
+  "origin": "direct_official_KOSIS_API",
+  "endpoint": "https://kosis.kr/openapi/Param/statisticsParameterData.do",
+  "request_params_without_key": {
+    "method": "getList",
+    "format": "json",
+    "jsonVD": "Y",
+    "smblChk": "Y",
+    "orgId": "301",
+    "tblId": "DT_200Y108",
+    "itmId": "13103136297999",
+    "prdSe": "Q",
+    "startPrdDe": "202401",
+    "endPrdDe": "202404",
+    "objL1": "13102136297ACC_ITEM.10601"
+  },
+  "checked_at": "2026-10-28T12:17:23.581258+00:00",
+  "status": "fetched",
+  "rows": [
+    {
+      "period": "202401",
+      "raw_period": "202401",
+      "value": "575171.3",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_200Y108",
+      "item_id": "13103136297999",
+      "frequency": "Q",
+      "classifications": {
+        "objL1": "13102136297ACC_ITEM.10601"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202402",
+      "raw_period": "202402",
+      "value": "574301.7",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_200Y108",
+      "item_id": "13103136297999",
+      "frequency": "Q",
+      "classifications": {
+        "objL1": "13102136297ACC_ITEM.10601"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202403",
+      "raw_period": "202403",
+      "value": "574618.7",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_200Y108",
+      "item_id": "13103136297999",
+      "frequency": "Q",
+      "classifications": {
+        "objL1": "13102136297ACC_ITEM.10601"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202404",
+      "raw_period": "202404",
+      "value": "575977",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_200Y108",
+      "item_id": "13103136297999",
+      "frequency": "Q",
+      "classifications": {
+        "objL1": "13102136297ACC_ITEM.10601"
+      },
+      "source_last_changed": "2026-10-27"
+    }
+  ],
+  "response": [
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "575171.3",
+      "C1": "13102136297ACC_ITEM.10601",
+      "PRD_SE": "Q",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103136297999",
+      "TBL_ID": "DT_200Y108",
+      "ITM_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "TBL_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "PRD_DE": "202401",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Expenditure on GDP",
+      "C1_NM": "국내총생산에 대한 지출",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "Expenditures on GDP (seasonally adjusted chained 2020 year prices quarterly)",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "574301.7",
+      "C1": "13102136297ACC_ITEM.10601",
+      "PRD_SE": "Q",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103136297999",
+      "TBL_ID": "DT_200Y108",
+      "ITM_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "TBL_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "PRD_DE": "202402",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Expenditure on GDP",
+      "C1_NM": "국내총생산에 대한 지출",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "Expenditures on GDP (seasonally adjusted chained 2020 year prices quarterly)",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "574618.7",
+      "C1": "13102136297ACC_ITEM.10601",
+      "PRD_SE": "Q",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103136297999",
+      "TBL_ID": "DT_200Y108",
+      "ITM_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "TBL_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "PRD_DE": "202403",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Expenditure on GDP",
+      "C1_NM": "국내총생산에 대한 지출",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "Expenditures on GDP (seasonally adjusted chained 2020 year prices quarterly)",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "575977",
+      "C1": "13102136297ACC_ITEM.10601",
+      "PRD_SE": "Q",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103136297999",
+      "TBL_ID": "DT_200Y108",
+      "ITM_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "TBL_NM": "국내총생산에 대한 지출(계절조정 실질 분기)",
+      "PRD_DE": "202404",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Expenditure on GDP",
+      "C1_NM": "국내총생산에 대한 지출",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "Expenditures on GDP (seasonally adjusted chained 2020 year prices quarterly)",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    }
+  ],
+  "response_sha256": "1f7c777e0bbedec785c7b420e0a63235a2bccdca83536b35fc66260281fe7afa"
+}

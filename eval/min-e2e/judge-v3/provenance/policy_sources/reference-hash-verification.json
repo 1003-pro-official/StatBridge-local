@@ -1,0 +1,21 @@
+{
+  "verified_on": "2026-11-02",
+  "reference_files": [
+    {
+      "reference_file": "answers.md",
+      "sha256": "9da2c252307d835d620d866017761dcfb4c7d18fad0a061e5e079b58b7d394ae",
+      "matches_original_approval_record": true
+    },
+    {
+      "reference_file": "observations.json",
+      "sha256": "7497f8370328650782e3c8054c351a7be408930a97d3a666ee56b062a7fa5ae9",
+      "matches_original_approval_record": true
+    },
+    {
+      "reference_file": "reference.html",
+      "sha256": "c2285aab31a766004be0aac0edb74f90d5abaa13979e451f7b94c51cfbe2e69a",
+      "matches_original_approval_record": true
+    }
+  ],
+  "note": "Hash identity verifies which files were approved, not independent numerical correctness of product outputs."
+}

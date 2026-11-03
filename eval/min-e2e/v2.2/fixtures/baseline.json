@@ -1,0 +1,58 @@
+{
+  "title": "2025년 상반기 금리 비교",
+  "title_size": 20,
+  "legend_visible": true,
+  "legend_position": "top",
+  "periods": [
+    "202501",
+    "202502",
+    "202503",
+    "202504",
+    "202505",
+    "202506"
+  ],
+  "series": {
+    "a": {
+      "visible": true,
+      "color": "#2563EB",
+      "width": 2,
+      "dash": "solid",
+      "type": "line",
+      "unit": "연리%",
+      "values": {
+        "202501": "3.08",
+        "202502": "2.97",
+        "202503": "2.83",
+        "202504": "2.72",
+        "202505": "2.64",
+        "202506": "2.55"
+      },
+      "segments": [],
+      "points": {}
+    },
+    "b": {
+      "visible": true,
+      "color": "#F97316",
+      "width": 2,
+      "dash": "solid",
+      "type": "line",
+      "unit": "연리%",
+      "values": {
+        "202501": "4.65",
+        "202502": "4.52",
+        "202503": "4.51",
+        "202504": "4.36",
+        "202505": "4.26",
+        "202506": "4.21"
+      },
+      "segments": [],
+      "points": {}
+    }
+  },
+  "annotations": [],
+  "reference_lines": [],
+  "table_series": [
+    "a",
+    "b"
+  ]
+}

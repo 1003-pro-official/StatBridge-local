@@ -1,0 +1,55 @@
+{
+  "_instructions": [
+    "새 실행 산출물마다 문항별로 한 줄(JSONL)을 작성합니다. 문항 정의(statbridge_judge_cases_10.jsonl)는 바꾸지 않습니다.",
+    "run_info·evidence_paths·observed_shape·capture_scope는 새 실행의 실제 파일과 캡처를 보고 새로 작성합니다.",
+    "과거 실행(run_binding_v14_20261027_archive.jsonl)의 관측 불가 사항을 복사하지 않습니다.",
+    "확인되지 않은 실행 정보는 null로 두고 unconfirmed에 이름을 적습니다. 추측하지 않습니다.",
+    "observed_shape는 실제 출력에서 관측한 값이며 정답으로 쓰지 않습니다."
+  ],
+  "run_id": "<새 실행 ID>",
+  "question_id": "Q01",
+  "case_id": "ME14-01",
+  "run_info": {
+    "label": "<실행 설명>",
+    "is_new_run": true,
+    "commit": null,
+    "model_config": null,
+    "executed_at": null,
+    "frozen_at": null,
+    "unconfirmed": []
+  },
+  "evidence_paths": {
+    "qualitative": [
+      "<사용자 화면 캡처 경로들: 표, 그래프, 요약문, 펼친 계보 등 실제 캡처한 것만>"
+    ],
+    "accuracy": [
+      {
+        "path": "<product-snapshot.json 경로>",
+        "selectors": [
+          "output.table.rows",
+          "output.tableSeries"
+        ]
+      }
+    ]
+  },
+  "observed_shape": {
+    "table_rows": null,
+    "table_series": null,
+    "source": "<관측 출처>",
+    "note": "실제 출력의 관측 정보. 정답·기대값으로 사용하지 않음"
+  },
+  "capture_scope": {
+    "applies_only_to_run": "<새 실행 ID>",
+    "captured": [
+      "<실제로 캡처한 화면 영역>"
+    ],
+    "unobservable_in_current_capture": [
+      {
+        "aspect": "<새 캡처 기준으로만 작성>",
+        "detail": "",
+        "affected_items": [],
+        "affected_requirements": []
+      }
+    ]
+  }
+}

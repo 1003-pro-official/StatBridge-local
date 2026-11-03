@@ -1,0 +1,134 @@
+{
+  "source": {
+    "org_id": "301",
+    "table_id": "DT_121Y006",
+    "item_id": "13103134553999",
+    "classifications": {
+      "objL1": "13102134553ACC_ITEM.BECBLA03"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "origin": "direct_official_KOSIS_API",
+  "endpoint": "https://kosis.kr/openapi/Param/statisticsParameterData.do",
+  "request_params_without_key": {
+    "method": "getList",
+    "format": "json",
+    "jsonVD": "Y",
+    "smblChk": "Y",
+    "orgId": "301",
+    "tblId": "DT_121Y006",
+    "itmId": "13103134553999",
+    "prdSe": "M",
+    "startPrdDe": "202401",
+    "endPrdDe": "202403",
+    "objL1": "13102134553ACC_ITEM.BECBLA03"
+  },
+  "checked_at": "2026-10-28T12:06:44.997952+00:00",
+  "status": "fetched",
+  "rows": [
+    {
+      "period": "202401",
+      "raw_period": "202401",
+      "value": "4.68",
+      "unit": "연리%",
+      "org_id": "301",
+      "table_id": "DT_121Y006",
+      "item_id": "13103134553999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134553ACC_ITEM.BECBLA03"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202402",
+      "raw_period": "202402",
+      "value": "4.49",
+      "unit": "연리%",
+      "org_id": "301",
+      "table_id": "DT_121Y006",
+      "item_id": "13103134553999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134553ACC_ITEM.BECBLA03"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202403",
+      "raw_period": "202403",
+      "value": "4.5",
+      "unit": "연리%",
+      "org_id": "301",
+      "table_id": "DT_121Y006",
+      "item_id": "13103134553999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134553ACC_ITEM.BECBLA03"
+      },
+      "source_last_changed": "2026-10-27"
+    }
+  ],
+  "response": [
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "4.68",
+      "C1": "13102134553ACC_ITEM.BECBLA03",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "Percent Per Annum",
+      "ITM_ID": "13103134553999",
+      "TBL_ID": "DT_121Y006",
+      "ITM_NM": "예금은행 대출금리(신규취급액 기준)",
+      "TBL_NM": "예금은행 대출금리(신규취급액 기준)",
+      "PRD_DE": "202401",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Loans To Households",
+      "C1_NM": "가계대출",
+      "UNIT_NM": "연리%",
+      "ITM_NM_ENG": "Based on Newly Extended",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "4.49",
+      "C1": "13102134553ACC_ITEM.BECBLA03",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "Percent Per Annum",
+      "ITM_ID": "13103134553999",
+      "TBL_ID": "DT_121Y006",
+      "ITM_NM": "예금은행 대출금리(신규취급액 기준)",
+      "TBL_NM": "예금은행 대출금리(신규취급액 기준)",
+      "PRD_DE": "202402",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Loans To Households",
+      "C1_NM": "가계대출",
+      "UNIT_NM": "연리%",
+      "ITM_NM_ENG": "Based on Newly Extended",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "4.5",
+      "C1": "13102134553ACC_ITEM.BECBLA03",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "Percent Per Annum",
+      "ITM_ID": "13103134553999",
+      "TBL_ID": "DT_121Y006",
+      "ITM_NM": "예금은행 대출금리(신규취급액 기준)",
+      "TBL_NM": "예금은행 대출금리(신규취급액 기준)",
+      "PRD_DE": "202403",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "Loans To Households",
+      "C1_NM": "가계대출",
+      "UNIT_NM": "연리%",
+      "ITM_NM_ENG": "Based on Newly Extended",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    }
+  ],
+  "response_sha256": "55a9e8a38aa336185ff8da54a8a1c59fff9ee81b35d3e80d72d59c57fa98579f"
+}

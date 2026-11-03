@@ -1,0 +1,134 @@
+{
+  "source": {
+    "org_id": "301",
+    "table_id": "DT_161Y006",
+    "item_id": "13103852603999",
+    "classifications": {
+      "objL1": "13102852603ACC_ITEM.BBHA00"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "origin": "direct_official_KOSIS_API",
+  "endpoint": "https://kosis.kr/openapi/Param/statisticsParameterData.do",
+  "request_params_without_key": {
+    "method": "getList",
+    "format": "json",
+    "jsonVD": "Y",
+    "smblChk": "Y",
+    "orgId": "301",
+    "tblId": "DT_161Y006",
+    "itmId": "13103852603999",
+    "prdSe": "M",
+    "startPrdDe": "202401",
+    "endPrdDe": "202403",
+    "objL1": "13102852603ACC_ITEM.BBHA00"
+  },
+  "checked_at": "2026-10-28T12:06:42.729474+00:00",
+  "status": "fetched",
+  "rows": [
+    {
+      "period": "202401",
+      "raw_period": "202401",
+      "value": "3725946.066388",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_161Y006",
+      "item_id": "13103852603999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102852603ACC_ITEM.BBHA00"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202402",
+      "raw_period": "202402",
+      "value": "3758300.250775",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_161Y006",
+      "item_id": "13103852603999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102852603ACC_ITEM.BBHA00"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202403",
+      "raw_period": "202403",
+      "value": "3811740.143706",
+      "unit": "십억원",
+      "org_id": "301",
+      "table_id": "DT_161Y006",
+      "item_id": "13103852603999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102852603ACC_ITEM.BBHA00"
+      },
+      "source_last_changed": "2026-10-27"
+    }
+  ],
+  "response": [
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "3725946.066388",
+      "C1": "13102852603ACC_ITEM.BBHA00",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103852603999",
+      "TBL_ID": "DT_161Y006",
+      "ITM_NM": "M2 상품별 구성내역(평잔 원계열)",
+      "TBL_NM": "M2 상품별 구성내역(평잔 원계열)",
+      "PRD_DE": "202401",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "M2(Average)",
+      "C1_NM": "M2(평잔 원계열)",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "M2 By Type (Average)",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "3758300.250775",
+      "C1": "13102852603ACC_ITEM.BBHA00",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103852603999",
+      "TBL_ID": "DT_161Y006",
+      "ITM_NM": "M2 상품별 구성내역(평잔 원계열)",
+      "TBL_NM": "M2 상품별 구성내역(평잔 원계열)",
+      "PRD_DE": "202402",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "M2(Average)",
+      "C1_NM": "M2(평잔 원계열)",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "M2 By Type (Average)",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    },
+    {
+      "C1_OBJ_NM": "계정항목별",
+      "DT": "3811740.143706",
+      "C1": "13102852603ACC_ITEM.BBHA00",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "Bil.Won",
+      "ITM_ID": "13103852603999",
+      "TBL_ID": "DT_161Y006",
+      "ITM_NM": "M2 상품별 구성내역(평잔 원계열)",
+      "TBL_NM": "M2 상품별 구성내역(평잔 원계열)",
+      "PRD_DE": "202403",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "M2(Average)",
+      "C1_NM": "M2(평잔 원계열)",
+      "UNIT_NM": "십억원",
+      "ITM_NM_ENG": "M2 By Type (Average)",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "ACCOUNT"
+    }
+  ],
+  "response_sha256": "def5f541c475f2a0f41b12a4cd069e4e7cbeaf35598e938ce6973ec6e2f233de"
+}

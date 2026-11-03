@@ -1,0 +1,8 @@
+{
+  "src/agent/bridge_api.py": "b38844bfa5176f5acc4066bab776ff9ec5c7f6d13b8b81d0b33fbc35fece7c96",
+  "src/agent/query_conditions.py": "95317f2a8070a3d4ba8274b350464e08335496b71ab8ed66a2ce952eff8705ce",
+  "src/agent/derived_indicator_planner.py": "0ec52e875f6dbb1312a11b06b7de7c47cddc574f2efd3f46dd7d10a66d72bb3a",
+  "src/agent/derived_api_inventory.py": "d1584ef969647cd9167a97d3ba883a6cd93c4022107e4a45d9a67a4c61173e9c",
+  "eval/min-e2e/v2.1/questions.jsonl": "3a95cadc7aa18f34e191fc68eb40788f21275fbf345762ea4c0a5fa18c4cb790",
+  "eval/min-e2e/v2.1/cases.jsonl": "16b25396a4e36782eb37c5bd7ab2e0cf0721d902cc9a56601122e476df819e1b"
+}

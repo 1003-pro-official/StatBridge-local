@@ -1,0 +1,154 @@
+{
+  "source": {
+    "org_id": "301",
+    "table_id": "DT_401Y015",
+    "item_id": "13103134643999",
+    "classifications": {
+      "objL1": "13102134643ACC_CD.*AA",
+      "objL2": "13102134643CRR_CTRT_CD.W"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "origin": "direct_official_KOSIS_API",
+  "endpoint": "https://kosis.kr/openapi/Param/statisticsParameterData.do",
+  "request_params_without_key": {
+    "method": "getList",
+    "format": "json",
+    "jsonVD": "Y",
+    "smblChk": "Y",
+    "orgId": "301",
+    "tblId": "DT_401Y015",
+    "itmId": "13103134643999",
+    "prdSe": "M",
+    "startPrdDe": "202401",
+    "endPrdDe": "202403",
+    "objL1": "13102134643ACC_CD.*AA",
+    "objL2": "13102134643CRR_CTRT_CD.W"
+  },
+  "checked_at": "2026-10-28T12:06:59.397191+00:00",
+  "status": "fetched",
+  "rows": [
+    {
+      "period": "202401",
+      "raw_period": "202401",
+      "value": "136.27",
+      "unit": "2020＝100",
+      "org_id": "301",
+      "table_id": "DT_401Y015",
+      "item_id": "13103134643999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134643ACC_CD.*AA",
+        "objL2": "13102134643CRR_CTRT_CD.W"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202402",
+      "raw_period": "202402",
+      "value": "137.63",
+      "unit": "2020＝100",
+      "org_id": "301",
+      "table_id": "DT_401Y015",
+      "item_id": "13103134643999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134643ACC_CD.*AA",
+        "objL2": "13102134643CRR_CTRT_CD.W"
+      },
+      "source_last_changed": "2026-10-27"
+    },
+    {
+      "period": "202403",
+      "raw_period": "202403",
+      "value": "138.31",
+      "unit": "2020＝100",
+      "org_id": "301",
+      "table_id": "DT_401Y015",
+      "item_id": "13103134643999",
+      "frequency": "M",
+      "classifications": {
+        "objL1": "13102134643ACC_CD.*AA",
+        "objL2": "13102134643CRR_CTRT_CD.W"
+      },
+      "source_last_changed": "2026-10-27"
+    }
+  ],
+  "response": [
+    {
+      "C1_OBJ_NM": "계정코드별",
+      "C2_NM": "원화기준",
+      "DT": "136.27",
+      "C2": "13102134643CRR_CTRT_CD.W",
+      "C1": "13102134643ACC_CD.*AA",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "2020＝100",
+      "ITM_ID": "13103134643999",
+      "TBL_ID": "DT_401Y015",
+      "ITM_NM": "수입물가지수(기본분류)",
+      "TBL_NM": "수입물가지수(기본분류)",
+      "PRD_DE": "202401",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "All items",
+      "C1_NM": "총지수",
+      "UNIT_NM": "2020＝100",
+      "ITM_NM_ENG": "Import Price Indices(Basic Groups)",
+      "C2_OBJ_NM_ENG": "Selection of Items",
+      "C2_NM_ENG": "Won Basis",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "Selection of Items",
+      "C2_OBJ_NM": "통화계약구분코드별"
+    },
+    {
+      "C1_OBJ_NM": "계정코드별",
+      "C2_NM": "원화기준",
+      "DT": "137.63",
+      "C2": "13102134643CRR_CTRT_CD.W",
+      "C1": "13102134643ACC_CD.*AA",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "2020＝100",
+      "ITM_ID": "13103134643999",
+      "TBL_ID": "DT_401Y015",
+      "ITM_NM": "수입물가지수(기본분류)",
+      "TBL_NM": "수입물가지수(기본분류)",
+      "PRD_DE": "202402",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "All items",
+      "C1_NM": "총지수",
+      "UNIT_NM": "2020＝100",
+      "ITM_NM_ENG": "Import Price Indices(Basic Groups)",
+      "C2_OBJ_NM_ENG": "Selection of Items",
+      "C2_NM_ENG": "Won Basis",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "Selection of Items",
+      "C2_OBJ_NM": "통화계약구분코드별"
+    },
+    {
+      "C1_OBJ_NM": "계정코드별",
+      "C2_NM": "원화기준",
+      "DT": "138.31",
+      "C2": "13102134643CRR_CTRT_CD.W",
+      "C1": "13102134643ACC_CD.*AA",
+      "PRD_SE": "M",
+      "UNIT_NM_ENG": "2020＝100",
+      "ITM_ID": "13103134643999",
+      "TBL_ID": "DT_401Y015",
+      "ITM_NM": "수입물가지수(기본분류)",
+      "TBL_NM": "수입물가지수(기본분류)",
+      "PRD_DE": "202403",
+      "LST_CHN_DE": "2026-10-27",
+      "C1_NM_ENG": "All items",
+      "C1_NM": "총지수",
+      "UNIT_NM": "2020＝100",
+      "ITM_NM_ENG": "Import Price Indices(Basic Groups)",
+      "C2_OBJ_NM_ENG": "Selection of Items",
+      "C2_NM_ENG": "Won Basis",
+      "ORG_ID": "301",
+      "C1_OBJ_NM_ENG": "Selection of Items",
+      "C2_OBJ_NM": "통화계약구분코드별"
+    }
+  ],
+  "response_sha256": "7fad5fc7c4e4ea78d2a73b58e715ce3729ad062c90ceb8d710e92f5463c4898b"
+}

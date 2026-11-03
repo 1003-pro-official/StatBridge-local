@@ -1,0 +1,31 @@
+{
+  "original_authoring_manifest": {
+    "date": "2026-10-28",
+    "cases": 120,
+    "groups": {
+      "QT": 20,
+      "CQ": 20,
+      "DA": 20,
+      "D": 20,
+      "E": 20,
+      "F": 20
+    },
+    "source_zip_hashes": {
+      "v2": "0b7d1244f7793f91322dd3e97cd70620469cfd00a123899c21c210a9e1f9e75c",
+      "v2.1": "91f1525ce0ef31f6440ddcb14aba24af33df72f9569520c6a2f8bc20245b02e9"
+    },
+    "v21_original_gold_missing": true,
+    "reconstructed_oracle_not_original_gold": true,
+    "human_review": "pending",
+    "product_evaluation_executed": false,
+    "ragas_judge_executed": false
+  },
+  "reviewed_contract_version": "2.0.0-reviewed-vNext",
+  "human_review": "REVIEW_REQUIRED",
+  "semantic_changes": [
+    "E40",
+    "F34"
+  ],
+  "question_changes": 0,
+  "numeric_changes": 0
+}

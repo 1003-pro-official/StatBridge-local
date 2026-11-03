@@ -1,0 +1,1197 @@
+{
+  "created_at_kst": "2026-11-02T16:16:11.668017+09:00",
+  "package_kind": "LLM Judge results from multiple runs, with evidence and immutable source deliverables",
+  "validated_result_records": 25,
+  "source_archives": [
+    {
+      "file": "StatBridge_Judge_criteria_v3_20261102.zip",
+      "bytes": 25417,
+      "sha256": "55a8a73cbea963e8a446b22b74f44a8fd921f37b58fe41b9d671b341b35e6f28"
+    },
+    {
+      "file": "StatBridge_qualitative_10_final_20261102.zip",
+      "bytes": 105512,
+      "sha256": "86872122fe25fc2d729bca71b614e9e655c03465b90c9152d10d9dba86d188c4"
+    },
+    {
+      "file": "StatBridge_Q05_Q06_Q10_reassessed_20261102.zip",
+      "bytes": 38654,
+      "sha256": "4eee686ac389e5dc70abb362fec964670df5c286296ac18acb4499bbe780cfc6"
+    },
+    {
+      "file": "StatBridge_accuracy_run20261102.zip",
+      "bytes": 39642,
+      "sha256": "7440c5abbc6cd570d868a0b9a03cedbedcb04f4f8c98fdd66582680bc2442471"
+    },
+    {
+      "file": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip",
+      "bytes": 24769,
+      "sha256": "27e34e0520a8af421b78a6689fbfa916547cfc47cde6985ad78a602e757d2d7d"
+    },
+    {
+      "file": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip",
+      "bytes": 19425703,
+      "sha256": "ac88db5282cf0a6b320c7074d5d1e8b3b4b993d4bd6820d244d3c448809eac3d"
+    },
+    {
+      "file": "StatBridge_Q05_Q06_before_after_20261102.zip",
+      "bytes": 7348542,
+      "sha256": "67e4a6a2e9ad93d0aa926488815a77e9775148a4da52e0b6d15163582539e3e3"
+    },
+    {
+      "file": "StatBridge_Q10_scroll_evidence_20261102.zip",
+      "bytes": 761414,
+      "sha256": "34338f44ad7b4fcff7c2c139d169d16a9e98af2d55421dd3fef5671ab0559160"
+    }
+  ],
+  "files": [
+    {
+      "path": "judge_criteria/00_criteria_summary.md",
+      "bytes": 4067,
+      "sha256": "fa222efd193fb67a46d0280a9242504a083ba5da2299b6b3599fdfddecf14722",
+      "source": "StatBridge_Judge_criteria_v3_20261102.zip::StatBridge_Judge_criteria_v3_20261102/00_criteria_summary.md",
+      "original_bytes": true
+    },
+    {
+      "path": "judge_criteria/judge_prompt_common.md",
+      "bytes": 12060,
+      "sha256": "2f89af9e4107ba94ac0f36002506b30b10652393fd0fd9f0c24d5bcee6fc953b",
+      "source": "StatBridge_Judge_criteria_v3_20261102.zip::StatBridge_Judge_criteria_v3_20261102/judge_prompt_common.md",
+      "original_bytes": true
+    },
+    {
+      "path": "judge_criteria/judge_result_schema.json",
+      "bytes": 17579,
+      "sha256": "392db6b0180b7aa5a345e4204087a548c0913b42830df2832d0a174d0355c0ae",
+      "source": "StatBridge_Judge_criteria_v3_20261102.zip::StatBridge_Judge_criteria_v3_20261102/judge_result_schema.json",
+      "original_bytes": true
+    },
+    {
+      "path": "judge_criteria/policy_source_verification.json",
+      "bytes": 4694,
+      "sha256": "76a9fed48936e48c7f0dc8eb35061d6fd3bce72179f683abd5f0b1d638141bde",
+      "source": "StatBridge_Judge_criteria_v3_20261102.zip::StatBridge_Judge_criteria_v3_20261102/policy_source_verification.json",
+      "original_bytes": true
+    },
+    {
+      "path": "judge_criteria/run_binding_template_new_run.json",
+      "bytes": 1835,
+      "sha256": "f03af23de46c47af06f0e265653a90eff06d5d091b5dc7ae24dd89c089567d79",
+      "source": "StatBridge_Judge_criteria_v3_20261102.zip::StatBridge_Judge_criteria_v3_20261102/run_binding_template_new_run.json",
+      "original_bytes": true
+    },
+    {
+      "path": "judge_criteria/run_binding_v14_20261027_archive.jsonl",
+      "bytes": 20579,
+      "sha256": "2360d96baed592ae73a56a246920438fcf006ea937a3cfb4dc58aae76f7c2a59",
+      "source": "StatBridge_Judge_criteria_v3_20261102.zip::StatBridge_Judge_criteria_v3_20261102/run_binding_v14_20261027_archive.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "judge_criteria/statbridge_judge_cases_10.jsonl",
+      "bytes": 84535,
+      "sha256": "1a00ca7f4ac3016b481bee9ad8662255bdf170d0ac829c15382f018ebb05ff8f",
+      "source": "StatBridge_Judge_criteria_v3_20261102.zip::StatBridge_Judge_criteria_v3_20261102/statbridge_judge_cases_10.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/00_summary.md",
+      "bytes": 1897,
+      "sha256": "9f643cb9fe6ba5b8e9005b2d17dba8f79bd6877ecfd22651ebb31b9bc53f5aa1",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/00_summary.md",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q01_ME14-01.json",
+      "bytes": 12773,
+      "sha256": "b4e5d40eff385a462760d36fac63c146b6a0290407bf73100e0c627ae2c5724f",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q01_ME14-01.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q02_ME14-06.json",
+      "bytes": 10966,
+      "sha256": "506e57fad99ee18d5212a0de10a99a4b0e06b23e4130c04238975d597a6f329e",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q02_ME14-06.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q03_ME14-13.json",
+      "bytes": 10811,
+      "sha256": "406856871533e812a9f22d0a22a04e5b3c1045ebe8b627155ed8f791a8679237",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q03_ME14-13.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q04_ME14-19.json",
+      "bytes": 10452,
+      "sha256": "3ff3adf3f903df4d6b658e4c267a482b8c96d9c79cc1a0dc2ec2f595e580c0e0",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q04_ME14-19.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q05_ME14-23.json",
+      "bytes": 10345,
+      "sha256": "7481d3bd116c6fe41833dd7de0e56403df2d9d3a3da6e338483037d78b12df55",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q05_ME14-23.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q06_ME14-29.json",
+      "bytes": 10391,
+      "sha256": "209f678b7e07c28bb55d70b067a9202b763eff0a9ada4ee621d5acf9be7a87bf",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q06_ME14-29.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q07_ME14-33.json",
+      "bytes": 12121,
+      "sha256": "61e9428fe7b4f45b7d635aeba1a25a15eead39b5fd98baa941653a092d69ceb1",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q07_ME14-33.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q08_ME14-39.json",
+      "bytes": 12457,
+      "sha256": "b5fddbdd98e008fa9158a95666cb89c3cf1c9d99cb1bfe5d342f9126cb3d3659",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q08_ME14-39.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q09_ME14-42.json",
+      "bytes": 12606,
+      "sha256": "ce0125a86386858c7f32cfdc228fa5be3f5a0a986ab7f33c15b01037e3da57c6",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q09_ME14-42.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_Q10_ME14-43.json",
+      "bytes": 12828,
+      "sha256": "62bc5c9b83388297f21b4c70d64c8b638e5f5db5c142e3a77d8d4c5ed4de5fec",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_Q10_ME14-43.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/qualitative_results_10_final.jsonl",
+      "bytes": 95046,
+      "sha256": "a9b3ea7055324ca4ece59c8805e3fad8a7a1ef6ee54ae8cf3eada6a6f72900e0",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/qualitative_results_10_final.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/revision_log.json",
+      "bytes": 36730,
+      "sha256": "ef1c69008eb4b04f671bb418410d1ca779ce9d67523fe903ca66120922421f14",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/revision_log.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/00_summary.md",
+      "bytes": 1437,
+      "sha256": "68b58c75e995e32cc11ade857ae7eae90c3376b86ff3a1197ca68c49e01154b9",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/00_summary.md",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q01_ME14-01.json",
+      "bytes": 12563,
+      "sha256": "5ed226dab75300aba5b8a78834db11a23ec83b047b9f6b3e200429211bf22153",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q01_ME14-01.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q02_ME14-06.json",
+      "bytes": 10756,
+      "sha256": "dc5203016ebc559e4e5e86f8037df647a173852680c731e6160211230d54acd1",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q02_ME14-06.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q03_ME14-13.json",
+      "bytes": 10601,
+      "sha256": "a9b9ec7044fc0fb6b9f5a74ec36d29ad900435ce29366e0a654d201c6a505e8b",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q03_ME14-13.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q04_ME14-19.json",
+      "bytes": 10242,
+      "sha256": "5feb053ce106cd02c0f5705cefe5764ca31f33eca0a8046459f8225223be1e67",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q04_ME14-19.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q05_ME14-23.json",
+      "bytes": 10135,
+      "sha256": "6b9dd92690caa12a3fd6670ab8dcaf503c0d7babe7c43755d59f09d564bc5b3d",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q05_ME14-23.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q06_ME14-29.json",
+      "bytes": 10181,
+      "sha256": "e2e2302896fc0110168533f3977f769a2a56e54473b31cc8e87c8ac589e84db3",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q06_ME14-29.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q07_ME14-33.json",
+      "bytes": 11497,
+      "sha256": "4a418fdd744654a2f233b582772f606b1e2e4579069ef76f93a315ca98cc0c5f",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q07_ME14-33.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q08_ME14-39.json",
+      "bytes": 11471,
+      "sha256": "17471728fb9205bfa337b733fa88aa251d7094073addca26ea3dc2bbc75e5606",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q08_ME14-39.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q09_ME14-42.json",
+      "bytes": 11153,
+      "sha256": "09526641949617d84213ba46603aba05c959299d608c3c001b9684b3b0c66d2d",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q09_ME14-42.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_Q10_ME14-43.json",
+      "bytes": 12609,
+      "sha256": "0207d6e292ea59c84c56e66ad2ca9b6a7eab53768a303f6246beb6d74e72f772",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_Q10_ME14-43.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_initial/pre_review/qualitative_results_10.jsonl",
+      "bytes": 90622,
+      "sha256": "72974f4a35709f373a0f3e0ba0d6e56554d7e4419642ac35c219e00cf63da634",
+      "source": "StatBridge_qualitative_10_final_20261102.zip::StatBridge_qualitative_10_final_20261102/pre_review/qualitative_results_10.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_reassessed/comparison_Q05_Q06_Q10.md",
+      "bytes": 5959,
+      "sha256": "974dce943be28fbd898beb89a549193e762e266874e19c62b81558c4d9d478da",
+      "source": "StatBridge_Q05_Q06_Q10_reassessed_20261102.zip::StatBridge_Q05_Q06_Q10_reassessed_20261102/comparison_Q05_Q06_Q10.md",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_reassessed/qualitative_Q05_Q06_Q10_reassessed.jsonl",
+      "bytes": 29473,
+      "sha256": "a6c46dba9dd85e98cb299de02d142a38ecb5a051db27c74db98f0522b2185309",
+      "source": "StatBridge_Q05_Q06_Q10_reassessed_20261102.zip::StatBridge_Q05_Q06_Q10_reassessed_20261102/qualitative_Q05_Q06_Q10_reassessed.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_reassessed/revision_log.json",
+      "bytes": 20286,
+      "sha256": "b8bc1bedc5f744199ae5f88261727b35305afd31526e66e3aa991f03b6939a11",
+      "source": "StatBridge_Q05_Q06_Q10_reassessed_20261102.zip::StatBridge_Q05_Q06_Q10_reassessed_20261102/revision_log.json",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_reassessed/write_regrade.py",
+      "bytes": 20500,
+      "sha256": "2e054e3892f5be0365fdc589418fe308208347d200961a2781175b3ec00260a3",
+      "source": "StatBridge_Q05_Q06_Q10_reassessed_20261102.zip::StatBridge_Q05_Q06_Q10_reassessed_20261102/write_regrade.py",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_reassessed/previous_results_preserved/qualitative_results_10_final.jsonl",
+      "bytes": 95046,
+      "sha256": "a9b3ea7055324ca4ece59c8805e3fad8a7a1ef6ee54ae8cf3eada6a6f72900e0",
+      "source": "StatBridge_Q05_Q06_Q10_reassessed_20261102.zip::StatBridge_Q05_Q06_Q10_reassessed_20261102/previous_results_preserved/qualitative_results_10_final.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "qualitative_reassessed/previous_results_preserved/revision_log_1435.json",
+      "bytes": 36730,
+      "sha256": "ef1c69008eb4b04f671bb418410d1ca779ce9d67523fe903ca66120922421f14",
+      "source": "StatBridge_Q05_Q06_Q10_reassessed_20261102.zip::StatBridge_Q05_Q06_Q10_reassessed_20261102/previous_results_preserved/revision_log_1435.json",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_initial/00_accuracy_summary.md",
+      "bytes": 4467,
+      "sha256": "cc7402758f87c6e37d3af63c8aa71348f5fa73cbb20668b31d2a5a0dc1ff1ef8",
+      "source": "StatBridge_accuracy_run20261102.zip::StatBridge_accuracy_run20261102/00_accuracy_summary.md",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_initial/accuracy_results_10.jsonl",
+      "bytes": 67627,
+      "sha256": "01cbb41e2bb7d5cd731deb308fe718c324abb41d6c3065d306a993de047e35ff",
+      "source": "StatBridge_accuracy_run20261102.zip::StatBridge_accuracy_run20261102/accuracy_results_10.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_initial/accuracy_summary.json",
+      "bytes": 6816,
+      "sha256": "81c25b531776e5f2a359f1022dd02ac4413a48a060fbfda54a2e9a8064a2fe00",
+      "source": "StatBridge_accuracy_run20261102.zip::StatBridge_accuracy_run20261102/accuracy_summary.json",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_initial/comparison_detail.csv",
+      "bytes": 278039,
+      "sha256": "75eefb3eeacdb860d3da57db4c7f951b996ec6f2c3dcc2eb36a0eb3011c49238",
+      "source": "StatBridge_accuracy_run20261102.zip::StatBridge_accuracy_run20261102/comparison_detail.csv",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_initial/self_test_mutation.txt",
+      "bytes": 1757,
+      "sha256": "3d9206d68c7c3d2bb6fa6943aecda927e8f52fc825571ccb417327399ddd2071",
+      "source": "StatBridge_accuracy_run20261102.zip::StatBridge_accuracy_run20261102/self_test_mutation.txt",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_initial/verify_accuracy.py",
+      "bytes": 32563,
+      "sha256": "18b3cd4dfedc4abb46265ed9cd6bfd5d630366c922f7b1e13b8ec03dd31abd14",
+      "source": "StatBridge_accuracy_run20261102.zip::StatBridge_accuracy_run20261102/verify_accuracy.py",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/00_accuracy_Q05_Q06.md",
+      "bytes": 4288,
+      "sha256": "dd1bf71f721972b2e4ac0687ebfa0cdead30932733ec5d6d77a9888f44b99070",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/00_accuracy_Q05_Q06.md",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/accuracy_results_Q05_Q06.jsonl",
+      "bytes": 14885,
+      "sha256": "25c75174d66b3600bec6b017490a26da211a8b8b7b9b8d6bcff82818b9439def",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/accuracy_results_Q05_Q06.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/accuracy_summary_Q05_Q06.json",
+      "bytes": 1451,
+      "sha256": "78f2636290bbd383feafc8494da8371bdcc4459631656a35b72fc55a65188d3b",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/accuracy_summary_Q05_Q06.json",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/comparison_detail_Q05_Q06.csv",
+      "bytes": 30678,
+      "sha256": "cf30065bad10f27f4db03a320d0a111fcdc8d3190bd7619181c7e7d06bc7091a",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/comparison_detail_Q05_Q06.csv",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/self_test_mutation_v2.txt",
+      "bytes": 1357,
+      "sha256": "37bbf21a09b9b092d820a1cf1813072647db82fffe39b585ed9c15aed56511b1",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/self_test_mutation_v2.txt",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/table_full_consistency.txt",
+      "bytes": 121,
+      "sha256": "3f42325dadb6a0f778673e654ccbf81c493008acf7ba1e93dfa78d2fe5c30c66",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/table_full_consistency.txt",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/verify_accuracy_v1_to_v2.diff",
+      "bytes": 9961,
+      "sha256": "b9e3d807630ba4d8a7428363aa23629d7ac0d787b216a26ac1cecf337c486a42",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/verify_accuracy_v1_to_v2.diff",
+      "original_bytes": true
+    },
+    {
+      "path": "accuracy_patched/verify_accuracy_v2.py",
+      "bytes": 35036,
+      "sha256": "7f3332313e1fe6cc605f38a3100e5004e995ede607f25496d20f9ad9827cc444",
+      "source": "StatBridge_accuracy_Q05_Q06_patched_20261102.zip::StatBridge_accuracy_Q05_Q06_patched_20261102/verify_accuracy_v2.py",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/full-screen-graph.png",
+      "bytes": 605053,
+      "sha256": "63dcc522f27ad2ee9b9892651fb6cff943d1cb57073ad6ef356d97403c6bf1c0",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/full-screen-lineage-expanded.png",
+      "bytes": 560498,
+      "sha256": "92465ac8b920954f394e568f7b370a8b49d065f59d9ca14b65762772311c0088",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/full-screen-table.png",
+      "bytes": 558714,
+      "sha256": "85d880a5ad7431935bc35e072af13a16db001827f6e432f7a6aa8eee22924e00",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/graph.png",
+      "bytes": 38578,
+      "sha256": "2b274b2904f616d00d4f5bf79943fb2d65645cdd5397288f51d49ea4f08a7e5c",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/observation.json",
+      "bytes": 187559,
+      "sha256": "3911ae1aa5355bd67768c7ea2bd60ff2e155322d33d512134827d7220f808135",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/product-snapshot.json",
+      "bytes": 182894,
+      "sha256": "6934c8f09f15b8e250ff782f61d0d879932e1199ca91a392f7514e830f2ae667",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/table.png",
+      "bytes": 63950,
+      "sha256": "c3a14498d368743982240f104836b71ae9695e2756ece05957f94bc1b5c1080f",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-01/table-full.json",
+      "bytes": 8802,
+      "sha256": "be078ee84a9d283bdfc07ca315bf0fa816b001b54243dbf60ad37ad69f8bfb6a",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-01/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/full-screen-graph.png",
+      "bytes": 626484,
+      "sha256": "1ef5e19da64bd99599dd463f00a44c3fe9e177ce76f9fcfa3f3a7f1440e41e6a",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/full-screen-lineage-expanded.png",
+      "bytes": 582549,
+      "sha256": "89f7b4ac49af3fdd887534741863ebc8ed3d38fce70c8a44708b1bd326561baf",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/full-screen-table.png",
+      "bytes": 579978,
+      "sha256": "627bebc5d35eecc8e44210ffe7299d2db913a53d3790b89e6517ed89e72cd608",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/graph.png",
+      "bytes": 43353,
+      "sha256": "933a06fc4c4235a89bbe46c2055728d4ce5cac6efa0659d75e5e92ddb37ba443",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/observation.json",
+      "bytes": 154065,
+      "sha256": "56cde2daa2e5eaa4b6355fb9d4d6c66b52281d162dcaa44ace11bf322f4efa70",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/product-snapshot.json",
+      "bytes": 127792,
+      "sha256": "db2e513ab0e82060cf2cd73ca259764b34945b9acb1653b4bbf2342759abba5f",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/table.png",
+      "bytes": 72441,
+      "sha256": "9a930cae3bd0540cf2d5228ed2b52cbf87250ea7c592845a1b02747e0045133a",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-06/table-full.json",
+      "bytes": 4939,
+      "sha256": "0d2abbd3e46fb7317fd3bb07bc810f0f242b71d681623c8b8fb9f38f6145f268",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-06/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/full-screen-graph.png",
+      "bytes": 664018,
+      "sha256": "4549be9db8f0cc3609a4312e564f3fc0bf417cc10000557caf3db08db227fa3d",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/full-screen-lineage-expanded.png",
+      "bytes": 605182,
+      "sha256": "db77cdc6c1c9f448488bb0eadf7130056c0df21e7c11ba2b62481e74509fb833",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/full-screen-table.png",
+      "bytes": 601260,
+      "sha256": "26612087a6e59858e6a85856dff5c556728b851fcd50c9e5bcc4ea24ef33afad",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/graph.png",
+      "bytes": 52091,
+      "sha256": "2bdfe48097ed622c5a54f6c3f2155e002d2e0a3054a640a43d2d67b30ed83880",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/observation.json",
+      "bytes": 266536,
+      "sha256": "40bea574b880d1ecfcc6771aca6b0e408c88d98e4f98cbac8fce46f863e52bb5",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/product-snapshot.json",
+      "bytes": 319128,
+      "sha256": "685f5c486a15758974884c9ce11aff9f34d17388c7451373f19c6b7c4ad02956",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/table.png",
+      "bytes": 71425,
+      "sha256": "2f68a91956c4756bca88e6df900b2dbf0913989550441b23853640fe7c3edec4",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-13/table-full.json",
+      "bytes": 16020,
+      "sha256": "14809c5f6a849210c84e3aee4f9ada26dec86efb7c9ce6c20a09b13e5bbff0f5",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-13/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/full-screen-graph.png",
+      "bytes": 626407,
+      "sha256": "5d6dca51468efb553c4946c89567733e21fb5f9ce5542fbc076fd6e5843230ee",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/full-screen-lineage-expanded.png",
+      "bytes": 582318,
+      "sha256": "6d5a6fc4beb42e02655bae201b7056a50ad09b544c9d66db501e1672c685a3e3",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/full-screen-table.png",
+      "bytes": 580628,
+      "sha256": "11551c1fd0c6d64fc9a80e789287dcc39a58c3b58e4d34e23c36a9bd41d6f671",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/graph.png",
+      "bytes": 31251,
+      "sha256": "f25231cfdd4483bbc1506244e0b8862d5308f7a8acbb1d71c0fde319888f0ce1",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/observation.json",
+      "bytes": 267354,
+      "sha256": "b9a51991df41f3c9f143ec19c42ecd099d892ae0a9b70d4477a60e1061833429",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/product-snapshot.json",
+      "bytes": 363528,
+      "sha256": "d16c6dbdc1e4343bee82e54a8d436025ba4500fe67422ee092dbd4aa32530c59",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/table.png",
+      "bytes": 62083,
+      "sha256": "58f5ad3db15ff91bc79c0b177eb3af7905e758b809f2ab80e3e9d42e99a37397",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-19/table-full.json",
+      "bytes": 15691,
+      "sha256": "c850a601326cf767ce38e4a6cdb524e8511548b4e71a316b463bc1e827e32f00",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-19/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-23/first-response.png",
+      "bytes": 439760,
+      "sha256": "17221b74fb3e7d2e2a22a483b393e7e4fd68d9c9a9fffbafbe73f44032dd4176",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-23/first-response.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-23/observation.json",
+      "bytes": 27731,
+      "sha256": "646b85d4803bed4551e5c95d7baaf3394944821e8e1d0e047f8775cf68f65a73",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-23/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-29/first-response.png",
+      "bytes": 440473,
+      "sha256": "09741bebade62993fd0b8643284e9ef47f889a97fa2b5b602d4f2cf413e0e950",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-29/first-response.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-29/observation.json",
+      "bytes": 29583,
+      "sha256": "cf0cef7079e190af139d9f511d14f00e7095d49058d371e095d7be95f91a2aec",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-29/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/full-screen-graph.png",
+      "bytes": 668037,
+      "sha256": "0f4b024c8b06bd1e241a75d243f76276193d97e8f34e4dcfc17763a63f2c5d06",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/full-screen-lineage-expanded.png",
+      "bytes": 637962,
+      "sha256": "28cf20d9d8a9a1896fd56e85d9c091716e086827fd661b685d7ed922f8eb0794",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/full-screen-table.png",
+      "bytes": 637772,
+      "sha256": "88faf21891822d3f3c6ce57c75c46764963076b965cbf154925734b91b9f5241",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/graph.png",
+      "bytes": 49431,
+      "sha256": "67c37627db5f4f7593bd4f0bf69b61b1647bef6a2a287c3f868004431df77fc2",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/observation.json",
+      "bytes": 280434,
+      "sha256": "2de851248474306396d807d6303b09158de73b3e68fcf754ba4d5894b47aa620",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/product-snapshot.json",
+      "bytes": 424818,
+      "sha256": "8f67f472566bdc51a4b32b2b1d6d9c78ecf3c848fc2bcb63cdc660de6a298a8d",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/table.png",
+      "bytes": 62769,
+      "sha256": "9907e5c4b8192c3c8a08fbae01aeb9e9f87fb72782a2951226a9e16ed3d6d73a",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-33/table-full.json",
+      "bytes": 18845,
+      "sha256": "fb4d7616f887ef32535214e94429dd08a7454bfd783991821afec35320896dc8",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-33/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/full-screen-graph.png",
+      "bytes": 729221,
+      "sha256": "724063fad8dd8c14f0eb72bc10d290fc5d81c3c91cc1fb79d7b01f2ae2cb4a12",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/full-screen-lineage-expanded.png",
+      "bytes": 675628,
+      "sha256": "52f7c4823cdece0ea4d423dc9f8509ff48e1cb935abd3e072a598939a5b95e24",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/full-screen-table.png",
+      "bytes": 676351,
+      "sha256": "a80645dcbdadbcb43b2109b3167b261eb791cbf43d98d6977fc8d6ee3ab24e36",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/graph.png",
+      "bytes": 43722,
+      "sha256": "4df9087b08074005338323ce4a7e8e70320e4e970cadb337a5eb132d166235c6",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/observation.json",
+      "bytes": 365928,
+      "sha256": "f4212c250e6325bd6dacf013a09226114e4f069bcf296ef987e39510a0d4d9c1",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/product-snapshot.json",
+      "bytes": 707307,
+      "sha256": "807c4a9a39d43109ebccf6ea6b6a1d8174752d207a9b363045d17217af5416e7",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/table.png",
+      "bytes": 73293,
+      "sha256": "74e530cfb61b43e647cfe4136edf329c94a5e539269ea4d056b9e3bf4bc04224",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-39/table-full.json",
+      "bytes": 37282,
+      "sha256": "35933c973d9b5dd99fca7c15f3e6045dda199a6773dea74518e5a6b2e8ad7882",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-39/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/full-screen-graph.png",
+      "bytes": 759345,
+      "sha256": "a9e0a53b91398985c54b53ec1076bda5c0e648f0d6b792bbea3e63cef6272dc0",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/full-screen-lineage-expanded.png",
+      "bytes": 704941,
+      "sha256": "8a26cdf04eac3b33e8c33e0183d5d8e2221ea31a5ccfad34c0ab1b7cdf9d100f",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/full-screen-table.png",
+      "bytes": 704801,
+      "sha256": "fd00f0f3dee306b8d5b573824c62ea73b337ea1068c4851b7b3541d62b93759c",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/graph.png",
+      "bytes": 53565,
+      "sha256": "693daa7870b8a7858aa33e4eb2accd1a3af3893434038a01d383249c97d77e23",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/observation.json",
+      "bytes": 454847,
+      "sha256": "d08cd7c9550564a602735d597aae6adf596f456fe35d46382d9c3da6d70e669f",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/product-snapshot.json",
+      "bytes": 820163,
+      "sha256": "0250cbc85625711243eba8fdb5ead793646e99a60733156ccbca2140cad43c96",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/table.png",
+      "bytes": 86485,
+      "sha256": "f36e5b693fd0082db6e356f75cf974cd3a0b368150d5f16199567b80303eaf08",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-42/table-full.json",
+      "bytes": 45501,
+      "sha256": "5b471f5c4cf46ed023f4733c627ba18cbcd61f81b1da8d7bfa1340038fab6280",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-42/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/full-screen-graph.png",
+      "bytes": 720792,
+      "sha256": "68e8eb83fa1e6cf284448d7aa1dac8517c38ba5cbd3d0c42afe310ffd6e59f6d",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/full-screen-lineage-expanded.png",
+      "bytes": 659084,
+      "sha256": "f7e096d42b0ea01b97373d8146b380dca0fd27213a669e147c99ee18e5b5a58a",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/full-screen-table.png",
+      "bytes": 658880,
+      "sha256": "3996b617987162f65b7e7e0bfb1174071052bb55f26c8aaa30cac781625de968",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/graph.png",
+      "bytes": 43081,
+      "sha256": "756c66c9218d34541c7dbfaea0fecd4556566943244b8788339e3a7fce103dfd",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/observation.json",
+      "bytes": 313859,
+      "sha256": "801e686247b9aa04748f48c62896bf9ddc6d7c1e84f729878ae0c3ffed16e190",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/product-snapshot.json",
+      "bytes": 365596,
+      "sha256": "5edb22583363a075631d549ca3b613ca1135a6de74b7183c7031d3f49111cc17",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/table.png",
+      "bytes": 60528,
+      "sha256": "72279858f4c9acd5d8738804f2a51a048e696ba756488f86f902c1cc90cbad42",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "actual_outputs/ME14-43/table-full.json",
+      "bytes": 14202,
+      "sha256": "2b293640c07d036428cb086c59aa4bbc38b5131f98c8bbd7b0e468ed3fc5caa6",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::actual_outputs/ME14-43/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "run_binding_new_20261102.jsonl",
+      "bytes": 24615,
+      "sha256": "f21b133a0cdba10499a3548883a74d485ec37d43ea0d537530c932d066a5d341",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::run_binding_new_20261102.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "provenance/run-manifest.json",
+      "bytes": 16840,
+      "sha256": "fcc25410832d82e218ba7e0478f293c6fb9d0800277be3eed057e2267269c711",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::provenance/run-manifest.json",
+      "original_bytes": true
+    },
+    {
+      "path": "provenance/openai-usage.json",
+      "bytes": 12111,
+      "sha256": "1c3187a1bdf1c4abc8662c7bf5ca88f2d3a8bbb193629d3e605c694ceac007ff",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::provenance/openai-usage.json",
+      "original_bytes": true
+    },
+    {
+      "path": "reference_only/answers.md",
+      "bytes": 62138,
+      "sha256": "9da2c252307d835d620d866017761dcfb4c7d18fad0a061e5e079b58b7d394ae",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::reference_only/answers.md",
+      "original_bytes": true
+    },
+    {
+      "path": "reference_only/observations.json",
+      "bytes": 551685,
+      "sha256": "7497f8370328650782e3c8054c351a7be408930a97d3a666ee56b062a7fa5ae9",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::reference_only/observations.json",
+      "original_bytes": true
+    },
+    {
+      "path": "reference_only/reference.html",
+      "bytes": 3268745,
+      "sha256": "c2285aab31a766004be0aac0edb74f90d5abaa13979e451f7b94c51cfbe2e69a",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::reference_only/reference.html",
+      "original_bytes": true
+    },
+    {
+      "path": "evaluation_design/questions_10.md",
+      "bytes": 4024,
+      "sha256": "741b7f9ffa5b856277aac461de8546402422f0e15f9c9c024ce9cfa4c8b0bc59",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::evaluation_design/questions_10.md",
+      "original_bytes": true
+    },
+    {
+      "path": "evaluation_design/qualitative_rubric.md",
+      "bytes": 2498,
+      "sha256": "cdda1a2c1c072a6d66886ac32519fd8c0faa66409acf2c6d2092bb86192e8bfa",
+      "source": "StatBridge_Judge_new_run_10cases_20261102_reviewed.zip::evaluation_design/qualitative_rubric.md",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/full-screen-graph.png",
+      "bytes": 673483,
+      "sha256": "491fe2993f993f255703976308bf413751a955822b2c78fc1e89c63312b5a7ff",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/full-screen-lineage-expanded.png",
+      "bytes": 632327,
+      "sha256": "aef7d66ea0c4a6fc7942bfbb5baec7e8532c6f91d40d6f3bd4cbb9167d80742f",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/full-screen-table.png",
+      "bytes": 632205,
+      "sha256": "5d0ac1e6fe95590c6e7a88d7ae0b1e25157be930f1517c5102e74e06decd6cfe",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/graph.png",
+      "bytes": 55175,
+      "sha256": "f48ea4547d2da2846d58f6d6bec07896468bb785b142455ddbda2aed9bdd0936",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/observation.json",
+      "bytes": 258041,
+      "sha256": "5d412baa587639ee2befe7dbe766a25aca05d241f1554cd24e0632d2f24b7f9e",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/product-snapshot.json",
+      "bytes": 324494,
+      "sha256": "e84602e2d0f4842412406da3e477295261749cdc034d5c46e093afe5d0f271a8",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/table.png",
+      "bytes": 57933,
+      "sha256": "01aeb5bd747443f7e13d2436e770db48dcabc1dd8a10d040849d51401ee4c4f6",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-23/table-full.json",
+      "bytes": 15419,
+      "sha256": "d25f116b008299713a53efdb54dcb2e8f60b4078531eb946796fec5330a1e620",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-23/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/full-screen-graph.png",
+      "bytes": 669950,
+      "sha256": "1dbd2be4bdd9b37384c87d8eabce9e3ab8a2a8e8edd59a52c35e83c54992b282",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/full-screen-graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/full-screen-lineage-expanded.png",
+      "bytes": 644776,
+      "sha256": "cbbdb4551d5750c78f408df385c9046361c5aaac3473dea2b8332a145871b966",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/full-screen-lineage-expanded.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/full-screen-table.png",
+      "bytes": 643649,
+      "sha256": "a4e4005922468fc8c73c52c0c7754872e7c81d70c697ef1fd274dcdaa1cb9cad",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/full-screen-table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/graph.png",
+      "bytes": 43860,
+      "sha256": "f7610514a4836476c84435e94f427e4e335d2af1a837abee658a99965cc126ea",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/graph.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/observation.json",
+      "bytes": 182591,
+      "sha256": "ce407d5870d1ec7f64881086b5a94d2f471a2797b5101a3968b1d7e3f08beb4c",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/observation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/product-snapshot.json",
+      "bytes": 127954,
+      "sha256": "250142e38a4399e65a4923782adfd3307f37975d78a4ffc754bf53e04f4c5600",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/product-snapshot.json",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/table.png",
+      "bytes": 63664,
+      "sha256": "6b052baf3ebba984e5b51d09738feba38e34cad1127822534eb784ade529bce3",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/table.png",
+      "original_bytes": true
+    },
+    {
+      "path": "after/actual_outputs/ME14-29/table-full.json",
+      "bytes": 3132,
+      "sha256": "1c664094657a96ba88a7cd72ac4035b7860f8abe8011603a7e278fee816fa2c5",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/actual_outputs/ME14-29/table-full.json",
+      "original_bytes": true
+    },
+    {
+      "path": "after/run_binding_Q05_Q06.jsonl",
+      "bytes": 4024,
+      "sha256": "1c3e14f775b3e705f4afa434a141fe27ed5a78e3fe7f0bf9ca5cf7e8a13adb60",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/run_binding_Q05_Q06.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "after/provenance/openai-usage.json",
+      "bytes": 2791,
+      "sha256": "2d85ce59f0db3be7bc51216858329a112b0e4cb8222ddcb388917527d456f308",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/provenance/openai-usage.json",
+      "original_bytes": true
+    },
+    {
+      "path": "after/provenance/run-manifest.json",
+      "bytes": 10728,
+      "sha256": "11d461842fdf7cc6417fd9581ffcd7a3aac5e5c29bd76b425aed0b9040e4664d",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::after/provenance/run-manifest.json",
+      "original_bytes": true
+    },
+    {
+      "path": "change/review-stage.patch",
+      "bytes": 4509,
+      "sha256": "579fae17d3ae491263f79a54003fd5aa9e69737e14d8e9b5c56f2a33a864a0dc",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::change/review-stage.patch",
+      "original_bytes": true
+    },
+    {
+      "path": "change/test_derived_review_unit_stage.py",
+      "bytes": 4402,
+      "sha256": "a9bb8b338c2d7cefef3bb71638f4f8a32bdbd92c6669a6c62601738b5635fd76",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::change/test_derived_review_unit_stage.py",
+      "original_bytes": true
+    },
+    {
+      "path": "change/validation.json",
+      "bytes": 765,
+      "sha256": "924a490a83507c2401b22ba59b0ae38bdd9f6a3c151e720fd4076727283c7a02",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::change/validation.json",
+      "original_bytes": true
+    },
+    {
+      "path": "provenance/codex_arithmetic_comparison_Q05_Q06.json",
+      "bytes": 3629,
+      "sha256": "3cf0f721822e7dc1ad0ab944d182945177cd2852d994fc78abdb88b599d5be53",
+      "source": "StatBridge_Q05_Q06_before_after_20261102.zip::comparison.json",
+      "original_bytes": true
+    },
+    {
+      "path": "Q10_scroll_supplement/00_README.txt",
+      "bytes": 1714,
+      "sha256": "c920938399c393cd46719a789d4251e5b063e0620a3e1801bd429d755eacd9a8",
+      "source": "StatBridge_Q10_scroll_evidence_20261102.zip::00_README.txt",
+      "original_bytes": true
+    },
+    {
+      "path": "Q10_scroll_supplement/before-scroll.png",
+      "bytes": 44677,
+      "sha256": "0c492c1a84444ef89c45356dabee37eebec58b0c907a1eb3779055910f3bd199",
+      "source": "StatBridge_Q10_scroll_evidence_20261102.zip::before-scroll.png",
+      "original_bytes": true
+    },
+    {
+      "path": "Q10_scroll_supplement/after-scroll.png",
+      "bytes": 34889,
+      "sha256": "0a07cca01d81252d96d1f2598cba9cdc44f6b617167651164a92ee44eb0a32a0",
+      "source": "StatBridge_Q10_scroll_evidence_20261102.zip::after-scroll.png",
+      "original_bytes": true
+    },
+    {
+      "path": "Q10_scroll_supplement/full-screen-after-scroll.png",
+      "bytes": 713110,
+      "sha256": "4b1014ac5da1a6ea64ac3926d2d47933bee66c9facb2f0c4a743f50fc6bd7c36",
+      "source": "StatBridge_Q10_scroll_evidence_20261102.zip::full-screen-after-scroll.png",
+      "original_bytes": true
+    },
+    {
+      "path": "Q10_scroll_supplement/inspection.json",
+      "bytes": 1252,
+      "sha256": "d2172e6d33a8ffa617f5d525673c340486519647779de755f0c941ed6cd91d83",
+      "source": "StatBridge_Q10_scroll_evidence_20261102.zip::inspection.json",
+      "original_bytes": true
+    },
+    {
+      "path": "reassessment_request/assessment_bindings_Q05_Q06_Q10.jsonl",
+      "bytes": 7079,
+      "sha256": "6ddc698a5dc6351a56238f15527e9bca25ead9543a3b685496cf11699741f493",
+      "source": "StatBridge_Q05_Q06_Q10_regrading_20261102.zip::assessment_bindings_Q05_Q06_Q10.jsonl",
+      "original_bytes": true
+    },
+    {
+      "path": "reassessment_request/01_PROMPT_TO_CLAUDE.txt",
+      "bytes": 3868,
+      "sha256": "05dc64de1a21be7612f8705666f1df99c90dc6f78773ee7d95aa339cef81b950",
+      "source": "StatBridge_Q05_Q06_Q10_regrading_20261102.zip::01_PROMPT_TO_CLAUDE.txt",
+      "original_bytes": true
+    },
+    {
+      "path": "provenance/policy_sources/original_approval_record.md",
+      "bytes": 1489,
+      "sha256": "c6d90fe187a4c9a2b21ccff15649c88bdaf0cbf1ce5b61ae1b180419148116d3",
+      "source": "StatBridge_Judge_policy_sources_20261102.zip::original_approval_record.md",
+      "original_bytes": true
+    },
+    {
+      "path": "provenance/policy_sources/original_score_v2.py",
+      "bytes": 11143,
+      "sha256": "d2f064a0d386e8e2339a885ea97ab9733f1ccaeba3198fbfcd9b9d208c8c2ac3",
+      "source": "StatBridge_Judge_policy_sources_20261102.zip::original_score_v2.py",
+      "original_bytes": true
+    },
+    {
+      "path": "provenance/policy_sources/reference-hash-verification.json",
+      "bytes": 739,
+      "sha256": "e6ea5a909ba38fb1234e7d83f817fad07bc0314b89ce89804ff33d2dec2b40a2",
+      "source": "StatBridge_Judge_policy_sources_20261102.zip::reference-hash-verification.json",
+      "original_bytes": true
+    },
+    {
+      "path": "latest_observations_index.json",
+      "bytes": 7401,
+      "sha256": "9e78ed88cd1588373ae94b2c160d5ad3be0195c7f70d847d4fcfa70fb57ab019",
+      "source": null,
+      "original_bytes": false
+    },
+    {
+      "path": "01_평가_요약.md",
+      "bytes": 4054,
+      "sha256": "371f433dc065b7e466800b6a8ada84bb83bd68105b5b5e296d150d6dcc24793e",
+      "source": null,
+      "original_bytes": false
+    },
+    {
+      "path": "00_README.txt",
+      "bytes": 2942,
+      "sha256": "14043ede94a69862f9f1c0daece245bfa75f7fd2ed4d7123b271e88d7a31375d",
+      "source": null,
+      "original_bytes": false
+    }
+  ]
+}

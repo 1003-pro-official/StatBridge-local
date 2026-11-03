@@ -1,0 +1,253 @@
+{
+  "DA21-01": {
+    "org_id": "301",
+    "table_id": "DT_161Y006",
+    "item_id": "13103852603999",
+    "classifications": {
+      "objL1": "13102852603ACC_ITEM.BBHA00"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-02": {
+    "org_id": "301",
+    "table_id": "DT_161Y007",
+    "item_id": "13103852611999",
+    "classifications": {
+      "objL1": "13102852611ACC_ITEM.BBGS00"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-03": {
+    "org_id": "301",
+    "table_id": "DT_121Y006",
+    "item_id": "13103134553999",
+    "classifications": {
+      "objL1": "13102134553ACC_ITEM.BECBLA03"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-04": {
+    "org_id": "301",
+    "table_id": "DT_121Y015",
+    "item_id": "13103134612999",
+    "classifications": {
+      "objL1": "13102134612ACC_ITEM.BECBLB0202"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-05": {
+    "org_id": "301",
+    "table_id": "DT_121Y002",
+    "item_id": "13103134588999",
+    "classifications": {
+      "objL1": "13102134588ACC_ITEM.BEABAA1"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-06": {
+    "org_id": "301",
+    "table_id": "DT_131Y018",
+    "item_id": "13103136163999",
+    "classifications": {
+      "objL1": "13102136163ACC_ITEM.1103000",
+      "objL2": "13102136163ENTERPRISE_SCALE.E20"
+    },
+    "frequency": "Q",
+    "start_period": "202401",
+    "end_period": "202404"
+  },
+  "DA21-07": {
+    "org_id": "301",
+    "table_id": "DT_151Y003",
+    "item_id": "13103134697999",
+    "classifications": {
+      "objL1": "13102134697ACC_ITEM.1111000",
+      "objL2": "13102134697RG_CD.B00"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-08": {
+    "org_id": "301",
+    "table_id": "DT_200Y104",
+    "item_id": "13103136259999",
+    "classifications": {
+      "objL1": "13102136259ACC_ITEM.1400"
+    },
+    "frequency": "Q",
+    "start_period": "202401",
+    "end_period": "202404"
+  },
+  "DA21-09": {
+    "org_id": "301",
+    "table_id": "DT_200Y105",
+    "item_id": "13103136260999",
+    "classifications": {
+      "objL1": "13102136260ACC_ITEM.1400"
+    },
+    "frequency": "Y",
+    "start_period": "2023",
+    "end_period": "2024"
+  },
+  "DA21-10": {
+    "org_id": "301",
+    "table_id": "DT_301Y013",
+    "item_id": "13103134519999",
+    "classifications": {
+      "objL1": "13102134519ACC_CD.000000"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-11": {
+    "org_id": "301",
+    "table_id": "DT_301Y015",
+    "item_id": "13103134752999",
+    "classifications": {
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.CN"
+    },
+    "frequency": "Y",
+    "start_period": "2023",
+    "end_period": "2024"
+  },
+  "DA21-12": {
+    "org_id": "301",
+    "table_id": "DT_311Y001",
+    "item_id": "13103134486999",
+    "classifications": {
+      "objL1": "13102134486ACC_CD.1000000"
+    },
+    "frequency": "Q",
+    "start_period": "202401",
+    "end_period": "202404"
+  },
+  "DA21-13": {
+    "org_id": "301",
+    "table_id": "DT_401Y015",
+    "item_id": "13103134643999",
+    "classifications": {
+      "objL1": "13102134643ACC_CD.*AA",
+      "objL2": "13102134643CRR_CTRT_CD.W"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-14": {
+    "org_id": "301",
+    "table_id": "DT_402Y014",
+    "item_id": "13103134642999",
+    "classifications": {
+      "objL1": "13102134642ACC_CD.*AA",
+      "objL2": "13102134642CRR_CTRT_CD.D"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-15": {
+    "org_id": "301",
+    "table_id": "DT_403Y001",
+    "item_id": "13103134671999",
+    "classifications": {
+      "objL1": "13102134671ACC_CD.*AA"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-16": {
+    "org_id": "301",
+    "table_id": "DT_403Y002",
+    "item_id": "13103134523999",
+    "classifications": {
+      "objL1": "13102134523ACC_CD.*AA"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-17": {
+    "org_id": "301",
+    "table_id": "DT_403Y005",
+    "item_id": "13103134627999",
+    "classifications": {
+      "objL1": "13102134627TERMS_TRADE_TYPE.A"
+    },
+    "frequency": "M",
+    "start_period": "202401",
+    "end_period": "202403"
+  },
+  "DA21-18": {
+    "org_id": "301",
+    "table_id": "DT_501Y005",
+    "item_id": "13103134632999",
+    "classifications": {
+      "objL1": "13102134632BZTYP_CD.C",
+      "objL2": "13102134632ENTERPRISE_SCALE.A",
+      "objL3": "13102134632ACC_ITEM.506"
+    },
+    "frequency": "Y",
+    "start_period": "2023",
+    "end_period": "2024"
+  },
+  "DA21-19": {
+    "org_id": "301",
+    "table_id": "DT_284Y001",
+    "item_id": "13103852624999",
+    "classifications": {
+      "objL1": "13102852624ACC_ITEM.A1000",
+      "objL2": "13102852624INSTITUTIONAL_SECTOR.T10000"
+    },
+    "frequency": "Y",
+    "start_period": "2023",
+    "end_period": "2024"
+  },
+  "DA21-20": {
+    "org_id": "301",
+    "table_id": "DT_284Y002",
+    "item_id": "13103852623999",
+    "classifications": {
+      "objL1": "13102852623ACC_ITEM.A1000",
+      "objL2": "13102852623INSTITUTIONAL_SECTOR.T10000"
+    },
+    "frequency": "Y",
+    "start_period": "2023",
+    "end_period": "2024"
+  },
+  "DA21-08-equivalent": {
+    "org_id": "301",
+    "table_id": "DT_200Y108",
+    "item_id": "13103136297999",
+    "classifications": {
+      "objL1": "13102136297ACC_ITEM.10601"
+    },
+    "frequency": "Q",
+    "start_period": "202401",
+    "end_period": "202404"
+  },
+  "DA21-09-equivalent": {
+    "org_id": "301",
+    "table_id": "DT_200Y109",
+    "item_id": "13103136270999",
+    "classifications": {
+      "objL1": "13102136270ACC_ITEM.10601"
+    },
+    "frequency": "Y",
+    "start_period": "2023",
+    "end_period": "2024"
+  }
+}

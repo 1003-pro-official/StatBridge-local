@@ -1,0 +1,627 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "statbridge-judge-result-v3",
+  "title": "StatBridge Judge 결과 (문항 1건, 실행 1건) · v3",
+  "type": "object",
+  "required": [
+    "run_id",
+    "question_id",
+    "case_id",
+    "run_context",
+    "judge_meta",
+    "qualitative",
+    "accuracy"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "pattern": "^Q\\d{2}$"
+    },
+    "case_id": {
+      "type": "string",
+      "pattern": "^ME14-\\d{2}$"
+    },
+    "judge_meta": {
+      "type": "object",
+      "required": [
+        "judge_model",
+        "prompt_version",
+        "case_set_version",
+        "evaluated_at"
+      ],
+      "properties": {
+        "judge_model": {
+          "type": "string"
+        },
+        "prompt_version": {
+          "type": "string"
+        },
+        "evaluated_at": {
+          "type": "string",
+          "description": "Judge 실행 시각(ISO 8601). 산출물 실행 시각이 아님"
+        },
+        "case_set_version": {
+          "type": "string"
+        }
+      }
+    },
+    "qualitative": {
+      "description": "1단계 결과. table.png·graph.png와 질문 원문만 근거. 2단계 호출에서는 null",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "files_used",
+            "items",
+            "review_item_observations",
+            "unverified_interactions",
+            "limitations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "files_used": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "run binding evidence_paths.qualitative에 있는 경로만"
+              }
+            },
+            "items": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "$ref": "#/$defs/qualitative_item"
+              }
+            },
+            "review_item_observations": {
+              "description": "status=검토 필요 조건에 대한 관찰. 점수에 반영하지 않음",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "req_id",
+                  "observations"
+                ],
+                "properties": {
+                  "req_id": {
+                    "type": "string"
+                  },
+                  "observations": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/evidence"
+                    }
+                  }
+                }
+              }
+            },
+            "unverified_interactions": {
+              "description": "정적 이미지로 확인할 수 없어 미검증으로 남긴 동작 (예: 스크롤, 툴팁, 표 확대 보기, 상세 데이터 계보 펼침)",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "accuracy": {
+      "description": "2단계 결과. 정성평가와 별도. 1단계 호출에서는 null",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "series_mapping",
+            "series_shape_checks",
+            "checks",
+            "optional_series_observed",
+            "accuracy_failure_confirmed",
+            "reference_limitations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "checks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/accuracy_check"
+              }
+            },
+            "accuracy_failure_confirmed": {
+              "type": "boolean",
+              "description": "필수 계열 관련 verdict=불일치가 하나라도 있으면 true. 선택 열 부재는 해당하지 않음. true이면 최종 활용 가능으로 결론 내리지 않음"
+            },
+            "reference_limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "승인 기록 해시 일치와 문서 내 검수 전 표기를 함께 기록. 승인을 제품 출력의 독립 검증 완료로 해석하지 않음"
+            },
+            "series_mapping": {
+              "type": "array",
+              "description": "expected_from_question의 계열 역할 ↔ 제품 출력 계열 대응",
+              "items": {
+                "type": "object",
+                "required": [
+                  "role",
+                  "requirement_type",
+                  "product_series",
+                  "basis"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string"
+                  },
+                  "requirement_type": {
+                    "enum": [
+                      "필수 표",
+                      "필수 그래프",
+                      "선택 표"
+                    ]
+                  },
+                  "product_series": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "제품 계열 라벨/ID. 대응 계열이 없으면 null"
+                  },
+                  "basis": {
+                    "type": "string",
+                    "description": "대응 근거 (source identity, 라벨, 단위 등)"
+                  }
+                }
+              }
+            },
+            "series_shape_checks": {
+              "type": "array",
+              "description": "A2: 필수 계열별 시점 형태. 기대 시점은 질문에서 도출한 표시 기간",
+              "items": {
+                "type": "object",
+                "required": [
+                  "role",
+                  "expected_period_count",
+                  "observed_period_count",
+                  "missing_periods",
+                  "duplicate_periods",
+                  "out_of_range_periods",
+                  "order_ok"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string"
+                  },
+                  "expected_period_count": {
+                    "type": "integer"
+                  },
+                  "observed_period_count": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "missing_periods": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "duplicate_periods": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "out_of_range_periods": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "표시 기간 밖 시점(선행 입력 포함)"
+                  },
+                  "order_ok": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                }
+              }
+            },
+            "observed_total_rows": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "관측 기록용. 판정 근거로 쓰지 않음"
+            },
+            "optional_series_observed": {
+              "type": "array",
+              "description": "선택 열의 존재 여부. 없어도 불일치·감점 아님",
+              "items": {
+                "type": "object",
+                "required": [
+                  "role",
+                  "present"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string"
+                  },
+                  "present": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "run_id": {
+      "type": "string",
+      "description": "run binding의 run_id"
+    },
+    "run_context": {
+      "type": "object",
+      "required": [
+        "run_label",
+        "is_new_run",
+        "unconfirmed"
+      ],
+      "description": "run binding의 run_info에서 그대로 옮김. 추측 금지",
+      "properties": {
+        "run_label": {
+          "type": "string"
+        },
+        "is_new_run": {
+          "type": "boolean"
+        },
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model_config": {
+          "type": [
+            "string",
+            "object",
+            "null"
+          ]
+        },
+        "executed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unconfirmed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": [
+        "file",
+        "location",
+        "observation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": "string",
+          "description": "근거 파일 경로 (ZIP 루트 기준)"
+        },
+        "location": {
+          "type": "string",
+          "description": "이미지 내 위치 또는 JSON 선택자"
+        },
+        "observation": {
+          "type": "string",
+          "description": "관측한 사실 한 문장. 해석·평가 표현 배제"
+        }
+      }
+    },
+    "qualitative_item": {
+      "type": "object",
+      "required": [
+        "item",
+        "score",
+        "unrated_reason",
+        "unobserved_aspects",
+        "evidence_absence_type",
+        "evidence",
+        "requirement_ids",
+        "rationale",
+        "improvement_suggestion"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "item": {
+          "enum": [
+            "요청 반영의 명확성",
+            "근거 확인의 용이성",
+            "표의 이해 용이성",
+            "그래프의 전달력",
+            "결과 활용성"
+          ]
+        },
+        "score": {
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            "미평가"
+          ]
+        },
+        "unrated_reason": {
+          "description": "score=미평가일 때만 값. 그 외 null",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "category",
+                "detail"
+              ],
+              "properties": {
+                "category": {
+                  "enum": [
+                    "외부 장애",
+                    "미실행",
+                    "화면 증거 부족",
+                    "기타"
+                  ]
+                },
+                "detail": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          ]
+        },
+        "evidence_absence_type": {
+          "description": "근거 부재 관련 판단 시 구분: 출력에 실제로 없음 vs 캡처 누락으로 관측 불가",
+          "enum": [
+            "해당 없음",
+            "출력에 실제로 없음",
+            "캡처 누락으로 관측 불가"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "description": "관찰을 기준표의 어느 등급 설명에 대응시켰는지"
+        },
+        "improvement_suggestion": {
+          "description": "score가 1 또는 2이면 필수(비어 있지 않은 문자열), 그 외 null 허용",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unobserved_aspects": {
+          "type": "array",
+          "description": "이 항목 판단에 관련되지만 현재 캡처로 확인되지 않은 부분 (capture_scope.unobservable_in_current_capture의 aspect). 내부 JSON으로 화면 표시를 추정하지 않음",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "score": {
+                "enum": [
+                  1,
+                  2
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "improvement_suggestion": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "score": {
+                "const": "미평가"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unrated_reason": {
+                "type": "object"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "unrated_reason": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "accuracy_check": {
+      "type": "object",
+      "required": [
+        "check_id",
+        "name",
+        "verdict",
+        "product_side",
+        "reference_side",
+        "points_compared",
+        "mismatches",
+        "max_abs_diff",
+        "tolerance_rule",
+        "notes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "check_id": {
+          "enum": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "A6",
+            "A7",
+            "A8"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "일치",
+            "불일치",
+            "검증 불가",
+            "해당 없음"
+          ],
+          "description": "'해당 없음'은 A8에서 선택 열이 출력에 없을 때만 사용"
+        },
+        "product_side": {
+          "type": "array",
+          "description": "비교에 쓴 제품 산출물 위치 (예: actual_outputs/ME14-23/product-snapshot.json :: output.table.rows[series='...'])",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reference_side": {
+          "type": "array",
+          "description": "비교에 쓴 참고 자료 위치 (예: reference_only/observations.json :: [1].rows[PRD_DE=202012..202412])",
+          "items": {
+            "type": "string"
+          }
+        },
+        "points_compared": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "mismatches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mismatch_type",
+              "series",
+              "period",
+              "product_value",
+              "reference_value",
+              "diff"
+            ],
+            "properties": {
+              "mismatch_type": {
+                "enum": [
+                  "허용 오차 초과",
+                  "계열 불일치",
+                  "기간 누락",
+                  "중복 시점",
+                  "표시 기간 밖 시점",
+                  "시점 순서",
+                  "단위 불일치",
+                  "한쪽만 결측"
+                ],
+                "description": "계열·기간·단위 문제와 한쪽만 결측은 허용 오차로 통과시키지 않음"
+              },
+              "series": {
+                "type": "string"
+              },
+              "period": {
+                "type": "string"
+              },
+              "product_value": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "reference_value": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "diff": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "max_abs_diff": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "양쪽 모두 값이 있는 대응 시점의 최대 절대 차이 (값 단위 그대로)"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "tolerance_rule": {
+          "const": "abs(actual - expected) <= 1e-6 + 1e-10",
+          "description": "전체 정밀도 JSON 수치에, 비교하는 값 자체의 단위에서 적용. 화면 반올림 표시에는 적용하지 않음"
+        }
+      }
+    }
+  }
+}
